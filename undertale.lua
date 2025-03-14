@@ -1,9 +1,10 @@
 local lovely = require("lovely")
 
-local path = SMODS.current_mod.path..'src/'
-for _,v in pairs(NFS.getDirectoryItems(path)) do
-	assert(SMODS.load_file('src/'..v))()
-end
+assert(SMODS.load_file('src/one.lua'))()
+assert(SMODS.load_file('src/two.lua'))()
+assert(SMODS.load_file('src/three.lua'))()
+assert(SMODS.load_file('src/four.lua'))()
+assert(SMODS.load_file('src/five.lua'))()
 
 SMODS.Atlas {
     key = "jokers",
