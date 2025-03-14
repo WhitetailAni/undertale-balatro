@@ -1,0 +1,16 @@
+{
+    "id": "UT",
+    "name": "Undertale",
+    "author": ["_VioMarks_, WhitetailAni"],
+    "description": "You can't give up now!",
+    "prefix": "UT",
+    "main_file": "undertale.lua",
+    "badge_colour": "80db80",
+    "dependencies": [
+    	"Steamodded (==1.0.0~ALPHA-1416a)",
+        "Lovely (>=0.6)",
+        "Talisman (>=2.1.0~dev)"
+    ],
+    "version": "1.0.0"
+}
+

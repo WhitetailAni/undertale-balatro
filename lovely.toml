@@ -1,0 +1,106 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+[vars]
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if self.ability.name == 'Golden Joker' then
+	return self.ability.extra
+end
+'''
+position = "at"
+payload = '''
+if self.ability.name == 'Golden Joker' or self.label == 'j_UT_burgerpants' then
+	return self.ability.extra
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "if change_context ~= 'splash' then "
+position = "before"
+payload = '''
+G.P_CENTERS.e_foil.config.chips = 50
+G.P_CENTERS.e_holo.config.mult = 10
+G.P_CENTERS.e_polychrome.config.x_mult = 1.5
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "G.GAME.discount_percent = center_table.extra"
+position = "at"
+payload = "G.GAME.discount_percent = G.GAME.discount_percent + center_table.extra"
+match_indent = false
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = '''
+if scoring_hand and SMODS.has_enhancement(card, 'm_glass') and not card.debuff and pseudorandom('glass') < G.GAME.probabilities.normal/(card.ability.name == 'Glass Card' and card.ability.extra or G.P_CENTERS.m_glass.config.extra) then
+'''
+position = "at"
+payload = '''
+if scoring_hand and SMODS.has_enhancement(card, 'm_glass') and not card.debuff and pseudorandom('glass') < G.GAME.probabilities.glass/(card.ability.name == 'Glass Card' and card.ability.extra or G.P_CENTERS.m_glass.config.extra) then
+'''
+match_indent = false
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+probabilities = {
+	normal = 1,
+},
+'''
+position = "at"
+payload = '''
+probabilities = {
+	normal = 1,
+	glass = 1,
+},
+'''
+match_indent = false
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "elseif _c.effect == 'Glass Card' then loc_vars = {cfg.Xmult, G.GAME.probabilities.normal, cfg.extra}"
+position = "at"
+payload = "elseif _c.effect == 'Glass Card' then loc_vars = {cfg.Xmult, G.GAME.probabilities.glass, cfg.extra}"
+match_indent = false
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'replace_card.states.visible = false'
+position = 'before'
+payload = '''
+SMODS.change_base(replace_card, "Hearts", nil)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if not initial then G.GAME.blind:debuff_card(self) end'
+position = 'before'
+payload = '''
+initial = true
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'new_card.pinned = other.pinned'
+position = 'after'
+payload = 'SMODS.calculate_context({copied_card = true, copied_card = new_card})'
+match_indent = true
