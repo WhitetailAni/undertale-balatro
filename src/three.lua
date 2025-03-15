@@ -11,7 +11,7 @@ SMODS.Joker {
 	},
 	config = {
 		extra = {
-			xmult = 3,
+			xmult = 2,
 			cycled = 3,
 			hands_remaining = 3,
 			secret_chance = 5,
@@ -84,7 +84,6 @@ SMODS.Joker {
 		name = "Temmie Flakes",
 		text = {
 			"{C:blue}pLaY twO!!!1!!{}"
-
 		}
 	},
 	config = {
@@ -507,13 +506,15 @@ SMODS.Joker {
 		return { vars = { G.GAME.probabilities.normal, card.ability.odds, card.ability.money } }
 	end,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers --[[and not card.ability.destroyed_card]] then
+		if context.end_of_round and context.cardarea == G.jokers then
 			local knife = pseudorandom_element(G.hand.cards, pseudoseed('mad_dummy'))
+			local was_glass = (knife.config.center.key == "m_glass")
 			G.E_MANAGER:add_event(Event({
             	trigger = 'after',
-            	delay = 0.4,
+            	delay = 0.1,
             	func = function()
 					play_sound('timpani')
+					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "Futile!", colour = G.C.RED})
 					if context.blueprint then
 						context.blueprint_card:juice_up(0.3, 0.5)
 					else
@@ -531,10 +532,14 @@ SMODS.Joker {
 					else
 						knife:start_dissolve(nil, false)
 					end
+					if was_glass then
+						SMODS.calculate_context({cards_destroyed = true, glass_shattered = { knife }})
+					else
+						SMODS.calculate_context({remove_playing_cards = true, removed = { knife }})
+					end
                     return true
                 end
             }))
-			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "Futile!", colour = G.C.RED})
         end
 	end
 }
@@ -559,7 +564,7 @@ SMODS.Joker {
 		return { vars = { card.ability.money } }
 	end,
 	calculate = function(self, card, context)
-		if context.destroying_card and not context.blueprint and #context.full_hand == 1 and G.GAME.current_round.hands_played == 0 then
+		if context.before and context.cardarea == G.jokers and not context.blueprint and #context.full_hand == 1 and G.GAME.current_round.hands_played == 0 then
 			print("before")
 			G.E_MANAGER:add_event(Event({
 				trigger = "before",
@@ -567,8 +572,9 @@ SMODS.Joker {
 				func = function()
 					if not context.scoring_hand[1].seal then
 						print("gm")
+						card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Sealed!", colour = G.C.ATTENTION})
 						context.scoring_hand[1]:set_seal(
-							SMODS.poll_seal({ guaranteed = true--[[, type_key = "hotland"]] }),
+							SMODS.poll_seal({ guaranteed = true, type_key = "hotland" }),
 							true,
 							false
 						)
@@ -576,7 +582,7 @@ SMODS.Joker {
 					end
 					play_sound("gold_seal", 1.2, 0.4)
 					card:juice_up()
-					card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Sealed!", colour = G.C.ATTENTION})
+					
 					return true
 				end,
 			}))

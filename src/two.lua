@@ -11,7 +11,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		mult_gain = 5,
+		mult_gain = 3,
 		mult = 0
 	},
 	rarity = 2,
@@ -555,7 +555,7 @@ SMODS.Joker {
 		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			if pseudorandom("nice_cream") < G.GAME.probabilities.normal/card.ability.odds then
 				for i = 1, card.ability.tag_count do
-					local tag = Tag(get_next_tag_key("twt_punch_card"))
+					local tag = Tag(get_next_tag_key("ut_abandoned_quiche"))
 					if tag.name == "Orbital Tag" then
 						local _poker_hands = {}
 						for k, v in pairs(G.GAME.hands) do

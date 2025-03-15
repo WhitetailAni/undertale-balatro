@@ -10,7 +10,7 @@ SMODS.Joker {
 	},
 	config = {
 		extra = {
-			mult = 10,
+			mult = 5,
 			chips = 20
 		}
 	},
@@ -173,7 +173,7 @@ SMODS.Joker {
 			"{C:mult}+#1#{} mult when scored",
 			"Each played {C:attention}9{} gives",
 			"{C:mult}+#2#{} mult when scored,",
-			"but is {C:attention}destroyed{}",
+			"but the Joker is {C:attention}destroyed{}",
 			"after scoring"
 		}
 	},
@@ -181,6 +181,7 @@ SMODS.Joker {
 		extra = {
 			seven = 7,
 			nine = 9,
+			destroy_self = false
 		}
 	},
 	rarity = 1,
@@ -199,15 +200,33 @@ SMODS.Joker {
 					mult = card.ability.extra.seven
 				}
 			elseif context.other_card.base.value == "9" then
+				card.ability.extra.destroy_self = true
 				return {
 					mult = card.ability.extra.nine
 				}
 			end
-		elseif context.destroy_card and context.cardarea == G.play and not context.blueprint then
-			if context.other_card.base.value == "9" then
-				card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Eaten!", colour = G.C.RED})
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+			if card.ability.extra.destroy_self then
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound('tarot1')
+						card.T.r = -0.2
+						card:juice_up(0.3, 0.4)
+						card.states.drag.is = true
+						card.children.center.pinch.x = true
+						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+							func = function()
+								G.jokers:remove_card(card)
+								card:remove()
+								card = nil
+								return true;
+							end
+						})) 
+						return true
+					end
+				})) 
 				return {
-					remove = true
+					message = "Eaten!"
 				}
 			end
 		end
@@ -240,7 +259,7 @@ SMODS.Joker {
 		G.hand:change_size(card.ability.hand_size)
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.hand:change_size(card.ability.hand_size)
+		G.hand:change_size(-card.ability.hand_size)
 	end,
 	calculate = function(self, card, context)
 		if context.setting_blind and not card.getting_sliced then
@@ -287,14 +306,15 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Human Soul",
 		text = {
-			"{X:mult,C:white}X#1#{} Mult for",
+			"{C:attention}+#1#{} hand size for",
 			"each {C:attention}Joker{} card",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
+			"{C:inactive}(Currently {C:attention}+#2#{C:inactive} hand size)"
 		}
 	},
 	config = {
 		extra = {
-			xmult = 1.5,
+			hand_size_gain = 1,
+			joker_count = 0,
 		}
 	},
 	rarity = 3,
@@ -305,16 +325,15 @@ SMODS.Joker {
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
 		if G.jokers ~= nil and G.jokers.cards ~= nil then
-			return { vars = { card.ability.extra.xmult, card.ability.extra.xmult * #G.jokers.cards } }
+			return { vars = { card.ability.extra.hand_size_gain, #G.jokers.cards - card.ability.extra.joker_count } }
 		else
-			return { vars = { card.ability.extra.xmult, card.ability.extra.xmult } }
+			return { vars = { card.ability.extra.hand_size_gain, card.ability.extra.hand_size_gain } }
 		end
 	end,
-	calculate = function(self, card, context)
-		if context.joker_main then
-			return {
-				xmult = card.ability.extra.xmult * #G.jokers.cards
-			}
+	update = function(self, card, dt)
+		if card.ability.extra.joker_count ~= #G.jokers.cards then
+			G.hand:change_size(#G.jokers.cards - card.ability.extra.joker_count)
+			card.ability.extra.joker_count = #G.jokers.cards
 		end
 	end
 }
@@ -514,7 +533,7 @@ SMODS.Joker {
 			odds = 10
 		}
 	},
-	rarity = 2,
+	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "jokers",

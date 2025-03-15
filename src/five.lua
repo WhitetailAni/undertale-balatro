@@ -90,8 +90,8 @@ SMODS.Joker {
 	},
 	config = {
 		extra = {
-			chips = 20,
-			card_count = 0,
+			chips = 0,
+			chip_gain = 20
 		}
 	},
 	rarity = 3,
@@ -101,25 +101,27 @@ SMODS.Joker {
 	pos = { x = 5, y = 4 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.chips, card.ability.extra.chips * card.ability.extra.card_count } }
+		return { vars = { card.ability.extra.chip_gain, card.ability.extra.chips } }
 	end,
 	calculate = function(self, card, context)
-		if (context.cards_destroyed or context.playing_card_added) and not context.blueprint then
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							card.ability.extra.card_count = card.ability.extra.card_count + 1
-							return true
-						end
-					}))
-					card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips * card.ability.extra.card*count}}})
-					return true
-                end
-            }))
+		if (context.cards_destroyed or context.remove_playing_cards or context.playing_card_added) and not context.blueprint then
+			local increase_count = 0
+			if context.cards_destroyed then
+				increase_count = card.ability.extra.chip_gain * #context.glass_shattered
+			elseif context.remove_playing_cards then
+				increase_count = card.ability.extra.chip_gain * #context.removed
+			elseif context.playing_card_added then
+				increase_count = card.ability.extra.chip_gain * #context.cards
+			end
+			card.ability.extra.chips = card.ability.extra.chips + increase_count
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.CHIPS,
+				card = card
+			}
         elseif context.joker_main then
         	return {
-        		chips = card.ability.extra.chips * card.ability.extra.card_count
+        		chips = card.ability.extra.chips 
         	}
         end
 	end
@@ -137,7 +139,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		xmult_gain = 0.4,
+		xmult_gain = 0.5,
 		xmult = 1,
 		bought = false
 	},
@@ -173,16 +175,16 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Last Dream",
 		text = {
-			"{X:mult,C:white}X#1#{} Mult",
+			"{C:chips}+#1#{} Chips",
 			"if all played cards",
 			"are of {C:hearts}Heart{} suit"
 		}
 	},
 	config = {
-		xmult = 2.5,
+		chips = 250
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult } }
+		return { vars = { card.ability.chips } }
 	end,
 	rarity = 2,
 	blueprint_compat = true,
@@ -199,7 +201,7 @@ SMODS.Joker {
 				end
 			end
 			return {
-				xmult = card.ability.xmult
+				chips = card.ability.chips
 			}
         end
 	end
@@ -212,20 +214,20 @@ SMODS.Joker {
 		name = "Justice",
 		text = {
 			"This Joker gains",
-			"{X:mult,C:white}X#1#{} Mult",
+			"{C:mult}+#1#{} Mult",
 			"at end of round",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
+			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
 		}
 	},
 	config = {
-		xmult = 1,
-		xmult_gain = 0.15,
-		xmult_gained = false
+		mult = 0,
+		mult_gain = 5,
+		mult_gained = false
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
-			card.ability.xmult_gain,
-			card.ability.xmult
+			card.ability.mult_gain,
+			card.ability.mult
 		} }
 	end,
 	rarity = 2,
@@ -236,15 +238,15 @@ SMODS.Joker {
 	cost = 6,
 	calculate = function(self, card, context)
 		if context.setting_blind then
-			card.ability.xmult_gained = false
+			card.ability.mult_gained = false
 		elseif context.joker_main then
 			return {
-				xmult = card.ability.xmult
+				mult = card.ability.mult
 			}
-		elseif context.end_of_round and not context.blueprint and not card.ability.xmult_gained then
-            card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
-            card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize{ type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } } })
-            card.ability.xmult_gained = true
+		elseif context.end_of_round and not context.blueprint and not card.ability.mult_gained then
+            card.ability.mult = card.ability.mult + card.ability.mult_gain
+            card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize{ type = 'variable', key = 'a_mult', vars = { card.ability.mult } } })
+            card.ability.mult_gained = true
         end
 	end
 }
@@ -395,16 +397,16 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Integrity",
 		text = {
-			"{X:mult,C:white}X#1#{} Mult if",
+			"{C:chips}+#1#{} Chips if",
 			"all played cards have",
 			"the {C:attention}same{} Enhancement"
 		}
 	},
 	config = {
-		xmult = 3
+		chips = 250
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult } }
+		return { vars = { card.ability.chips } }
 	end,
 	rarity = 2,
 	blueprint_compat = true,
@@ -421,7 +423,7 @@ SMODS.Joker {
 				end
 			end
 			return {
-				xmult = card.ability.xmult
+				chips = card.ability.chips
 			}
 		end
 	end

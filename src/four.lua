@@ -292,14 +292,16 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Muffet",
 		text = {
-			"{X:mult,C:white}X#1#{} Mult if you",
+			"{C:attention}+#1#{} Mult if you",
 			"have at least {C:money}$#2#{}"
 		}
 	},
 	config = {
 		extra = {
-			xmult = 3,
-			dollars = 30
+			hand_size = 3,
+			dollars = 30,
+			has_thirty = false,
+			size_increased = false
 		}
 	},
 	rarity = 2,
@@ -311,12 +313,18 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult, card.ability.extra.dollars } }
 	end,
-	calculate = function(self, card, context)
-		if context.joker_main and G.GAME.dollars > to_big(card.ability.extra.dollars) then
-        	return {
-				xmult = card.ability.extra.xmult
-			}
-        end
+	update = function(self, card, dt)
+		if G.GAME.dollars > to_big(card.ability.extra.dollars) then
+			if not size_increased then
+				G.hand:change_size(card.ability.extra.hand_size)
+				size_increased = true
+			end
+		else
+			if size_increased then
+				G.hand:change_size(-card.ability.extra.hand_size)
+				size_increased = false
+			end
+		end
 	end
 }
 
@@ -337,25 +345,52 @@ SMODS.Joker {
 	pos = { x = 5, y = 3 },
 	cost = 3,
 	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play then	
-			if 
-			--base game
-			next(context.poker_hands["Five of a Kind"]) or
+		if context.repetition and context.cardarea == G.play and G.GAME.current_round.hands_played == 0 then
+			local base = false
+			local problematic = false
+			local cryptid = false
+			local bunco = false
+			local sixsuits = false
+			--spectrum_Straight Spectrum
+			if next(context.poker_hands["Five of a Kind"]) or
 			next(context.poker_hands["Flush Five"]) or
-			next(context.poker_hands["Flush House"]) or
-			--age gap t4t yuri (yes of course i added support for my own mod)
-			next(context.poker_hands["TWT_greaterpolycule"]) or
-			--cryptid
-			next(context.poker_hands["cry_Bulwark"]) or
-			next(context.poker_hands["cry_Clusterfuck"]) or
-			next(context.poker_hands["cry_UltPair"]) or
-			next(context.poker_hands["cry_WholeDeck"]) or
-			--bunco
-			next(context.poker_hands["bunc_Spectrum"]) or
-			next(context.poker_hands["bunc_Straight Spectrum"]) or
-			next(context.poker_hands["bunc_Spectrum House"]) or
-			next(context.poker_hands["bunc_Spectrum Five"])
-			then
+			next(context.poker_hands["Flush House"]) then
+				base = true
+			end
+			if true --[[mod check]] then
+				if next(context.poker_hands["TWT_greaterpolycule"]) then
+					 problematic = true
+				end
+			end
+			if true --[[]] then
+				if next(context.poker_hands["cry_Bulwark"]) or
+				next(context.poker_hands["cry_Clusterfuck"]) or
+				next(context.poker_hands["cry_UltPair"]) or
+				next(context.poker_hands["cry_WholeDeck"]) then
+					cryptid = true
+				end
+			end
+			
+			if true then
+				if next(context.poker_hands["bunc_Spectrum"]) or
+				next(context.poker_hands["bunc_Straight Spectrum"]) or
+				next(context.poker_hands["bunc_Spectrum House"]) or
+				next(context.poker_hands["bunc_Spectrum Five"]) then
+					bunco = true
+				end
+			end
+			
+			if true then
+				if next(context.poker_hands["spectrum_Spectrum"]) or
+				next(context.poker_hands["spectrum_Straight Spectrum"]) or
+				next(context.poker_hands["spectrum_Spectrum House"]) or
+				next(context.poker_hands["spectrum_Spectrum Five"]) then
+					sixsuits = true
+				end
+			end
+			
+			
+			if base or problematic or cryptid or bunco or sixsuits then
 				return {
 					message = localize('k_again_ex'),
 					repetitions = 1,
@@ -387,7 +422,7 @@ SMODS.Joker {
 	pos = { x = 5, y = 6 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra } }
+		return { vars = { card.ability.extra, card.ability.hand_loss } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		G.hand:change_size(-card.ability.hand_loss)
