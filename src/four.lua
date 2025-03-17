@@ -97,12 +97,12 @@ SMODS.Joker {
 		chip_gain = 5,
 		chips = 0
 	},
-	rarity = 1,
+	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "jokers",
 	pos = { x = 3, y = 6 },
-	cost = 4,
+	cost = 5,
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
 			card.ability.chip_gain,
@@ -292,7 +292,7 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Muffet",
 		text = {
-			"{C:attention}+#1#{} Mult if you",
+			"{C:attention}+#1#{} hand size if you",
 			"have at least {C:money}$#2#{}"
 		}
 	},
@@ -300,8 +300,8 @@ SMODS.Joker {
 		extra = {
 			hand_size = 3,
 			dollars = 30,
-			has_thirty = false,
-			size_increased = false
+			size_increased = false,
+			in_build = false
 		}
 	},
 	rarity = 2,
@@ -311,20 +311,29 @@ SMODS.Joker {
 	pos = { x = 4, y = 6 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.xmult, card.ability.extra.dollars } }
+		return { vars = { card.ability.extra.hand_size, card.ability.extra.dollars } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		card.ability.extra.in_build = true
 	end,
 	update = function(self, card, dt)
-		if G.GAME.dollars > to_big(card.ability.extra.dollars) then
-			if not size_increased then
-				G.hand:change_size(card.ability.extra.hand_size)
-				size_increased = true
-			end
-		else
-			if size_increased then
-				G.hand:change_size(-card.ability.extra.hand_size)
-				size_increased = false
+		if card.ability.extra.in_build then
+			if to_number(G.GAME.dollars) > card.ability.extra.dollars then
+				if not size_increased then
+					G.hand:change_size(card.ability.extra.hand_size)
+					size_increased = true
+				end
+			else
+				if size_increased then
+					G.hand:change_size(-card.ability.extra.hand_size)
+					size_increased = false
+				end
 			end
 		end
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.hand:change_size(-card.ability.extra.hand_size)
+		card.ability.extra.in_build = false
 	end
 }
 
@@ -333,9 +342,9 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Empty Gun",
 		text = {
-			"Retrigger all played",
-			"cards if played hand",
-			"is a {C:attention}secret hand{}"
+			"If {C:attention}first hand{} of round",
+			"is a {C:attention}secret hand{},",
+			"retrigger all played cards"
 		}
 	},
 	rarity = 2,
@@ -351,18 +360,19 @@ SMODS.Joker {
 			local cryptid = false
 			local bunco = false
 			local sixsuits = false
-			--spectrum_Straight Spectrum
+			
 			if next(context.poker_hands["Five of a Kind"]) or
 			next(context.poker_hands["Flush Five"]) or
 			next(context.poker_hands["Flush House"]) then
 				base = true
 			end
-			if true --[[mod check]] then
+			
+			if (SMODS.Mods["TWT"] or {}).can_load then
 				if next(context.poker_hands["TWT_greaterpolycule"]) then
 					 problematic = true
 				end
 			end
-			if true --[[]] then
+			if (SMODS.Mods["Cryptid"] or {}).can_load then
 				if next(context.poker_hands["cry_Bulwark"]) or
 				next(context.poker_hands["cry_Clusterfuck"]) or
 				next(context.poker_hands["cry_UltPair"]) or
@@ -371,7 +381,7 @@ SMODS.Joker {
 				end
 			end
 			
-			if true then
+			if (SMODS.Mods["Bunco"] or {}).can_load then
 				if next(context.poker_hands["bunc_Spectrum"]) or
 				next(context.poker_hands["bunc_Straight Spectrum"]) or
 				next(context.poker_hands["bunc_Spectrum House"]) or
@@ -380,15 +390,12 @@ SMODS.Joker {
 				end
 			end
 			
-			if true then
-				if next(context.poker_hands["spectrum_Spectrum"]) or
-				next(context.poker_hands["spectrum_Straight Spectrum"]) or
-				next(context.poker_hands["spectrum_Spectrum House"]) or
-				next(context.poker_hands["spectrum_Spectrum Five"]) then
+			if (SMODS.Mods["SixSuits"] or {}).can_load then
+				if next(context.poker_hands["six_Spectrum House"]) or
+				next(context.poker_hands["six_Spectrum Five"]) then
 					sixsuits = true
 				end
 			end
-			
 			
 			if base or problematic or cryptid or bunco or sixsuits then
 				return {
@@ -478,7 +485,7 @@ SMODS.Joker {
 				SMODS.calculate_effect({ dollars = card.ability.extra.bigbucks }, card)
 			end
 		elseif context.end_of_round and not context.blueprint then
-			if pseudorandom("glamburger_eaten") < G.GAME.probabilities.normal/card.ability.extra.bigbucks_chance then
+			if pseudorandom("glamburger_eaten") < G.GAME.probabilities.normal/card.ability.extra.munch_chance then
 				G.E_MANAGER:add_event(Event({
 					func = function()
 						play_sound('tarot1')
@@ -613,7 +620,8 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		mult = 15
+		mult = 15,
+		has_scored = false
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -625,7 +633,9 @@ SMODS.Joker {
 		return { vars = { card.ability.mult } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.hand and context.other_card:is_face() then
+		if context.before and context.cardarea == G.jokers then
+			card.ability.has_scored = false
+		elseif context.individual and context.cardarea == G.hand and context.other_card:is_face() and not card.ability.has_scored then
 			if context.other_card.debuff then
 				return {
 					message = localize('k_debuffed'),
@@ -633,10 +643,12 @@ SMODS.Joker {
 					card = context.blueprint_card or card,
 				}
 			else
-				--[[return {
+				return {
 					mult = card.ability.mult
-				}]]
+				}
 			end
+		elseif context.after and context.cardarea == G.jokers then
+			card.ability.has_scored = true
         end
 	end
 }

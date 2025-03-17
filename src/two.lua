@@ -14,7 +14,7 @@ SMODS.Joker {
 		mult_gain = 3,
 		mult = 0
 	},
-	rarity = 2,
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "jokers",
@@ -424,7 +424,8 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		xmult = 1.25
+		xmult = 1.25,
+		has_scored = false
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -436,7 +437,9 @@ SMODS.Joker {
 		return { vars = { card.ability.xmult } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.hand and (context.other_card.base.suit == "Spades" or SMODS.has_any_suit(context.other_card)) then
+		if context.before and context.cardarea == G.jokers then
+			card.ability.has_scored = false
+		elseif context.individual and context.cardarea == G.hand and (context.other_card.base.suit == "Spades" or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
 			if context.other_card.debuff then
 				return {
 					message = localize('k_debuffed'),
@@ -448,6 +451,8 @@ SMODS.Joker {
 					xmult = card.ability.xmult
 				}
 			end
+		elseif context.after and context.cardarea == G.jokers then
+			card.ability.has_scored = true
         end
 	end
 }
@@ -493,6 +498,10 @@ SMODS.Joker {
 			}))
 
 			return
+		elseif context.joker_main then
+			return {
+				chips = card.ability.chips
+			}
 		end
 	end
 }
@@ -623,7 +632,9 @@ SMODS.Joker {
 		return { vars = { G.GAME.probabilities.normal, card.ability.odds, card.ability.money } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.hand and (context.other_card.base.suit == "Diamonds" or SMODS.has_any_suit(context.other_card)) then
+		if context.before and context.cardarea == G.jokers then
+			card.ability.has_scored = false
+		elseif context.individual and context.cardarea == G.hand and (context.other_card.base.suit == "Diamonds" or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
 			if pseudorandom("waterfall") < G.GAME.probabilities.normal/card.ability.odds then
 				if context.other_card.debuff then
 					return {
@@ -637,7 +648,9 @@ SMODS.Joker {
 					}
 				end
 			end
-        end
+        elseif context.after and context.cardarea == G.jokers then
+			card.ability.has_scored = true
+		end
 	end
 }
 

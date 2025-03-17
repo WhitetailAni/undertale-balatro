@@ -498,7 +498,13 @@ SMODS.Joker {
 	config = {
 		foil = 100,
 		holo = 20,
-		poly = 2
+		poly = 2,
+		
+		old_foil = 0,
+		old_holo = 0,
+		old_poly = 0,
+		
+		in_build = false
 	},
 	rarity = 2,
 	blueprint_compat = false,
@@ -517,17 +523,27 @@ SMODS.Joker {
 		} }
 	end,
 	add_to_deck = function(self, card, from_debuff)
+		card.ability.old_foil = G.P_CENTERS.e_foil.config.chips
+		card.ability.old_holo = G.P_CENTERS.e_holo.config.mult
+		card.ability.old_poly = G.P_CENTERS.e_polychrome.config.x_mult
+	
+		card.ability.in_build = true
+		
 		edition_values(card.ability.foil, card.ability.holo, card.ability.poly)
 	end,
 	update = function(self, card, dt)
-		edition_values(card.ability.foil, card.ability.holo, card.ability.poly)
+		if card.ability.in_build then
+			edition_values(card.ability.foil, card.ability.holo, card.ability.poly)
+		end
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		edition_values(50, 10, 1.5)
+		card.ability.in_build = false
+		edition_values(card.ability.old_foil, card.ability.old_holo, card.ability.old_poly)
 	end,
 	calculate = function(self, card, context)
 		if context.game_over then
-			edition_values(50, 10, 1.5)
+			card.ability.in_build = false
+			edition_values(card.ability.old_foil, card.ability.old_holo, card.ability.old_poly)
 		end
 	end
 }

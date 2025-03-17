@@ -14,8 +14,8 @@ SMODS.Joker {
 			xmult = 2,
 			cycled = 3,
 			hands_remaining = 3,
-			secret_chance = 5,
-			super_secret_chance = 15
+			secret_chance = 3,
+			super_secret_chance = 9
 		},
 		spared = false,
 		old_bones = ""
@@ -374,11 +374,11 @@ SMODS.Joker {
 		name = "Gerson",
 		text = {
 			"All cards and packs in shop",
-			"are an additional {C:money}#1#%{} off"
+			"are {C:money}$#1#{} cheaper"
 		}
 	},
 	config = {
-		discount = 10
+		discount = 1
 	},
 	rarity = 1,
 	blueprint_compat = false,
@@ -390,10 +390,10 @@ SMODS.Joker {
 		return { vars = { card.ability.discount } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
-		G.GAME.discount_percent = G.GAME.discount_percent + card.ability.discount
+		G.GAME.inflation = -card.ability.discount
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.GAME.discount_percent = G.GAME.discount_percent - card.ability.discount
+		G.GAME.inflation = card.ability.discount
 	end
 }
 
@@ -408,7 +408,8 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		chips = 30
+		chips = 30,
+		has_scored = false
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -420,7 +421,9 @@ SMODS.Joker {
 		return { vars = { card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.hand and (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) then
+		if context.before and context.cardarea == G.jokers then
+			card.ability.has_scored = false
+		elseif context.individual and context.cardarea == G.hand and (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
 			if context.other_card.debuff then
 				return {
 					message = localize('k_debuffed'),
@@ -432,6 +435,8 @@ SMODS.Joker {
 					chips = card.ability.chips
 				}
 			end
+		elseif context.after and context.cardarea == G.jokers then
+			card.ability.has_scored = true
         end
 	end
 }
@@ -598,11 +603,11 @@ SMODS.Joker {
 		text = {
 			"Gives a random {C:attention}Bonus{}",
 			"when Blind is selected",
-			"{C:inactive}[Bonuses are {C:blue}+#1#{C:inactive} Hands,",
+			--[["{C:inactive}[Bonuses are {C:blue}+#1#{C:inactive} Hands,",
 			"{C:red}+#2#{C:inactive} Discards, {C:attention}+#3#{C:inactive} hand size,",
 			"{C:chips}+#4#{C:inactive} Chips, {C:mult}+#5#{C:inactive} Mult, {X:mult,C:white}X#6#{C:inactive} Mult,",
 			"{C:inactive}retriggering all scored cards,",
-			"{C:inactive}or disabling the current {C:attention}Boss Blind"
+			"{C:inactive}or disabling the current {C:attention}Boss Blind"]]
 		}
 	},
 	config = {
@@ -703,7 +708,7 @@ SMODS.Joker {
 			end
 			
 			if card.ability.states.hand then
-				G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.values.hand_count
+				G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.values.hand_count
         		ease_hands_played(card.ability.values.hand_count)
 			elseif card.ability.states.discard then
 				G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.values.discard_count

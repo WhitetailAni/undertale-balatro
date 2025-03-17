@@ -1,0 +1,92 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+[vars]
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'function copy_card(other, new_card, card_scale, playing_card, strip_edition)'
+position = 'at'
+payload = '''
+function copy_card(other, new_card, card_scale, playing_card, strip_edition, flag_context_raw)
+	local flag_context = flag_context_raw
+	if flag_context == nil then
+		flag_context = true
+		if card_scale ~= nil then
+			flag_context = false
+		end
+	end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'new_card.pinned = other.pinned'
+position = 'at'
+payload = '''
+if flag_context then
+	SMODS.calculate_context({copied_card = true, copied_card = new_card})
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local _card = copy_card(context.full_hand[1], nil, nil, G.playing_card)'
+position = 'at'
+payload = 'local _card = copy_card(context.full_hand[1], nil, nil, G.playing_card, nil, true)'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'copy_card(rightmost, G.hand.highlighted[i])'
+position = 'at'
+payload = 'copy_card(rightmost, G.hand.highlighted[i], nil, nil, nil, true)'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local _card = copy_card(G.hand.highlighted[1], nil, nil, G.playing_card)'
+position = 'at'
+payload = 'local _card = copy_card(G.hand.highlighted[1], nil, nil, G.playing_card, nil, true)'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local card = copy_card(chosen_joker, nil, nil, nil, chosen_joker.edition and chosen_joker.edition.negative)'
+position = 'at'
+payload = 'local card = copy_card(chosen_joker, nil, nil, nil, chosen_joker.edition and chosen_joker.edition.negative, true)'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local card_to_save = self and copy_card(self) or Card(0, 0, G.CARD_W, G.CARD_H, G.P_CARDS.empty, center)'
+position = 'at'
+payload = 'local card_to_save = self and copy_card(self, nil, nil, nil, nil, false) or Card(0, 0, G.CARD_W, G.CARD_H, G.P_CARDS.empty, center)'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "local card = copy_card(pseudorandom_element(G.consumeables.cards, pseudoseed('perkeo')), nil)"
+position = 'at'
+payload = "local card = copy_card(pseudorandom_element(G.consumeables.cards, pseudoseed('perkeo')), nil, nil, nil, nil, true)"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = 'local copy = copy_card(SUITS[suit_map[j]][i],nil, _scale)'
+position = 'at'
+payload = 'local copy = copy_card(SUITS[suit_map[j]][i], nil, _scale, nil, nil, false)'
+match_indent = true
+

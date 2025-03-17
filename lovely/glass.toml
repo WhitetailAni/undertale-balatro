@@ -1,0 +1,42 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+[vars]
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = '''
+if scoring_hand and SMODS.has_enhancement(card, 'm_glass') and not card.debuff and pseudorandom('glass') < G.GAME.probabilities.normal/(card.ability.name == 'Glass Card' and card.ability.extra or G.P_CENTERS.m_glass.config.extra) then
+'''
+position = "at"
+payload = '''
+if scoring_hand and SMODS.has_enhancement(card, 'm_glass') and not card.debuff and pseudorandom('glass') < G.GAME.probabilities.glass/(card.ability.name == 'Glass Card' and card.ability.extra or G.P_CENTERS.m_glass.config.extra) then
+'''
+match_indent = false
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+probabilities = {
+	normal = 1,
+},
+'''
+position = "at"
+payload = '''
+probabilities = {
+	normal = 1,
+	glass = 1,
+},
+'''
+match_indent = false
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "elseif _c.effect == 'Glass Card' then loc_vars = {cfg.Xmult, G.GAME.probabilities.normal, cfg.extra}"
+position = "at"
+payload = "elseif _c.effect == 'Glass Card' then loc_vars = {cfg.Xmult, G.GAME.probabilities.glass, cfg.extra}"
+match_indent = false

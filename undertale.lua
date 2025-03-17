@@ -27,6 +27,14 @@ SMODS.Atlas {
     py = 95
 }
 
+SMODS.Atlas {
+	key = "splash",
+	path = "splash.png",
+	px = 312,
+	py = 169,
+	atlas_table = "ASSET_ATLAS"
+}
+
 SMODS.Back {
 	key = "dogdeck",
 	pos = { x = 0, y = 0 },

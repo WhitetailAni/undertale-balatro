@@ -315,6 +315,7 @@ SMODS.Joker {
 		extra = {
 			hand_size_gain = 1,
 			joker_count = 0,
+			in_build = false
 		}
 	},
 	rarity = 3,
@@ -324,18 +325,29 @@ SMODS.Joker {
 	pos = { x = 0, y = 0 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		if G.jokers ~= nil and G.jokers.cards ~= nil then
-			return { vars = { card.ability.extra.hand_size_gain, #G.jokers.cards - card.ability.extra.joker_count } }
+		if card.ability.extra.in_build then
+			return { vars = { card.ability.extra.hand_size_gain, #G.jokers.cards * card.ability.extra.hand_size_gain } }
 		else
 			return { vars = { card.ability.extra.hand_size_gain, card.ability.extra.hand_size_gain } }
 		end
 	end,
+	add_to_deck = function(self, card, from_debuff)
+		card.ability.extra.in_build = true
+		G.hand:change_size((#G.jokers.cards * card.ability.extra.hand_size_gain))
+		card.ability.extra.joker_count = #G.jokers.cards
+	end,
 	update = function(self, card, dt)
-		if card.ability.extra.joker_count ~= #G.jokers.cards then
-			G.hand:change_size(#G.jokers.cards - card.ability.extra.joker_count)
-			card.ability.extra.joker_count = #G.jokers.cards
+		if card.ability.extra.in_build then
+			if card.ability.extra.joker_count ~= #G.jokers.cards then
+				G.hand:change_size(#G.jokers.cards - card.ability.extra.joker_count)
+				card.ability.extra.joker_count = #G.jokers.cards
+			end
 		end
-	end
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.hand:change_size(-(#G.jokers.cards * card.ability.extra.hand_size_gain))
+		card.ability.extra.in_build = false
+	end,
 }
 
 SMODS.Joker {
@@ -648,7 +660,7 @@ SMODS.Joker {
 		return { vars = { card.ability.xmult } }
 	end,
 	calculate = function(self, card, context)
-		if context.setting_blind and not (context.blueprint_card or card).getting_sliced and #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit then
+		if context.setting_blind and not (context.blueprint_card or card).getting_sliced and #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit and context.blind.boss then
 			local uncommon_or_rare = pseudorandom("toriel")
 			local color = nil
 			local rarity = 0
