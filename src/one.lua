@@ -543,7 +543,8 @@ SMODS.Joker {
 	config = {
 		extra = {
 			odds = 10
-		}
+		},
+		in_build = false
 	},
 	rarity = 1,
 	blueprint_compat = false,
@@ -552,15 +553,19 @@ SMODS.Joker {
 	pos = { x = 5, y = 0 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { G.GAME.probabilities.normal, card.ability.extra.odds } }
+		return { vars = { G.GAME.probabilities.glass, card.ability.extra.odds } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
+		card.ability.in_build = true
 		glass_chance(card.ability.extra.odds)
 	end,
 	update = function(self, card, dt)
-		glass_chance(card.ability.extra.odds)
+		if card.ability.in_build then
+			glass_chance(card.ability.extra.odds)
+		end
 	end,
 	remove_from_deck = function(self, card, from_debuff)
+		card.ability.in_build = false
 		glass_chance(4)
 	end
 }

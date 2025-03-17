@@ -348,7 +348,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		old_glass = 0,
+		in_build = false
 	},
 	rarity = 2,
 	blueprint_compat = false,
@@ -357,14 +357,17 @@ SMODS.Joker {
 	pos = { x = 1, y = 2 },
 	cost = 8,
 	add_to_deck = function(self, card, from_debuff)
-		card.ability.old_glass = G.GAME.probabilities.glass
+		card.ability.in_build = true
 		G.GAME.probabilities.glass = 0
 	end,
 	update = function(self, card, dt)
-		G.GAME.probabilities.glass = 0
+		if card.ability.in_build then
+			G.GAME.probabilities.glass = 0
+		end
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.GAME.probabilities.glass = card.ability.old_glass
+		card.ability.in_build = false
+		G.GAME.probabilities.glass = G.GAME.probabilities.normal
 	end
 }
 
