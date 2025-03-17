@@ -35,6 +35,8 @@ SMODS.Atlas {
 	atlas_table = "ASSET_ATLAS"
 }
 
+--SMODS.calculate_end_of_round_effects("test")
+
 SMODS.Back {
 	key = "dogdeck",
 	pos = { x = 0, y = 0 },

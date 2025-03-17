@@ -97,12 +97,12 @@ SMODS.Joker {
 		chip_gain = 5,
 		chips = 0
 	},
-	rarity = 2,
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "jokers",
 	pos = { x = 3, y = 6 },
-	cost = 5,
+	cost = 4,
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
 			card.ability.chip_gain,
