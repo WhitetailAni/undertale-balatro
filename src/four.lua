@@ -4,7 +4,7 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Stained Apron",
 		text = {
-			"Earn {C:money}$#1#{} on every",
+			"Earn {C:money}$#1#{} on {C:attention}every{}",
 			"{C:attention}other{} scored card"
 		}
 	},
@@ -48,9 +48,6 @@ SMODS.Joker {
 			"{C:inactive}(Must have room){}"
 		}
 	},
-	config = {
-		card_count = 2
-	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = false,
@@ -58,11 +55,11 @@ SMODS.Joker {
 	pos = { x = 1, y = 3 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.card_count } }
+		return { vars = { G.consumeables.config.card_limit } }
 	end,
 	calculate = function(self, card, context)
 		if context.selling_self then
-			for i = 1, math.min(card.ability.card_count, G.consumeables.config.card_limit - #G.consumeables.cards) do
+			for i = 1, G.consumeables.config.card_limit - #G.consumeables.cards do
 				G.E_MANAGER:add_event(Event({
 					trigger = 'after',
 					delay = 0.4,
@@ -137,9 +134,6 @@ SMODS.Joker {
 			"{C:inactive}(Must have room){}"
 		}
 	},
-	config = {
-		card_count = 2
-	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = false,
@@ -147,11 +141,11 @@ SMODS.Joker {
 	pos = { x = 2, y = 3 },
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.card_count } }
+		return { vars = { G.consumeables.config.card_limit } }
 	end,
 	calculate = function(self, card, context)
 		if context.selling_self then
-			for i = 1, math.min(card.ability.card_count, G.consumeables.config.card_limit - #G.consumeables.cards) do
+			for i = 1, G.consumeables.config.card_limit do
 				G.E_MANAGER:add_event(Event({
 					trigger = 'after',
 					delay = 0.4,
@@ -176,12 +170,15 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Burnt Pan",
 		text = {
-			"{C:tarot}+#1#{} consumable slots"
+			"{C:tarot}+#1#{} consumable slots",
+			"Earn {C:money}$#2#{} for each consumable",
+			"retained at end of round"
 		}
 	},
 	config = {
 		extra = {
 			slots = 2,
+			money_gain = 1
 		}
 	},
 	rarity = 1,
@@ -191,13 +188,27 @@ SMODS.Joker {
 	pos = { x = 9, y = 2 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.slots } }
+		return { vars = { card.ability.extra.slots, card.ability.extra.money_gain } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.slots
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.slots
+	end,
+	calculate = function(self, card, context)
+		if context.end_of_round and context.cardarea == G.jokers then
+			print(#G.consumeables.cards)
+			for i = 1, #G.consumeables.cards do
+				ease_dollars(card.ability.extra.money_gain)
+                return {
+                    message = localize('$')..card.ability.extra.money_gain,
+                    colour = G.C.MONEY,
+                    delay = 0.45, 
+                    card = G.consumeables.cards[i]
+                }
+			end
+		end
 	end
 }
 
@@ -305,7 +316,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	blueprint_compat = true,
+	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "jokers",
 	pos = { x = 4, y = 6 },
@@ -318,7 +329,7 @@ SMODS.Joker {
 	end,
 	update = function(self, card, dt)
 		if card.ability.extra.in_build then
-			if to_number(G.GAME.dollars) > card.ability.extra.dollars then
+			if to_number(G.GAME.dollars) >= card.ability.extra.dollars then
 				if not size_increased then
 					G.hand:change_size(card.ability.extra.hand_size)
 					size_increased = true
@@ -342,9 +353,10 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Empty Gun",
 		text = {
-			"If {C:attention}first hand{} of round",
-			"is a {C:attention}secret hand{},",
-			"retrigger all played cards"
+			"If {C:attention}first hand{} of",
+			"round is a {C:attention}secret{}",
+			"{C:attention}hand{}, retrigger all",
+			"played cards"
 		}
 	},
 	rarity = 2,
@@ -355,49 +367,7 @@ SMODS.Joker {
 	cost = 3,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and G.GAME.current_round.hands_played == 0 then
-			local base = false
-			local problematic = false
-			local cryptid = false
-			local bunco = false
-			local sixsuits = false
-			
-			if next(context.poker_hands["Five of a Kind"]) or
-			next(context.poker_hands["Flush Five"]) or
-			next(context.poker_hands["Flush House"]) then
-				base = true
-			end
-			
-			if (SMODS.Mods["TWT"] or {}).can_load then
-				if next(context.poker_hands["TWT_greaterpolycule"]) then
-					 problematic = true
-				end
-			end
-			if (SMODS.Mods["Cryptid"] or {}).can_load then
-				if next(context.poker_hands["cry_Bulwark"]) or
-				next(context.poker_hands["cry_Clusterfuck"]) or
-				next(context.poker_hands["cry_UltPair"]) or
-				next(context.poker_hands["cry_WholeDeck"]) then
-					cryptid = true
-				end
-			end
-			
-			if (SMODS.Mods["Bunco"] or {}).can_load then
-				if next(context.poker_hands["bunc_Spectrum"]) or
-				next(context.poker_hands["bunc_Straight Spectrum"]) or
-				next(context.poker_hands["bunc_Spectrum House"]) or
-				next(context.poker_hands["bunc_Spectrum Five"]) then
-					bunco = true
-				end
-			end
-			
-			if (SMODS.Mods["SixSuits"] or {}).can_load then
-				if next(context.poker_hands["six_Spectrum House"]) or
-				next(context.poker_hands["six_Spectrum Five"]) then
-					sixsuits = true
-				end
-			end
-			
-			if base or problematic or cryptid or bunco or sixsuits then
+			if played_secret_hand(context.poker_hands) then
 				return {
 					message = localize('k_again_ex'),
 					repetitions = 1,

@@ -29,7 +29,7 @@ pattern = 'new_card.pinned = other.pinned'
 position = 'at'
 payload = '''
 if flag_context then
-	SMODS.calculate_context({copied_card = true, copied_card = new_card})
+	SMODS.calculate_context({copied_card = true, card = new_card})
 end
 '''
 match_indent = true

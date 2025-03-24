@@ -476,7 +476,7 @@ SMODS.Joker {
 	pos = { x = 5, y = 1 },
 	cost = 5,
 	config = {
-		chip_gain = 10,
+		chip_gain = 15,
 		chips = 0,
 	},
 	loc_vars = function(self, info_queue, card)
@@ -511,7 +511,7 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Echo Flower",
 		text = {
-			"Retriggers every",
+			"Retriggers {C:attention}every{}",
 			"{C:attention}other{} scored card"
 		}
 	},
@@ -615,7 +615,7 @@ SMODS.Joker {
 			"Each card of {C:diamonds}Diamond{}",
 			"suit held in hand has a",
 			"{C:green}#1# in #2#{} chance to give",
-			"{C:money}$#3#{} when scored"
+			"{C:money}$#3#{} at end of round"
 		}
 	},
 	config = {

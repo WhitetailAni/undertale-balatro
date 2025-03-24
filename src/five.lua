@@ -7,12 +7,19 @@ SMODS.Joker {
 			"Scored cards of {C:hearts}Heart{}",
 			"suit give {C:money}$#1#{} or {C:chips}+#2#{}",
 			"Chips when scored"
-		}
+		},
+		unlock = {
+			"Have no more than",
+			"{C:money}$50{} at any point ",
+			"during a run"
+		},
 	},
 	config = {
 		money = 1,
 		chips = 20
 	},
+	unlocked = false,
+	unlock_condition = {type = 'win_custom'},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -45,12 +52,18 @@ SMODS.Joker {
 			"Doubles {C:money}interest{} and",
 			"{C:money}Blind payout{} if round",
 			"was won on {C:attention}final hand{}"
+		},
+		unlock = {
+			"Win a run {C:attention}without{}",
+			"skipping any Blinds"
 		}
 	},
 	config = {
 		final_hand = false,
 		increased_interest = false
 	},
+	unlocked = false,
+	unlock_condition = {type = 'win_custom'},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -81,19 +94,24 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Boss Monster Soul",
 		text = {
-			"Gains {C:chips}+#1#{} Chips",
-			"when a playing card is",
-			"either {C:attention}destroyed{} or",
-			"{C:attention}added{} to your deck",
+			"Gains {C:chips}+#1#{} Chips when a playing",
+			"card is either {C:attention}destroyed{}",
+			"or {C:attention}added{} to your deck",
 			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
+		},
+		unlock = {
+			"Discard a",
+			"{C:attention}Full House{}"
 		}
 	},
 	config = {
 		extra = {
 			chips = 0,
-			chip_gain = 20
+			chip_gain = 35
 		}
 	},
+	unlocked = false,
+	unlock_condition = {type = 'discard_custom'},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -136,6 +154,10 @@ SMODS.Joker {
 			"for each shop visited",
 			"{C:attention}without buying anything{}",
 			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
+		},
+		unlock = {
+			"Play a hand containing",
+			"at least 4 {C:attention}Glass Cards{}"
 		}
 	},
 	config = {
@@ -146,6 +168,8 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
+	unlocked = false,
+	unlock_condition = {type = 'hand_contents'},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -178,6 +202,10 @@ SMODS.Joker {
 			"{C:chips}+#1#{} Chips",
 			"if all played cards",
 			"are of {C:hearts}Heart{} suit"
+		},
+		unlock = {
+			"Reach Ante",
+			"level {C:attention}10{}"
 		}
 	},
 	config = {
@@ -186,6 +214,8 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips } }
 	end,
+	unlocked = false,
+	unlock_condition = { type = 'ante_up', ante = 10, extra = 10 },
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -217,6 +247,10 @@ SMODS.Joker {
 			"{C:mult}+#1#{} Mult",
 			"at end of round",
 			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+		},
+		unlock = {
+			"Play a",
+			"{C:attention}secret hand"
 		}
 	},
 	config = {
@@ -224,6 +258,8 @@ SMODS.Joker {
 		mult_gain = 5,
 		mult_gained = false
 	},
+	unlocked = false,
+	unlock_condition = {type = 'hand_contents'},
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
 			card.ability.mult_gain,
@@ -260,6 +296,10 @@ SMODS.Joker {
 			"{C:attention}Consumable{} card held",
 			"{C:blue}+#2#{} consumable slots",
 			"{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"
+		},
+		unlock = {
+			"Have at least",
+			"{C:attention}7{} Jokers"
 		}
 	},
 	config = {
@@ -268,6 +308,8 @@ SMODS.Joker {
 			slots = 4
 		}
 	},
+	unlocked = false,
+	unlock_condition = {type = 'modify_jokers'},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -304,6 +346,10 @@ SMODS.Joker {
 			"Each played {C:attention}Ace{}",
 			"gives {X:mult,C:white}X#1#{} Mult",
 			"when scored"
+		},
+		unlock = {
+			"Play a 5 card hand",
+			"containing only {C:attention}Aces{}"
 		}
 	},
 	config = {
@@ -312,6 +358,8 @@ SMODS.Joker {
 		}
 	},
 	rarity = 3,
+	unlocked = false,
+	unlock_condition = {type = 'hand_contents'},
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "jokers",
@@ -341,6 +389,10 @@ SMODS.Joker {
 			"gains {X:mult,C:white}X#2#{} Mult when Death",
 			"is prevented",
 			"{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"
+		},
+		unlock = {
+			"Lose a run on",
+			"Ante level {C:attention}8{}"
 		}
 	},
 	config = {
@@ -351,6 +403,10 @@ SMODS.Joker {
 		},
 		old_bones = ""
 	},
+	check_for_unlock = function(self, args)
+		return (args.type == "loss_ante" and args.ante == 8)
+	end,
+	unlocked = false,
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -400,6 +456,11 @@ SMODS.Joker {
 			"{C:chips}+#1#{} Chips if",
 			"all played cards have",
 			"the {C:attention}same{} Enhancement"
+		},
+		unlock = {
+			"Play any hand",
+			"type {C:attention}25{} times",
+			"in one run"
 		}
 	},
 	config = {
@@ -408,6 +469,8 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips } }
 	end,
+	unlocked = false,
+	unlock_condition = {type = 'hand', count = 25},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -439,8 +502,15 @@ SMODS.Joker {
 			"a {C:attention}playing card{} with",
 			"{C:hearts}Heart{} suit is destroyed",
 			"{C:inactive}(Currently {X:mult,C:white}X#2#{} Mult)"
+		},
+		unlock = {
+			"Thin your full",
+			"deck to {C:attention}30{}",
+			"cards or less"
 		}
 	},
+	unlocked = false,
+	unlock_condition = {type = 'modify_deck'},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -493,6 +563,10 @@ SMODS.Joker {
 			"{C:dark_edition}#1#{} Cards grant {C:chips}+#2#{} Chips",
 			"{C:dark_edition}#3#{} Cards grant {C:mult}+#4#{} Mult",
 			"{C:dark_edition}#5#{} Cards grant {X:mult,C:white}X#6#{} Mult",
+		},
+		unlock = {
+			"Use no {C:red}discards{} for",
+			"{C:attention}3{} consecutive rounds",
 		}
 	},
 	config = {
@@ -506,6 +580,8 @@ SMODS.Joker {
 		
 		in_build = false
 	},
+	unlocked = false,
+	unlock_condition = {type = 'round_win'},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -529,7 +605,7 @@ SMODS.Joker {
 	
 		card.ability.in_build = true
 		
-		edition_values(card.ability.foil, card.ability.holo, card.ability.poly)
+		edition_values(card.ability.foil, card.ability.holo, card.ability.poly, true)
 	end,
 	update = function(self, card, dt)
 		if card.ability.in_build then
@@ -538,7 +614,7 @@ SMODS.Joker {
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
-		edition_values(card.ability.old_foil, card.ability.old_holo, card.ability.old_poly)
+		edition_values(card.ability.old_foil, card.ability.old_holo, card.ability.old_poly, true)
 	end,
 	calculate = function(self, card, context)
 		if context.game_over then
@@ -548,10 +624,25 @@ SMODS.Joker {
 	end
 }
 
-function edition_values(foil, holo, poly)
+function edition_values(foil, holo, poly, add_remove)
 	G.P_CENTERS.e_foil.config.chips = foil
 	G.P_CENTERS.e_holo.config.mult = holo
 	G.P_CENTERS.e_polychrome.config.x_mult = poly
+	
+	if add_remove then
+		for i = 1, #G.playing_cards do
+			local card = G.playing_cards[i]
+			if card.edition then
+				if card.edition.key == "e_foil" then
+					card.edition.chips = foil
+				elseif card.edition.key == "e_holo" then
+					card.edition.mult = holo
+				elseif card.edition.key == "e_polychrome" then
+					card.edition.x_mult = poly
+				end
+			end
+		end
+	end
 end
 
 SMODS.Joker {
@@ -559,15 +650,20 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Heart Locket",
 		text = {
-			"Scored {C:attention}Steel Cards{}",
-			"have a {C:green}#1# in #2#{} chance",
-			"to give {C:mult}+#3#{} Mult"
+			"{C:attention}Steel Cards{} give",
+			"{C:mult}+#3#{} Mult when scored"
+		},
+		unlock = {
+			"Have at least {C:attention}5{}",
+			"{C:attention}Steel Cards{} in",
+			"your deck"
 		}
 	},
 	config = {
-		odds = 2,
 		mult = 15
 	},
+	unlocked = false,
+	unlock_condition = {type = 'modify_deck', extra = {count = 5, enhancement = 'Steel Card', e_key = 'm_steel'}},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -579,11 +675,9 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card.config.center_key == "m_steel" then
-			if pseudorandom("heart_locket") < G.GAME.probabilities.normal/card.ability.odds then
-				return {
-					mult = card.ability.mult
-				}
-			end
+			return {
+				mult = card.ability.mult
+			}
         end
 	end
 }
@@ -597,6 +691,10 @@ SMODS.Joker {
 			"at most {C:attention}#2#{} Enhanced",
 			"cards in your full deck",
 			"{C:inactive}(Currently {C:attention}#3#{C:inactive})"
+		},
+		unlock = {
+			"Win a run on",
+			"{C:attention}your final hand{}"
 		}
 	},
 	config = {
@@ -604,6 +702,8 @@ SMODS.Joker {
 		cap = 8,
 		xmult = 2
 	},
+	unlocked = false,
+	unlock_condition = {type = 'win_custom'},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult, card.ability.cap, card.ability.enhancement_count } }
 	end,
@@ -639,6 +739,9 @@ SMODS.Joker {
 		text = {
 			"{X:mult,C:white}X#1#{} Mult",
 			"{C:red}-#2#{} hand size"
+		},
+		unlock = {
+			"{C:red}Five heart nines.{}"
 		}
 	},
 	config = {
@@ -647,6 +750,8 @@ SMODS.Joker {
 			hand_loss = 3
 		}
 	},
+	unlocked = false,
+	unlock_condition = {type = 'hand_contents'},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
