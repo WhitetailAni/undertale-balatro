@@ -229,7 +229,7 @@ SMODS.Joker {
 		text = {
 			"If {C:attention}first hand{} of round is",
 			"a pair of {C:attention}Aces{}, destroy one",
-			"of them and create a {C:spectral}Spectral{} card",
+			"and create a {C:spectral}Spectral{} card",
 			"{C:inactive}(Must have room){}"
 		}
 	},
@@ -343,7 +343,7 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Cloudy Glasses",
 		text = {
-			"{C:attention}Glass{} Cards can",
+			"{C:attention}Glass Cards{} can",
 			"{C:attention}no longer{} break"
 		}
 	},
@@ -376,8 +376,8 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Gerson",
 		text = {
-			"All cards and packs in shop",
-			"are {C:money}$#1#{} cheaper"
+			"All cards and packs",
+			"in shop are {C:money}$#1#{} cheaper"
 		}
 	},
 	config = {
@@ -394,9 +394,15 @@ SMODS.Joker {
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		G.GAME.inflation = -card.ability.discount
+		for k, v in pairs(G.I.CARD) do
+			if v.set_cost then v:set_cost() end
+		end
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.GAME.inflation = card.ability.discount
+		G.GAME.inflation = G.GAME.inflation + card.ability.discount
+		for k, v in pairs(G.I.CARD) do
+			if v.set_cost then v:set_cost() end
+		end
 	end
 }
 

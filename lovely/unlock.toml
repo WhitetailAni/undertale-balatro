@@ -1,0 +1,277 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+[vars]
+# DEBUG PATCH!!! REMOVE
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "function check_for_unlock(args)"
+position = "after"
+payload = "--print(args)"
+match_indent = true
+
+#omega flowey
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+if G.GAME.round_resets.ante <= G.GAME.win_ante then
+	if not G.GAME.seeded and not G.GAME.challenge then
+'''
+position = "at"
+payload = '''
+if G.GAME.round_resets.ante <= G.GAME.win_ante then
+	check_for_unlock({type = 'loss_ante', ante = G.GAME.round_resets.ante})
+	if not G.GAME.seeded and not G.GAME.challenge then
+'''
+match_indent = true
+
+#boss monster soul
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if args.type == 'discard_custom' then"
+position = "after"
+payload = '''
+	G.GAME.discard_streak = -1
+	if card.key == 'j_UT_boss_monster_soul' then 
+		local eval = evaluate_poker_hand(args.cards)
+		if next(eval['Full House']) then
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_CORE' then 
+		local eval = evaluate_poker_hand(args.cards)
+		if next(eval['Straight']) then
+			unlock_card(card)
+		end
+	end
+'''
+match_indent = true
+
+#bravery, asriel, chara, justice
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if args.type == 'hand_contents' then"
+position = "after"
+payload = '''
+	if card.key == 'j_UT_justice' then
+		local eval = evaluate_poker_hand(args.cards)
+		if played_secret_hand(eval) then
+			ret = true
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_surface' then 
+		local tally = 0
+		for j = 1, #args.cards do
+			if SMODS.has_enhancement(args.cards[j], 'm_stone') then
+				tally = tally+1
+			end
+		end
+		if tally >= 4 then 
+			ret = true
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_bravery' then 
+		local tally = 0
+		for j = 1, #args.cards do
+			if SMODS.has_enhancement(args.cards[j], 'm_glass') then
+				tally = tally+1
+			end
+		end
+		if tally >= 4 then 
+			ret = true
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_asriel' then 
+		local tally = 0
+		for j = 1, #args.cards do
+			if args.cards[j].base.value == "Ace" then
+				tally = tally+1
+			end
+		end
+		if tally >= 4 then 
+			ret = true
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_chara' then 
+		local tally = 0
+		for j = 1, #args.cards do
+			if args.cards[j]:get_id() == 9 then
+				tally = tally+1
+			end
+		end
+		if tally >= 5 then 
+			ret = true
+			unlock_card(card)
+		end
+	end
+'''
+match_indent = true
+
+#real knife
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+if args.type == 'modify_deck' then
+    if card.unlock_condition.extra and card.unlock_condition.extra.suit then
+'''
+position = "at"
+payload = '''
+if args.type == 'modify_deck' then
+	if card.key == 'j_UT_chara' then
+		if G.deck and G.deck.config.card_limit <= 20 then
+			ret = true
+			unlock_card(card)
+		end
+	elseif card.unlock_condition.extra and card.unlock_condition.extra.suit then
+'''
+match_indent = true
+
+
+#integrity
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if args.type == 'hand' and args.handname == card.unlock_condition.extra then"
+position = "before"
+payload = '''
+if args.type == 'hand' and card.unlock_condition.count then
+	if card.unlock_condition.hand then
+		if G.GAME.hands[card.unlock_condition.hand].played >= card.unlock_condition.count then
+			ret = true
+			unlock_card(card)
+		end
+	else
+		for k, v in pairs(G.GAME.hands) do
+			if v.played >= card.unlock_condition.count then
+				ret = true
+				unlock_card(card)
+			end
+		end
+	end
+end
+'''
+match_indent = true
+
+#patience, worn dagger, perseverance, fun value
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if args.type == 'win_custom' then"
+position = "after"
+payload = '''
+	if card.key == 'j_UT_perseverance' then
+		if G.GAME.current_round.hands_left == 0 then
+			ret = true
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_patience' then 
+		if G.GAME.skips == 0 then
+			ret = true
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_worn_dagger' then 
+		if to_big(G.GAME.dollar_max) <= to_big(50) then
+			ret = true
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_gaster' then 
+		for i = 1, #G.jokers.cards do
+			if G.jokers.cards[i].key == 'j_UT_SURVEY_PROGRAM' then
+				ret = true
+				unlock_card(card)
+			end
+		end
+	end
+	if card.key == 'j_UT_fun_value' then 
+		if pseudorandom("fun_value_unlock") < G.GAME.probabilities.normal/10 then
+			ret = true
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_SURVEY_PROGRAM' then
+		if G.PROFILES[G.SETTINGS.profile].career_stats.c_wins >= card.unlock_condition.count then
+			ret = true
+			unlock_card(card)
+		end
+	end
+'''
+match_indent = true
+
+#worn dagger
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if args.type == 'money' then"
+position = "after"
+payload = '''
+	if to_big(G.GAME.dollar_max) < to_big(G.GAME.dollars) then
+		G.GAME.dollar_max = to_big(G.GAME.dollars)
+	end
+'''
+match_indent = true
+
+#worn dagger, kindness
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "STOP_USE = 0,"
+position = "after"
+payload = '''
+dollar_max = 0,
+discard_streak = 0,
+'''
+match_indent = true
+
+#asgore
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+if args.type == 'modify_jokers' and G.jokers then
+	if card.unlock_condition.extra.count then
+'''
+position = "at"
+payload = '''
+if args.type == 'modify_jokers' and G.jokers then
+	if card.key == 'j_UT_asgore' then
+		if #G.jokers.cards >= 7 then
+			unlock_card(card)
+		end
+	elseif card.unlock_condition.extra.count then
+'''
+match_indent = true
+
+#kindness, true reset
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if args.type == 'round_win' then"
+position = "after"
+payload = '''
+	if card.key == 'j_UT_kindness' then
+		G.GAME.discard_streak = G.GAME.discard_streak + 1
+		if G.GAME.discard_streak >= 3 then
+			unlock_card(card)
+		end
+	end
+	if card.key == 'j_UT_true_reset' then
+		if G.GAME.round_resets.ante == 0 and G.GAME.blind.boss then
+			ret = true
+			unlock_card(card)
+		end
+	end
+'''
+match_indent = true

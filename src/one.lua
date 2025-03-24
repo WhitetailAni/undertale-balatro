@@ -14,6 +14,7 @@ SMODS.Joker {
 			chips = 20
 		}
 	},
+	discovered = true,
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -46,6 +47,7 @@ SMODS.Joker {
 			xmult = 1.5,
 		}
 	},
+	discovered = true,
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -173,8 +175,8 @@ SMODS.Joker {
 			"{C:mult}+#1#{} mult when scored",
 			"Each played {C:attention}9{} gives",
 			"{C:mult}+#2#{} mult when scored,",
-			"but the Joker is {C:attention}destroyed{}",
-			"after scoring"
+			"but this Joker is",
+			"{C:attention}destroyed{} after scoring"
 		}
 	},
 	config = {
@@ -279,7 +281,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		chips = 70
+		chips = 100
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -452,10 +454,8 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		extra = {
-			chips = 40,
-			nojoker = 0
-		}
+		chips_per = 40,
+		chips = 0
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -466,20 +466,30 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		if G.jokers ~= nil and G.jokers.config ~= nil and G.jokers.cards ~= nil and G.jokers.config.card_limit ~= nil then
 			return { vars = {
-				card.ability.extra.chips,
-				card.ability.extra.chips * (G.jokers.config.card_limit - #G.jokers.cards)
+				card.ability.chips_per,
+				card.ability.chips
 			} }
 		else 
 			return { vars = {
-				card.ability.extra.chips,
-				card.ability.extra.chips
+				card.ability.chips_per,
+				card.ability.chips_per
 			} }
+		end
+	end,
+	update = function(self, card, dt)
+		if G.jokers ~= nil and G.jokers.config ~= nil and G.jokers.cards ~= nil and G.jokers.config.card_limit ~= nil then
+			card.ability.chips = (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.chips_per
+			for i = 1, #G.jokers.cards do
+				if G.jokers.cards[i].label == 'j_UT_napstablook' then
+					card.ability.chips = card.ability.chips + card.ability.chips_per
+				end
+			end
 		end
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				chips = card.ability.extra.chips * (G.jokers.config.card_limit - #G.jokers.cards)
+				chips = card.ability.chips
 			}
 		end
 	end
