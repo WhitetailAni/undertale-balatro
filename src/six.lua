@@ -19,7 +19,7 @@ SMODS.Joker {
 	pos = { x = 4, y = 8 },
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
-		if G.jokers ~= nil G.jokers.cards ~= nil  nil then
+		if G.jokers ~= nil and G.jokers.cards ~= nil then
 			return { vars = { card.ability.chips, card.ability.chips * #G.jokers.cards } }
 		else
 			return { vars = { card.ability.chips, card.ability.chips } }
