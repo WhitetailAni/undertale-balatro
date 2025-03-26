@@ -87,19 +87,10 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "game.lua"
-pattern = '''
-probabilities = {
-	normal = 1,
-},
-'''
-position = "at"
-payload = '''
-probabilities = {
-	normal = 1,
-	glass = 1,
-},
-'''
-match_indent = false
+pattern = "normal = 1,"
+position = "after"
+payload = "glass = 1"
+match_indent = true
 
 [[patches]]
 [patches.pattern]
