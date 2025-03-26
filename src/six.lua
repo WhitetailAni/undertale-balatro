@@ -335,7 +335,8 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.debuffed_individual and context.cardarea == G.jokers then
+		if context.individual and context.ignore_debuff then-- and context.cardarea == G.jokers then
+			print(context.ignore_debuff)
 			return {
 				dollars = card.ability.money
 			}
