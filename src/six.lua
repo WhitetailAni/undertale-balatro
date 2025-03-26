@@ -207,7 +207,7 @@ SMODS.Joker {
 			"when scored"
 		},
 		unlock = {
-			"Play {C:attention}20{} Pairs {C:inactive}[#1#]"
+			"Play {E:1,C:attention}20{} Pairs {C:inactive}[#1#]"
 		}
 	},
 	config = {
@@ -255,7 +255,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Discard a",
-			"{C:attention}Straight"
+			"{E:1,C:attention}Straight"
 		}
 	},
 	unlocked = false,
@@ -288,7 +288,7 @@ SMODS.Joker {
 		unlock = {
 			"In one hand,",
 			"earn at least",
-			"{C:attention}1e11{} chips"
+			"{E:1,C:attention}1e11{} chips"
 		},
 	},
 	config = {
@@ -396,7 +396,7 @@ SMODS.Joker {
 		unlock = {
 			"Win a run with any",
 			"deck on at least",
-			"{V:1}#1#{} difficulty",
+			"{E:1,V:1}#1#{} difficulty",
 		},
 	},
 	config = {
@@ -435,8 +435,8 @@ SMODS.Joker {
 			"chance to give {X:mult,C:white}X#3#{} Mult"
 		},
 		unlock = {
-			"{C:green}#1# in 10{} chance to unlock",
-			"after {C:attention}winning{} a run",
+			"{E:1,C:green}#1# in 10{} chance to unlock",
+			"after {E:1,C:attention}winning{} a run",
 		},
 	},
 	config = {
@@ -482,8 +482,8 @@ SMODS.Joker {
 			"number of {C:dark_edition}Negative{} Tags",
 		},
 		unlock = {
-			"Beat the {C:attention}Ante{}",
-			"{C:attention}0{} Boss Blind"
+			"Beat the {E:1,C:attention}Ante{}",
+			"{E:1,C:attention}0{} Boss Blind"
 		}
 	},
 	unlocked = false,
@@ -590,7 +590,7 @@ SMODS.Joker {
 			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
 		},
 		unlock = {
-			"Win {C:attention}5{} runs {C:inactive}[#1#]"
+			"Win {E:1,C:attention}5{} runs {C:inactive}[#1#]"
 		}
 	},
 	config = {
@@ -642,7 +642,7 @@ SMODS.Joker {
 			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
 		},
 		unlock = {
-			"Sell {C:attention}30{} Jokers"
+			"Sell {E:1,C:attention}30{} Jokers"
 		}
 	},
 	config = {

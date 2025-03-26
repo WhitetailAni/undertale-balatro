@@ -10,7 +10,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Have no more than",
-			"{C:money}$50{} at any point ",
+			"{E:1,C:money}$50{} at any point ",
 			"during a run"
 		},
 	},
@@ -54,7 +54,7 @@ SMODS.Joker {
 			"was won on {C:attention}final hand{}"
 		},
 		unlock = {
-			"Win a run {C:attention}without{}",
+			"Win a run {E:1,C:attention}without{}",
 			"skipping any Blinds"
 		}
 	},
@@ -101,7 +101,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Discard a",
-			"{C:attention}Full House{}"
+			"{E:1,C:attention}Full House{}"
 		}
 	},
 	config = {
@@ -157,7 +157,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Play a hand containing",
-			"at least 4 {C:attention}Glass Cards{}"
+			"at least 4 {E:1,C:attention}Glass Cards{}"
 		}
 	},
 	config = {
@@ -205,7 +205,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Reach Ante",
-			"level {C:attention}10{}"
+			"level {E:1,C:attention}10{}"
 		}
 	},
 	config = {
@@ -250,7 +250,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Play a",
-			"{C:attention}secret hand"
+			"{E:1,C:attention}secret hand"
 		}
 	},
 	config = {
@@ -299,7 +299,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Have at least",
-			"{C:attention}7{} Jokers"
+			"{E:1,C:attention}7{} Jokers"
 		}
 	},
 	config = {
@@ -309,7 +309,7 @@ SMODS.Joker {
 		}
 	},
 	unlocked = false,
-	unlock_condition = {type = 'modify_jokers'},
+	unlock_condition = {type = 'modify_jokers', extra = { count = 7 } },
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -349,7 +349,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Play a 5 card hand",
-			"containing only {C:attention}Aces{}"
+			"containing only {E:1,C:attention}Aces{}"
 		}
 	},
 	config = {
@@ -392,7 +392,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Lose a run on",
-			"Ante level {C:attention}8{}"
+			"Ante level {E:1,C:attention}8{}"
 		}
 	},
 	config = {
@@ -459,7 +459,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Play any hand",
-			"type {C:attention}25{} times",
+			"type {E:1,C:attention}25{} times",
 			"in one run"
 		}
 	},
@@ -505,7 +505,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Thin your full",
-			"deck to {C:attention}30{}",
+			"deck to {E:1,C:attention}30{}",
 			"cards or less"
 		}
 	},
@@ -565,8 +565,8 @@ SMODS.Joker {
 			"{C:dark_edition}#5#{} Cards grant {X:mult,C:white}X#6#{} Mult",
 		},
 		unlock = {
-			"Use no {C:red}discards{} for",
-			"{C:attention}3{} consecutive rounds",
+			"Use no {E:1,C:red}discards{} for",
+			"{E:1,C:attention}3{} consecutive rounds",
 		}
 	},
 	config = {
@@ -654,8 +654,8 @@ SMODS.Joker {
 			"{C:mult}+#3#{} Mult when scored"
 		},
 		unlock = {
-			"Have at least {C:attention}5{}",
-			"{C:attention}Steel Cards{} in",
+			"Have at least {E:1,C:attention}5{}",
+			"{E:1,C:attention}Steel Cards{} in",
 			"your deck"
 		}
 	},
@@ -694,7 +694,7 @@ SMODS.Joker {
 		},
 		unlock = {
 			"Win a run on",
-			"{C:attention}your final hand{}"
+			"{E:1,C:attention}your final hand{}"
 		}
 	},
 	config = {
@@ -741,7 +741,7 @@ SMODS.Joker {
 			"{C:red}-#2#{} hand size"
 		},
 		unlock = {
-			"{C:red}Five heart nines.{}"
+			"{E:1,C:red}Five heart nines.{}"
 		}
 	},
 	config = {

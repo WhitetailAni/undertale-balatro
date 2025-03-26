@@ -240,17 +240,17 @@ match_indent = true
 [patches.pattern]
 target = "functions/common_events.lua"
 pattern = '''
-if args.type == 'modify_jokers' and G.jokers then
-	if card.unlock_condition.extra.count then
+for _, v in pairs(G.jokers.cards) do
+	if v.ability.set == 'Joker' and v.edition and v.edition.polychrome and card.unlock_condition.extra.polychrome then count = count + 1 end
+end
 '''
 position = "at"
 payload = '''
-if args.type == 'modify_jokers' and G.jokers then
-	if card.key == 'j_UT_asgore' then
-		if #G.jokers.cards >= 7 then
-			unlock_card(card)
-		end
-	elseif card.unlock_condition.extra.count then
+for _, v in pairs(G.jokers.cards) do
+	if v.ability.set == 'Joker' and (not card.unlock_condition.extra.polychrome or (v.edition and v.edition.polychrome)) then
+		count = count + 1
+	end
+end
 '''
 match_indent = true
 

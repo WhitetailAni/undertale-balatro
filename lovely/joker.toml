@@ -14,7 +14,7 @@ end
 '''
 position = "at"
 payload = '''
-if self.ability.name == 'Golden Joker' or self.label == 'j_UT_burgerpants' or (self.label == 'j_UT_end' and G.GAME.blind.boss) then
+if self.ability.name == 'Golden Joker' or self.label == 'j_UT_burgerpants' or (self.label == 'j_UT_end' and self.ability.was_boss) then
 	return self.ability.extra
 end
 '''
