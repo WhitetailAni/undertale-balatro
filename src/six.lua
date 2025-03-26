@@ -10,8 +10,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		chips_per = 20,
-		chips = 0
+		chips = 20,
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -20,17 +19,16 @@ SMODS.Joker {
 	pos = { x = 4, y = 8 },
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chips_per, card.ability.chips } }
-	end,
-	update = function(self, card, dt)
-		if G.jokers ~= nil and G.jokers.config ~= nil and G.jokers.cards ~= nil and G.jokers.config.card_limit ~= nil then
-			card.ability.chips = (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.chips_per
+		if G.jokers ~= nil G.jokers.cards ~= nil  nil then
+			return { vars = { card.ability.chips, card.ability.chips * #G.jokers.cards } }
+		else
+			return { vars = { card.ability.chips, card.ability.chips } }
 		end
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				chips = card.ability.chips
+				chips = card.ability.chips * #G.jokers.cards
 			}
 		end
 	end
@@ -53,7 +51,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips, card.ability.mult } }
 	end,
-	rarity = 2,
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "jokers",
@@ -254,6 +252,10 @@ SMODS.Joker {
 		text = {
 			"{C:attention}Straights{} count as",
 			"{C:attention}Straight Flushes{}"
+		},
+		unlock = {
+			"Discard a",
+			"{C:attention}Straight"
 		}
 	},
 	unlocked = false,
@@ -488,7 +490,7 @@ SMODS.Joker {
 	unlock_condition = {type = 'round_win'},
 	rarity = 3,
 	blueprint_compat = false,
-	eternal_compat = true,
+	eternal_compat = false,
 	atlas = "jokers",
 	pos = { x = 2, y = 8 },
 	cost = 7,
