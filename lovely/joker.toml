@@ -50,11 +50,12 @@ SMODS.calculate_main_scoring({cardarea = v, full_hand = G.play.cards, scoring_ha
 position = "at"
 payload = '''
 local context = {cardarea = v, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands}
-local scoring_hand_2 = v == G.play and scoring_hand or nil
+local scoring_hand_2 = (v == G.play and scoring_hand or nil)
 
-for _, card in ipairs(scoring_hand or context.cardarea.cards) do
+for _, card in ipairs(context.cardarea.cards) do
+	local in_scoring = scoring_hand_2 and SMODS.in_scoring(card, context.scoring_hand)
 	--add cards played to list
-	if scoring_hand_2 and not SMODS.has_no_rank(card) then
+	if scoring_hand_2 and not SMODS.has_no_rank(card) and in_scoring then
 		G.GAME.cards_played[card.base.value].total = G.GAME.cards_played[card.base.value].total + 1
 		if not SMODS.has_no_suit(card) then
 			G.GAME.cards_played[card.base.value].suits[card.base.suit] = true
@@ -62,32 +63,20 @@ for _, card in ipairs(scoring_hand or context.cardarea.cards) do
 	end
 	--if card is debuffed
 	if scoring_hand_2 and card.debuff then
-		G.GAME.blind.triggered = true
-		G.E_MANAGER:add_event(Event({
-			trigger = 'immediate',
-			func = (function()
-				SMODS.juice_up_blind()
-				for i = 1, #G.jokers.cards do
-					local joker = G.jokers.cards[i]
-					if joker.label == 'j_UT_barrier' then
-						G.jokers.cards[i]:juice_up(0.3, 0.5)
-					end
-				end
-				return true
-			end)
-		}))
-		if next(SMODS.find_card('j_UT_barrier')) then
-			for i = 1, #G.jokers.cards do
-				local joker = G.jokers.cards[i]
-				if joker.label == 'j_UT_barrier' then
-					ease_dollars(joker.ability.money)
-					card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('$')..joker.ability.money, colour = G.C.MONEY})
-				end
-			end
-		else
+		if in_scoring then 
+			G.GAME.blind.triggered = true
+			
+			G.E_MANAGER:add_event(Event({
+				trigger = 'immediate',
+				func = (function() SMODS.juice_up_blind();return true end)
+			}))
 			card_eval_status_text(card, 'debuff')
+			SMODS.calculate_context({debuffed_individual = true, other_card = new_card})
 		end
 	else
+		if scoring_hand_2 then
+			if in_scoring then context.cardarea = G.play else context.cardarea = 'unscored' end
+		end
 		SMODS.score_card(card, context)
 	end
 end

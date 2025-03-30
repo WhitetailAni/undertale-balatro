@@ -579,13 +579,11 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and not context.blueprint and #context.full_hand == 1 and G.GAME.current_round.hands_played == 0 then
-			print("before")
 			G.E_MANAGER:add_event(Event({
 				trigger = "before",
 				delay = 0.4,
 				func = function()
 					if not context.scoring_hand[1].seal then
-						print("gm")
 						card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Sealed!", colour = G.C.ATTENTION})
 						context.scoring_hand[1]:set_seal(
 							SMODS.poll_seal({ guaranteed = true, type_key = "hotland" }),

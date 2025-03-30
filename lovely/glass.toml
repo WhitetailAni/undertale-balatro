@@ -4,7 +4,7 @@ priority = 0
 
 [vars]
 
-# i would LOVE to just patch the one line in steamodded but i cant get the patch to work
+# i would LOVE to just patch the one line in steamodded but i cant get lovely to do it
 #[[patches]]
 #[patches.pattern]
 #target = '''=[SMODS _ "src/utils.lua"]'''

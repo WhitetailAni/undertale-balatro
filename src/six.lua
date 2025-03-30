@@ -4,8 +4,8 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Dummy",
 		text = {
-			"{C:chips}+#1#{} Chips for each",
-			"empty {C:attention}Joker{} slot",
+			"{C:chips}+#1#{} Chips for",
+			"each {C:attention}Joker{}",
 			"{C:inactive}(Currently {C:chips}+#2#{} Chips)"
 		}
 	},
@@ -292,7 +292,7 @@ SMODS.Joker {
 		},
 	},
 	config = {
-		money = 3,
+		money = 2,
 	},
 	unlocked = false,
 	unlock_condition = {
@@ -308,37 +308,8 @@ SMODS.Joker {
 	atlas = "jokers",
 	pos = { x = 9, y = 7 },
 	cost = 7,
-	in_pool = function(self, args)
-		return #SMODS.find_card('j_UT_barrier') > 1
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		if #SMODS.find_card('j_UT_barrier') > 0 then
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					play_sound('tarot1')
-					card.T.r = -0.2
-					card:juice_up(0.3, 0.4)
-					card.states.drag.is = true
-					card.children.center.pinch.x = true
-					G.E_MANAGER:add_event(Event({
-						trigger = 'after',
-						delay = 0.3,
-						blockable = false,
-						func = function()
-							G.jokers:remove_card(card)
-							card:remove()
-							self = nil
-							return true;
-						end
-					})) 
-					return true
-				end
-			}))
-		end
-	end,
 	calculate = function(self, card, context)
-		if context.individual and context.ignore_debuff then-- and context.cardarea == G.jokers then
-			print(context.ignore_debuff)
+		if context.debuffed_individual then
 			return {
 				dollars = card.ability.money
 			}
@@ -655,7 +626,6 @@ SMODS.Joker {
 	unlocked = false,
 	unlock_condition = {type = 'money'},
 	check_for_unlock = function(self, args)
-		print(args)
 		if args.type == 'money' then
 			if G.PROFILES[G.SETTINGS.profile].career_stats.c_jokers_sold >= 30 then
 				return true
