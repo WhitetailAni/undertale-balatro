@@ -545,7 +545,7 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Faded Ribbon",
 		text = {
-			"{C:attention}Glass{} Cards have a",
+			"{C:attention}Glass Cards{} have a",
 			"{C:green}#1# in #2#{} chance to be",
 			"destroyed"
 		}

@@ -198,7 +198,6 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers then
-			print(#G.consumeables.cards)
 			for i = 1, #G.consumeables.cards do
 				ease_dollars(card.ability.extra.money_gain)
                 return {
@@ -283,7 +282,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
-			if tonumber(context.other_card.base.value, 10) ~= nil then
+			if tonumber(context.other_card.base.value, 10) ~= nil and not SMODS.has_enhancement(context.other_card, "m_stone") then
 				if pseudorandom("cowboy_hat") < 1/2 then
 					return {
 						mult = card.ability.low_mult
@@ -606,17 +605,9 @@ SMODS.Joker {
 		if context.before and context.cardarea == G.jokers then
 			card.ability.has_scored = false
 		elseif context.individual and context.cardarea == G.hand and context.other_card:is_face() and not card.ability.has_scored then
-			if context.other_card.debuff then
-				return {
-					message = localize('k_debuffed'),
-					colour = G.C.RED,
-					card = context.blueprint_card or card,
-				}
-			else
-				return {
-					mult = card.ability.mult
-				}
-			end
+			return {
+				mult = card.ability.mult
+			}
 		elseif context.after and context.cardarea == G.jokers then
 			card.ability.has_scored = true
         end
