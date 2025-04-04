@@ -181,10 +181,10 @@ SMODS.Joker {
         	return {
         		xmult = card.ability.extra.xmult
         	}
-        elseif context.end_of_round and context.cardarea == G.jokers then
+        elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
         	if pseudorandom("annoying_dog") < G.GAME.probabilities.normal/card.ability.extra.secret_chance then
         		SMODS.add_card({ key = "j_UT_dog_residue" })
-        		card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = "Bark!", colour = G.C.ATTENTION })
+        		card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Bark!", colour = G.C.ATTENTION })
         	end
         end
 	end

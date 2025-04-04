@@ -48,6 +48,9 @@ SMODS.Joker {
 			"{C:inactive}(Must have room){}"
 		}
 	},
+	config = {
+		in_build = false
+	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = false,
@@ -55,7 +58,17 @@ SMODS.Joker {
 	pos = { x = 1, y = 3 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { G.consumeables.config.card_limit } }
+		if card.ability.in_build then
+			return { vars = { G.consumeables.config.card_limit } }
+		else
+			return { vars = { 2 }}
+		end
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		card.ability.in_build = true
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		card.ability.in_build = false
 	end,
 	calculate = function(self, card, context)
 		if context.selling_self then
@@ -134,6 +147,9 @@ SMODS.Joker {
 			"{C:inactive}(Must have room){}"
 		}
 	},
+	config = {
+		in_build = false
+	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = false,
@@ -141,7 +157,17 @@ SMODS.Joker {
 	pos = { x = 2, y = 3 },
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { G.consumeables.config.card_limit } }
+		if card.ability.in_build then
+			return { vars = { G.consumeables.config.card_limit } }
+		else
+			return { vars = { 2 }}
+		end
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		card.ability.in_build = true
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		card.ability.in_build = false
 	end,
 	calculate = function(self, card, context)
 		if context.selling_self then

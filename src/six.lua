@@ -6,7 +6,7 @@ SMODS.Joker {
 		text = {
 			"{C:chips}+#1#{} Chips for",
 			"each {C:attention}Joker{}",
-			"{C:inactive}(Currently {C:chips}+#2#{} Chips)"
+			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
 		}
 	},
 	config = {
@@ -557,7 +557,7 @@ SMODS.Joker {
 		name = "SURVEY_PROGRAM",
 		text = {
 			"Gains {X:mult,C:white}X#1#{} Mult when",
-			"a {C:spectral}Spectral is used",
+			"a {C:spectral}Spectral{} card is used",
 			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
 		},
 		unlock = {
