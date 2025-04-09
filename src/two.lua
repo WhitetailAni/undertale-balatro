@@ -614,8 +614,7 @@ SMODS.Joker {
 		text = {
 			"Each card of {C:diamonds}Diamond{}",
 			"suit held in hand has a",
-			"{C:green}#1# in #2#{} chance to give",
-			"{C:money}$#3#{} at end of round"
+			"{C:green}#1# in #2#{} chance to give {C:money}$#3#{}"
 		}
 	},
 	config = {
