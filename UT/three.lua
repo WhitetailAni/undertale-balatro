@@ -23,7 +23,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 6, y = 1 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
@@ -54,7 +54,7 @@ SMODS.Joker {
 				end
 			end
 		elseif context.selling_self and G.GAME.blind.in_blind and not G.GAME.blind.boss then
-			if pseudorandom("punch_card_secret") < G.GAME.probabilities.normal / card.ability.extra.secret_chance then
+			if SMODS.pseudorandom_probability(card, "punch_card_secret", 1, card.ability.extra.secret_chance, "UT_punch_card_secret") then
 				card.ability.spared = true
 				G.STATE = G.STATES.HAND_PLAYED
 				G.STATE_COMPLETE = true
@@ -70,8 +70,8 @@ SMODS.Joker {
 		elseif context.ending_shop then
 			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
         elseif context.end_of_round and context.cardarea == G.jokers and card.ability.extra.hands_remaining == 0 then
-        	if pseudorandom("punch_card_super_secret") < G.GAME.probabilities.normal/card.ability.extra.super_secret_chance then
-        		SMODS.add_card({ key = "j_UT_nice_cream" })
+        	if SMODS.pseudorandom_probability(card, "punch_card_super_secret", 1, card.ability.extra.super_secret_chance, "UT_punch_card_secret") then
+        		SMODS.add_card({ key = "j_UTDR_nice_cream" })
         		card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Punched!", colour = G.C.ATTENTION })
         	end
         end
@@ -99,7 +99,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 3, y = 2 },
 	cost = 2,
 	loc_vars = function(self, info_queue, card)
@@ -151,40 +151,41 @@ SMODS.Joker {
 		name = "Annoying Dog",
 		text = {
 			"{X:mult,C:white}X#1#{} Mult",
-			"{C:red}-#2#{} consumable slots"
+			"{C:red}-#2#{} consumable slots",
+			"{C:joker_grey}+1 dogs"
 		}
 	},
 	config = {
-		extra = {
-			xmult = 4,
-			slots = 2,
-			secret_chance = 6
-		}
+		xmult = 4,
+		slots = 2,
+		secret_chance = 6
 	},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 5, y = 2 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.xmult, card.ability.extra.slots } }
+		return { vars = { card.ability.xmult, card.ability.slots } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
-		G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.slots
+		G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.slots
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.slots
+		G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.slots
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
         	return {
-        		xmult = card.ability.extra.xmult
+        		xmult = card.ability.xmult
         	}
-        elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-        	if pseudorandom("annoying_dog") < G.GAME.probabilities.normal/card.ability.extra.secret_chance then
-        		SMODS.add_card({ key = "j_UT_dog_residue" })
-        		card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Bark!", colour = G.C.ATTENTION })
+        elseif context.setting_blind and context.cardarea == G.jokers and not context.blueprint then
+			local count = math.floor(pseudorandom("annoying_dog_count") * 10)
+			play_sound("UTDR_bark", 1.0, 0.7)
+			for i = 1, count do
+        			SMODS.add_card({ key = "j_UTDR_dog_residue" })
+        			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Bark!", colour = G.C.ATTENTION })
         	end
         end
 	end
@@ -205,7 +206,7 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 4, y = 2 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
@@ -236,7 +237,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 6, y = 3 },
 	cost = 6,
 	config = {
@@ -292,7 +293,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = false,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 0, y = 2 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
@@ -339,7 +340,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "cloudy_glasses",
+	key = "glasses",
 	loc_txt = {
 		name = "Cloudy Glasses",
 		text = {
@@ -348,26 +349,30 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		in_build = false
+		thorning_is_older = false
 	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 1, y = 2 },
 	cost = 8,
-	add_to_deck = function(self, card, from_debuff)
-		card.ability.in_build = true
-		G.GAME.probabilities.glass = 0
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = G.P_CENTERS.m_glass
 	end,
-	update = function(self, card, dt)
-		if card.ability.in_build then
-			G.GAME.probabilities.glass = 0
+	add_to_deck = function(self, card, from_debuff)
+		if #SMODS.find_card("j_UTDR_thornring") > 0 then
+			card.ability.thornring_is_older = true
 		end
 	end,
-	remove_from_deck = function(self, card, from_debuff)
-		card.ability.in_build = false
-		G.GAME.probabilities.glass = G.GAME.probabilities.normal
+	calculate = function(self, card, context)
+		if context.mod_probability and not context.blueprint and context.identifier == "glass" and not card.ability.thornring_is_older then
+			return {
+				numerator = 0
+			}
+		elseif context.selling_card and context.card.label == "j_UTDR_thornring" and #SMODS.find_card("j_UTDR_thornring") == 1 then
+			card.ability.thorning_is_older = false
+		end
 	end
 }
 
@@ -386,7 +391,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 9, y = 5 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
@@ -423,7 +428,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 2, y = 2 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
@@ -471,7 +476,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 3, y = 7 },
 	cost = 7,calculate = function(self, card, context)
 		if context.joker_main then
@@ -481,7 +486,7 @@ SMODS.Joker {
 		elseif context.discard and not context.other_card.debuff and not context.blueprint then
 			card.ability.mult = card.ability.mult + card.ability.mult_per_card
 			return {
-				message = localize { type = 'variable', key = 'a_mult',vars = { card.ability.mult }},
+				message = localize { type = 'variable', key = 'a_mult',vars = { card.ability.mult_gain }},
 				colour = G.C.RED,
 				delay = 0.45, 
 				card = card
@@ -502,22 +507,21 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Mad Dummy",
 		text = {
-			"{C:red}Destroys{} {C:attention}1{} random card",
+			"{C:red}Destroys{} {C:attention}#1#{} random card",
 			"held in hand at end of round"
 		}
 	},
 	config = {
-		odds = 2,
-		money = 1
+		cards_destroyed = 1
 	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 8, y = 5 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { G.GAME.probabilities.normal, card.ability.odds, card.ability.money } }
+		return { vars = { card.ability.cards_destroyed } }
 	end,
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers then
@@ -527,7 +531,7 @@ SMODS.Joker {
             	trigger = 'after',
             	delay = 0.1,
             	func = function()
-					play_sound('timpani')
+					play_sound("UTDR_dummy", 1, 0.7)
 					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "Futile!", colour = G.C.RED})
 					if context.blueprint then
 						context.blueprint_card:juice_up(0.3, 0.5)
@@ -546,11 +550,7 @@ SMODS.Joker {
 					else
 						knife:start_dissolve(nil, false)
 					end
-					if was_glass then
-						SMODS.calculate_context({cards_destroyed = true, glass_shattered = { knife }})
-					else
-						SMODS.calculate_context({remove_playing_cards = true, removed = { knife }})
-					end
+					SMODS.calculate_context({remove_playing_cards = true, removed = { knife }})
                     return true
                 end
             }))
@@ -571,7 +571,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 0, y = 6 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
@@ -641,7 +641,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 1, y = 6 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
@@ -804,7 +804,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = false,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 0, y = 3 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
@@ -858,7 +858,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 0, y = 7 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)

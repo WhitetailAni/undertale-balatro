@@ -1,16 +1,16 @@
 {
     "id": "UTDR",
-    "name": "Undertale",
+    "name": "Undertale/Deltarune",
     "author": ["_VioMarks_, WhitetailAni"],
     "description": "You can't give up now!",
-    "prefix": "UT",
-    "main_file": "undertale.lua",
+    "prefix": "UTDR",
+    "main_file": "UTDR.lua",
     "badge_colour": "000000",
     "badge_text_colour": "ffffff",
     "dependencies": [
-    	"Steamodded (==1.0.0~BETA-0323b)",
-        "Lovely (>=0.6)",
-        "Talisman (>=2.1.0~dev)"
+    	"Steamodded (>=1.0.0~BETA-0711a)",
+        "Lovely (>=0.8)",
+        "Talisman (>=2.3.4)"
     ],
     "version": "1.0.0"
 }

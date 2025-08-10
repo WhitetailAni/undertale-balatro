@@ -1,0 +1,50 @@
+[manifest]
+version = "1.0.0"
+priority = 1
+
+[vars]
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if self.ability.rental then self.cost = 1 end'
+position = 'after'
+payload = "if #SMODS.find_card('j_UTDR_oddcontroller') > 0 and (self.config.center.rarity == 2 or self.config.center.rarity == 3) then self.cost = 0 end"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = '''
+	local temp_in_pool = {}
+    for k, v in ipairs(G.P_CENTER_POOLS['Booster']) do
+'''
+position = "at"
+payload = '''
+	local temp_in_pool = {}
+	
+	local booster_pool = {}
+	if #SMODS.find_card('j_UTDR_shelter') > 0 and #SMODS.find_card('j_UTDR_seam') > 0 then
+		for k, v in ipairs(G.P_CENTER_POOLS['Booster']) do
+			if string.match(v.key, "spectral") and string.match(v.key, "mega") then
+				booster_pool[#booster_pool + 1] = v
+			end
+		end
+	elseif #SMODS.find_card('j_UTDR_seam') > 0 then
+		for k, v in ipairs(G.P_CENTER_POOLS['Booster']) do
+			if string.match(v.key, "mega") then
+				booster_pool[#booster_pool + 1] = v
+			end
+		end
+	elseif #SMODS.find_card('j_UTDR_shelter') > 0 then
+		for k, v in ipairs(G.P_CENTER_POOLS['Booster']) do
+			if string.match(v.key, "spectral") then
+				booster_pool[#booster_pool + 1] = v
+			end
+		end
+	else
+		booster_pool = G.P_CENTER_POOLS['Booster']
+	end
+	
+    for k, v in ipairs(booster_pool) do
+'''
+match_indent = true

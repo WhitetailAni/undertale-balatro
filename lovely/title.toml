@@ -27,8 +27,8 @@ position = 'at'
 payload = '''
 G.SPLASH_LOGO = Sprite(0, 0,
 		13*SC_scale,
-		13*SC_scale*(G.ASSET_ATLAS["UT_splash"].py/G.ASSET_ATLAS["UT_splash"].px),
-		G.ASSET_ATLAS["UT_splash"], {x=0,y=0})
+		13*SC_scale*(G.ASSET_ATLAS["UTDR_splash"].py/G.ASSET_ATLAS["UTDR_splash"].px),
+		G.ASSET_ATLAS["UTDR_splash"], {x=0,y=0})
 '''
 match_indent = true
 
@@ -42,18 +42,18 @@ initial = true
 '''
 match_indent = true
 
-# Make the splash screen more jolly
-# Requires "Custom Main Menu" config to be enabled
 [[patches]]
 [patches.pattern]
 target = "game.lua"
 pattern = "SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_joker'])"
 position = "at"
 payload = '''
-if pseudorandom("undertale") < 1/10000 then
-	SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UT_chara'])
+if math.fmod(os.time(), 16384) == 0  then
+	SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_chara_title'])
+elseif math.fmod(os.time(), 2) == 0 then
+	SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_tv_world_title'])
 else
-	SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UT_sans_title'])
+	SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_sans_title'])
 end
 '''
 match_indent = true
