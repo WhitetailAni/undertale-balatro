@@ -1,0 +1,73 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+[vars]
+
+#shadowguy chips-mult level up tampering
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+G.GAME.hands[hand].level = math.max(0, G.GAME.hands[hand].level + amount)
+G.GAME.hands[hand].mult = math.max(G.GAME.hands[hand].s_mult + G.GAME.hands[hand].l_mult*(G.GAME.hands[hand].level - 1), 1)
+G.GAME.hands[hand].chips = math.max(G.GAME.hands[hand].s_chips + G.GAME.hands[hand].l_chips*(G.GAME.hands[hand].level - 1), 0)
+'''
+position = "at"
+payload = '''
+local shadowguys = SMODS.find_card("j_UTDR_shadowguy")
+local shadowguy_chips_factor = 0
+local shadowguy_mult_factor = 0
+if #shadowguys then
+	for i = 1, #shadowguys do
+		shadowguys[i]:juice_up(0.3, 0.4)
+		play_sound(pseudorandom_element({"UTDR_shadowguy_1", "UTDR_shadowguy_2", "UTDR_shadowguy_3"}, shadowguys[i].T.x), 1.0, 0.7)
+		shadowguy_chips_factor = shadowguy_chips_factor + shadowguys[i].ability.chip_gain
+		shadowguy_mult_factor = shadowguy_mult_factor + shadowguys[i].ability.mult_gain
+	end
+end
+G.GAME.hands[hand].level = math.max(0, G.GAME.hands[hand].level + amount)
+G.GAME.hands[hand].mult = math.max(G.GAME.hands[hand].s_mult + G.GAME.hands[hand].l_mult*(G.GAME.hands[hand].level - 1), 1) + to_big(shadowguy_mult_factor)
+G.GAME.hands[hand].chips = math.max(G.GAME.hands[hand].s_chips + G.GAME.hands[hand].l_chips*(G.GAME.hands[hand].level - 1), 0) + to_big(shadowguy_chips_factor)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if obj.get_p_dollars and type(obj.get_p_dollars) == 'function' then
+	ret = ret + obj:get_p_dollars(self)
+elseif self.seal == 'Gold' and not self.ability.extra_enhancement then
+	ret = ret +  3
+end
+'''
+position = "at"
+payload = '''
+local mizzles = SMODS.find_card('j_UTDR_missmizzle')
+if obj.get_p_dollars and type(obj.get_p_dollars) == 'function' then
+	ret = ret + obj:get_p_dollars(self)
+elseif (self.seal == 'Gold' or (#mizzles and self.seal ~= nil))and not self.ability.extra_enhancement then
+	if self.seal ~= 'Gold' then
+		for i = 1, #mizzles do
+			G.E_MANAGER:add_event(Event({
+				delay = 0.4,
+				func = function() 
+					mizzles[i]:juice_up(0.3, 0.4)
+					return true
+				end
+			}))
+		end
+	end
+	ret = ret +  3
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = 'if self.ability.set == "Voucher" then'
+position = "after"
+payload = "	SMODS.calculate_context({voucher_redeem = true, other_voucher = self})"
+match_indent = true

@@ -23,7 +23,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 1, y = 4 },
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
@@ -67,7 +67,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 9, y = 0 },
 	cost = 5,
 	calculate = function(self, card, context)
@@ -105,33 +105,31 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		extra = {
-			chips = 0,
-			chip_gain = 35
-		}
+		chips = 0,
+		chip_gain = 35
 	},
 	unlocked = false,
 	unlock_condition = {type = 'discard_custom'},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 5, y = 4 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.chip_gain, card.ability.extra.chips } }
+		return { vars = { card.ability.chip_gain, card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
 		if (context.cards_destroyed or context.remove_playing_cards or context.playing_card_added) and not context.blueprint then
 			local increase_count = 0
 			if context.cards_destroyed then
-				increase_count = card.ability.extra.chip_gain * #context.glass_shattered
+				increase_count = card.ability.chip_gain * #context.glass_shattered
 			elseif context.remove_playing_cards then
-				increase_count = card.ability.extra.chip_gain * #context.removed
+				increase_count = card.ability.chip_gain * #context.removed
 			elseif context.playing_card_added then
-				increase_count = card.ability.extra.chip_gain * #context.cards
+				increase_count = card.ability.chip_gain * #context.cards
 			end
-			card.ability.extra.chips = card.ability.extra.chips + increase_count
+			card.ability.chips = card.ability.chips + increase_count
 			return {
 				message = localize('k_upgrade_ex'),
 				colour = G.C.CHIPS,
@@ -139,7 +137,7 @@ SMODS.Joker {
 			}
         elseif context.joker_main then
         	return {
-        		chips = card.ability.extra.chips 
+        		chips = card.ability.chips 
         	}
         end
 	end
@@ -173,7 +171,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 4, y = 1 },
 	cost = 6,
 	calculate = function(self, card, context)
@@ -209,7 +207,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		chips = 250
+		chips = 200
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips } }
@@ -219,7 +217,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 4, y = 4 },
 	soul_pos = { x = 5, y = 7 },
 	cost = 8,
@@ -244,8 +242,8 @@ SMODS.Joker {
 		name = "Justice",
 		text = {
 			"This Joker gains",
-			"{C:mult}+#1#{} Mult",
-			"at end of round",
+			"{C:mult}+#1#{} Mult at",
+			"end of round",
 			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
 		},
 		unlock = {
@@ -269,7 +267,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 0, y = 4 },
 	cost = 6,
 	calculate = function(self, card, context)
@@ -303,36 +301,34 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		extra = {
-			xmult_per = 0.75,
-			slots = 4
-		}
+		xmult_per = 0.75,
+		slots = 4
 	},
 	unlocked = false,
 	unlock_condition = {type = 'modify_jokers', extra = { count = 7 } },
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 8, y = 6 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
 		if G.consumeables ~= nil and G.consumeables.config ~= nil then
-			return { vars = { card.ability.extra.xmult_per, card.ability.extra.slots, 1 + (card.ability.extra.xmult_per * G.consumeables.config.card_count) } }
+			return { vars = { card.ability.xmult_per, card.ability.slots, 1 + (card.ability.xmult_per * G.consumeables.config.card_count) } }
 		else
-			return { vars = { card.ability.extra.xmult_per, card.ability.extra.slots, 1 } }
+			return { vars = { card.ability.xmult_per, card.ability.slots, 1 } }
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
-		G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.slots
+		G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.slots
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.slots
+		G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.slots
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
         	return {
-        		xmult = 1 + (card.ability.extra.xmult_per * G.consumeables.config.card_count)
+        		xmult = 1 + (card.ability.xmult_per * G.consumeables.config.card_count)
         	}
         end
 	end
@@ -343,9 +339,9 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Asriel",
 		text = {
-			"Each played {C:attention}Ace{}",
-			"gives {X:mult,C:white}X#1#{} Mult",
-			"when scored"
+			"Each played {C:attention}Ace{} gives",
+			"{X:mult,C:white}X#1#{} Mult when scored",
+			"{C:inactive}Activates after {C:attention}#2# {C:inactive}[#3#] rounds"
 		},
 		unlock = {
 			"Play a 5 card hand",
@@ -353,27 +349,29 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		extra = {
-			xmult = 2.5,
-		}
+		xmult = 2.5,
+		threshold = 6,
+		turns_elapsed = 0
 	},
 	rarity = 3,
 	unlocked = false,
 	unlock_condition = {type = 'hand_contents'},
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 1, y = 7 },
 	soul_pos = { x = 6, y = 7 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.xmult } }
+		return { vars = { card.ability.xmult, card.ability.threshold, card.ability.turns_elapsed} }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card.base.value == "Ace" then
-        	return {
-        		xmult = card.ability.extra.xmult
-        	}
+		if context.individual and context.cardarea == G.play and context.other_card.base.value == "Ace"and card.ability.turns_elapsed >= card.ability.threshold then
+			return {
+				xmult = card.ability.xmult
+			}
+		elseif context.end_of_round and context.cardarea == G.jokers then
+			card.ability.turns_elapsed = card.ability.turns_elapsed + 1
         end
 	end
 }
@@ -386,8 +384,8 @@ SMODS.Joker {
 			"Prevents Death if chips",
 			"scored are at least",
 			"{C:attention}#1#%{} of required chips,",
-			"gains {X:mult,C:white}X#2#{} Mult when Death",
-			"is prevented",
+			"gains {X:mult,C:white}X#2#{} Mult when",
+			"Death is prevented",
 			"{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"
 		},
 		unlock = {
@@ -410,7 +408,7 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 9, y = 6 },
 	cost = 10,
 	loc_vars = function(self, info_queue, card)
@@ -464,7 +462,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		chips = 250
+		chips = 150
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips } }
@@ -474,7 +472,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 9, y = 1 },
 	cost = 7,
 	calculate = function(self, card, context)
@@ -514,7 +512,7 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 2, y = 4 },
 	cost = 9,
 	config = {
@@ -545,11 +543,11 @@ SMODS.Joker {
 							return true
 						end
 					}))
+					play_sound("UTDR_lvup", 1.0, 0.7)
 					card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize{ type = 'variable', key = 'a_xmult', vars = { card.ability.xmult + hearts*card.ability.xmult_gain } } })
 					return true
 				end
 			}))
-
 			return
 		end
 	end
@@ -571,8 +569,8 @@ SMODS.Joker {
 	},
 	config = {
 		foil = 100,
-		holo = 20,
-		poly = 2,
+		holo = 25,
+		poly = 2.5,
 		
 		old_foil = 0,
 		old_holo = 0,
@@ -585,7 +583,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 3, y = 3 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
@@ -667,10 +665,11 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 3, y = 4 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = G.P_CENTERS.m_steel 
 		return { vars = { G.GAME.probabilities.normal, card.ability.odds, card.ability.mult } }
 	end,
 	calculate = function(self, card, context)
@@ -710,7 +709,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 7, y = 2 },
 	cost = 5,
 	update = function(self, card, dt)
@@ -745,33 +744,31 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		extra = {
-			xmult = 5,
-			hand_loss = 3
-		}
+		xmult = 5,
+		hand_loss = 3
 	},
 	unlocked = false,
 	unlock_condition = {type = 'hand_contents'},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 4, y = 7 },
 	soul_pos = { x = 7, y = 7 },
 	cost = 9,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.xmult, card.ability.extra.hand_loss } }
+		return { vars = { card.ability.xmult, card.ability.hand_loss } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
-		G.hand:change_size(-card.ability.extra.hand_loss)
+		G.hand:change_size(-card.ability.hand_loss)
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.hand:change_size(card.ability.extra.hand_loss)
+		G.hand:change_size(card.ability.hand_loss)
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
         	return {
-        		xmult = card.ability.extra.xmult
+        		xmult = card.ability.xmult
         	}
         end
 	end

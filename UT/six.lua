@@ -15,7 +15,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 4, y = 8 },
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
@@ -54,7 +54,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 5, y = 8 },
 	cost = 7,
 	calculate = function(self, card, context)
@@ -72,7 +72,8 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Toby and Temmie",
 		text = {
-			"{C:attention}+#1#{} Voucher slot"
+			"Creates a {C:purple}Voucher Tag",
+			"when {C:attention}Boss Blind is defeated"
 		},
 	},
 	config = {
@@ -86,43 +87,14 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 8, y = 8 },
 	cost = 6,
-	add_to_deck = function(self, card, from_debuff)
-		if not from_debuff then
-			card.ability.in_build = true
-		end
-	end,
-	update = function(self, card, dt)
-		if G.shop and G.shop_vouchers and not card.ability.slotted and card.ability.in_build then
-			card.ability.slotted = true
-			G.E_MANAGER:add_event(Event({
-				trigger = 'after',
-				delay = 0.4,
-				func = function()
-					for i = 1, card.ability.slot_count do
-						local voucher_key = get_next_voucher_key(false)
-						G.shop_vouchers.config.card_limit = G.shop_vouchers.config.card_limit + 1
-						local voucher = Card(G.shop_vouchers.T.x + G.shop_vouchers.T.w/2,
-						G.shop_vouchers.T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, G.P_CENTERS[voucher_key],{ bypass_discovery_center = true, bypass_discovery_ui = true})
-						create_shop_card_ui(voucher, 'Voucher', G.shop_vouchers)
-						voucher:start_materialize()
-						G.shop_vouchers:emplace(voucher)
-					end
-					return true
-				end
-			}))
-		end
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		if not from_debuff then
-			card.ability.in_build = false
-		end
-	end,
 	calculate = function(self, card, context)
-		if context.setting_blind then
-			card.ability.slotted = false
+		if context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
+			card:juice_up(0.3,0.5)
+			local tag = Tag("tag_voucher")
+			add_tag(tag)
 		end
 	end
 }
@@ -145,7 +117,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 7, y = 8 },
 	cost = 6,
 	calculate = function(self, card, context)
@@ -179,12 +151,13 @@ SMODS.Joker {
 		mult = 5,
 	},
 	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = G.P_CENTERS.m_wild 
 		return { vars = { card.ability.mult } }
 	end,
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 3, y = 8 },
 	cost = 4,
 	calculate = function(self, card, context)
@@ -218,7 +191,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 6, y = 8 },
 	display_size = { w = 33.5, h = 47.5 },
 	cost = 5,
@@ -250,12 +223,12 @@ SMODS.Joker {
 	loc_txt = {
 		name = "CORE",
 		text = {
-			"{C:attention}Straights{} count as",
-			"{C:attention}Straight Flushes{}"
+			"{C:attention}#1#s{} count as",
+			"{C:attention}#2#es{}"
 		},
 		unlock = {
 			"Discard a",
-			"{E:1,C:attention}Straight"
+			"{E:1,C:attention}#1#"
 		}
 	},
 	unlocked = false,
@@ -263,17 +236,21 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 8, y = 7 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { G.localization.misc.poker_hands['Straight'], G.localization.misc.poker_hands['Straight Flush'] } }
 	end,
-	add_to_deck = function(self, card, from_debuff)
-		G.hand:parse_highlighted()
+	locked_loc_vars = function(self, info_queue, card)
+		return { vars = { G.localization.misc.poker_hands['Straight'] } }
 	end,
-	remove_from_deck = function(self, card, from_debuff)
-		G.hand:parse_highlighted()
+	calculate = function(self, card, context)
+		if context.evaluate_poker_hand and context.scoring_name == "Straight" then
+			return {
+				replace_scoring_name = "Straight Flush"
+			}
+		end
 	end
 }
 
@@ -305,7 +282,7 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 9, y = 7 },
 	cost = 7,
 	calculate = function(self, card, context)
@@ -337,12 +314,13 @@ SMODS.Joker {
 	unlocked = false,
 	unlock_condition = { type = 'modify_deck', extra = { count = 5, enhancement = 'Stone Card', e_key = 'm_stone' } },
 	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = G.P_CENTERS.m_stone 
 		return { vars = { card.ability.mult } }
 	end,
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 0, y = 8 },
 	cost = 7,
 	calculate = function(self, card, context)
@@ -385,7 +363,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 1, y = 8 },
 	cost = 6,
 	calculate = function(self, card, context)
@@ -412,7 +390,7 @@ SMODS.Joker {
 	},
 	config = {
 		xmult = 1.5,
-		odds = 2
+		odds = 3
 	},
 	unlocked = false,
 	unlock_condition = { type = 'win_custom' },
@@ -425,7 +403,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 9, y = 8 },
 	cost = 8,
 	calculate = function(self, card, context)
@@ -448,8 +426,8 @@ SMODS.Joker {
 	loc_txt = {
 		name = "True Reset",
 		text = {
-			"{C:attention}Sell{} this card to {C:red}destroy all",
-			"{C:red}Jokers{} and create an equal",
+			"{C:attention}Sell{} this card to {S:1.1,C:red,E:2}destroy all",
+			"{S:1.1,C:red,E:2}Jokers{} and create an equal",
 			"number of {C:dark_edition}Negative{} Tags",
 		},
 		unlock = {
@@ -458,16 +436,16 @@ SMODS.Joker {
 		}
 	},
 	unlocked = false,
-	unlock_condition = {type = 'round_win'},
+	unlock_condition = { type = 'round_win' },
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = false,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 2, y = 8 },
 	cost = 7,
 	calculate = function(self, card, context)
 		if context.selling_self then
-			for i = 1, #G.jokers.cards - 1 do
+			for i = 1, #G.jokers.cards do
 				local carb = G.jokers.cards[i]
 				G.E_MANAGER:add_event(Event({
 					func = function()
@@ -517,7 +495,7 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 2, y = 9 },
 	soul_pos = { x = 3, y = 9 },
 	cost = 12,
@@ -579,7 +557,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 0, y = 9 },
 	pixel_size = { w = 71, h = 77 },
 	cost = 7,
@@ -636,11 +614,11 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "jokers",
+	atlas = "UT_jokers",
 	pos = { x = 1, y = 9 },
 	cost = 7,
 	calculate = function(self, card, context)
-		if context.selling_card and not context.selling_self and context.card.ability.set == "Joker" then
+		if context.selling_card and context.card ~= card and context.card.ability.set == "Joker" then
 			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
 			G.E_MANAGER:add_event(
 				Event({

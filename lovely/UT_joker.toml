@@ -1,0 +1,89 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+[vars]
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if self.ability.name == 'Golden Joker' then
+	return self.ability.extra
+end
+'''
+position = "at"
+payload = '''
+if self.ability.name == 'Golden Joker' or self.label == 'j_UTDR_burgerpants' or (self.label == 'j_UTDR_end' and self.ability.was_boss) or self.label == 'j_UTDR_scarlixir' then
+	return self.ability.extra
+end
+'''
+match_indent = true
+
+# kindness last resort reset
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "if change_context ~= 'splash' then "
+position = "before"
+payload = '''
+G.P_CENTERS.e_foil.config.chips = 50
+G.P_CENTERS.e_holo.config.mult = 10
+G.P_CENTERS.e_polychrome.config.x_mult = 1.5
+'''
+match_indent = true
+
+# gerson
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "G.GAME.discount_percent = center_table.extra"
+position = "at"
+payload = "G.GAME.discount_percent = G.GAME.discount_percent + center_table.extra"
+match_indent = false
+
+# barrier
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = "card_eval_status_text(card, 'debuff')"
+position = "after"
+payload = "SMODS.calculate_context({debuffed_individual = true, other_card = new_card})"
+match_indent = true
+
+# gaster text color
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''
+enhanced = G.C.SECONDARY_SET.Enhanced
+'''
+position = "before"
+payload = '''
+joker_grey = G.C.JOKER_GREY,
+gaster = G.C.GASTER,
+FRIEND = G.C.FRIEND,
+FRIEND_PINK = G.C.FRIEND_PINK,
+FRIEND_YELLOW = G.C.FRIEND_YELLOW,
+watercooler = G.C.WATERCOOLER,
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = '''
+RENTAL = HEX('b18f43'),
+'''
+position = "after"
+payload = '''
+GASTER = HEX('000000'),
+FRIEND = HEX('eeeeee'),
+FRIEND_PINK = HEX('fda9c0'),
+FRIEND_YELLOW = HEX('ffdd45'),
+WATERCOOLER = HEX('2d9bd7'),
+'''
+match_indent = true
+
+
+
