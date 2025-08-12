@@ -41,7 +41,7 @@ SMODS.Joker {
 		name = "Cuptains",
 		text = {
 			"Gains {C:chips}+#1#{} Chips when",
-			"a hand is played"
+			"a hand is played",
 			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
 		}
 	},
