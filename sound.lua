@@ -249,3 +249,10 @@ SMODS.Sound {
 	pitch = 1.0,
 	volume = 0.7
 }
+
+SMODS.Sound {
+	key = "swoon",
+	path = "swoon.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}

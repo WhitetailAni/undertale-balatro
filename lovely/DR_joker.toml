@@ -137,7 +137,6 @@ pattern = "boot_timer('splash prep', 'end',1)"
 position = "after"
 payload = '''
 if SMODS.find_mod('UTDR')[1].config_file.deltarune then
-	print("gm")
 	self.shared_soul = Sprite(0, 0, self.CARD_W, self.CARD_H, self.ASSET_ATLAS['UTDR_consumables'], { x = 6, y = 5 })
 end
 '''

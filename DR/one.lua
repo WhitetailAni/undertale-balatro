@@ -227,11 +227,11 @@ SMODS.Joker {
 		text = {
 			"Played cards with",
 			"{C:spades}Spade{} suit give",
-			"{C:mult}+#1#{} Mult when scored"
+			"{C:chips}+#1#{} Chips when scored"
 		}
 	},
 	config = {
-		mult = 5,
+		chips = 30,
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -240,12 +240,12 @@ SMODS.Joker {
 	pos = { x = 0, y = 2 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult } }
+		return { vars = { card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and (context.other_card:is_suit("Spades") or SMODS.has_any_suit(context.other_card)) then
 			return {
-				mult = card.ability.mult
+				chips = card.ability.chips
 			}
         end
 	end
@@ -424,7 +424,7 @@ SMODS.Joker {
 		xmult_gain = 0.2,
 		xmult = 1,
 		rounds = 0,
-		round_limit = 5,
+		round_limit = 15,
 	},
 	rarity = 3,
 	blueprint_compat = true,

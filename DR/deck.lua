@@ -52,19 +52,26 @@ SMODS.Back {
 		},
 	},
 	loc_vars = function(self, info_queue, back)
-		return { vars = { localize{type = 'name_text', key = 'v_crystal_ball', set = 'Voucher'}, localize{type = 'name_text', key = 'v_omen_globe', set = 'Voucher'} } }
+		return { vars = { localize{ type = 'name_text', key = 'v_crystal_ball', set = 'Voucher'}, localize{ type = 'name_text', key = 'v_omen_globe', set = 'Voucher'} } }
 	end,
 	unlocked = true,
 	atlas = "DR_deck",
 	pos = { x = 2, y = 0 },
-	apply = function(self)
-		G.GAME.used_vouchers["v_crystal_ball"] = true
-		G.GAME.starting_voucher_count = (G.GAME.starting_voucher_count or 0) + 1
-		Card.apply_to_run(nil, G.P_CENTERS["v_crystal_ball"])
-		
-		G.GAME.used_vouchers["v_omen_globe"] = true
-		G.GAME.starting_voucher_count = (G.GAME.starting_voucher_count or 0) + 1
-		Card.apply_to_run(nil, G.P_CENTERS["v_omen_globe"])
+	apply = function(self, back)
+		G.E_MANAGER:add_event(Event({
+			trigger = 'after',
+			delay = 0.1,
+			func = function()
+				if not G.vouchers then return false end
+				G.GAME.used_vouchers["v_crystal_ball"] = true
+				G.GAME.used_vouchers["v_omen_globe"] = true
+				Card.apply_to_run(nil, G.P_CENTERS["v_crystal_ball"])
+				Card.apply_to_run(nil, G.P_CENTERS["v_omen_globe"])
+				
+				G.GAME.starting_voucher_count = (G.GAME.starting_voucher_count or 0) + 2
+				return true
+			end
+		}))
 	end
 }
 

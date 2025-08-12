@@ -245,7 +245,7 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Mike",
 		text = {
-			"Gains {C:money}$#1#{} if played",
+			"Gives {C:money}$#1#{} if played",
 			"hand contains a",
 			"{C:attention}#2#{}",
 		}
@@ -307,17 +307,22 @@ SMODS.Joker {
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			local cards_destroyed = G.hand.cards
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "SWOON", colour = G.C.RED })
+			G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.1,
+					func = function()
+						--card_eval_status_text(card, 'extra', nil, nil, nil, { message = "SWOON", colour = G.C.RED })
+						play_sound("UTDR_swoon", 1.0, 1.0)
+						return true
+					end
+				}))
 			for i = 1, #G.hand.cards do
 				local knife = G.hand.cards[i]
 				G.E_MANAGER:add_event(Event({
 					trigger = 'after',
 					delay = 0.1,
 					func = function()
-						if context.blueprint then
-							context.blueprint_card:juice_up(0.3, 0.5)
-						else
-							card:juice_up(0.3, 0.5)
-						end
+						card:juice_up(0.3, 0.5)
 						return true
 					end
 				}))
@@ -334,6 +339,8 @@ SMODS.Joker {
 					end
 				}))
             end
+            --card_eval_status_text(card, 'extra', nil, nil, nil, { message = "SWOON", colour = G.C.RED })
+			--play_sound("UTDR_swoon", 1.0, 1.0)
             card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
 			SMODS.calculate_context({remove_playing_cards = true, removed = cards_destroyed })
         end

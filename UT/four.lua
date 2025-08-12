@@ -215,8 +215,8 @@ SMODS.Joker {
 	pos = { x = 9, y = 2 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		if G.consumeables.card then
-			return { vars = { card.ability.chips_per, card.ability.slots, card.ability.chips_per * #G.consumeables.card } }
+		if G.consumeables then
+			return { vars = { card.ability.chips_per, card.ability.slots, card.ability.chips_per * #G.consumeables.cards } }
 		else
 			return { vars = { card.ability.chips_per, card.ability.slots, 0 } }
 		end
@@ -230,7 +230,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main and context.cardarea == G.jokers then
 			return {
-				chips = card.ability.chips_per *  #G.consumeables.card
+				chips = card.ability.chips_per *  #G.consumeables.cards
 			}
 		end
 	end
@@ -248,7 +248,7 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Dog Residue",
 		text = {
-			"{C:mult}+#1#{} Mult, and...?"
+			"{C:mult}+#1#{} Mult"
 		}
 	},
 	config = {

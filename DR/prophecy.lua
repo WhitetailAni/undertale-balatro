@@ -14,42 +14,48 @@ SMODS.Back:take_ownership("ghost",
 
 SMODS.Joker:take_ownership("ring_master",
 	{
-		name = "Showman",
-		text = {
-			"{C:attention}Joker{}, {C:tarot}Tarot{}, {C:planet}Planet{},",
-			"and {C:spectral}Prophecy{} cards may",
-			"appear multiple times",
-		},
-		unlock = {
-			"Reach Ante",
-			"level {E:1,C:attention}#1#",
-		},
+		loc_txt = {
+			name = "Showman",
+			text = {
+				"{C:attention}Joker{}, {C:tarot}Tarot{}, {C:planet}Planet{},",
+				"and {C:spectral}Prophecy{} cards may",
+				"appear multiple times",
+			},
+			unlock = {
+				"Reach Ante",
+				"level {E:1,C:attention}#1#",
+			},
+		}
 	},
 	true
 )
 
 SMODS.Joker:take_ownership("seance",
 	{
-		name = "Séance",
-		text = {
-			"If {C:attention}poker hand{} is a",
-			"{C:attention}#1#{}, create a",
-			"random {C:spectral}Prophecy{} card",
-			"{C:inactive}(Must have room)",
-		},
+		loc_txt = {
+			name = "Séance",
+			text = {
+				"If {C:attention}poker hand{} is a",
+				"{C:attention}#1#{}, create a",
+				"random {C:spectral}Prophecy{} card",
+				"{C:inactive}(Must have room)",
+			},
+		}
 	},
 	true
 )
 
 SMODS.Joker:take_ownership("sixth_sense",
 	{
-		name="Sixth Sense",
-		text={
-			"If {C:attention}first hand{} of round is",
-			"a single {C:attention}6{}, destroy it and",
-			"create a {C:spectral}Prophecy{} card",
-			"{C:inactive}(Must have room)",
-		},
+		loc_txt = {
+			name="Sixth Sense",
+			text={
+				"If {C:attention}first hand{} of round is",
+				"a single {C:attention}6{}, destroy it and",
+				"create a {C:spectral}Prophecy{} card",
+				"{C:inactive}(Must have room)",
+			},
+		}
 	},
 	true
 )

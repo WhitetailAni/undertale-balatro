@@ -549,7 +549,7 @@ SMODS.Joker {
 		xmult = 1
 	},
 	loc_vars = function(self, info_queue, card)
-		if UTDR.config_storage.deltarune then
+		if UTDR.config_file.deltarune then
 			return { key = "j_UTDR_mystery_key_DR", vars = { card.ability.xmult_gain, card.ability.xmult } }
 		end
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }

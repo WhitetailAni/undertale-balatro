@@ -372,6 +372,7 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers then
 			card.ability.turns_elapsed = card.ability.turns_elapsed + 1
+			card:juice_up(0.3,0.4)
 			if card.ability.turns_elapsed == card.ability.threshold then
 				play_sound("UTDR_asriel", 1.0, 0.7)
 				card:juice_up(0.3,0.5)

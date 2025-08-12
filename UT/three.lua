@@ -244,7 +244,7 @@ SMODS.Joker {
 	pos = { x = 6, y = 3 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		if UTDR.config_storage.deltarune then
+		if UTDR.config_file.deltarune then
 			return { key = "j_UTDR_mystery_key_DR" }
 		end
 	end,

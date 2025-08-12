@@ -509,6 +509,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.turns = card.ability.turns + 1
+			card:juice_up(0.3,0.4)
 			if card.ability.turns >= card.ability.turn_cap then
 				local eval = function(card)
 					return card.ability.turns >= card.ability.turn_cap
@@ -575,8 +576,8 @@ SMODS.Joker {
 	loc_txt = {
 		name = "BitterTear",
 		text = {
-			"The next {C:attention}#1#{} cards",
-			"played give {C:money}$#2#{}",
+			"The next {C:attention}#1#{} played",
+			"cards give {C:money}$#2#{}",
 			"when scored"
 		}
 	},
