@@ -9,59 +9,54 @@ if NFS.read(SMODS.current_mod.path.."config.lua") then
     UTDR.config_file = file
 end
 
+G.FUNCS.restart_game_smods = function(e)
+	SMODS.restart_game()
+end
+
 UTDR.config_tab = function()
-		tal_nodes = {
-			{
-				n = G.UIT.R,
-				config = { align = "cm" },
-				nodes = {
-		 			{
-		 				n = G.UIT.O,
-		 				config = { 
-		 					object = DynaText({
-		 						string = "Requires game restart to apply",
-		 						colours = {G.C.WHITE},
-		 						shadow = true,
-		 						scale = 0.4
-		 					}
-		 				)
-		 			}
-		 		},
-			}
-		},
-		create_toggle(
-			{
-				align = "tl",
-				label = "UNDERTALE",
-				ref_table = UTDR.config_file,
-				ref_value = "undertale",
-				callback = function(_set_toggle)
-					NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
-				end
-			}
-		),
-		create_toggle(
-			{
-				align = "tl",
-				label = "DELTARUNE",
-				ref_table = UTDR.config_file,
-				ref_value = "deltarune",
-				callback = function(_set_toggle)
-					NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
-				end
-			}
-		),
-	}
 	return {
-	n = G.UIT.ROOT,
-	config = {
-		emboss = 0.05,
-		r = 0.1,
-		align = "tl",
-		padding = 0.2,
-		colour = G.C.BLACK
-	},
-	nodes = tal_nodes
+		n = G.UIT.ROOT,
+		config = {
+			emboss = 0.05,
+			r = 0.1,
+			align = "tl",
+			padding = 0.2,
+			colour = G.C.BLACK
+		},
+		nodes =  {
+				create_toggle(
+				{
+					align = "tl",
+					label = "UNDERTALE",
+					ref_table = UTDR.config_file,
+					ref_value = "undertale",
+					callback = function(_set_toggle)
+						UTDR.config_file.undertale = _set_toggle
+						NFS.write(lovely.mod_dir.."/UTDR/config.lua", STR_PACK(UTDR.config_file))
+					end
+				}
+			),
+			create_toggle(
+				{
+					align = "tl",
+					label = "DELTARUNE",
+					ref_table = UTDR.config_file,
+					ref_value = "deltarune",
+					callback = function(_set_toggle)
+						UTDR.config_file.deltarune = _set_toggle
+						NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
+					end
+				}
+			),
+			UIBox_button(
+				{
+					align = "tl",
+					label = { "Apply Changes" }, 
+					minw = 3.5,
+					button = 'restart_game_smods'
+				}
+			),
+		}
 	}
 end
 

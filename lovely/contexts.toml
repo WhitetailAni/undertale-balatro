@@ -9,7 +9,9 @@ priority = 0
 target = "card.lua"
 pattern = 'if self.ability.set == "Voucher" then'
 position = "after"
-payload = "	SMODS.calculate_context({voucher_redeem = true, other_voucher = self})"
+payload = '''
+	SMODS.calculate_context({voucher_redeem = true, other_voucher = self})
+'''
 match_indent = true
 
 [[patches]]
@@ -67,3 +69,16 @@ G.GAME.money_spent = G.GAME.money_spent + c1.cost
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+ease_dollars(-self.cost)
+inc_career_stat('c_shop_dollars_spent', self.cost)
+'''
+position = "after"
+payload = '''
+ease_dollars(-self.cost)
+G.GAME.money_spent = G.GAME.money_spent + self.cost
+'''
+match_indent = true
