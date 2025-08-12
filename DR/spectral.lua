@@ -24,6 +24,7 @@ SMODS.Consumable:take_ownership('familiar',
 			local used_tarot = copier or card
 			if not (#SMODS.find_card("j_UTDR_shadow_crystal") > 0) then
 				local destroyed_cards = random_destroy(used_tarot)
+				SMODS.calculate_context({ remove_playing_cards = true, removed = destroyed_cards })
 			end
 			G.E_MANAGER:add_event(Event({
 				trigger = 'after',
@@ -56,9 +57,6 @@ SMODS.Consumable:take_ownership('familiar',
 				end
 			}))
 			delay(0.3)
-			if not (#SMODS.find_card("j_UTDR_shadow_crystal") > 0) then
-				SMODS.calculate_context({ remove_playing_cards = true, removed = destroyed_cards })
-			end
 		end,
 	},
 	true
@@ -90,6 +88,7 @@ SMODS.Consumable:take_ownership('grim',
             local used_tarot = copier or card
             if not (#SMODS.find_card("j_UTDR_shadow_crystal") > 0) then
 				local destroyed_cards = random_destroy(used_tarot)
+				SMODS.calculate_context({ remove_playing_cards = true, removed = destroyed_cards })
 			end
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
@@ -116,9 +115,6 @@ SMODS.Consumable:take_ownership('grim',
                 end
             }))
             delay(0.3)
-            if not (#SMODS.find_card("j_UTDR_shadow_crystal") > 0) then
-				SMODS.calculate_context({ remove_playing_cards = true, removed = destroyed_cards })
-			end
         end,
     },
     true
@@ -148,9 +144,9 @@ SMODS.Consumable:take_ownership('incantation',
 		pos = { x = 2, y = 4 },
 		use = function(self, card, area, copier)
 			local used_tarot = copier or card
-			local destroyed_cards = nil
 			if not (#SMODS.find_card("j_UTDR_shadow_crystal") > 0) then
-				destroyed_cards = random_destroy(used_tarot)
+				local destroyed_cards = random_destroy(used_tarot)
+				SMODS.calculate_context({ remove_playing_cards = true, removed = destroyed_cards })
 			end
 			G.E_MANAGER:add_event(Event({
 				trigger = 'after',
@@ -183,9 +179,6 @@ SMODS.Consumable:take_ownership('incantation',
 				end
 			}))
 			delay(0.3)
-			if not (#SMODS.find_card("j_UTDR_shadow_crystal") > 0) then
-				SMODS.calculate_context({ remove_playing_cards = true, removed = destroyed_cards })
-			end
 		end,
 	},
 	true

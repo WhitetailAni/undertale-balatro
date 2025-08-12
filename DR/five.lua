@@ -713,7 +713,7 @@ SMODS.Joker {
 		old_hex = "",
 		old_immolate = "",
 	},
-	rarity = 1,
+	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "DR_jokers",

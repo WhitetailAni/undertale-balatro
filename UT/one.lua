@@ -611,7 +611,7 @@ SMODS.Joker {
 					func = function()
 						local over = false
 						local eligible_card = pseudorandom_element(pool, pseudoseed("snail_pie"))
-						while eligible_card == card do
+						while eligible_card ~= card do
 							eligible_card = pseudorandom_element(pool, pseudoseed("snail_pie"))
 						end
 						if first == nil then

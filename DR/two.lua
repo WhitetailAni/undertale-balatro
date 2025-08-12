@@ -110,6 +110,7 @@ SMODS.Joker {
 				}
 			else
 				card.ability.tea_timer = card.ability.tea_timer + 1
+				card:juice_up(0.3,0.4)
 			end
 		end
 	end
@@ -263,7 +264,7 @@ SMODS.Joker {
 			return {
 				mult = card.ability.mult
 			}
-		elseif context.setting_blind and context.cardarea == G.jokers then
+		elseif context.setting_blind and context.cardarea == G.jokers and G.GAME.blind.name ~= "The Needle" then
 			ease_hands_played(-G.GAME.current_round.hands_left + 1)
 		end
 	end
@@ -558,7 +559,7 @@ SMODS.Joker {
 		name = "Dealmaker",
 		text = {
 			"Each scored card",
-			"gives {C:money}$#1#{} Chips when",
+			"gives {C:money}$#1#{} when",
 			"{C:red}#2#{} discards remaining"
 		}
 	},
