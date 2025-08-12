@@ -58,7 +58,7 @@ SMODS.Joker {
 		return { vars = { card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card.config.center_key == "m_steel" then
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement( context.other_card, "m_steel") then
 			return {
 				chips = card.ability.chips
 			}
@@ -71,9 +71,8 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Mr. (Ant) Tenna",
 		text = {
-			"Creates a {C:tarot}Tarot{} card",
-			"when played hand",
-			"is a {C:attention}#1#{}",
+			"Creates a {C:tarot}Tarot{} card when",
+			"played hand is a {C:attention}#1#{}",
 			"{s:0.8}hand changes at end of round",
 			"{C:inactive}(Must have room)"
 		}
@@ -105,6 +104,9 @@ SMODS.Joker {
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
 						card:juice_up(0.3, 0.5)
+						local number = pseudorandom_element({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }, "tenna_blip")
+						play_sound('UTDR_tenna_blip_'..number, 1.0, 0.7)
+						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Amazing!" } )
 					end
 					return true
 				end
@@ -128,7 +130,7 @@ SMODS.Joker {
 		},
 	},
 	config = {
-		mult_gain = 2,
+		mult_gain = 1,
 		mult = 0,
 		selected_suit = 'Hearts'
 	},
@@ -155,7 +157,7 @@ SMODS.Joker {
 		if context.before and context.cardarea == G.jokers then
 			local suit_count = 0
 			for i = 1, #context.scoring_hand do
-				if context.scoring_hand[i].base.suit == card.ability.selected_suit or SMODS.has_any_suit(context.scoring_hand[i]) then
+				if context.scoring_hand[i]:is_suit(card.ability.selected_suit) or SMODS.has_any_suit(context.scoring_hand[i]) then
 					suit_count = suit_count + 1
 				end
 			end
@@ -170,7 +172,7 @@ SMODS.Joker {
 				card.ability.mult = 0
 				return {
 					card = card,
-					message = localize('k_reset'),
+					message = "KILLED",
 					colour = G.C.MULT
 				}
 			end
@@ -229,7 +231,7 @@ SMODS.Joker {
 		return { vars = { card.ability.bigbucks, quote } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card.config.center_key == "m_wild" then
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_wild") then
 			return {
 				dollars = card.ability.bigbucks
 			}
@@ -241,7 +243,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "mike",
 	loc_txt = {
-		name = "Mikes",
+		name = "Mike",
 		text = {
 			"Gains {C:money}$#1#{} if played",
 			"hand contains a",
@@ -251,7 +253,7 @@ SMODS.Joker {
 	config = {
 		bigbucks = 5,
 	},
-	rarity = 2,
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -307,7 +309,6 @@ SMODS.Joker {
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "SWOON", colour = G.C.RED })
 			for i = 1, #G.hand.cards do
 				local knife = G.hand.cards[i]
-				local was_glass = (knife.config.center.key == "m_glass")
 				G.E_MANAGER:add_event(Event({
 					trigger = 'after',
 					delay = 0.1,
@@ -324,7 +325,7 @@ SMODS.Joker {
 					trigger = 'after',
 					delay = 0.1,
 					func = function() 
-						if was_glass then
+						if SMODS.has_enhancement(knife, "m_glass") then
 							knife:shatter()
 						else
 							knife:start_dissolve(nil, false)
@@ -381,15 +382,15 @@ SMODS.Joker {
 	loc_txt = {
 		name = "BlackShard",
 		text = {
-			"During {C:attention}Boss Blind{}, played",
-			"cards give {X:mult,C:white}X#1#{} Mult and are",
-			"{C:attention}retriggered{} when scored"
+			"During {C:attention}Boss Blind{}, give",
+			"{X:mult,C:white}X#1#{} Mult and played cards",
+			"are {C:attention}retriggered{} when scored"
 		}
 	},
 	config = {
 		xmult = 2
 	},
-	rarity = 3,
+	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -399,7 +400,7 @@ SMODS.Joker {
 		return { vars = { card.ability.xmult } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and G.GAME.blind.boss then
+		if context.joker_main and G.GAME.blind.boss then
 			return {
 				xmult = card.ability.xmult
 			}
@@ -505,6 +506,7 @@ SMODS.Joker {
 							new_card:add_to_deck()
 							G.consumeables:emplace(new_card)
 							card:juice_up(0.3, 0.5)
+							card_eval_status_text(card, 'extra', nil, nil, nil, { message = "GOT STRONGER" } )
 						end
 						return true
 					end
@@ -541,6 +543,7 @@ SMODS.Joker {
 							new_card:add_to_deck()
 							G.consumeables:emplace(new_card)
 							card:juice_up(0.3, 0.5)
+							card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Nice, luv." } )
 						end
 						return true
 					end
@@ -582,6 +585,8 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.discard then
 			if SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
+				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
+				play_sound("UTDR_ERAM", 1.0, 1.0)
 				return {
 					remove = true,
 					removed = context.other_card

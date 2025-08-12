@@ -104,8 +104,148 @@ SMODS.Sound {
 }
 
 SMODS.Sound {
+	key = "pipis_laugh",
+	path = "pipis_laugh.ogg",
+	pitch = 1.4,
+	volume = 0.7
+}
+
+SMODS.Sound {
 	key = "pipis_boom",
 	path = "pipis_boom.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_1",
+	path = "tenna_blip_1.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_2",
+	path = "tenna_blip_2.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_3",
+	path = "tenna_blip_3.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_4",
+	path = "tenna_blip_4.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_5",
+	path = "tenna_blip_5.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_6",
+	path = "tenna_blip_6.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_7",
+	path = "tenna_blip_7.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_8",
+	path = "tenna_blip_8.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_9",
+	path = "tenna_blip_9.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "tenna_blip_10",
+	path = "tenna_blip_10.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "omega_flowey",
+	path = "omega_flowey.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "asriel",
+	path = "asriel.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "gaster",
+	path = "gaster.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "sans",
+	path = "sans.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "papyrus",
+	path = "papyrus.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "alphys",
+	path = "alphys.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "revivemint",
+	path = "revivemint.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "ERAM",
+	path = "ERAM.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
+	key = "true_reset",
+	path = "true_reset.ogg",
 	pitch = 1.0,
 	volume = 0.7
 }

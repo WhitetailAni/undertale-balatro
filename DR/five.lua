@@ -22,7 +22,7 @@ SMODS.Joker {
 	pos = { x = 1, y = 0 },
 	cost = 3,
 	calculate = function(self, card, context)
-		if context.selling_card and context.card ~= card and context.no_blueprint then
+		if context.selling_anything and context.card ~= card and not context.blueprint then
 			card.ability.extra_value = card.ability.extra_value + card.ability.sell_value_gain
             card:set_cost()
             return {
@@ -50,7 +50,7 @@ SMODS.Joker {
 		bigbucks = 1,
 	},
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_glass 
+		info_queue[#info_queue+1] = G.P_CENTERS.m_lucky
 		return { vars = { card.ability.mult, card.ability.bigbucks } }
 	end,
 	rarity = 1,
@@ -64,7 +64,7 @@ SMODS.Joker {
 			return {
 				numerator = 0
 			}
-		elseif context.individual and context.cardarea == G.play and context.other_card.config.center_key == "m_lucky"  then
+		elseif context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_lucky")  then
 			return {
 				mult = card.ability.mult,
 				dollars = card.ability.bigbucks
@@ -98,7 +98,7 @@ SMODS.Joker {
 		return { vars = { card.ability.turn_cap, card.ability.turns, card.ability.ante_loss } }
 	end,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers and context.no_blueprint then
+		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.turns = card.ability.turns + 1
 			if card.ability.turns >= card.ability.turn_cap then
 				local eval = function(card)
@@ -106,7 +106,7 @@ SMODS.Joker {
 				end
 				juice_card_until(card, eval, true)
 			end
-		elseif context.selling_self and card.ability.turns >= card.ability.turn_cap and context.no_blueprint then
+		elseif context.selling_self and card.ability.turns >= card.ability.turn_cap and not context.blueprint then
 			ease_ante(-card.ability.ante_loss)
         	G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
         	G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - card.ability.ante_loss
@@ -171,11 +171,11 @@ SMODS.Joker {
 		glass_xmult(card.ability.old_xmult)
 	end,
 	calculate = function(self, card, context)
-		if context.mod_probability and not context.blueprint and context.identifier == "glass" and not card.ability.ribbon_is_older and context.no_blueprint then
+		if context.mod_probability and not context.blueprint and context.identifier == "glass" and not card.ability.ribbon_is_older and not context.blueprint then
 			return {
 				denominator = card.ability.odds
 			}
-		elseif context.selling_card and context.card.label == "j_UTDR_ribbon" and #SMODS.find_card("j_UTDR_ribbon") == 1 and context.no_blueprint then
+		elseif context.selling_card and context.card.label == "j_UTDR_ribbon" and #SMODS.find_card("j_UTDR_ribbon") == 1 and not context.blueprint then
 			card.ability.ribbon_is_older = false
 		end
 	end
@@ -183,18 +183,12 @@ SMODS.Joker {
 
 function glass_xmult(xmult)
 	G.P_CENTERS.m_glass.config.Xmult = xmult
-	if G.deck ~= nil and G.deck.cards ~= nil then
-		for i = 1, #G.deck.cards do
-			if G.deck.cards[i].config.center and (G.deck.cards[i].config.center_key == "m_glass") and not G.deck.cards[i].vampired then 
-				G.deck.cards[i].ability.Xmult = xmult
-				G.deck.cards[i].ability.x_mult = xmult
+	if G.playing_cards ~= nil then
+		for i = 1, #G.playing_cards do
+			if G.playing_cards[i].config.center and (SMODS.has_enhancement(G.playing_cards[i], "m_glass")) and not G.playing_cards[i].vampired then 
+				G.playing_cards[i].ability.Xmult = xmult
+				G.playing_cards[i].ability.x_mult = xmult
 			end				
-		end
-		for i = 1, #G.hand.cards do
-			if G.hand.cards[i].config.center and (G.hand.cards[i].config.center_key == "m_glass") and not G.hand.cards[i].vampired then 
-				G.hand.cards[i].ability.Xmult = xmult
-				G.hand.cards[i].ability.x_mult = xmult
-			end
 		end
 	end
 end
@@ -208,7 +202,7 @@ SMODS.Joker {
 			"{S:1.1,C:red,E:2}always{} break, {C:red}and...?{}"
 		}
 	},
-	rarity = 3,
+	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -248,11 +242,11 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.mod_probability and not context.blueprint and context.identifier == "glass" and not card.ability.glasses_are_older and context.no_blueprint then
+		if context.mod_probability and not context.blueprint and context.identifier == "glass" and not card.ability.glasses_are_older then
 			return {
 				numerator = context.denominator
 			}
-		elseif context.selling_card and context.card.label == "j_UTDR_glasses" and #SMODS.find_card("j_UTDR_glasses") == 1 and context.no_blueprint then
+		elseif context.selling_card and context.card.label == "j_UTDR_glasses" and #SMODS.find_card("j_UTDR_glasses") == 1 then
 			card.ability.glasses_are_older = false
 		end
 	end
@@ -276,7 +270,7 @@ SMODS.Joker {
 	pos = { x = 4, y = 1 },
 	cost = 5,
 	calculate = function(self, card, context)
-		if context.setting_blind and context.cardarea == G.jokers then
+		if context.setting_blind and context.cardarea == G.jokers and #G.jokers.cards < G.jokers.config.card_limit then
 			SMODS.add_card( {
 				set = "Joker",
 				area = G.jokers,
@@ -371,12 +365,17 @@ SMODS.Joker {
 		text = {
 			"Copies abilities of {C:attention}Jokers{}",
 			"to the left and right"
+		},
+		unlock = {
+			"{s:1.3}?????",
 		}
 	},
 	config = {
 		in_build = false,
 		redprint_compat_string = "incompatible"
 	},
+	unlocked = false,
+	unlock_condition = {type = '', extra = '', hidden = true},
 	rarity = 4,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -594,7 +593,7 @@ SMODS.Joker {
 	loc_txt = {
 		name = "_FRIEND",
 		text = {
-			"{C:FRIEND}Creates a {C:FRIEND_PINK}Spectral{C:FRIEND} card",
+			"{C:FRIEND}Creates a {C:FRIEND_PINK}Prophecy{C:FRIEND} card",
 			"{C:FRIEND}after {C:FRIEND_YELLOW}#1# {C:FRIEND_PINK}[#2#]{C:FRIEND} cards",
 			"{C:FRIEND}are {C:FRIEND_YELLOW}destroyed{}",
 			"{C:FRIEND}(Must have room)"
@@ -668,7 +667,7 @@ SMODS.Joker {
 				}
 			}
 	end,
-	rarity = 3,
+	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -679,7 +678,7 @@ SMODS.Joker {
 		card.ability.selected_rank = pseudorandom_element(get_keys(SMODS.Ranks), "ralsei_rank")
 	end,
 	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play and (context.other_card.base.suit == card.ability.selected_suit or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == card.ability.selected_rank then
+		if context.repetition and context.cardarea == G.play and (context.other_card:is_suit(card.ability.selected_suit) or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == card.ability.selected_rank then
 			return {
 				message = localize('k_again_ex'),
 				repetitions = card.ability.repetitions,
@@ -690,6 +689,77 @@ SMODS.Joker {
 			card.ability.selected_rank = pseudorandom_element(get_keys(SMODS.Ranks), "ralsei_rank")
 		end
 	end
+}
+
+SMODS.Joker {
+	key = "shadow_crystal",
+	loc_txt = {
+		name = "Shadow Crystal",
+		text = {
+			"Disables the {C:attention}negative",
+			"{C:attention}effects{} of all",
+			"{C:spectral}Prophecy{} cards"
+		}
+	},
+	config = {
+		joker_slots = 1,
+		old_ouija = "",
+		old_ectoplasm = "",
+		old_familiar = "",
+		old_grim = "",
+		old_incantation = "",
+		old_wraith = "",
+		old_ankh = "",
+		old_hex = "",
+		old_immolate = "",
+	},
+	rarity = 1,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 1 },
+	soul_pos = { x = 5, y = 7 },
+	cost = 8,
+	add_to_deck = function(self, card, from_debuff)
+		card.ability.old_ouija = G.localization.descriptions.Spectral.c_ouija.text
+		G.localization.descriptions.Spectral.c_ouija.text = { "Converts all cards", "in hand to a single", "random {C:attention}rank" }
+		
+		card.ability.old_ectoplasm = G.localization.descriptions.Spectral.c_ectoplasm.text
+		G.localization.descriptions.Spectral.c_ectoplasm.text = { "Add {C:dark_edition}Negative{} to", "a random {C:attention}Joker" }
+		
+		card.ability.old_familiar = G.localization.descriptions.Spectral.c_familiar.text
+		G.localization.descriptions.Spectral.c_familiar.text = { "Add {C:attention}#1#{} random {C:attention}Enhanced", "{C:attention}face cards{} to your hand" }
+		
+		card.ability.old_grim = G.localization.descriptions.Spectral.c_grim.text
+		G.localization.descriptions.Spectral.c_grim.text = { "Add {C:attention}#1#{} random {C:attention}Enhanced", "{C:attention}Aces{} to your hand" }
+		
+		card.ability.old_incantation = G.localization.descriptions.Spectral.c_incantation.text
+		G.localization.descriptions.Spectral.c_incantation.text = { "Add {C:attention}#1# random", "{C:attention}Enhanced numbered", "{C:attention}cards{} to your hand" }
+		
+		card.ability.old_wraith = G.localization.descriptions.Spectral.c_wraith.text
+		G.localization.descriptions.Spectral.c_wraith.text = { "Creates a random", "{C:red}Rare{C:attention} Joker{}" }
+		
+		card.ability.old_ankh = G.localization.descriptions.Spectral.c_ankh.text
+		G.localization.descriptions.Spectral.c_ankh.text = { "Create a copy of a", "random {C:attention}Joker{}" }
+		
+		card.ability.old_hex = G.localization.descriptions.Spectral.c_hex.text
+		G.localization.descriptions.Spectral.c_hex.text = { "Add {C:dark_edition}Polychrome{} to", "a random {C:attention}Joker{}" }
+		
+		card.ability.old_immolate = G.localization.descriptions.Spectral.c_immolate.text
+		G.localization.descriptions.Spectral.c_immolate.text = { "Gain {C:money}$#2#" }
+		
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.localization.descriptions.Spectral.c_ouija.text = card.ability.old_ouija
+		G.localization.descriptions.Spectral.c_ectoplasm.text = card.ability.old_ectoplasm
+		G.localization.descriptions.Spectral.c_familiar.text = card.ability.old_familiar
+		G.localization.descriptions.Spectral.c_grim.text = card.ability.old_grim
+		G.localization.descriptions.Spectral.c_incantation.text =card.ability.old_incantation
+		G.localization.descriptions.Spectral.c_wraith.text = card.ability.old_wraith
+		G.localization.descriptions.Spectral.c_ankh.text = card.ability.old_ankh
+		G.localization.descriptions.Spectral.c_hex.text = card.ability.old_hex
+		G.localization.descriptions.Spectral.c_immolate.text = card.ability.old_immolate
+	end,
 }
 
 SMODS.Joker {

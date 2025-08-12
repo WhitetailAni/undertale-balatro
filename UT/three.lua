@@ -156,7 +156,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		xmult = 4,
+		xmult = 3,
 		slots = 2,
 		secret_chance = 6
 	},
@@ -180,7 +180,7 @@ SMODS.Joker {
         	return {
         		xmult = card.ability.xmult
         	}
-        elseif context.setting_blind and context.cardarea == G.jokers and not context.blueprint then
+        elseif context.setting_blind and context.cardarea == G.jokers and not context.blueprint and #G.jokers.cards < G.jokers.config.card_limit then
 			local count = math.floor(pseudorandom("annoying_dog_count") * 10)
 			play_sound("UTDR_bark", 1.0, 0.7)
 			for i = 1, count do
@@ -234,15 +234,20 @@ SMODS.Joker {
 			"{C:inactive}(Must have room){}"
 		}
 	},
+	config = {
+		spectral_gen = false
+	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "UT_jokers",
 	pos = { x = 6, y = 3 },
 	cost = 6,
-	config = {
-		spectral_gen = false
-	},
+	loc_vars = function(self, info_queue, card)
+		if UTDR.config_storage.deltarune then
+			return { key = "j_UTDR_mystery_key_DR" }
+		end
+	end,
 	calculate = function(self, card, context)
 		if context.setting_blind then
 			card.ability.spectral_gen = false
@@ -273,6 +278,24 @@ SMODS.Joker {
             return nil
         end
 	end
+}
+
+SMODS.Joker {
+	key = "mystery_key_DR",
+	loc_txt = {
+		name = "Mystery Key",
+		text = {
+			"If {C:attention}first hand{} of round is",
+			"a pair of {C:attention}Aces{}, destroy one",
+			"and create a {C:spectral}Prophecy{} card",
+			"{C:inactive}(Must have room){}"
+		}
+	},
+	no_collection = true,
+	in_pool = function(self, args)
+		return false
+	end,
+	atlas = "UT_jokers",
 }
 
 --dos
@@ -437,7 +460,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers then
 			card.ability.has_scored = false
-		elseif context.individual and context.cardarea == G.hand and (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
+		elseif context.individual and context.cardarea == G.hand and (context.other_card:is_suit("Clubs") or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
 			if context.other_card.debuff then
 				return {
 					message = localize('k_debuffed'),
@@ -526,7 +549,6 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers then
 			local knife = pseudorandom_element(G.hand.cards, pseudoseed('mad_dummy'))
-			local was_glass = (knife.config.center.key == "m_glass")
 			G.E_MANAGER:add_event(Event({
             	trigger = 'after',
             	delay = 0.1,
@@ -545,7 +567,7 @@ SMODS.Joker {
                 trigger = 'after',
                 delay = 0.1,
                 func = function() 
-                    if SMODS.has_enhancement(knife, 'm_glass') then
+                    if SMODS.has_enhancement(knife, "m_glass") then
 						knife:shatter()
 					else
 						knife:start_dissolve(nil, false)
@@ -657,6 +679,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.setting_blind and not card.getting_sliced then
 			local rand = pseudorandom("alphys")
+			play_sound("UTDR_alphys", 1.0, 0.7)
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Called in!" })
 			
 			if G.GAME.blind.boss then

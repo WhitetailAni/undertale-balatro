@@ -20,7 +20,11 @@ SMODS.Joker {
 		mult_per = 0.5
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult_per, card.ability.mult_per * #G.playing_cards } }
+		if G.playing_cards then
+			return { vars = { card.ability.mult_per, card.ability.mult_per * #G.playing_cards } }
+		else
+			return { vars = { card.ability.mult_per, card.ability.mult_per * 52 } }
+		end
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -43,7 +47,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		chip_gain = 5,
+		chip_gain = 6,
 		chips = 0
 	},
 	rarity = 1,
@@ -149,6 +153,24 @@ SMODS.Joker {
 	cost = 6,
 }
 
+SMODS.Joker {
+	key = "philosopher",
+	loc_txt = {
+		name = "Philosopher",
+		text = {
+			"{C:planet}Planet{} cards may",
+			"appear in any of",
+			"the {C:attention}Arcana Packs"
+		}
+	},
+	rarity = 1,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 6, y = 6 },
+	cost = 5,
+}
+
 --second sanctuary
 SMODS.Joker {
 	key = "jackenstein",
@@ -212,7 +234,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		extra = 10,
+		extra = 8,
 		hole_in_my_pocket = 2,
 		first_round = true
 	},
@@ -226,7 +248,7 @@ SMODS.Joker {
 		return { vars = { card.ability.extra, card.ability.hole_in_my_pocket } }
 	end,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers and context.no_blueprint then
+		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			if card.ability.first_round then
 				card.ability.first_round = false
 			elseif not ((card.ability.extra - card.ability.hole_in_my_pocket) > 0) then
@@ -287,6 +309,11 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
+	add_to_deck = function(self, card, from_debuff)
+		if not from_debuff then
+			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain * #get_keys(G.GAME.used_vouchers)
+		end
+	end,
 	calculate = function(self, card, context)
 		if context.voucher_redeem then
 			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
@@ -323,15 +350,13 @@ SMODS.Joker {
 		money_spent = 0
 	},
 	in_pool = function(self, args)
-		--require $150 to be spent, custom context
+		return G.GAME.money_spent >= 150
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult } }
 	end,
 	calculate = function(self, card, context)
-		if context.debiting then
-			card.ability.money_spent = context.money_spent
-		elseif context.individual and context.cardarea == G.play then
+		if context.individual and context.cardarea == G.play then
 			return {
 				xmult = card.ability.xmult
 			}
@@ -344,9 +369,8 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Second Sanctuary",
 		text = {
-			"{X:mult,C:white}X#1#{} Mult for each",
-			"card removed",
-			"from your deck",
+			"{X:mult,C:white}X#1#{} Mult for each card",
+			"{C:attention}removed{} from your deck",
 			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
 		}
 	},
@@ -412,7 +436,7 @@ SMODS.Joker {
 	pos = { x = 4, y = 6 },
 	cost = 5,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card.config.center_key == "m_glass" then
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_glass") then
 			return {
 				chips = card.ability.chips
 			}
@@ -427,7 +451,7 @@ SMODS.Joker {
 		text = {
 			"Gains {C:mult}+#1#{} Mult when a",
 			"{C:attention}Stone Card{} is scored",
-			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
+			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
 		}
 	},
 	config = {
@@ -445,7 +469,7 @@ SMODS.Joker {
 		return { vars = { card.ability.mult_gain, card.ability.mult } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card.config.center_key == "m_stone" then
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_stone") then
 			card.ability.mult = card.ability.mult + card.ability.mult_gain
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT })
 		elseif context.joker_main then
@@ -471,7 +495,7 @@ SMODS.Joker {
 		turn_cap = 4,
 		turns = 0
 	},
-	rarity = 2,
+	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = false,
 	atlas = "DR_jokers",
@@ -483,7 +507,7 @@ SMODS.Joker {
 		return { vars = { card.ability.turn_cap, card.ability.turns, G.localization.descriptions.Edition.e_negative.name } }
 	end,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers and context.no_blueprint then
+		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.turns = card.ability.turns + 1
 			if card.ability.turns >= card.ability.turn_cap then
 				local eval = function(card)
@@ -491,7 +515,7 @@ SMODS.Joker {
 				end
 				juice_card_until(card, eval, true)
 			end
-		elseif context.selling_self and #G.jokers.cards > 1 and card.ability.turns >= card.ability.turn_cap and context.no_blueprint then
+		elseif context.selling_self and #G.jokers.cards > 1 and card.ability.turns >= card.ability.turn_cap and not context.blueprint then
 			local joker = nil
 			for i = 1, #G.jokers.cards do
 				if G.jokers.cards[i] == card then
@@ -522,7 +546,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		repetitions = 3
+		repetitions = 4
 	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue+1] = G.P_CENTERS.m_stone 
@@ -534,9 +558,9 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 7, y = 5 },
 	soul_pos = { x = 2, y = 8 },
-	cost = 6,
+	cost = 9,
 	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play and context.other_card.config.center_key == "m_stone" then
+		if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_stone") then
 			return {
 				message = localize('k_again_ex'),
 				repetitions = card.ability.repetitions,

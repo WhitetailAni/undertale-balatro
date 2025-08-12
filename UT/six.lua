@@ -56,7 +56,7 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "UT_jokers",
 	pos = { x = 5, y = 8 },
-	cost = 7,
+	cost = 3,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
 			return {
@@ -186,7 +186,7 @@ SMODS.Joker {
 	config = {
 		mult = 7
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'hand', count = 20, hand = 'Pair'},
 	rarity = 1,
 	blueprint_compat = true,
@@ -205,7 +205,7 @@ SMODS.Joker {
 			return { vars = { 0 }}
 		end
 	end,
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'hand', count = 20, hand = 'Pair'},
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
@@ -231,7 +231,7 @@ SMODS.Joker {
 			"{E:1,C:attention}#1#"
 		}
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'discard_custom'},
 	rarity = 2,
 	blueprint_compat = false,
@@ -247,6 +247,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.evaluate_poker_hand and context.scoring_name == "Straight" then
+			context.poker_hands["Flush"] = context.poker_hands["Straight"]
 			return {
 				replace_scoring_name = "Straight Flush"
 			}
@@ -271,7 +272,7 @@ SMODS.Joker {
 	config = {
 		money = 2,
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {
 		type = 'chip_score',
 		chips = 100000000000
@@ -311,7 +312,7 @@ SMODS.Joker {
 	config = {
 		mult = 5,
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = { type = 'modify_deck', extra = { count = 5, enhancement = 'Stone Card', e_key = 'm_stone' } },
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue+1] = G.P_CENTERS.m_stone 
@@ -352,7 +353,7 @@ SMODS.Joker {
 		extra = 12,
 		was_boss = false,
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = { type = 'win_stake', stake = 4 },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.mult } }
@@ -392,7 +393,7 @@ SMODS.Joker {
 		xmult = 1.5,
 		odds = 3
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = { type = 'win_custom' },
 	loc_vars = function(card, info_queue, card)
 		return { vars = { G.GAME.probabilities.normal, card.ability.odds, card.ability.xmult } }
@@ -435,9 +436,9 @@ SMODS.Joker {
 			"{E:1,C:attention}0{} Boss Blind"
 		}
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = { type = 'round_win' },
-	rarity = 3,
+	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = false,
 	atlas = "UT_jokers",
@@ -445,6 +446,7 @@ SMODS.Joker {
 	cost = 7,
 	calculate = function(self, card, context)
 		if context.selling_self then
+			play_sound("UTDR_true_reset", 1.0, 1.5)
 			for i = 1, #G.jokers.cards do
 				local carb = G.jokers.cards[i]
 				G.E_MANAGER:add_event(Event({
@@ -490,7 +492,7 @@ SMODS.Joker {
 			"{C:gaster}A FEW QUESTIONS."
 		}
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'win_custom'},
 	rarity = 3,
 	blueprint_compat = false,
@@ -501,7 +503,7 @@ SMODS.Joker {
 	cost = 12,
 	add_to_deck = function(self, card, from_debuff)
 		joker_rarity(0.34, 0.33, 0.33)
-		
+		play_sound("UTDR_gaster", 1.0, 0.7)
 		card.ability.in_build = true
 	end,
 	update = function(self, card, dt)
@@ -518,7 +520,7 @@ SMODS.Joker {
 		if context.game_over then
 			card.ability.in_build = false
 			
-			joker_rarity(0.34, 0.33, 0.33)
+			joker_rarity(0.7, 0.25, 0.05)
 		end
 	end
 }
@@ -547,12 +549,15 @@ SMODS.Joker {
 		xmult = 1
 	},
 	loc_vars = function(self, info_queue, card)
+		if UTDR.config_storage.deltarune then
+			return { key = "j_UTDR_mystery_key_DR", vars = { card.ability.xmult_gain, card.ability.xmult } }
+		end
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		return { vars = { G.PROFILES[G.SETTINGS.profile].career_stats.c_wins } }
 	end,
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'win_custom', count = 5},
 	rarity = 2,
 	blueprint_compat = true,
@@ -582,6 +587,26 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+	key = "SURVEY_PROGRAM_DR",
+	loc_txt = {
+		name = "SURVEY_PROGRAM",
+		text = {
+			"Gains {X:mult,C:white}X#1#{} Mult when",
+			"a {C:spectral}Prophecy{} card is used",
+			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
+		},
+		unlock = {
+			"Win {E:1,C:attention}5{} runs {C:inactive}[#1#]"
+		}
+	},
+	no_collection = true,
+	in_pool = function(self, args)
+		return false
+	end,
+	atlas = "UT_jokers",
+}
+
+SMODS.Joker {
 	key = "vessel",
 	loc_txt = {
 		name = "VESSEL",
@@ -601,7 +626,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'money'},
 	check_for_unlock = function(self, args)
 		if args.type == 'money' then

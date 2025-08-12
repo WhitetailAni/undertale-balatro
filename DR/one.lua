@@ -61,28 +61,26 @@ SMODS.Joker {
 			return {
 				chips = card.ability.chips
 			}
-		elseif context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
-            G.E_MANAGER:add_event(Event({
-				func = function()
-					play_sound('tarot1')
-					card.T.r = -0.2
-					card:juice_up(0.3, 0.4)
-					card.states.drag.is = true
-					card.children.center.pinch.x = true
-					G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
-						func = function()
-							G.jokers:remove_card(card)
-							card:remove()
-							card = nil
-							return true;
-						end
-					})) 
-					return true
-				end
-			})) 
-			return {
-				message = "Eaten!"
-			}
+		elseif context.end_of_round and G.GAME.blind.boss then
+			G.E_MANAGER:add_event(Event({
+					func = function()
+						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Splat!", colour = G.C.BLUE })
+						play_sound('tarot1')
+						card.T.r = -0.2
+						card:juice_up(0.3, 0.4)
+						card.states.drag.is = true
+						card.children.center.pinch.x = true
+						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+							func = function()
+								G.jokers:remove_card(card)
+								card:remove()
+								card = nil
+								return true;
+							end
+						})) 
+						return true
+					end
+				})) 
         end
 	end
 }
@@ -108,10 +106,14 @@ SMODS.Joker {
 	pos = { x = 1, y = 2 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		if #G.playing_cards > G.GAME.starting_deck_size then
-			return { vars = { card.ability.mult_per, G.GAME.starting_deck_size, (card.ability.mult_per * (G.playing_cards and (#G.playing_cards - G.GAME.starting_deck_size) or 0)) } }
+		if G.playing_cards then
+			if #G.playing_cards > G.GAME.starting_deck_size then
+				return { vars = { card.ability.mult_per, G.GAME.starting_deck_size, (card.ability.mult_per * (#G.playing_cards - G.GAME.starting_deck_size)) } }
+			else
+				return { vars = { card.ability.mult_per, 52, 0 } }
+			end
 		else
-			return { vars = { card.ability.mult_per, 0, 0 } }
+			return { vars = { card.ability.mult_per, G.GAME.starting_deck_size, (card.ability.mult_per * (52 - G.GAME.starting_deck_size)) } }
 		end
 	end,
 	calculate = function(self, card, context)
@@ -161,7 +163,7 @@ SMODS.Joker {
 		text = {
 			"{C:chips}+#1#{} Chips for each {C:attention}hand{} played",
 			"{C:red}-#2#{} Chips for each {C:attention}discard{} used",
-			"{C:inactive}(Currently {C:attention}#3#{C:inactive} Chips)"
+			"{C:inactive}(Currently {C:attention}+#3#{C:inactive} Chips)"
 		}
 	},
 	config = {
@@ -177,14 +179,10 @@ SMODS.Joker {
 	pos = { x = 8, y = 2 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		local total_chips = card.ability.chips
-		if card.ability.chips >= 0 then
-			total_chips = "+"..card.ability.chips
-		end
-		return { vars = { card.ability.chip_gain, card.ability.chip_loss,  total_chips} }
+		return { vars = { card.ability.chip_gain, card.ability.chip_loss, card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
-		if context.pre_discard and context.cardarea == G.jokers then
+		if context.pre_discard and context.cardarea == G.jokers and card.ability.chips > 0 then
 			card.ability.chips = card.ability.chips - card.ability.chip_loss
 			return {
 				message = localize{ type = 'variable', key = 'a_chips_minus', vars = { card.ability.chip_loss } },
@@ -245,7 +243,7 @@ SMODS.Joker {
 		return { vars = { card.ability.mult } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and (context.other_card.base.suit == "Spades" or SMODS.has_any_suit(context.other_card)) then
+		if context.individual and context.cardarea == G.play and (context.other_card:is_suit("Spades") or SMODS.has_any_suit(context.other_card)) then
 			return {
 				mult = card.ability.mult
 			}
@@ -264,7 +262,7 @@ SMODS.Joker {
 			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
 		}
 	},
-	rarity = 1,
+	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -281,7 +279,7 @@ SMODS.Joker {
 		if context.remove_playing_cards and not context.blueprint then
 			local nonspades = 0
 			for i = 1, #context.removed do
-				if (context.removed[i].base.suit ~= "Spades" or SMODS.has_any_suit(context.removed[i])) then
+				if (not context.removed[i]:is_suit("Spades") or SMODS.has_any_suit(context.removed[i])) then
 					nonspades = nonspades + 1
 				end
 			end
@@ -329,7 +327,7 @@ SMODS.Joker {
 		return { vars = { card.ability.chips, card.ability.mult } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) then
+		if context.individual and context.cardarea == G.play and (context.other_card:is_suit("Clubs") or SMODS.has_any_suit(context.other_card)) then
 			return {
 				chips = card.ability.chips,
 				mult = card.ability.mult
@@ -357,7 +355,7 @@ SMODS.Joker {
 		info_queue[#info_queue+1] = G.P_CENTERS.m_wild 
 	end,
 	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play and context.other_card.config.center_key == "m_wild" then
+		if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_wild") then
 			return {
 				message = localize('k_again_ex'),
 				repetitions = 1,
@@ -416,14 +414,14 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Top Cake",
 		text = {
-			"Gains {X:mult,C:white}X#1#{} Mult at",
+			"Gains {X:mult,C:white}X#1#{} Mult after",
 			"end of round, destroys",
 			"itself after {C:attention}#2#{} {C:inactive}[#3#]{} rounds",
 			"{C:inactive}(Currently {X:mult,C:white}X#4#{C:inactive} Mult)",
 		}
 	},
 	config = {
-		xmult_gain = 1,
+		xmult_gain = 0.2,
 		xmult = 1,
 		rounds = 0,
 		round_limit = 5,
@@ -468,14 +466,14 @@ SMODS.Joker {
 					end
 				})) 
 				local susie = SMODS.find_card("j_UTDR_susie", true)
-				if #susie > 0 then
+				if #susie > 0 and pseudorandom('susie_ate_the_cake') > 0.7 then
 					susie:juice_up(0.3, 0.3);
 					return {
 						message = "Consumed by the Dragon"
 					}
 				else
 					return {
-						message = "Eaten!"
+						message = "Mama miba!"
 					}
 				end
 			elseif context.end_of_round and context.cardarea == G.jokers then
@@ -534,6 +532,9 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers then
 			card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "rouxls")
+			while not G.GAME.hands[card.ability.selected_hand].visible do
+				card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "rouxls")
+			end
 		end
 	end
 }
@@ -543,8 +544,13 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Iron Shackle",
 		text = {
-			"NONFUNCTIONAL"
+			"{C:attention}Gold Cards{} and {C:attention}Steel Cards",
+			"are considered the",
+			"{C:attention}same enhancement"
 		}
+	},
+	config = {
+		in_build = false
 	},
 	rarity = 2,
 	blueprint_compat = false,
@@ -558,9 +564,38 @@ SMODS.Joker {
 		return { vars = { card.ability.mult } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
-		print("IRON SHACKLE NONFUNCTIONAL")
+		card.ability.in_build = true
+	end,
+	update = function(self, card, dt)
+		if card.ability.in_build then
+			iron_gold_crosstalk(true)
+		end
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		card.ability.in_build = false
+		iron_gold_crosstalk(false)
 	end
 }
+
+function iron_gold_crosstalk(on_off)
+	if on_off then
+		for i = 1, #G.playing_cards do
+			if SMODS.has_enhancement(G.playing_cards[i], "m_steel") then
+				G.playing_cards[i].ability.h_dollars = G.P_CENTERS.m_gold.config.h_dollars
+			elseif SMODS.has_enhancement(G.playing_cards[i], "m_gold") then
+				G.playing_cards[i].ability.h_x_mult = G.P_CENTERS.m_steel.config.h_x_mult
+			end				
+		end
+	else
+		for i = 1, #G.playing_cards do
+			if SMODS.has_enhancement(G.playing_cards[i], "m_steel") then
+				G.playing_cards[i].ability.h_dollars = nil
+			elseif SMODS.has_enhancement(G.playing_cards[i], "m_gold") then
+				G.playing_cards[i].ability.h_x_mult = nil
+			end				
+		end
+	end
+end
 
 SMODS.Joker {
 	key = "devilsknife",
@@ -585,7 +620,7 @@ SMODS.Joker {
 	pos = { x = 0, y = 1 },
 	cost = 8,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card.config.center_key == "m_wild" then
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_wild") then
 			return {
 				xmult = card.ability.xmult
 			}

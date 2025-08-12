@@ -23,7 +23,8 @@ SMODS.Atlas {
     key = "consumables",
     path = "consumable.png",
     px = 71,
-    py = 95
+    py = 95,
+    atlas_table = "ASSET_ATLAS"
 }
 
 SMODS.Atlas {
