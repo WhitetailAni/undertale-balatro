@@ -111,7 +111,7 @@ SMODS.Joker {
 					return true
 				end
 			}))
-		elseif context.end_of_round and context.cardarea == G.jokers then
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 		end
 	end
@@ -154,7 +154,7 @@ SMODS.Joker {
 		card.ability.selected_suit = pseudorandom_element(get_keys(G.C.SUITS), "tv_world")
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers then
+		if context.before and context.cardarea == G.jokers and not context.blueprint then
 			local suit_count = 0
 			for i = 1, #context.scoring_hand do
 				if context.scoring_hand[i]:is_suit(card.ability.selected_suit) or SMODS.has_any_suit(context.scoring_hand[i]) then
@@ -180,7 +180,7 @@ SMODS.Joker {
 			return {
 				mult = card.ability.mult
 			}
-		elseif context.end_of_round and context.cardarea == G.jokers then
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.selected_suit = pseudorandom_element(get_keys(G.C.SUITS), "tv_world")
 		end
 	end
@@ -311,7 +311,6 @@ SMODS.Joker {
 					trigger = 'after',
 					delay = 0.1,
 					func = function()
-						--card_eval_status_text(card, 'extra', nil, nil, nil, { message = "SWOON", colour = G.C.RED })
 						play_sound("UTDR_swoon", 1.0, 1.0)
 						return true
 					end
@@ -339,8 +338,6 @@ SMODS.Joker {
 					end
 				}))
             end
-            --card_eval_status_text(card, 'extra', nil, nil, nil, { message = "SWOON", colour = G.C.RED })
-			--play_sound("UTDR_swoon", 1.0, 1.0)
             card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
 			SMODS.calculate_context({remove_playing_cards = true, removed = cards_destroyed })
         end
@@ -590,15 +587,13 @@ SMODS.Joker {
 		return { vars = { probabilities_normal, odds } }
 	end,
 	calculate = function(self, card, context)
-		if context.discard then
-			if SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
-				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
-				play_sound("UTDR_ERAM", 1.0, 1.0)
-				return {
-					remove = true,
-					removed = context.other_card
-				}
-			end
+		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
+			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
+			play_sound("UTDR_ERAM", 1.0, 1.0)
+			return {
+				remove = true,
+				removed = context.other_card
+			}
 		end
 	end
 }

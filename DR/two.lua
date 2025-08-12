@@ -84,7 +84,7 @@ SMODS.Joker {
 				result["dollars"] = card.ability.bigbucks
 			end
 			return result
-		elseif context.end_of_round and context.cardarea == G.jokers then
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			if card.ability.tea_timer == card.ability.steep_time then
 				G.E_MANAGER:add_event(Event({
 					func = function()
@@ -140,7 +140,7 @@ SMODS.Joker {
 		return { vars = { probabilities_normal, odds } }
 	end,
 	calculate = function(self, card, context)
-		if context.using_consumeable and not context.blueprint and context.consumeable.ability.set == 'Tarot' then
+		if context.using_consumeable and context.consumeable.ability.set == 'Tarot' then
 			if SMODS.pseudorandom_probability(card, "cyber_world", 1, card.ability.odds, "DR_cyber_world") then
 				G.E_MANAGER:add_event(Event({
 					trigger = 'after',
@@ -189,7 +189,7 @@ SMODS.Joker {
 		return { vars = { card.ability.chip_gain, card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card:is_face() then
+		if context.individual and context.cardarea == G.play and context.other_card:is_face() and not context.blueprint then
 			card.ability.chips = card.ability.chips + card.ability.chip_gain
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.CHIPS })
 		elseif context.joker_main then
@@ -264,7 +264,7 @@ SMODS.Joker {
 			return {
 				mult = card.ability.mult
 			}
-		elseif context.setting_blind and context.cardarea == G.jokers and G.GAME.blind.name ~= "The Needle" then
+		elseif context.setting_blind and context.cardarea == G.jokers and G.GAME.blind.name ~= "The Needle" and not context.blueprint  then
 			ease_hands_played(-G.GAME.current_round.hands_left + 1)
 		end
 	end
@@ -330,7 +330,7 @@ SMODS.Joker {
 	pos = { x = 3, y = 3 },
 	cost = 6,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers then
+		if context.before and context.cardarea == G.jokers and not context.blueprint then
 			for i = 1, #context.scoring_hand do
 				if tonumber(context.scoring_hand[i].base.value) then
 					card.ability.mult = 0
@@ -346,6 +346,10 @@ SMODS.Joker {
 				card = card,
 				message = localize('k_upgrade_ex'),
 				colour = G.C.MULT
+			}
+		elseif context.joker_main then
+			return {
+				mult = card.ability.mult
 			}
 		end
 	end
@@ -619,29 +623,30 @@ SMODS.Joker {
 			})
 			card:juice_up(0.3, 0.4)
 			play_sound("UTDR_revivemint", 1.0, 0.7)
-		
-			if SMODS.pseudorandom_probability(card, "revivemint", 1, card.ability.odds, "DR_revivemint") then
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						})) 
-						return true
-					end
-				})) 
-				return {
-					message = "DOWN"
-				}
+			if not context.blueprint then
+				if SMODS.pseudorandom_probability(card, "revivemint", 1, card.ability.odds, "DR_revivemint") then
+					G.E_MANAGER:add_event(Event({
+						func = function()
+							play_sound('tarot1')
+							card.T.r = -0.2
+							card:juice_up(0.3, 0.4)
+							card.states.drag.is = true
+							card.children.center.pinch.x = true
+							G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+								func = function()
+									G.jokers:remove_card(card)
+									card:remove()
+									card = nil
+									return true;
+								end
+							})) 
+							return true
+						end
+					})) 
+					return {
+						message = "DOWN"
+					}
+				end
 			end
 		end
 	end

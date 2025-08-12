@@ -246,7 +246,7 @@ SMODS.Joker {
 		return { vars = { G.localization.misc.poker_hands['Straight'] } }
 	end,
 	calculate = function(self, card, context)
-		if context.evaluate_poker_hand and context.scoring_name == "Straight" then
+		if context.evaluate_poker_hand and context.scoring_name == "Straight" and not context.blueprint then
 			context.poker_hands["Flush"] = context.poker_hands["Straight"]
 			return {
 				replace_scoring_name = "Straight Flush"
@@ -368,7 +368,7 @@ SMODS.Joker {
 	pos = { x = 1, y = 8 },
 	cost = 6,
 	calculate = function(self, card, context)
-		if context.setting_blind then
+		if context.setting_blind and not context.blueprint then
 			card.ability.was_boss = G.GAME.blind.boss
         end
 	end
@@ -445,7 +445,7 @@ SMODS.Joker {
 	pos = { x = 2, y = 8 },
 	cost = 7,
 	calculate = function(self, card, context)
-		if context.selling_self then
+		if context.selling_self and not context.blueprint then
 			play_sound("UTDR_true_reset", 1.0, 1.5)
 			for i = 1, #G.jokers.cards do
 				local carb = G.jokers.cards[i]
@@ -517,7 +517,7 @@ SMODS.Joker {
 		joker_rarity(0.7, 0.25, 0.05)
 	end,
 	calculate = function(self, card, context)
-		if context.game_over then
+		if context.game_over and not context.blueprint then
 			card.ability.in_build = false
 			
 			joker_rarity(0.7, 0.25, 0.05)
@@ -643,7 +643,7 @@ SMODS.Joker {
 	pos = { x = 1, y = 9 },
 	cost = 7,
 	calculate = function(self, card, context)
-		if context.selling_card and context.card ~= card and context.card.ability.set == "Joker" then
+		if context.selling_card and context.card ~= card and context.card.ability.set == "Joker" and not context.blueprint then
 			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
 			G.E_MANAGER:add_event(
 				Event({

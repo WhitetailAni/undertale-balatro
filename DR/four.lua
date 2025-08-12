@@ -313,7 +313,7 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.voucher_redeem then
+		if context.voucher_redeem and not context.blueprint then
 			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
 			return {
 				card = card,
@@ -467,7 +467,7 @@ SMODS.Joker {
 		return { vars = { card.ability.mult_gain, card.ability.mult } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_stone") then
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_stone") and not context.blueprint then
 			card.ability.mult = card.ability.mult + card.ability.mult_gain
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT })
 		elseif context.joker_main then

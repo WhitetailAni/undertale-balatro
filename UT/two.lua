@@ -173,7 +173,7 @@ SMODS.Joker {
 		return { vars = { probabilities_normal, tarot_odds, destroy_odds } }
 	end,
 	calculate = function(self, card, context)
-		if context.using_consumeable and not context.blueprint and context.consumeable.ability.set == 'Planet' then
+		if context.using_consumeable and context.consumeable.ability.set == 'Planet' then
 			if SMODS.pseudorandom_probability(card, "nice_cream_tarot", 1, card.ability.tarot_odds, "UT_nice_cream_tarot") then
 				G.E_MANAGER:add_event(Event({
 					trigger = 'after',
@@ -194,28 +194,30 @@ SMODS.Joker {
 					end
 				}))
 			end
-			if SMODS.pseudorandom_probability(card, "nice_cream_destroy", 1, card.ability.destroy_odds, "UT_nice_cream_destroy") then
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						})) 
-						return true
-					end
-				})) 
-				return {
-					message = "Melted!"
-				}
+			if not context.blueprint then
+				if SMODS.pseudorandom_probability(card, "nice_cream_destroy", 1, card.ability.destroy_odds, "UT_nice_cream_destroy") then
+					G.E_MANAGER:add_event(Event({
+						func = function()
+							play_sound('tarot1')
+							card.T.r = -0.2
+							card:juice_up(0.3, 0.4)
+							card.states.drag.is = true
+							card.children.center.pinch.x = true
+							G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+								func = function()
+									G.jokers:remove_card(card)
+									card:remove()
+									card = nil
+									return true;
+								end
+							})) 
+							return true
+						end
+					})) 
+					return {
+						message = "Melted!"
+					}
+				end
 			end
         end
 	end
@@ -365,7 +367,7 @@ SMODS.Joker {
 		return { vars = { G.localization.misc.poker_hands['Straight'] } }
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Straight']) and not context.blueprint then
+		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Straight']) then
 			G.E_MANAGER:add_event(Event({
 				trigger = 'after',
 				delay = 0.4,
@@ -376,7 +378,7 @@ SMODS.Joker {
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
 						card:juice_up(0.3, 0.5)
-						--card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "Created!", colour = G.C.SECONDARY_SET.PLANET})
+						card_eval_status_text(self, 'extra', nil, nil, nil, {message = localize('k_plus_planet'), colour = G.C.SECONDARY_SET.Planet})
 					end
 					return true
 				end
@@ -505,7 +507,6 @@ SMODS.Joker {
 					return true
 				end
 			}))
-
 			return
 		elseif context.joker_main then
 			return {
