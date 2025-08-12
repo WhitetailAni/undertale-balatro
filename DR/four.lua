@@ -348,7 +348,8 @@ SMODS.Joker {
 		money_spent = 0
 	},
 	in_pool = function(self, args)
-		return G.GAME.money_spent >= 150
+		local money_spent = G.GAME.money_spent or 0
+		return money_spent >= 150
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult } }
