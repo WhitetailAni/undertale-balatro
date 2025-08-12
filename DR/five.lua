@@ -246,7 +246,7 @@ SMODS.Joker {
 			return {
 				numerator = context.denominator
 			}
-		elseif context.selling_card and context.card.label == "j_UTDR_glasses" and #SMODS.find_card("j_UTDR_glasses") == 1 then
+		elseif context.selling_card and context.card.label == "j_UTDR_glasses" and #SMODS.find_card("j_UTDR_glasses") == 1 and not context.blueprint then
 			card.ability.glasses_are_older = false
 		end
 	end
@@ -523,7 +523,7 @@ SMODS.Joker {
 	pos = { x = 3, y = 2 },
 	cost = 6,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
+		if context.individual and context.cardarea == G.play and not context.blueprint then
 			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize { type='variable', key='a_xmult', vars = { card.ability.xmult } }, colour = G.C.MULT })
 		elseif context.joker_main then
@@ -684,7 +684,7 @@ SMODS.Joker {
 				repetitions = card.ability.repetitions,
 				card = context.blueprint_card or card
 			}
-		elseif context.end_of_round and context.cardarea == G.jokers then
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.selected_suit = pseudorandom_element(get_keys(G.C.SUITS), "ralsei_suit")
 			card.ability.selected_rank = pseudorandom_element(get_keys(SMODS.Ranks), "ralsei_rank")
 		end
@@ -747,7 +747,6 @@ SMODS.Joker {
 		
 		card.ability.old_immolate = G.localization.descriptions.Spectral.c_immolate.text
 		G.localization.descriptions.Spectral.c_immolate.text = { "Gain {C:money}$#2#" }
-		
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		G.localization.descriptions.Spectral.c_ouija.text = card.ability.old_ouija

@@ -71,7 +71,7 @@ SMODS.Joker {
 		card.ability.in_build = false
 	end,
 	calculate = function(self, card, context)
-		if context.selling_self then
+		if context.selling_self and not context.blueprint then
 			play_sound("UTDR_bark", 1, 0.7)
 			for i = 1, G.consumeables.config.card_limit - #G.consumeables.cards do
 				G.E_MANAGER:add_event(Event({
@@ -171,7 +171,7 @@ SMODS.Joker {
 		card.ability.in_build = false
 	end,
 	calculate = function(self, card, context)
-		if context.selling_self then
+		if context.selling_self and not context.blueprint then
 			play_sound("UTDR_meow", 1.12, 0.7)
 			for i = 1, G.consumeables.config.card_limit do
 				G.E_MANAGER:add_event(Event({
@@ -454,7 +454,7 @@ SMODS.Joker {
 		munch_chance = 10
 	},
 	rarity = 1,
-	blueprint_compat = false,
+	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
 	pos = { x = 8, y = 3 },
@@ -473,7 +473,7 @@ SMODS.Joker {
 		} }
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main and not context.blueprint then
+		if context.joker_main then
 			if SMODS.pseudorandom_probability(card, "glamburger_mult", 1, card.ability.mult_chance, "UT_glamburger_mult") then
 				SMODS.calculate_effect({ mult = card.ability.mult }, card)
 			end
@@ -625,13 +625,13 @@ SMODS.Joker {
 		return { vars = { card.ability.mult } }
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers then
+		if context.before and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.has_scored = false
 		elseif context.individual and context.cardarea == G.hand and context.other_card:is_face() and not card.ability.has_scored then
 			return {
 				mult = card.ability.mult
 			}
-		elseif context.after and context.cardarea == G.jokers then
+		elseif context.after and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.has_scored = true
         end
 	end

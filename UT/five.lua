@@ -71,13 +71,13 @@ SMODS.Joker {
 	pos = { x = 9, y = 0 },
 	cost = 5,
 	calculate = function(self, card, context)
-		if context.setting_blind and card.ability.increased_interest and not card.getting_sliced then
+		if context.setting_blind and card.ability.increased_interest and not card.getting_sliced and not context.blueprint then
 			G.GAME.interest_amount = G.GAME.interest_amount / 2
 			card.ability.increased_interest = false
-		elseif context.joker_main and G.GAME.current_round.hands_left == 0 then
+		elseif context.joker_main and G.GAME.current_round.hands_left == 0 and not context.blueprint then
 			G.GAME.blind.dollars = G.GAME.blind.dollars * 2
 			card.ability.final_hand = true
-		elseif context.end_of_round and context.cardarea == G.jokers and card.ability.final_hand then
+		elseif context.end_of_round and context.cardarea == G.jokers and card.ability.final_hand and not context.blueprint then
 			card.ability.final_hand = false
 			G.GAME.interest_amount = G.GAME.interest_amount * 2
 			card.ability.increased_interest = true
@@ -271,13 +271,13 @@ SMODS.Joker {
 	pos = { x = 0, y = 4 },
 	cost = 6,
 	calculate = function(self, card, context)
-		if context.setting_blind then
+		if context.setting_blind and not context.blueprint then
 			card.ability.mult_gained = false
 		elseif context.joker_main then
 			return {
 				mult = card.ability.mult
 			}
-		elseif context.end_of_round and not context.blueprint and not card.ability.mult_gained then
+		elseif context.end_of_round and not context.blueprint and not card.ability.mult_gained and not context.blueprint then
             card.ability.mult = card.ability.mult + card.ability.mult_gain
             card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize{ type = 'variable', key = 'a_mult', vars = { card.ability.mult } } })
             card.ability.mult_gained = true
@@ -370,7 +370,7 @@ SMODS.Joker {
 			return {
 				xmult = card.ability.xmult
 			}
-		elseif context.end_of_round and context.cardarea == G.jokers then
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.turns_elapsed = card.ability.turns_elapsed + 1
 			card:juice_up(0.3,0.4)
 			if card.ability.turns_elapsed == card.ability.threshold then
@@ -621,14 +621,14 @@ SMODS.Joker {
 		edition_values(card.ability.old_foil, card.ability.old_holo, card.ability.old_poly, true)
 	end,
 	calculate = function(self, card, context)
-		if context.game_over then
+		if context.game_over and not context.blueprint then
 			card.ability.in_build = false
 			edition_values(card.ability.old_foil, card.ability.old_holo, card.ability.old_poly)
 		end
 	end
 }
 
-function edition_values(foil, holo, poly, add_remove)
+function edition_values(foil, holo, poly)
 	G.P_CENTERS.e_foil.config.chips = foil
 	G.P_CENTERS.e_holo.config.mult = holo
 	G.P_CENTERS.e_polychrome.config.x_mult = poly

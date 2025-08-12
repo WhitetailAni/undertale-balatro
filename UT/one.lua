@@ -255,7 +255,7 @@ SMODS.Joker {
 		G.hand:change_size(-card.ability.hand_size)
 	end,
 	calculate = function(self, card, context)
-		if context.setting_blind and not card.getting_sliced then
+		if context.setting_blind and not card.getting_sliced and not context.blueprint then
 			ease_discard(-G.GAME.current_round.discards_left, nil, true)
         end
 	end
@@ -310,7 +310,7 @@ SMODS.Joker {
 		in_build = false
 	},
 	rarity = 3,
-	blueprint_compat = true,
+	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "UT_jokers",
 	pos = { x = 0, y = 0 },
@@ -373,16 +373,14 @@ SMODS.Joker {
 					mult = card.ability.mult
 				}
 			end
-		elseif context.after then
-			if not context.blueprint then
-				if card.ability.hands_remaining == 0 then
-					local eval = function(card)
-						return card.ability.hands_remaining == 0
-					end
-					juice_card_until(card, eval, true)
-				else
-					card.ability.hands_remaining = card.ability.hands_remaining - 1
+		elseif context.after and not context.blueprint then
+			if card.ability.hands_remaining == 0 then
+				local eval = function(card)
+					return card.ability.hands_remaining == 0
 				end
+				juice_card_until(card, eval, true)
+			else
+				card.ability.hands_remaining = card.ability.hands_remaining - 1
 			end
 		end
 	end
@@ -509,19 +507,19 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.selling_self and G.GAME.blind.in_blind and not G.GAME.blind.boss then
+		if context.selling_self and G.GAME.blind.in_blind and not G.GAME.blind.boss and not context.blueprint then
 			card.ability.spared = true
 			G.STATE = G.STATES.HAND_PLAYED
 			G.STATE_COMPLETE = true
 			end_round()
-		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared then
+		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared and not context.blueprint then
 			G.localization.misc.dictionary.ph_mr_bones = "Spared by Buttspie"
 			return {
 				message = "Spared!",
 				saved = true,
 				colour = G.C.RED
 			}
-		elseif context.ending_shop then
+		elseif context.ending_shop and not context.blueprint then
 			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
         end
 	end
@@ -562,7 +560,7 @@ SMODS.Joker {
 			return {
 				denominator = 8
 			}
-		elseif context.selling_card and context.card.label == "j_UTDR_noelle" and #SMODS.find_card("j_UTDR_noelle") == 1 then
+		elseif context.selling_card and context.card.label == "j_UTDR_noelle" and #SMODS.find_card("j_UTDR_noelle") == 1 and not context.blueprint then
 			card.ability.noelle_is_older = false
 		end
 	end
@@ -595,7 +593,7 @@ SMODS.Joker {
 		return { vars = { G.localization.descriptions.Edition.e_foil.name, G.localization.descriptions.Edition.e_holo.name, G.localization.descriptions.Edition.e_polychrome.name, card.ability.jokers } }
 	end,
 	calculate = function(self, card, context)
-		if context.selling_self and #G.jokers.cards > 1 then
+		if context.selling_self and #G.jokers.cards > 1 and not context.blueprint then
 			local first = nil
 			local repeat_count = math.min((#G.jokers.cards - 1), card.ability.jokers)
 			for i = 1, repeat_count do

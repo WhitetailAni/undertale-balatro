@@ -42,32 +42,28 @@ SMODS.Joker {
 					xmult = card.ability.extra.xmult
 				}
 			end
-		elseif context.after then
-			if not context.blueprint then
-				if card.ability.extra.hands_remaining == 0 then
-					local eval = function(card)
-						return card.ability.extra.hands_remaining == 0
-					end
-					juice_card_until(card, eval, true)
-				else
-					card.ability.extra.hands_remaining = card.ability.extra.hands_remaining - 1
+		elseif context.after and not context.blueprint then
+			if card.ability.extra.hands_remaining == 0 then
+				local eval = function(card)
+					return card.ability.extra.hands_remaining == 0
 				end
+				juice_card_until(card, eval, true)
+			else
+				card.ability.extra.hands_remaining = card.ability.extra.hands_remaining - 1
 			end
-		elseif context.selling_self and G.GAME.blind.in_blind and not G.GAME.blind.boss then
-			if SMODS.pseudorandom_probability(card, "punch_card_secret", 1, card.ability.extra.secret_chance, "UT_punch_card_secret") then
-				card.ability.spared = true
-				G.STATE = G.STATES.HAND_PLAYED
-				G.STATE_COMPLETE = true
-				end_round()
-			end
-		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared then
+		elseif context.selling_self and G.GAME.blind.in_blind and not G.GAME.blind.boss and not context.blueprint and SMODS.pseudorandom_probability(card, "punch_card_secret", 1, card.ability.extra.secret_chance, "UT_punch_card_secret") then
+			card.ability.spared = true
+			G.STATE = G.STATES.HAND_PLAYED
+			G.STATE_COMPLETE = true
+			end_round()
+		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared and not context.blueprint then
 			G.localization.misc.dictionary.ph_mr_bones = "Redeemed the Punch Card"
 			return {
 				message = "Punched!",
 				saved = true,
 				colour = G.C.RED
 			}
-		elseif context.ending_shop then
+		elseif context.ending_shop and not context.blueprint then
 			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
         elseif context.end_of_round and context.cardarea == G.jokers and card.ability.extra.hands_remaining == 0 then
         	if SMODS.pseudorandom_probability(card, "punch_card_super_secret", 1, card.ability.extra.super_secret_chance, "UT_punch_card_secret") then
@@ -249,7 +245,7 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.setting_blind then
+		if context.setting_blind and not context.blueprint then
 			card.ability.spectral_gen = false
 		elseif context.destroying_card and not context.blueprint then
             if #context.full_hand == 2 and G.GAME.current_round.hands_played == 0 and not card.ability.spectral_gen then
@@ -393,7 +389,7 @@ SMODS.Joker {
 			return {
 				numerator = 0
 			}
-		elseif context.selling_card and context.card.label == "j_UTDR_thornring" and #SMODS.find_card("j_UTDR_thornring") == 1 then
+		elseif context.selling_card and context.card.label == "j_UTDR_thornring" and #SMODS.find_card("j_UTDR_thornring") == 1 and not context.blueprint then
 			card.ability.thorning_is_older = false
 		end
 	end
@@ -458,7 +454,7 @@ SMODS.Joker {
 		return { vars = { card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers then
+		if context.before and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.has_scored = false
 		elseif context.individual and context.cardarea == G.hand and (context.other_card:is_suit("Clubs") or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
 			if context.other_card.debuff then
@@ -472,7 +468,7 @@ SMODS.Joker {
 					chips = card.ability.chips
 				}
 			end
-		elseif context.after and context.cardarea == G.jokers then
+		elseif context.after and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.has_scored = true
         end
 	end
@@ -514,7 +510,7 @@ SMODS.Joker {
 				delay = 0.45, 
 				card = card
 			}
-		elseif context.end_of_round and context.cardarea == G.jokers then
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.mult = 0
 			return {
 				message = localize('k_reset'),

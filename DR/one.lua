@@ -14,7 +14,7 @@ SMODS.Joker {
 	},
 	pixel_size = { w = 69, h = 69 },
 	rarity = 1,
-	blueprint_compat = true,
+	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "DR_jokers",
 	pos = { x = 5, y = 0 },
@@ -61,7 +61,7 @@ SMODS.Joker {
 			return {
 				chips = card.ability.chips
 			}
-		elseif context.end_of_round and G.GAME.blind.boss then
+		elseif context.end_of_round and G.GAME.blind.boss and not context.blueprint then
 			G.E_MANAGER:add_event(Event({
 					func = function()
 						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Splat!", colour = G.C.BLUE })
@@ -182,13 +182,13 @@ SMODS.Joker {
 		return { vars = { card.ability.chip_gain, card.ability.chip_loss, card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
-		if context.pre_discard and context.cardarea == G.jokers and card.ability.chips > 0 then
+		if context.pre_discard and context.cardarea == G.jokers and card.ability.chips > 0 and not context.blueprint then
 			card.ability.chips = card.ability.chips - card.ability.chip_loss
 			return {
 				message = localize{ type = 'variable', key = 'a_chips_minus', vars = { card.ability.chip_loss } },
 				colour = G.C.CHIPS
 			}
-		elseif context.before and context.cardarea == G.jokers then
+		elseif context.before and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.chips = card.ability.chips + card.ability.chip_gain
 			return {
 				message = localize{ type = 'variable', key = 'a_chips', vars = { "+"..card.ability.chip_gain } },
@@ -292,7 +292,6 @@ SMODS.Joker {
 					end
 				}))
 			end
-
 			return
 		elseif context.joker_main then
 			return {
@@ -394,7 +393,7 @@ SMODS.Joker {
 		} }
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Straight']) then
+		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Straight']) and not context.blueprint then
 			card.ability.mult = card.ability.mult + card.ability.mult_gain
 			return {
 				message = localize('k_upgrade_ex'),
@@ -476,7 +475,7 @@ SMODS.Joker {
 						message = "Mama miba!"
 					}
 				end
-			elseif context.end_of_round and context.cardarea == G.jokers then
+			elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 				card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
 				card.ability.rounds = card.ability.rounds + 1
 				return {
@@ -519,7 +518,7 @@ SMODS.Joker {
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "rouxls")
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers and context.scoring_name == card.ability.selected_hand then
+		if context.before and context.cardarea == G.jokers and context.scoring_name == card.ability.selected_hand and not context.blueprint then
 			card.ability.chips = card.ability.chips + card.ability.chip_gain
 			return {
 				message = localize('k_upgrade_ex'),
@@ -530,7 +529,7 @@ SMODS.Joker {
 			return {
 				chips = card.ability.chips
 			}
-		elseif context.end_of_round and context.cardarea == G.jokers then
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "rouxls")
 			while not G.GAME.hands[card.ability.selected_hand].visible do
 				card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "rouxls")
