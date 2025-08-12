@@ -40,10 +40,9 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Cuptains",
 		text = {
-			"Gains {C:chips}+#1#{} Chips",
-			"if played hand",
-			"contains a {C:attention}#2#{}",
-			"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)",
+			"Gains {C:chips}+#1#{} Chips when",
+			"a hand is played"
+			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
 		}
 	},
 	config = {
@@ -59,12 +58,11 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
 			card.ability.chip_gain,
-			G.localization.misc.poker_hands['High Card'],
 			card.ability.chips
 		} }
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers and next(context.poker_hands['High Card']) and not context.blueprint then
+		if context.before and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.chips = card.ability.chips + card.ability.chip_gain
 			return {
 				message = localize('k_upgrade_ex'),
