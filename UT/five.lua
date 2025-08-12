@@ -18,7 +18,7 @@ SMODS.Joker {
 		money = 1,
 		chips = 20
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'win_custom'},
 	rarity = 1,
 	blueprint_compat = true,
@@ -30,7 +30,7 @@ SMODS.Joker {
 		return { vars = { card.ability.money, card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and (context.other_card.base.suit == "Hearts" or SMODS.has_any_suit(context.other_card)) then
+		if context.individual and context.cardarea == G.play and (context.other_card:is_suit("Hearts") or SMODS.has_any_suit(context.other_card)) then
 			if pseudorandom("worn_dagger") < 1/2 then
 				return {
 					dollars = card.ability.money
@@ -62,7 +62,7 @@ SMODS.Joker {
 		final_hand = false,
 		increased_interest = false
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'win_custom'},
 	rarity = 2,
 	blueprint_compat = false,
@@ -108,7 +108,7 @@ SMODS.Joker {
 		chips = 0,
 		chip_gain = 35
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'discard_custom'},
 	rarity = 3,
 	blueprint_compat = true,
@@ -159,14 +159,14 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		xmult_gain = 0.5,
+		xmult_gain = 0.25,
 		xmult = 1,
 		bought = false
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'hand_contents'},
 	rarity = 2,
 	blueprint_compat = true,
@@ -212,7 +212,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips } }
 	end,
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = { type = 'ante_up', ante = 10, extra = 10 },
 	rarity = 2,
 	blueprint_compat = true,
@@ -224,7 +224,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			for i = 1, #context.full_hand do
-				if not (context.full_hand[i].base.suit == "Hearts" or SMODS.has_any_suit(context.full_hand[i])) then
+				if not (context.full_hand[i]:is_suit( "Hearts") or SMODS.has_any_suit(context.full_hand[i])) then
 					return nil
 				end
 			end
@@ -256,7 +256,7 @@ SMODS.Joker {
 		mult_gain = 5,
 		mult_gained = false
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'hand_contents'},
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
@@ -304,7 +304,7 @@ SMODS.Joker {
 		xmult_per = 0.75,
 		slots = 4
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'modify_jokers', extra = { count = 7 } },
 	rarity = 3,
 	blueprint_compat = true,
@@ -354,7 +354,7 @@ SMODS.Joker {
 		turns_elapsed = 0
 	},
 	rarity = 3,
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'hand_contents'},
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -372,6 +372,10 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers then
 			card.ability.turns_elapsed = card.ability.turns_elapsed + 1
+			if card.ability.turns_elapsed == card.ability.threshold then
+				play_sound("UTDR_asriel", 1.0, 0.7)
+				card:juice_up(0.3,0.5)
+			end
         end
 	end
 }
@@ -404,7 +408,7 @@ SMODS.Joker {
 	check_for_unlock = function(self, args)
 		return (args.type == "loss_ante" and args.ante == 8)
 	end,
-	unlocked = false,
+	--unlocked = false
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -435,6 +439,7 @@ SMODS.Joker {
 				end
 			}))
 			G.localization.misc.dictionary.ph_mr_bones = "HAHAHAHAHAHAHAHAHAHAHA!!"
+			play_sound("UTDR_omega_flowey", 1.0, 0.7)
 			return {
 				message = localize { type = 'variable', key = 'a_xmult',vars = { card.ability.extra.xmult }},
 				saved = true,
@@ -467,7 +472,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips } }
 	end,
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'hand', count = 25},
 	rarity = 2,
 	blueprint_compat = true,
@@ -507,7 +512,7 @@ SMODS.Joker {
 			"cards or less"
 		}
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'modify_deck'},
 	rarity = 3,
 	blueprint_compat = true,
@@ -530,7 +535,7 @@ SMODS.Joker {
 		elseif context.remove_playing_cards and not context.blueprint then
 			local hearts = 0
 			for i = 1, #context.removed do
-				if context.removed[i].base.suit == "Hearts" or SMODS.has_any_suit(context.removed[i]) then
+				if context.removed[i]:is_suit("Hearts") or SMODS.has_any_suit(context.removed[i]) then
 					hearts = hearts + 1
 				end
 			end
@@ -578,7 +583,7 @@ SMODS.Joker {
 		
 		in_build = false
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'round_win'},
 	rarity = 2,
 	blueprint_compat = false,
@@ -660,7 +665,7 @@ SMODS.Joker {
 	config = {
 		mult = 15
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'modify_deck', extra = {count = 5, enhancement = 'Steel Card', e_key = 'm_steel'}},
 	rarity = 2,
 	blueprint_compat = true,
@@ -673,7 +678,7 @@ SMODS.Joker {
 		return { vars = { G.GAME.probabilities.normal, card.ability.odds, card.ability.mult } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card.config.center_key == "m_steel" then
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_steel") then
 			return {
 				mult = card.ability.mult
 			}
@@ -701,7 +706,7 @@ SMODS.Joker {
 		cap = 8,
 		xmult = 2
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'win_custom'},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult, card.ability.cap, card.ability.enhancement_count } }
@@ -747,7 +752,7 @@ SMODS.Joker {
 		xmult = 5,
 		hand_loss = 3
 	},
-	unlocked = false,
+	--unlocked = false
 	unlock_condition = {type = 'hand_contents'},
 	rarity = 3,
 	blueprint_compat = true,

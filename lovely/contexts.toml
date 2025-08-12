@@ -1,0 +1,69 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[vars]
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = 'if self.ability.set == "Voucher" then'
+position = "after"
+payload = "	SMODS.calculate_context({voucher_redeem = true, other_voucher = self})"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''
+ease_dollars(self.sell_cost)
+self:start_dissolve({G.C.GOLD})
+delay(0.3)
+'''
+position = 'after'
+payload = "SMODS.calculate_context({selling_anything = true, card = self, card_value = self.sell_value})"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "modifiers = {},"
+position = "after"
+payload = "money_spent = 0,"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "if not G.from_boss_tag then ease_dollars(-10) end"
+position = "at"
+payload = '''
+if not G.from_boss_tag then
+	ease_dollars(-10)
+	G.GAME.money_spent = G.GAME.money_spent + 10
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "ease_dollars(-G.GAME.current_round.reroll_cost)"
+position = "at"
+payload = '''
+ease_dollars(-G.GAME.current_round.reroll_cost)
+G.GAME.money_spent = G.GAME.money_spent + G.GAME.current_round.reroll_cost
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "ease_dollars(-c1.cost)"
+position = "at"
+payload = '''
+ease_dollars(-c1.cost)
+G.GAME.money_spent = G.GAME.money_spent + c1.cost
+'''
+match_indent = true
+

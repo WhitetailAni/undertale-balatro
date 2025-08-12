@@ -49,7 +49,7 @@ SMODS.Joker {
 			xmult = 1.25,
 			mult = 5,
 			bigbucks = 1,
-			steep_time = 3,
+			steep_time = 4,
 			tea_timer = 0,
 	},
 	rarity = 1,
@@ -71,10 +71,10 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
 			local result = {}
-			if context.other_card.base.suit == "Spades" or SMODS.has_any_suit(context.other_card) then
+			if context.other_card:is_suit("Spades") or SMODS.has_any_suit(context.other_card) then
 				result["chips"] = card.ability.chips
 			end
-			if context.other_card.base.suit == "Hearts" or SMODS.has_any_suit(context.other_card) then
+			if context.other_card:is_suit("Hearts") or SMODS.has_any_suit(context.other_card) then
 				result["xmult"] = card.ability.xmult
 			end
 			if context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card) then
@@ -401,7 +401,11 @@ SMODS.Joker {
 	pos = { x = 8, y = 0 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult, G.GAME.starting_params.hand_size, card.ability.mult * math.abs(G.hand.config.card_limit - G.GAME.starting_params.hand_size) } }
+		if G.hand and G.hand.config then
+			return { vars = { card.ability.mult, G.GAME.starting_params.hand_size, card.ability.mult * math.abs(G.hand.config.card_limit - G.GAME.starting_params.hand_size) } }
+		else
+			return { vars = { card.ability.mult, G.GAME.starting_params.hand_size, card.ability.mult * math.abs(8 - G.GAME.starting_params.hand_size) } }
+		end
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main and G.hand.config.card_limit ~= G.GAME.starting_params.hand_size then
@@ -462,7 +466,7 @@ SMODS.Joker {
 	},
 	config = {
 		mult = 5,
-		xmult = 1.5
+		xmult = 1.25
 	},
 	pixel_size = { w = 69, h = 69 },
 	rarity = 1,
@@ -473,6 +477,11 @@ SMODS.Joker {
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.mult, card.ability.xmult } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		if not from_debuff then
+			play_sound('UTDR_pipis_laugh', 1.4, 0.9)
+		end
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -490,6 +499,7 @@ SMODS.Joker {
             G.E_MANAGER:add_event(Event({
 				func = function()
 					play_sound('tarot1')
+					play_sound('UTDR_pipis_boom', 1.0, 0.7)
 					card.T.r = -0.2
 					card:juice_up(0.3, 0.4)
 					card.states.drag.is = true
@@ -506,7 +516,8 @@ SMODS.Joker {
 				end
 			})) 
 			return {
-				message = "[7470 liked that]"
+				message = "[7470 liked that]",
+				colour = G.C.BLUE
 			}
         end
 	end
@@ -606,6 +617,7 @@ SMODS.Joker {
 				key = "c_judgement"
 			})
 			card:juice_up(0.3, 0.4)
+			play_sound("UTDR_revivemint", 1.0, 0.7)
 		
 			if SMODS.pseudorandom_probability(card, "revivemint", 1, card.ability.odds, "DR_revivemint") then
 				G.E_MANAGER:add_event(Event({

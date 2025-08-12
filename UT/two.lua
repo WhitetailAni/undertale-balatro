@@ -238,6 +238,11 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 7, y = 3 },
 	cost = 7,
+	loc_vars = function(self, info_queue, card)
+		if UTDR.config_storage.deltarune then
+			return { key = "j_UTDR_silver_key_DR" }
+		end
+	end,
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then 
@@ -256,6 +261,24 @@ SMODS.Joker {
 			end
         end
 	end
+}
+
+SMODS.Joker {
+	key = "silver_key_DR",
+	loc_txt = {
+		name = "Silver Key",
+		text = {
+			"Create a {C:spectral}Prophecy{} card",
+			"when {C:attention}Boss Blind{}",
+			"is defeated",
+			"{C:inactive}(Must have room){}"
+		}
+	},
+	no_collection = true,
+	in_pool = function(self, args)
+		return false
+	end,
+	atlas = "UT_jokers",
 }
 
 --row two
@@ -281,30 +304,14 @@ SMODS.Joker {
 		return { vars = { card.ability.xmult, G.localization.misc.poker_hands['High Card'].lower(G.localization.misc.poker_hands['High Card']) } }
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main and next(context.poker_hands['High Card']) then
-			local tableKeys = getTableKeys(context.poker_hands)
-			for i = 1, #tableKeys do
-				if tableKeys[i] ~= "High Card" then
-					if #context.poker_hands[tableKeys[i]] > 0 then
-						return nil
-					end
-				end
-			end
+		if context.joker_main and context.scoring_name == "High Card" then
+			play_sound("UTDR_sans", 1.0, 0.7)
 			return {
 				xmult = card.ability.xmult
 			}
 		end
 	end
 }
-
---https://gist.github.com/abursuc/51185d11ddd946f433e1299489ed2c07
-function getTableKeys(tab)
-	local keyset = {}
-	for k,v in pairs(tab) do
-    	keyset[#keyset + 1] = k
-	end
-	return keyset
-end
 
 SMODS.Joker {
 	key = "papyrus",
@@ -327,6 +334,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and next(context.poker_hands['Straight']) then
+			play_sound("UTDR_papyrus", 1.0, 0.7)
 			return {
 				message = localize('k_again_ex'),
 				repetitions = 1,
@@ -440,7 +448,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers then
 			card.ability.has_scored = false
-		elseif context.individual and context.cardarea == G.hand and (context.other_card.base.suit == "Spades" or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
+		elseif context.individual and context.cardarea == G.hand and (context.other_card:is_suit("Spades") or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
 			if context.other_card.debuff then
 				return {
 					message = localize('k_debuffed'),
@@ -564,7 +572,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			if SMODS.pseudorandom_probability(card, "quiche", 1, card.ability.tarot_odds, "UT_quiche") then
+			if SMODS.pseudorandom_probability(card, "quiche", 1, card.ability.odds, "UT_quiche") then
 				for i = 1, card.ability.tag_count do
 					local tag = Tag(get_next_tag_key("ut_abandoned_quiche"))
 					if tag.name == "Orbital Tag" then
@@ -636,7 +644,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers then
 			card.ability.has_scored = false
-		elseif context.individual and context.cardarea == G.hand and (context.other_card.base.suit == "Diamonds" or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
+		elseif context.individual and context.cardarea == G.hand and (context.other_card:is_suit("Diamonds") or SMODS.has_any_suit(context.other_card)) and not card.ability.has_scored then
 			if SMODS.pseudorandom_probability(card, "waterfall", 1, card.ability.odds, "UT_waterfall") then
 				if context.other_card.debuff then
 					return {
@@ -672,7 +680,7 @@ SMODS.Joker {
 	pos = { x = 8, y = 1 },
 	cost = 7,
 	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play and context.other_card.config.center_key == "m_bonus" then
+		if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
 			return {
 				message = localize('k_again_ex'),
 				repetitions = 1,

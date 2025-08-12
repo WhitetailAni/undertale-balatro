@@ -1,0 +1,1 @@
+return {["deltarune"]=false,["undertale"]=true,}

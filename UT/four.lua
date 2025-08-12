@@ -201,6 +201,7 @@ SMODS.Joker {
 			"{C:chips}+#1#{} chips for each",
 			"held consumable",
 			"{C:tarot}+#2#{} consumable slots",
+			"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)"
 		}
 	},
 	config = {
@@ -214,7 +215,11 @@ SMODS.Joker {
 	pos = { x = 9, y = 2 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chips_per, card.ability.slots } }
+		if G.consumeables.card then
+			return { vars = { card.ability.chips_per, card.ability.slots, card.ability.chips_per * #G.consumeables.card } }
+		else
+			return { vars = { card.ability.chips_per, card.ability.slots, 0 } }
+		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.slots
@@ -330,7 +335,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		hand_size = 3,
+		hand_size = 2,
 		dollars = 30,
 		size_increased = false,
 		in_build = false
@@ -527,7 +532,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.destroying_card and not context.blueprint then
-			if #context.full_hand == 1 and context.full_hand[1].base.suit == "Clubs" and G.GAME.current_round.hands_played == 0 then
+			if #context.full_hand == 1 and context.full_hand[1]:is_suit( "Clubs") and G.GAME.current_round.hands_played == 0 then
                 SMODS.calculate_effect({ dollars = card.ability.money }, card)
                	return true
             end
