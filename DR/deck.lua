@@ -28,7 +28,7 @@ SMODS.Back {
 	apply = function(self)
 		G.GAME.win_ante = 7
 		G.GAME.perscribed_bosses = {}
-		G.GAME.perscribed_bosses[1] = 'bl_eye'
+		G.GAME.perscribed_bosses[1] = 'bl_fish'
 		G.GAME.perscribed_bosses[2] = 'bl_flint'
 		G.GAME.perscribed_bosses[3] = 'bl_house'
 		G.GAME.perscribed_bosses[4] = 'bl_wall'

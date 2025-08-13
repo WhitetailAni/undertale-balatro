@@ -16,21 +16,47 @@ G.GAME.hands[hand].chips = math.max(G.GAME.hands[hand].s_chips + G.GAME.hands[ha
 position = "at"
 payload = '''
 local shadowguys = SMODS.find_card("j_UTDR_shadowguy")
-local shadowguy_chips_factor = 0
-local shadowguy_mult_factor = 0
 if #shadowguys then
 	for i = 1, #shadowguys do
 		shadowguys[i]:juice_up(0.3, 0.4)
 		play_sound(pseudorandom_element({"UTDR_shadowguy_1", "UTDR_shadowguy_2", "UTDR_shadowguy_3"}, shadowguys[i].T.x), 1.0, 0.7)
-		shadowguy_chips_factor = shadowguy_chips_factor + shadowguys[i].ability.chip_gain
-		shadowguy_mult_factor = shadowguy_mult_factor + shadowguys[i].ability.mult_gain
+		G.GAME.hands[hand].chips = G.GAME.hands[hand].chips + to_big(shadowguys[i].ability.chip_gain)
+		G.GAME.hands[hand].mult = G.GAME.hands[hand].mult + to_big(shadowguys[i].ability.mult_gain)
 	end
 end
 G.GAME.hands[hand].level = math.max(0, G.GAME.hands[hand].level + amount)
-G.GAME.hands[hand].mult = math.max(G.GAME.hands[hand].s_mult + G.GAME.hands[hand].l_mult*(G.GAME.hands[hand].level - 1), 1) + to_big(shadowguy_mult_factor)
-G.GAME.hands[hand].chips = math.max(G.GAME.hands[hand].s_chips + G.GAME.hands[hand].l_chips*(G.GAME.hands[hand].level - 1), 0) + to_big(shadowguy_chips_factor)
+G.GAME.hands[hand].mult = G.GAME.hands[hand].mult + G.GAME.hands[hand].l_mult*amount
+G.GAME.hands[hand].chips = G.GAME.hands[hand].chips + G.GAME.hands[hand].l_chips*amount
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "elseif _c.set == 'Planet' then"
+position = "after"
+payload = '''
+local shadowguys = SMODS.find_card("j_UTDR_shadowguy")
+local shadowguys_chips_factor = 0
+local shadowguys_mult_factor = 0
+if #shadowguys then
+	for i = 1, #shadowguys do
+		shadowguys_chips_factor = shadowguys_chips_factor + to_big(shadowguys[i].ability.chip_gain)
+		shadowguys_mult_factor = shadowguys_mult_factor + to_big(shadowguys[i].ability.mult_gain)
+	end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "G.GAME.hands[cfg.hand_type].level,localize(cfg.hand_type, 'poker_hands'), G.GAME.hands[cfg.hand_type].l_mult, G.GAME.hands[cfg.hand_type].l_chips,"
+position = "at"
+payload = "G.GAME.hands[cfg.hand_type].level,localize(cfg.hand_type, 'poker_hands'), G.GAME.hands[cfg.hand_type].l_mult + shadowguys_mult_factor, G.GAME.hands[cfg.hand_type].l_chips + shadowguys_chips_factor,"
+match_indent = true
+
+
 
 [[patches]]
 [patches.pattern]

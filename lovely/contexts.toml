@@ -78,7 +78,6 @@ inc_career_stat('c_shop_dollars_spent', self.cost)
 '''
 position = "after"
 payload = '''
-ease_dollars(-self.cost)
 G.GAME.money_spent = G.GAME.money_spent + self.cost
 '''
 match_indent = true

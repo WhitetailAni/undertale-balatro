@@ -1,2 +1,2 @@
 # undertale-balatro
-An Undertale mod for Balatro
+An Undertale/Deltarune mod for Balatro
