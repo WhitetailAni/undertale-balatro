@@ -413,11 +413,11 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
-			if SMODS.pseudorandom_probability(card, "monster_kid_mult", 1, card.ability.tarot_odds, "UT_monster_kid_mult") then
+			if SMODS.pseudorandom_probability(card, "monster_kid_mult", 1, card.ability.odds, "UT_monster_kid_mult") then
 				SMODS.calculate_effect({ mult = card.ability.mult }, card)
 			end
 			
-			if SMODS.pseudorandom_probability(card, "monster_kid_chips", 1, card.ability.tarot_odds, "UT_monster_kid_chips") then
+			if SMODS.pseudorandom_probability(card, "monster_kid_chips", 1, card.ability.odds, "UT_monster_kid_chips") then
 				SMODS.calculate_effect({ chips = -card.ability.chips }, card)
 			end
         end

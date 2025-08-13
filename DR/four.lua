@@ -40,9 +40,10 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Cuptains",
 		text = {
-			"Gains {C:chips}+#1#{} Chips when",
-			"a hand is played",
-			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
+			"Gains {C:chips}+#1#{} Chips",
+			"if played hand is",
+			"a {C:attention}#2#",
+			"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)",
 		}
 	},
 	config = {
@@ -58,11 +59,12 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
 			card.ability.chip_gain,
+			G.localization.misc.poker_hands['High Card'],
 			card.ability.chips
 		} }
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers and not context.blueprint then
+		if context.before and context.cardarea == G.jokers and context.scoring_name == "High Card" and not context.blueprint then
 			card.ability.chips = card.ability.chips + card.ability.chip_gain
 			return {
 				message = localize('k_upgrade_ex'),
@@ -307,10 +309,8 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
-	add_to_deck = function(self, card, from_debuff)
-		if not from_debuff then
-			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain * #get_keys(G.GAME.used_vouchers)
-		end
+	set_ability = function(self, card, initial, delay_sprites)
+		card.ability.xmult = card.ability.xmult + card.ability.xmult_gain * #get_keys(G.GAME.used_vouchers)
 	end,
 	calculate = function(self, card, context)
 		if context.voucher_redeem and not context.blueprint then

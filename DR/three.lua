@@ -426,7 +426,7 @@ SMODS.Joker {
 		text = {
 			"{C:attention}Poker hands{} gain an",
 			"additional {C:chips}+#1#{} Chips and",
-			"{C:mult}+#2# Mult{} on level up"
+			"{C:mult}+#2#{} Mult on level up"
 		}
 	},
 	config = {
