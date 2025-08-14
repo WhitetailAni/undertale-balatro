@@ -191,7 +191,7 @@ SMODS.Joker {
 		elseif context.before and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.chips = card.ability.chips + card.ability.chip_gain
 			return {
-				message = localize{ type = 'variable', key = 'a_chips', vars = { "+"..card.ability.chip_gain } },
+				message = localize{ type = 'variable', key = 'a_chips', vars = { card.ability.chip_gain } },
 				colour = G.C.CHIPS
 			}
 		elseif context.joker_main then
@@ -581,7 +581,8 @@ function iron_gold_crosstalk(on_off)
 		for i = 1, #G.playing_cards do
 			if SMODS.has_enhancement(G.playing_cards[i], "m_steel") then
 				G.playing_cards[i].ability.h_dollars = G.P_CENTERS.m_gold.config.h_dollars
-			elseif SMODS.has_enhancement(G.playing_cards[i], "m_gold") then
+			end
+			if SMODS.has_enhancement(G.playing_cards[i], "m_gold") then
 				G.playing_cards[i].ability.h_x_mult = G.P_CENTERS.m_steel.config.h_x_mult
 			end				
 		end
@@ -589,7 +590,8 @@ function iron_gold_crosstalk(on_off)
 		for i = 1, #G.playing_cards do
 			if SMODS.has_enhancement(G.playing_cards[i], "m_steel") then
 				G.playing_cards[i].ability.h_dollars = nil
-			elseif SMODS.has_enhancement(G.playing_cards[i], "m_gold") then
+			end
+			if SMODS.has_enhancement(G.playing_cards[i], "m_gold") then
 				G.playing_cards[i].ability.h_x_mult = nil
 			end				
 		end

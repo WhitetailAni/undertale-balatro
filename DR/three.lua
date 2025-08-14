@@ -18,7 +18,7 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 3, y = 4 },
 	cost = 4,
-	add_to_deck = function(self, card, from_debuff)
+	set_ability = function(self, card, initial, delay_sprites)
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "elnino_lanina")
 	end,
 	calculate = function(self, card, context)
@@ -89,7 +89,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { G.localization.misc.poker_hands[card.ability.selected_hand]} }
 	end,
-	add_to_deck = function(self, card, from_debuff)
+	set_ability = function(self, card, initial, delay_sprites)
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 	end,
 	calculate = function(self, card, context)
@@ -589,7 +589,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
-			play_sound("UTDR_ERAM", 1.0, 1.0)
+			play_sound("UTDR_ERAM", 1.0, 0.7)
 			return {
 				remove = true,
 				removed = context.other_card

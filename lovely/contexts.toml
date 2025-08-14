@@ -9,10 +9,18 @@ priority = 0
 target = "card.lua"
 pattern = 'if self.ability.set == "Voucher" then'
 position = "after"
-payload = '''
-	SMODS.calculate_context({voucher_redeem = true, other_voucher = self})
-'''
+payload = "	SMODS.calculate_context({voucher_redeem = true, other_voucher = self})"
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "check_for_unlock({type = 'blank_redeems'})"
+position = "before"
+payload = "SMODS.calculate_context({voucher_redeem = true, other_voucher = self})"
+match_indent = true
+
+
 
 [[patches]]
 [patches.pattern]
