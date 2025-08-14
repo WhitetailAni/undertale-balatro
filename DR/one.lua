@@ -413,17 +413,17 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Top Cake",
 		text = {
-			"Gains {X:mult,C:white}X#1#{} Mult after",
-			"end of round, destroys",
-			"itself after {C:attention}#2#{} {C:inactive}[#3#]{} rounds",
+			"Gains {X:mult,C:white}X#1#{} Mult per",
+			"hand played, destroys",
+			"itself after {C:attention}#2#{} {C:inactive}[#3#]{} hands",
 			"{C:inactive}(Currently {X:mult,C:white}X#4#{C:inactive} Mult)",
 		}
 	},
 	config = {
 		xmult_gain = 0.2,
 		xmult = 1,
-		rounds = 0,
-		round_limit = 15,
+		hands = 0,
+		hand_limit = 15,
 	},
 	rarity = 3,
 	blueprint_compat = true,
@@ -434,18 +434,26 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
 			card.ability.xmult_gain,
-			card.ability.round_limit,
-			card.ability.rounds,
+			card.ability.hand_limit,
+			card.ability.hands,
 			card.ability.xmult
 		} }
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main then
+		if context.before and context.cardarea == G.jokers then
+			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
+			card.ability.hands = card.ability.hands + 1
+			return {
+				message = localize('k_upgrade_ex'),
+				colour = G.C.MULT,
+				card = card
+			}
+	elseif context.joker_main then
 			return {
 				xmult = card.ability.xmult
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			if card.ability.rounds >= card.ability.round_limit then
+			if card.ability.hands >= card.ability.hand_limit then
 				G.E_MANAGER:add_event(Event({
 					func = function()
 						play_sound('tarot1')
@@ -475,14 +483,6 @@ SMODS.Joker {
 						message = "Mama miba!"
 					}
 				end
-			elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-				card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
-				card.ability.rounds = card.ability.rounds + 1
-				return {
-					message = localize('k_upgrade_ex'),
-					colour = G.C.MULT,
-					card = card
-				}
 			end
 		end
 	end

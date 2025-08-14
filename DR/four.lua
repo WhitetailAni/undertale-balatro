@@ -491,7 +491,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		turn_cap = 4,
+		turn_cap = 3,
 		turns = 0
 	},
 	rarity = 3,
