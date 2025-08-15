@@ -64,6 +64,38 @@ SMODS.Consumable {
 }
 
 SMODS.Consumable {
+	key = "jorkington",
+	set = 'Spectral',
+	loc_txt = {
+		name="Jorkington",
+		text={
+			"Creates a random",
+			"{C:red}Rare{C:attention} Joker{}"
+		},
+	},
+	no_collection = true,
+	in_pool = function(self, args)
+		return false
+	end
+}
+
+SMODS.Consumable {
+	key = "jorkington_crystal",
+	set = 'Spectral',
+	loc_txt = {
+		name="Jorkington",
+		text={
+			"Creates a random",
+			"{C:red}Rare{C:attention} Joker{}"
+		},
+	},
+	no_collection = true,
+	in_pool = function(self, args)
+		return false
+	end
+}
+
+SMODS.Consumable {
 	key = "ouija_crystal",
 	set = 'Spectral',
 	loc_txt = {

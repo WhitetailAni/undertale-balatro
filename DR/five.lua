@@ -150,7 +150,12 @@ SMODS.Joker {
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.in_build = true
 		card.ability.old_xmult = G.P_CENTERS.m_glass.config.Xmult
-		if #SMODS.find_card("j_UTDR_thornring") > 0 then
+		local thornrings = SMODS.find_card("j_UTDR_thornring")
+		if #thornrings > 0 then
+			card:set_eternal(true)
+			for i = 1, #thornrings do
+				thornrings[i]:set_eternal(true)
+			end
 			play_sound("UTDR_thornring_equip", 1.0, 0.7)
 		end
 		if #SMODS.find_card("j_UTDR_ribbon") > 0 then
@@ -223,8 +228,13 @@ SMODS.Joker {
 			if #SMODS.find_card("j_UTDR_glasses") > 0 then
 				card.ability.glasses_are_older = true
 			end
-			if #SMODS.find_card("j_UTDR_noelle") > 0 then
-				play_sound("UTDR_thornring_equip", 1.0, 1.0)
+			local noelles = SMODS.find_card("j_UTDR_noelle")
+			if #noelles > 0 then
+				card:set_eternal(true)
+				for i = 1, #noelles do
+					noelles[i]:set_eternal(true)
+				end
+				play_sound("UTDR_thornring_equip", 1.0, 0.7)
 			else
 				play_sound("UTDR_ominous", 1.0, 0.9)
 			end
@@ -571,7 +581,7 @@ SMODS.Joker {
 	end,
 	update = function(self, card, dt)
 		if G.jokers ~= nil and G.jokers.config ~= nil and G.jokers.cards ~= nil and G.jokers.config.card_limit ~= nil then
-			card.ability.mult = (G.jokers.config.card_limit - #G.jokers.cards) * card.ability.mult_per
+			card.ability.mult = math.max((G.jokers.config.card_limit - #G.jokers.cards) * card.ability.mult_per, 0)
 			for i = 1, #G.jokers.cards do
 				if G.jokers.cards[i].label == 'j_UTDR_ralsei_dummy' then
 					card.ability.mult = card.ability.mult + card.ability.mult_per
@@ -674,8 +684,14 @@ SMODS.Joker {
 	pos = { x = 8, y = 1 },
 	cost = 9,
 	set_ability = function(self, card, initial, delay_sprites)
-		card.ability.selected_suit = pseudorandom_element(get_keys(G.C.SUITS), "ralsei_suit")
-		card.ability.selected_rank = pseudorandom_element(get_keys(SMODS.Ranks), "ralsei_rank")
+		if G.playing_cards then
+			local selected_card = pseudorandom_element(G.playing_cards, "ralsei")
+			card.ability.selected_suit = selected_card.base.suit
+			card.ability.selected_rank = selected_card.base.value
+		else
+			card.ability.selected_suit = "Spades"
+			card.ability.selected_rank = "Queen"
+		end
 	end,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and (context.other_card:is_suit(card.ability.selected_suit) or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == card.ability.selected_rank then
@@ -685,8 +701,9 @@ SMODS.Joker {
 				card = context.blueprint_card or card
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			card.ability.selected_suit = pseudorandom_element(get_keys(G.C.SUITS), "ralsei_suit")
-			card.ability.selected_rank = pseudorandom_element(get_keys(SMODS.Ranks), "ralsei_rank")
+			local selected_card = pseudorandom_element(G.playing_cards, "ralsei")
+			card.ability.selected_suit = selected_card.base.suit
+			card.ability.selected_rank = selected_card.base.value
 		end
 	end
 }
@@ -696,7 +713,7 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Shadow Crystal",
 		text = {
-			"Disables the {C:attention}negative",
+			"Removes the {C:attention}negative",
 			"{C:attention}effects{} of all",
 			"{C:spectral}Prophecy{} cards"
 		}

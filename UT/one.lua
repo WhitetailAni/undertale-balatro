@@ -593,40 +593,21 @@ SMODS.Joker {
 		return { vars = { G.localization.descriptions.Edition.e_foil.name, G.localization.descriptions.Edition.e_holo.name, G.localization.descriptions.Edition.e_polychrome.name, card.ability.jokers } }
 	end,
 	calculate = function(self, card, context)
-		if context.selling_self and #G.jokers.cards > 1 and not context.blueprint then
-			local first = nil
-			local repeat_count = math.min((#G.jokers.cards - 1), card.ability.jokers)
-			for i = 1, repeat_count do
-				local pool = EMPTY(pool)
-				for k, v in pairs(G.jokers.cards) do
-					if v.ability.set == 'Joker' and (not v.edition) then
-						table.insert(pool, v)
+		if context.selling_self and not context.blueprint and #G.jokers.cards > 1 then
+			for i = 1, card.ability.jokers do
+				local pool = {}
+			
+				for j = 1, #G.jokers.cards do
+					if G.jokers.cards[j] ~= card and not G.jokers.cards[j].edition then
+						pool[#pool + 1] = G.jokers.cards[j]
 					end
 				end
-				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.4,
-					func = function()
-						local over = false
-						local eligible_card = pseudorandom_element(pool, pseudoseed("snail_pie"))
-						while eligible_card ~= card do
-							eligible_card = pseudorandom_element(pool, pseudoseed("snail_pie"))
-						end
-						if first == nil then
-							first = eligible_card
-						else
-							while first == eligible_card or eligible_card ~= card do
-								eligible_card = pseudorandom_element(pool, pseudoseed("snail_pie"))
-							end
-						end
-						
-						local edition = poll_edition("snail_pie", nil, true, true)
-						
-						eligible_card:set_edition(edition, true)
-						return true
-					end
-				}))
-            end
+				if #pool < 1 then
+					break
+				end
+				local joker = pseudorandom_element(pool, "snail_pie_joker")
+				joker:set_edition(poll_edition("snail_pie_edition", nil, true, true), true)
+			end
 		end
 	end
 }
