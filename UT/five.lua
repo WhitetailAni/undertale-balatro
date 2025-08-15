@@ -253,7 +253,7 @@ SMODS.Joker {
 	},
 	config = {
 		mult = 0,
-		mult_gain = 5,
+		mult_gain = 4,
 		mult_gained = false
 	},
 	--unlocked = false

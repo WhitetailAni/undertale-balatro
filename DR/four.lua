@@ -47,7 +47,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		chip_gain = 6,
+		chip_gain = 4,
 		chips = 0
 	},
 	rarity = 1,

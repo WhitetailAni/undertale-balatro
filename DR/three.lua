@@ -113,6 +113,9 @@ SMODS.Joker {
 			}))
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
+			while not G.GAME.hands[card.ability.selected_hand].visible do
+				card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
+			end
 		end
 	end
 }
@@ -489,6 +492,7 @@ SMODS.Joker {
 		text = {
 			"Creates a {C:tarot}Tarot{} card when a",
 			"a {C:attention}playing card{} is destroyed",
+			"{C:inactive}(Must have room)"
 		},
 	},
 	rarity = 2,
@@ -527,6 +531,7 @@ SMODS.Joker {
 		text = {
 			"Creates a {C:tarot}Tarot{} or {C:planet}Planet",
 			"card at end of round",
+			"{C:inactive}(Must have room)"
 		},
 	},
 	rarity = 1,
@@ -567,7 +572,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		odds = 10
+		odds = 15
 	},
 	rarity = 2,
 	blueprint_compat = true,

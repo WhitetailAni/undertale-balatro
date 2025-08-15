@@ -176,7 +176,7 @@ SMODS.Joker {
 		}
 	},
 	config = {
-		chip_gain = 2,
+		chip_gain = 3,
 		chips = 0
 	},
 	rarity = 1,
@@ -533,8 +533,8 @@ SMODS.Joker {
 	loc_txt = {
 		name = "SPAMTON NEO",
 		text = {
-			"Retrigger each played",
-			"{C:attention}Ace{}, {C:attention}9{}, or {C:attention}7"
+			"RETRIGGER [EveryHotSingle]",
+			"{C:attention}1{}, {C:attention}9{}, OR {C:attention}7!!"
 		}
 	},
 	rarity = 2,
