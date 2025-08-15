@@ -142,22 +142,6 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
-target = '''=[SMODS _ "src/game_object.lua"]'''
-pattern = "local function random_destroy(used_tarot)"
-position = "at"
-payload = "function random_destroy(used_tarot)"
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = '''=[SMODS _ "src/game_object.lua"]'''
-pattern = "local function juice_flip(used_tarot)"
-position = "at"
-payload = "function juice_flip(used_tarot)"
-match_indent = true
-
-[[patches]]
-[patches.pattern]
 target = "game.lua"
 pattern = "boot_timer('splash prep', 'end',1)"
 position = "after"

@@ -23,7 +23,7 @@ SMODS.Consumable:take_ownership('familiar',
 		use = function(self, card, area, copier)
 			local used_tarot = copier or card
 			if not (#SMODS.find_card("j_UTDR_shadow_crystal") > 0) then
-				local destroyed_cards = random_destroy(used_tarot)
+				local destroyed_cards = random_destroy_DR(used_tarot)
 				SMODS.calculate_context({ remove_playing_cards = true, removed = destroyed_cards })
 			end
 			G.E_MANAGER:add_event(Event({
@@ -87,7 +87,7 @@ SMODS.Consumable:take_ownership('grim',
         use = function(self, card, area, copier)
             local used_tarot = copier or card
             if not (#SMODS.find_card("j_UTDR_shadow_crystal") > 0) then
-				local destroyed_cards = random_destroy(used_tarot)
+				local destroyed_cards = random_destroy_DR(used_tarot)
 				SMODS.calculate_context({ remove_playing_cards = true, removed = destroyed_cards })
 			end
             G.E_MANAGER:add_event(Event({
@@ -145,7 +145,7 @@ SMODS.Consumable:take_ownership('incantation',
 		use = function(self, card, area, copier)
 			local used_tarot = copier or card
 			if not (#SMODS.find_card("j_UTDR_shadow_crystal") > 0) then
-				local destroyed_cards = random_destroy(used_tarot)
+				local destroyed_cards = random_destroy_DR(used_tarot)
 				SMODS.calculate_context({ remove_playing_cards = true, removed = destroyed_cards })
 			end
 			G.E_MANAGER:add_event(Event({
@@ -293,7 +293,7 @@ SMODS.Consumable:take_ownership('ouija',
 		pos = { x = 7, y = 4 },
 		use = function(self, card, area, copier)
 			local used_tarot = copier or card
-			juice_flip(used_tarot)
+			juice_flip_DR(used_tarot)
 			local _rank = pseudorandom_element(SMODS.Ranks, pseudoseed('ouija'))
 			for i = 1, #G.hand.cards do
 				G.E_MANAGER:add_event(Event({
@@ -592,4 +592,56 @@ function become_prophecy()
 	G.localization.misc.dictionary.k_plus_spectral = "+1 Prophecy"
 	G.localization.misc.dictionary.k_spectral = "Prophecy"
     G.localization.misc.dictionary.k_spectral_pack = "Prophecy Pack"
+end
+
+function juice_flip_DR(used_tarot)
+	G.E_MANAGER:add_event(Event({
+		trigger = 'after',
+		delay = 0.4,
+		func = function()
+			play_sound('tarot1')
+			used_tarot:juice_up(0.3, 0.5)
+			return true
+		end
+	}))
+	for i = 1, #G.hand.cards do
+		local percent = 1.15 - (i - 0.999) / (#G.hand.cards - 0.998) * 0.3
+		G.E_MANAGER:add_event(Event({
+			trigger = 'after',
+			delay = 0.15,
+			func = function()
+				G.hand.cards[i]:flip(); play_sound('card1', percent); G.hand.cards[i]:juice_up(0.3, 0.3); return true
+			end
+		}))
+	end
+end
+
+function random_destroy_DR(used_tarot)
+	local destroyed_cards = {}
+	destroyed_cards[#destroyed_cards + 1] = pseudorandom_element(G.hand.cards, pseudoseed('random_destroy'))
+	G.E_MANAGER:add_event(Event({
+		trigger = 'after',
+		delay = 0.4,
+		func = function()
+			play_sound('tarot1')
+			used_tarot:juice_up(0.3, 0.5)
+			return true
+		end
+	}))
+	G.E_MANAGER:add_event(Event({
+		trigger = 'after',
+		delay = 0.1,
+		func = function()
+			for i = #destroyed_cards, 1, -1 do
+				local card = destroyed_cards[i]
+				if card.ability.name == 'Glass Card' then
+					card:shatter()
+				else
+					card:start_dissolve(nil, i ~= #destroyed_cards)
+				end
+			end
+			return true
+		end
+	}))
+	return destroyed_cards
 end
