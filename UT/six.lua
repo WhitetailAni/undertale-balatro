@@ -502,33 +502,34 @@ SMODS.Joker {
 	soul_pos = { x = 3, y = 9 },
 	cost = 12,
 	add_to_deck = function(self, card, from_debuff)
-		joker_rarity(0.34, 0.33, 0.33)
+		joker_rarity(0.666, 0.666, 0.666, 0.006)
 		play_sound("UTDR_gaster", 1.0, 0.7)
 		card.ability.in_build = true
 	end,
 	update = function(self, card, dt)
 		if card.ability.in_build then
-			joker_rarity(0.34, 0.33, 0.33)
+			joker_rarity(0.666, 0.666, 0.666, 0.006)
 		end
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
 		
-		joker_rarity(0.7, 0.25, 0.05)
+		joker_rarity(0.7, 0.25, 0.05, 0)
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and not context.blueprint then
 			card.ability.in_build = false
 			
-			joker_rarity(0.7, 0.25, 0.05)
+			joker_rarity(0.7, 0.25, 0.05, 0)
 		end
 	end
 }
 
-function joker_rarity(common, uncommon, rare)
+function joker_rarity(common, uncommon, rare, legendary)
 	SMODS.ObjectTypes["Joker"].rarities[1].weight = common
 	SMODS.ObjectTypes["Joker"].rarities[2].weight = uncommon
 	SMODS.ObjectTypes["Joker"].rarities[3].weight = rare
+	SMODS.ObjectTypes["Joker"].rarities[4] = { key = "Legendary", weight = legendary }
 end
 
 SMODS.Joker {
