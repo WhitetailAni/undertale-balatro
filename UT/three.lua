@@ -543,7 +543,7 @@ SMODS.Joker {
 		return { vars = { card.ability.cards_destroyed } }
 	end,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers then
+		if context.end_of_round and context.cardarea == G.jokers and #G.hand.cards > 0 then
 			local knife = pseudorandom_element(G.hand.cards, pseudoseed('mad_dummy'))
 			G.E_MANAGER:add_event(Event({
             	trigger = 'after',
