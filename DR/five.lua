@@ -684,13 +684,14 @@ SMODS.Joker {
 	pos = { x = 8, y = 1 },
 	cost = 9,
 	set_ability = function(self, card, initial, delay_sprites)
+		card.ability.selected_suit = "Spades"
+		card.ability.selected_rank = "Queen"
 		if G.playing_cards then
 			local selected_card = pseudorandom_element(G.playing_cards, "ralsei")
-			card.ability.selected_suit = selected_card.base.suit
-			card.ability.selected_rank = selected_card.base.value
-		else
-			card.ability.selected_suit = "Spades"
-			card.ability.selected_rank = "Queen"
+			if selected_card and selected_card.base and selected_card.base.suit and selected_card.base.value then
+				card.ability.selected_suit = selected_card.base.suit
+				card.ability.selected_rank = selected_card.base.value
+			end
 		end
 	end,
 	calculate = function(self, card, context)

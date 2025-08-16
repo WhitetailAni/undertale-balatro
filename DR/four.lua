@@ -4,8 +4,8 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Dark Sanctuary",
 		text = {
-			"Gives {C:mult}+#1#{} Mult for each",
-			"card in your full deck",
+			"Gives {C:mult}+#1#{} Mult for",
+			"each card in your deck",
 			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
 		}
 	},
@@ -20,8 +20,8 @@ SMODS.Joker {
 		mult_per = 0.5
 	},
 	loc_vars = function(self, info_queue, card)
-		if G.playing_cards then
-			return { vars = { card.ability.mult_per, card.ability.mult_per * #G.playing_cards } }
+		if G.deck.cards then
+			return { vars = { card.ability.mult_per, card.ability.mult_per * #G.deck.cards } }
 		else
 			return { vars = { card.ability.mult_per, card.ability.mult_per * 52 } }
 		end
@@ -29,7 +29,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				mult = card.ability.mult_per * #G.playing_cards
+				mult = card.ability.mult_per * #G.deck.cards
 			}
 		end
 	end
