@@ -9,6 +9,10 @@ if NFS.read(SMODS.current_mod.path .. "config.lua") then
 	UTDR.config_file = file
 end
 
+-- I think this fixes Talisman stuff? - J8
+to_big = to_big or function(x) return x end
+to_number = to_number or function(x) return tonumber(x) end
+
 G.FUNCS.restart_game_smods = function(e)
 	SMODS.restart_game()
 end
