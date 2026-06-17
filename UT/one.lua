@@ -1,6 +1,7 @@
 --first row
 SMODS.Joker {
 	key = "bandage",
+	--[[
 	loc_txt = {
 		name = "Bandage",
 		text = {
@@ -8,6 +9,7 @@ SMODS.Joker {
 			"and {C:mult}+#2#{} Mult"
 		}
 	},
+	]]
 	config = {
 		mult = 5,
 		chips = 20
@@ -34,12 +36,14 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "stick",
+	--[[
 	loc_txt = {
 		name = "Stick",
 		text = {
 			"{X:mult,C:white}X#1#{} Mult"
 		}
 	},
+	]]
 	config = {
 		xmult = 1.5,
 	},
@@ -92,10 +96,10 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
-        	return {
-        		mult = card.ability.mult
-        	}
-        end
+			return {
+				mult = card.ability.mult
+			}
+		end
 	end
 }
 
@@ -140,17 +144,20 @@ SMODS.Joker {
 						card:juice_up(0.3, 0.4)
 						card.states.drag.is = true
 						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
 							func = function()
 								G.jokers:remove_card(card)
 								card:remove()
 								card = nil
 								return true;
 							end
-						})) 
+						}))
 						return true
 					end
-				})) 
+				}))
 				return {
 					message = "Dropped!"
 				}
@@ -207,17 +214,20 @@ SMODS.Joker {
 						card:juice_up(0.3, 0.4)
 						card.states.drag.is = true
 						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
 							func = function()
 								G.jokers:remove_card(card)
 								card:remove()
 								card = nil
 								return true;
 							end
-						})) 
+						}))
 						return true
 					end
-				})) 
+				}))
 				return {
 					message = "Eaten!"
 				}
@@ -257,7 +267,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.setting_blind and not card.getting_sliced and not context.blueprint then
 			ease_discard(-G.GAME.current_round.discards_left, nil, true)
-        end
+		end
 	end
 }
 
@@ -281,16 +291,18 @@ SMODS.Joker {
 	pos = { x = 7, y = 4 },
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.chips
-		} }
+		return {
+			vars = {
+				card.ability.chips
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main and #context.full_hand <= 4 then
 			return {
 				chips = card.ability.chips
 			}
-        end
+		end
 	end
 }
 
@@ -408,10 +420,12 @@ SMODS.Joker {
 	pos = { x = 9, y = 4 },
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.chips_round,
-			card.ability.mult_round
-		} }
+		return {
+			vars = {
+				card.ability.chips_round,
+				card.ability.mult_round
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main and not context.debuffed_hand and hand_chips and mult and not context.blueprint then
@@ -450,15 +464,19 @@ SMODS.Joker {
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
 		if G.jokers ~= nil and G.jokers.config ~= nil and G.jokers.cards ~= nil and G.jokers.config.card_limit ~= nil then
-			return { vars = {
-				card.ability.chips_per,
-				card.ability.chips
-			} }
-		else 
-			return { vars = {
-				card.ability.chips_per,
-				card.ability.chips_per
-			} }
+			return {
+				vars = {
+					card.ability.chips_per,
+					card.ability.chips
+				}
+			}
+		else
+			return {
+				vars = {
+					card.ability.chips_per,
+					card.ability.chips_per
+				}
+			}
 		end
 	end,
 	update = function(self, card, dt)
@@ -521,7 +539,7 @@ SMODS.Joker {
 			}
 		elseif context.ending_shop and not context.blueprint then
 			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
-        end
+		end
 	end
 }
 
@@ -546,7 +564,7 @@ SMODS.Joker {
 	pos = { x = 5, y = 0 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_glass
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
 		local probabilities_glass, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "glass")
 		return { vars = { probabilities_glass, odds } }
 	end,
@@ -587,16 +605,16 @@ SMODS.Joker {
 	pos = { x = 8, y = 0 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.e_foil
-		info_queue[#info_queue+1] = G.P_CENTERS.e_holo
-		info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_foil
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_holo
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
 		return { vars = { G.localization.descriptions.Edition.e_foil.name, G.localization.descriptions.Edition.e_holo.name, G.localization.descriptions.Edition.e_polychrome.name, card.ability.jokers } }
 	end,
 	calculate = function(self, card, context)
 		if context.selling_self and not context.blueprint and #G.jokers.cards > 1 then
 			for i = 1, card.ability.jokers do
 				local pool = {}
-			
+
 				for j = 1, #G.jokers.cards do
 					if G.jokers.cards[j] ~= card and not G.jokers.cards[j].edition then
 						pool[#pool + 1] = G.jokers.cards[j]
@@ -637,17 +655,18 @@ SMODS.Joker {
 			local uncommon_or_rare = pseudorandom("toriel")
 			local color = nil
 			local rarity = 0
-			G.GAME.joker_buffer = G.GAME.joker_buffer + math.min(1, G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
-			if uncommon_or_rare < 1/4 then
+			G.GAME.joker_buffer = G.GAME.joker_buffer +
+				math.min(1, G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
+			if uncommon_or_rare < 1 / 4 then
 				color = G.C.GREEN
 				rarity = 1
 			else
 				color = G.C.RED
 				rarity = 0.75
 			end
-			
+
 			G.E_MANAGER:add_event(Event({
-				func = function() 
+				func = function()
 					local card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
 					card:add_to_deck()
 					G.jokers:emplace(card)
@@ -655,8 +674,9 @@ SMODS.Joker {
 					G.GAME.joker_buffer = 0
 					return true
 				end
-			}))   
-			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize('k_plus_joker'), colour = color })
-        end
+			}))
+			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+				{ message = localize('k_plus_joker'), colour = color })
+		end
 	end
 }

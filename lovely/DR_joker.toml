@@ -160,9 +160,9 @@ position = 'after'
 payload = '''
 if G.GAME then if G.GAME.selected_back then if G.GAME.selected_back.name == "b_UTDR_merciful" then
 	if(self.config.center.rarity == 1 or self.config.center.rarity == 2) then
-		self.cost = math.floor(self.cost * 0.25 + 0.5)
+		self.cost = math.floor(self.cost * G.GAME.selected_back.effect.config.common_uncommon_multipler + 0.5)
 	elseif(self.config.center.rarity == 3 or self.config.center.rarity == 4) then
-		self.cost = math.floor(self.cost * 1.5 + 0.5)
+		self.cost = math.floor(self.cost * G.GAME.selected_back.effect.config.rare_legendary_multiplier + 0.5)
 	end
 end end end
 '''
