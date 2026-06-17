@@ -43,6 +43,30 @@ SMODS.Back {
 	pos = { x = 1, y = 0 },
 	config = { boss_order = { 'bl_fish', 'bl_flint', 'bl_house', 'bl_wall', 'bl_serpent', 'bl_psychic', 'bl_final_heart' } },
 	loc_vars = function(self, info_queue, back)
+		-- uncommenting this won't visually display anything but it'd be really funny if we got this to work somehow
+		--[[
+		local main_end = {}
+		for _, boss in ipairs(self.config.boss_order) do
+			if info_queue then
+				info_queue[#info_queue + 1] = localize { type = 'name_text', key = boss, set = 'Blind' }
+			end
+			local thing = {
+				n = G.UIT.C,
+				config = { align = "bm", minh = 0.4 },
+				nodes = {
+					{
+						n = G.UIT.C,
+						config = { align = "m", colour = G.C.CLEAR, r = 0.05, padding = 0.06 },
+						nodes = {
+							{ n = G.UIT.T, config = { text = localize { type = 'name_text', key = boss, set = 'Blind' }, colour = G.P_BLINDS[boss].boss_colour, scale = 0.32 * 0.9 } },
+						}
+					}
+				}
+			}
+			table.insert(main_end, thing)
+		end
+		]]
+		--print(main_end)
 		return { vars = { #self.config.boss_order } }
 	end,
 	apply = function(self)
