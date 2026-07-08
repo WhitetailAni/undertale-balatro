@@ -1,0 +1,191 @@
+SMODS.Joker {
+	key = "tension_gem",
+	loc_txt = {
+		name = "Tension Gem",
+		text = {
+			"Sell this card to",
+			"create {C:attention}#1#{} random",
+			"{C:tarot}Charm Tags",
+		}
+	},
+	config = {
+		tag_count = 3,
+		slotted = false,
+		in_build = false
+	},
+	loc_vars = function(self, info_queue, card)
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_TGEM")
+		if math.fmod(os.time(), 16) == 0  then
+			return {
+				key = "j_UTDR_tension_slop",
+				vars = { card.ability.tag_count }
+			}
+		end
+		return { vars = { card.ability.tag_count } }
+	end,
+	rarity = 1,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 8, y = 8 },
+	cost = 6,
+	calculate = function(self, card, context)
+		if context.selling_self then
+			for i = 1, card.ability.tag_count do
+				card:juice_up(0.3,0.5)
+				local tag = Tag("tag_charm")
+				add_tag(tag)
+			end
+		end
+	end
+}
+
+--dummy joker so ERAM can say john mantle some of the time
+SMODS.Joker {
+	key = "tension_slop",
+	loc_txt = {
+		name = "Tension Slop",
+		text = {
+			"Sell this card to",
+			"create {C:attention}#1#{} random",
+			"{C:tarot}Charm Tags",
+		}
+	},
+	no_collection = true,
+	in_pool = function(self, args)
+		return false
+	end,
+}
+
+SMODS.Joker {
+	key = "lord_of_hammer",
+	loc_txt = {
+		name = "Lord of the Hammer",
+		text = {
+			"{X:mult,C:white}X#1#{} Mult if {C:attention}Joker{} slots are full",
+		}
+	},
+	config = {
+		xmult = 2,
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.xmult } }
+	end,
+	rarity = 3,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 8, y = 8 },
+	cost = 6,
+	calculate = function(self, card, context)
+		if context.joker_main and G.jokers.config.card_limit == #G.jokers.cards then
+			return {
+				xmult = card.ability.xmult
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "carol",
+	loc_txt = {
+		name = "Carol",
+		text = {
+			"Cards are drawn in order",
+			"of rank, {C:attention}lowest to highest"
+		}
+	},
+	rarity = 3,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 6, y = 6 },
+	cost = 5,
+}
+
+SMODS.Joker {
+	key = "find_her_dogg_girl",
+	loc_txt = {
+		name = "December",
+		text = {
+			"{C:blue}Common{} Jokers {C:attention}no",
+			"{C:attention}longer appear{} in shop"
+		}
+	},
+	rarity = 3,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 9 },
+	cost = 12,
+	add_to_deck = function(self, card, from_debuff)
+		joker_rarity(0, 0.25, 0.05, 0)
+		card.ability.in_build = true
+	end,
+	update = function(self, card, dt)
+		if card.ability.in_build then
+			joker_rarity(0, 0.25, 0.05, 0)
+		end
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		card.ability.in_build = false
+		
+		joker_rarity(0.7, 0.25, 0.05, 0)
+	end,
+	calculate = function(self, card, context)
+		if context.game_over and not context.blueprint then
+			card.ability.in_build = false
+			
+			joker_rarity(0.7, 0.25, 0.05, 0)
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "shelter_code",
+	loc_txt = {
+		name = "Shelter Code",
+		text = {
+			"{C:green}Uncommon{} and {C:red}Rare{} Jokers appear",
+			"in shop {C:attention}more often"
+		}
+	},
+	rarity = 2,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 9 },
+	cost = 12,
+	add_to_deck = function(self, card, from_debuff)
+		joker_rarity(0.7, 0.5, 0.1, 0)
+		card.ability.in_build = true
+	end,
+	update = function(self, card, dt)
+		if card.ability.in_build then
+			joker_rarity(0.7, 0.5, 0.1, 0)
+		end
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		card.ability.in_build = false
+		
+		joker_rarity(0.7, 0.25, 0.05, 0)
+	end,
+	calculate = function(self, card, context)
+		if context.game_over and not context.blueprint then
+			card.ability.in_build = false
+			
+			joker_rarity(0.7, 0.25, 0.05, 0)
+		end
+	end
+}
+
+function joker_rarity(common, uncommon, rare, legendary)
+	SMODS.ObjectTypes["Joker"].rarities[1].weight = common
+	SMODS.ObjectTypes["Joker"].rarities[2].weight = uncommon
+	SMODS.ObjectTypes["Joker"].rarities[3].weight = rare
+	if legendary == 0 then
+		SMODS.ObjectTypes["Joker"].rarities[4] = nil
+	else
+		SMODS.ObjectTypes["Joker"].rarities[4] = { key = "Legendary", weight = legendary }
+	end
+end

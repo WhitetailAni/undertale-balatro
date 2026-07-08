@@ -657,17 +657,25 @@ SMODS.Joker {
 			local rarity = 0
 			G.GAME.joker_buffer = G.GAME.joker_buffer +
 				math.min(1, G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
-			if uncommon_or_rare < 1 / 4 then
+			if uncommon_or_rare < 1 / 2 then
 				color = G.C.GREEN
 				rarity = 1
 			else
 				color = G.C.RED
 				rarity = 0.75
 			end
-
+			
+			
+			
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					local card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
+					if card.label == 'j_UTDR_asgore' then
+						print("Divorcee Identified.")
+						card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
+						print("Target Destroyed."..card.label)
+					end
+					print("add his sorry ass to the deck")
 					card:add_to_deck()
 					G.jokers:emplace(card)
 					card:start_materialize()
@@ -675,6 +683,19 @@ SMODS.Joker {
 					return true
 				end
 			}))
+			
+			G.E_MANAGER:add_event(Event({
+							trigger = "before",
+							delay = 1.0,
+							func = (function()
+									for i = 1, #G.jokers.cards do
+				print(G.jokers.cards[i].label .. i)
+			end
+								return true
+							end)}))
+			
+			
+			
 			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
 				{ message = localize('k_plus_joker'), colour = color })
 		end

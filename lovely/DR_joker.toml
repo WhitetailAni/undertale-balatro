@@ -57,7 +57,7 @@ payload = "G.GAME.hands[cfg.hand_type].level,localize(cfg.hand_type, 'poker_hand
 match_indent = true
 
 
-
+#mizzle stuffs
 [[patches]]
 [patches.pattern]
 target = "card.lua"
@@ -167,5 +167,165 @@ if G.GAME then if G.GAME.selected_back then if G.GAME.selected_back.name == "b_U
 end end end
 '''
 match_indent = true
+
+
+#carol
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = '''
+function CardArea:remove_card(card, discarded_only)
+    if not self.cards then return end
+    local _cards = discarded_only and {} or self.cards
+    if discarded_only then 
+        for k, v in ipairs(self.cards) do
+            if v.ability and v.ability.discarded then 
+                _cards[#_cards+1] = v
+            end
+        end
+    end
+    if self.config.type == 'discard' or self.config.type == 'deck' then
+        card = card or _cards[#_cards]
+    else
+        card = card or _cards[1]
+    end
+    for i = #self.cards,1,-1 do
+        if self.cards[i] == card then
+            card:remove_from_area()
+            table.remove(self.cards, i)
+            self:remove_from_highlighted(card, true)
+            break
+        end
+    end
+    self:set_ranks()
+    if not G.in_delete_run and self == G.deck then check_for_unlock({type = 'modify_deck', deck = self}) end
+    return card
+end
+'''
+position = 'after'
+payload = '''
+function CardArea:remove_card(card, discarded_only)
+    if not self.cards then return end
+    local _cards = discarded_only and {} or self.cards
+    if discarded_only then 
+        for k, v in ipairs(self.cards) do
+            if v.ability and v.ability.discarded then 
+                _cards[#_cards+1] = v
+            end
+        end
+    end
+    if self.config.type == 'discard' or self.config.type == 'deck' then
+    	if #SMODS.find_card("j_UTDR_carol") > 0 then
+			local nextcard = _cards[#_cards]
+			
+			local desired_id = 2
+			if G.GAME.last_drawn_card_id ~= 14 then
+				desired_id = G.GAME.last_drawn_card_id + 1
+			end
+
+			if nextcard:get_id() ~= desired_id then
+				nextcard = pseudorandom_element(_cards, "carol")
+			end
+			
+			G.GAME.last_drawn_card_id = nextcard:get_id()
+    	else
+        	card = card or _cards[#_cards]
+        end
+    else
+        card = card or _cards[1]
+    end
+    for i = #self.cards,1,-1 do
+        if self.cards[i] == card then
+            card:remove_from_area()
+            table.remove(self.cards, i)
+            self:remove_from_highlighted(card, true)
+            break
+        end
+    end
+    self:set_ranks()
+    if not G.in_delete_run and self == G.deck then check_for_unlock({type = 'modify_deck', deck = self}) end
+    return card
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''
+STOP_USE = 0,
+'''
+position = 'after'
+payload = '''
+last_drawn_card_id = 14,
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = '''
+for i = 1, #G.jokers.cards do
+	if G.jokers.cards[i].ability.crimson_heart_chosen then
+		prev_chosen_set[G.jokers.cards[i]] = true
+		G.jokers.cards[i].ability.crimson_heart_chosen = nil
+		if G.jokers.cards[i].debuff then SMODS.recalc_debuff(G.jokers.cards[i]) end
+	end
+end
+for i = 1, #G.jokers.cards do
+	if not G.jokers.cards[i].debuff then
+		if not prev_chosen_set[G.jokers.cards[i]] then
+			jokers[#jokers+1] = G.jokers.cards[i]
+		end
+		table.insert(fallback_jokers, G.jokers.cards[i])
+	end
+end
+if #jokers == 0 then jokers = fallback_jokers end 
+local _card = pseudorandom_element(jokers, pseudoseed('crimson_heart'))
+if _card then
+	_card.ability.crimson_heart_chosen = true
+	SMODS.recalc_debuff(_card)
+	_card:juice_up()
+	self:wiggle()
+end
+'''
+position = 'at'
+payload = '''
+local flowery_index = 0
+for i = 1, #G.jokers.cards do
+	if G.jokers.cards[i].config.center.key == "j_UTDR_flowery" then
+		flowery_index = i
+	end
+	if G.jokers.cards[i].ability.crimson_heart_chosen then
+		prev_chosen_set[G.jokers.cards[i]] = true
+		G.jokers.cards[i].ability.crimson_heart_chosen = nil
+		if G.jokers.cards[i].debuff then SMODS.recalc_debuff(G.jokers.cards[i]) end
+	end
+end
+for i = 1, #G.jokers.cards do
+	if not G.jokers.cards[i].debuff then
+		if not prev_chosen_set[G.jokers.cards[i]] then
+			jokers[#jokers+1] = G.jokers.cards[i]
+		end
+		table.insert(fallback_jokers, G.jokers.cards[i])
+	end
+end
+if #jokers == 0 then jokers = fallback_jokers end 
+local _card = pseudorandom_element(jokers, pseudoseed('crimson_heart'))
+if _card.config.center.key == "j_UTDR_flowery" then
+	play_flowery_sound("nonono")
+	--[[table.remove(jokers, flowery_index)
+	_card = pseudorandom_element(jokers, pseudoseed('crimson_heart'))]]
+end
+
+if _card then
+	_card.ability.crimson_heart_chosen = true
+	SMODS.recalc_debuff(_card)
+	_card:juice_up()
+	self:wiggle()
+end
+'''
+match_indent = true
+
 
 

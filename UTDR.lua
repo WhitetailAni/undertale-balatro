@@ -52,6 +52,18 @@ UTDR.config_tab = function()
 					end
 				}
 			),
+			create_toggle(
+				{
+					align = "tl",
+					label = "Voice Clips",
+					ref_table = UTDR.config_file,
+					ref_value = "voiceclips",
+					callback = function(_set_toggle)
+						UTDR.config_file.deltarune = _set_toggle
+						NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
+					end
+				}
+			),
 			UIBox_button(
 				{
 					align = "tl",
@@ -108,6 +120,7 @@ if UTDR.config_file['undertale'] then
 	assert(SMODS.load_file('UT/four.lua'))()
 	assert(SMODS.load_file('UT/five.lua'))()
 	assert(SMODS.load_file('UT/six.lua'))()
+	assert(SMODS.load_file('UT/seven.lua'))()
 
 	SMODS.Back {
 		key = "dog",
@@ -151,7 +164,12 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/two.lua'))()
 	assert(SMODS.load_file('DR/three.lua'))()
 	assert(SMODS.load_file('DR/four.lua'))()
-	assert(SMODS.load_file('DR/five.lua'))()
+	
+	assert(SMODS.load_file('DR/five_A.lua'))()
+	assert(SMODS.load_file('DR/five_B.lua'))()
+	assert(SMODS.load_file('DR/flowery.lua'))()
+	
+	assert(SMODS.load_file('DR/99.lua'))()
 
 	assert(SMODS.load_file('DR/deck.lua'))()
 	assert(SMODS.load_file('DR/booster.lua'))()
