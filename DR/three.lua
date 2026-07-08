@@ -1,14 +1,6 @@
 --desert board
 SMODS.Joker {
 	key = "lanino_elnina",
-	loc_txt = {
-		name = "Lanino & Elnina",
-		text = {
-			"Upgrades a random",
-			"{C:attention}Poker Hand{} when",
-			"Blind is selected"
-		}
-	},
 	rarity = 1,
 	config = {
 		polycule_odds = 3
@@ -37,13 +29,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "gingerguard",
-	loc_txt = {
-		name = "Ginger Guard",
-		text = {
-			"Played {C:attention}Steel{} cards give",
-			"{C:chips}+#1#{} Chips when scored"
-		}
-	},
 	config = {
 		chips = 50
 	},
@@ -68,15 +53,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "tenna",
-	loc_txt = {
-		name = "Mr. (Ant) Tenna",
-		text = {
-			"Creates a {C:tarot}Tarot{} card when",
-			"played hand is a {C:attention}#1#{}",
-			"{s:0.8}hand changes at end of round",
-			"{C:inactive}(Must have room)"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -122,16 +98,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "tv_world",
-	loc_txt = {
-		name = "TV World",
-		text = {
-			"This Joker gains {C:mult}+#1#{} Mult",
-			"per {C:attention}consecutive hand",
-			"played with a {V:1}#2#{} card",
-			"{s:0.8}suit changes at end of round",
-			"{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
-		},
-	},
 	config = {
 		mult_gain = 1,
 		mult = 0,
@@ -191,14 +157,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "watercooler",
-	loc_txt = {
-		name = "Watercooler",
-		text = {
-			"Played {C:attention}Wild Cards{} give",
-			"{C:money}$#1#{} when scored",
-			"{s:0.8,C:watercooler}#2#        "
-		}
-	},
 	config = {
 		bigbucks = 2,
 		said_buble = false
@@ -245,14 +203,6 @@ SMODS.Joker {
 --island board
 SMODS.Joker {
 	key = "mike",
-	loc_txt = {
-		name = "Mike",
-		text = {
-			"Gives {C:money}$#1#{} if played",
-			"hand contains a",
-			"{C:attention}#2#{}",
-		}
-	},
 	config = {
 		bigbucks = 5,
 	},
@@ -279,15 +229,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "knight",
-	loc_txt = {
-		name = "The Roaring Knight",
-		text = {
-			"At end of round, destroy",
-			"{C:red}all cards held in hand",
-			"and gain {X:mult,C:white}X#1#{} Mult",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-		}
-	},
 	config = {
 		xmult_gain = 0.25,
 		xmult = 1
@@ -349,12 +290,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "shelter",
-	loc_txt = {
-		name = "Shelter",
-		text = {
-			"{C:gaster}. . .{}"
-		}
-	},
 	config = {
 		in_build = false,
 		old_volume = 0
@@ -386,14 +321,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "blackshard",
-	loc_txt = {
-		name = "BlackShard",
-		text = {
-			"During {C:attention}Boss Blind{}, give",
-			"{X:mult,C:white}X#1#{} Mult and played cards",
-			"are {C:attention}retriggered{} when scored"
-		}
-	},
 	config = {
 		xmult = 2
 	},
@@ -424,14 +351,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "shadowguy",
-	loc_txt = {
-		name = "Shadowguy",
-		text = {
-			"{C:attention}Poker hands{} gain an",
-			"additional {C:chips}+#1#{} Chips and",
-			"{C:mult}+#2#{} Mult on level up"
-		}
-	},
 	config = {
 		chip_gain = 5,
 		mult_gain = 2
@@ -450,13 +369,6 @@ SMODS.Joker {
 --big city board
 SMODS.Joker {
 	key = "oddcontroller",
-	loc_txt = {
-		name = "Odd Controller",
-		text = {
-			"{C:green}Uncommon{} and {C:red}Rare",
-			"Jokers in shop are {C:attention}free"
-		},
-	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -487,14 +399,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "hero_sword",
-	loc_txt = {
-		name = "HERO_SWORD",
-		text = {
-			"Creates a {C:tarot}Tarot{} card when a",
-			"a {C:attention}playing card{} is destroyed",
-			"{C:inactive}(Must have room)"
-		},
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -526,14 +430,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "ramb",
-	loc_txt = {
-		name = "Ramb",
-		text = {
-			"Creates a {C:tarot}Tarot{} or {C:planet}Planet",
-			"card at end of round",
-			"{C:inactive}(Must have room)"
-		},
-	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -563,14 +459,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "ERAM",
-	loc_txt = {
-		name = "ERAM",
-		text = {
-			"{C:attention}Discarded{} cards have",
-			"a {C:green}#1# in #2#{} chance to",
-			"be {C:red}destroyed"
-		}
-	},
 	config = {
 		odds = 15
 	},
@@ -606,14 +494,6 @@ SMODS.Joker {
 --dummy joker so ERAM can say john mantle some of the time
 SMODS.Joker {
 	key = "john_mantle",
-	loc_txt = {
-		name = "John Mantle",
-		text = {
-			"{C:attention}Discarded{} cards have",
-			"a {C:green}#1# in #2#{} chance to",
-			"be {C:red}destroyed"
-		}
-	},
 	no_collection = true,
 	in_pool = function(self, args)
 		return false

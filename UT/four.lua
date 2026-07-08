@@ -1,13 +1,6 @@
 --top
 SMODS.Joker {
 	key = "stained_apron",
-	loc_txt = {
-		name = "Stained Apron",
-		text = {
-			"Earn {C:money}$#1#{} on {C:attention}every{}",
-			"{C:attention}other{} scored card"
-		}
-	},
 	config = {
 		money = 1,
 		other_card = false
@@ -39,15 +32,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "hot_dog",
-	loc_txt = {
-		name = "Hot Dog",
-		text = {
-			"Sell this card to",
-			"create {C:attention}#1#{} random",
-			"{C:tarot}Tarot{} cards",
-			"{C:inactive}(Must have room){}"
-		}
-	},
 	config = {
 		in_build = false
 	},
@@ -95,15 +79,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "yaoi",
-	loc_txt = {
-		name = "Royal Guards",
-		text = {
-			"Gains {C:chips}+#1#{} Chips",
-			"if played hand",
-			"contains a {C:attention}#2#{}",
-			"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)",
-		}
-	},
 	config = {
 		chip_gain = 5,
 		chips = 0
@@ -139,15 +114,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "hot_cat",
-	loc_txt = {
-		name = "Hot Cat",
-		text = {
-			"Sell this card to",
-			"create {C:attention}#1#{} random",
-			"{C:planet}Planet{} cards",
-			"{C:inactive}(Must have room){}"
-		}
-	},
 	config = {
 		in_build = false
 	},
@@ -195,15 +161,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "burnt_pan",
-	loc_txt = {
-		name = "Burnt Pan",
-		text = {
-			"{C:chips}+#1#{} chips for each",
-			"held consumable",
-			"{C:tarot}+#2#{} consumable slots",
-			"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)"
-		}
-	},
 	config = {
 		slots = 2,
 		chips_per = 40,
@@ -245,12 +202,6 @@ because then, the dog residue is double negative
 ]]
 SMODS.Joker {
 	key = "dog_residue",
-	loc_txt = {
-		name = "Dog Residue",
-		text = {
-			"{C:mult}+#1#{} Mult"
-		}
-	},
 	config = {
 		mult = 1
 	},
@@ -263,16 +214,17 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 6, y = 2 },
 	cost = 1,
-	--[[add_to_deck = function(self, card, from_debuff)
-		if not from_debuff then
+	add_to_deck = function(self, card, from_debuff)
+		if not from_debuff and pseudorandom("double_negative") < 1/1000 then
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					card:set_edition({ negative = true }, true)
 				end
 			}))
 		end
-	end,]]
+	end,
 	--comment out this function and then start a blind with annoying dog! it's fun!!
+	--oooops did i reenable it with a really slim chance..... oops!!!
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.mult } }
 	end,
@@ -287,14 +239,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "cowboy_hat",
-	loc_txt = {
-		name = "Cowboy Hat",
-		text = {
-			"Played cards with",
-			"{C:attention}numerical{} ranks give",
-			" {C:mult}+#1#{} or {C:mult}+#2#{} Mult when scored"
-		}
-	},
 	config = {
 		low_mult = 3,
 		high_mult = 5
@@ -327,13 +271,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "muffet",
-	loc_txt = {
-		name = "Muffet",
-		text = {
-			"{C:attention}+#1#{} hand size if you",
-			"have at least {C:money}$#2#{}"
-		}
-	},
 	config = {
 		hand_size = 2,
 		dollars = 30,
@@ -375,15 +312,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "empty_gun",
-	loc_txt = {
-		name = "Empty Gun",
-		text = {
-			"If {C:attention}first hand{} of",
-			"round is a {C:attention}secret{}",
-			"{C:attention}hand{}, retrigger all",
-			"played cards"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -437,15 +365,6 @@ SMODS.Joker {
 --bottom
 SMODS.Joker {
 	key = "glamburger",
-	loc_txt = {
-		name = "Glamburger",
-		text = {
-			"{C:green}#6# in #1#{} chance for {C:mult}+#2#{} Mult",
-			"{C:green}#6# in #3#{} chance to win {C:money}$#4#{}",
-			"{C:green}#6# in #5#{} chance this card is",
-			"{C:attention}destroyed{} at end of round"
-		}
-	},
 	config = {
 		mult_chance = 3,
 		mult = 15,
@@ -510,14 +429,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "mettaton",
-	loc_txt = {
-		name = "Mettaton",
-		text = {
-			"If {C:attention}first hand{} of round is",
-			"a single card of {C:clubs}Club{} suit",
-			"destroy it and earn {C:money}$#1#{}"
-		}
-	},
 	config = {
 		money = 2
 	},
@@ -543,13 +454,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "new_home",
-	loc_txt = {
-		name = "New Home",
-		text = {
-			"{C:chips}+#1#{} Chips in {C:attention}final",
-			"{C:attention}hand{} of round"
-		}
-	},
 	config = {
 			chips = 300
 	},
@@ -573,14 +477,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "mettaton_ex",
-	loc_txt = {
-		name = "Mettaton EX",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult for every",
-			"{C:money}$#2#{} you have",
-			"{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"
-		}
-	},
 	config = {
 		xmult_per = 0.1,
 		money = 5
@@ -605,12 +501,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "mettaton_steak",
-	loc_txt = {
-		name = "Steak in the Shape of Mettaton's Face",
-		text = {
-			"{C:attention}Face{} cards held in hand give {C:mult}+#1#{} Mult"
-		}
-	},
 	config = {
 		mult = 15,
 		has_scored = false

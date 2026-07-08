@@ -1,13 +1,6 @@
 --field
 SMODS.Joker {
 	key = "amber_card",
-	loc_txt = {
-		name = "Amber Card",
-		text = {
-			"{C:blue}+#1#{} hands per round",
-			"{C:red}-#2#{} hand size"
-		}
-	},
 	config = {
 			hands = 2,
 			hand_size = 1
@@ -36,14 +29,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "lancer_cookie",
-	loc_txt = {
-		name = "Lancer Cookie",
-		text = {
-			"{C:chips}+#1#{} Chips",
-			"Destroyed when {C:attention}Boss",
-			"{C:attention}Blind{} is defeated"
-		}
-	},
 	config = {
 			chips = 60
 	},
@@ -87,15 +72,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "castle_town",
-	loc_txt = {
-		name = "Castle Town",
-		text = {
-			"{C:mult}+#1#{} Mult for each",
-			"card above {C:attention}#2#{}",
-			"in your full deck",
-			"{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
-		}
-	},
 	config = {
 			mult_per = 5
 	},
@@ -127,13 +103,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "thrash_machine",
-	loc_txt = {
-		name = "Thrash Machine",
-		text = {
-			"{C:chips}+#1#{} Chips when",
-			"{C:red}#2#{} discards remaining"
-		}
-	},
 	config = {
 		chips = 100,
 		discards_remaining = 0
@@ -158,14 +127,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "k_round",
-	loc_txt = {
-		name = "K. Round",
-		text = {
-			"{C:chips}+#1#{} Chips for each {C:attention}hand{} played",
-			"{C:red}-#2#{} Chips for each {C:attention}discard{} used",
-			"{C:inactive}(Currently {C:attention}+#3#{C:inactive} Chips)"
-		}
-	},
 	config = {
 			chip_gain = 5,
 			chip_loss = 5,
@@ -205,13 +166,6 @@ SMODS.Joker {
 --forest
 SMODS.Joker {
 	key = "seam",
-	loc_txt = {
-		name = "Seam",
-		text = {
-			"Only {C:attention}Mega{} booster packs",
-			"show up in shop"
-		}
-	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -222,14 +176,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "lancer",
-	loc_txt = {
-		name = "Lancer",
-		text = {
-			"Played cards with",
-			"{C:spades}Spade{} suit give",
-			"{C:chips}+#1#{} Chips when scored"
-		}
-	},
 	config = {
 		chips = 30,
 	},
@@ -253,15 +199,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "king",
-	loc_txt = {
-		name = "Chaos King",
-		text = {
-			"Gains {X:mult,C:white}X#1#{} Mult when a",
-			"{C:attention}playing card{} not of",
-			"{C:spades}Spade{} suit is destroyed",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -303,15 +240,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "clover",
-	loc_txt = {
-		name = "Clover",
-		text = {
-			"Played cards with",
-			 "{C:clubs}Club{} suit give",
-			"{C:chips}+#1#{} Chips and",
-			"{C:mult}+#2#{} Mult{} when scored"
-		}
-	},
 	config = {
 		chips = 21,
 		mult = 3,
@@ -337,13 +265,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "jevil",
-	loc_txt = {
-		name = "Jevil",
-		text = {
-			"Retrigger all",
-			"played {C:attention}Wild Cards{}"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -367,14 +288,6 @@ SMODS.Joker {
 --castle
 SMODS.Joker {
 	key = "scarlet_forest",
-	loc_txt = {
-		name = "Scarlet Forest",
-		text = {
-			"Gains {C:mult}+#1#{} Mult if played",
-			"hand contains a {C:attention}#2#{}",
-			"{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)",
-		}
-	},
 	config = {
 		mult_gain = 2,
 		mult = 0
@@ -410,15 +323,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "top_cake",
-	loc_txt = {
-		name = "Top Cake",
-		text = {
-			"Gains {X:mult,C:white}X#1#{} Mult per",
-			"hand played, destroys",
-			"itself after {C:attention}#2#{} {C:inactive}[#3#]{} hands",
-			"{C:inactive}(Currently {X:mult,C:white}X#4#{C:inactive} Mult)",
-		}
-	},
 	config = {
 		xmult_gain = 0.2,
 		xmult = 1,
@@ -490,16 +394,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "rouxls",
-	loc_txt = {
-		name = "Rouxls Kaard",
-		text = {
-			"Gains {C:chips}+#1#{} Chips",
-			"when played hand",
-			"is a {C:attention}#2#{}",
-			"{s:0.8}hand changes at end of round",
-			"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)"
-		}
-	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -540,14 +434,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "shackle",
-	loc_txt = {
-		name = "Iron Shackle",
-		text = {
-			"{C:attention}Gold Cards{} and {C:attention}Steel Cards",
-			"are considered the",
-			"{C:attention}same enhancement"
-		}
-	},
 	config = {
 		in_build = false
 	},
@@ -600,13 +486,6 @@ end
 
 SMODS.Joker {
 	key = "devilsknife",
-	loc_txt = {
-		name = "Devilsknife",
-		text = {
-			"Played {C:attention}Wild Cards{} give",
-			"{X:mult,C:white}X#1#{} Mult when scored"
-		}
-	},
 	config = {
 		xmult = 1.75
 	},

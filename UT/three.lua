@@ -1,14 +1,6 @@
 --uno
 SMODS.Joker {
 	key = "punch_card",
-	loc_txt = {
-		name = "Punch Card",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult every",
-			"{C:attention}#2#{} hands played",
-			"{C:inactive}#3# remaining"
-		}
-	},
 	config = {
 		extra = {
 			xmult = 2,
@@ -76,12 +68,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "temmie_flakes",
-	loc_txt = {
-		name = "Temmie Flakes",
-		text = {
-			"{C:blue}pLaY twO!!!1!!{}"
-		}
-	},
 	config = {
 		chip_min = 5,
 		chip_max = 30,
@@ -143,14 +129,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "annoying_dog",
-	loc_txt = {
-		name = "Annoying Dog",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult",
-			"{C:red}-#2#{} consumable slots",
-			"{C:joker_grey}+1 dogs"
-		}
-	},
 	config = {
 		xmult = 3,
 		slots = 2,
@@ -189,13 +167,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "temmie_armor",
-	loc_txt = {
-		name = "Temmie Armor",
-		text = {
-			"Played {C:attention}Enhanced 2's{} each",
-			"give {X:mult,C:white}X#1#{} Mult when scored"
-		}
-	},
 	config = {
 		xmult = 2
 	},
@@ -221,15 +192,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "mystery_key",
-	loc_txt = {
-		name = "Mystery Key",
-		text = {
-			"If {C:attention}first hand{} of round is",
-			"a pair of {C:attention}Aces{}, destroy one",
-			"and create a {C:spectral}Spectral{} card",
-			"{C:inactive}(Must have room){}"
-		}
-	},
 	config = {
 		spectral_gen = false
 	},
@@ -278,15 +240,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "mystery_key_DR",
-	loc_txt = {
-		name = "Mystery Key",
-		text = {
-			"If {C:attention}first hand{} of round is",
-			"a pair of {C:attention}Aces{}, destroy one",
-			"and create a {C:spectral}Prophecy{} card",
-			"{C:inactive}(Must have room){}"
-		}
-	},
 	no_collection = true,
 	in_pool = function(self, args)
 		return false
@@ -297,14 +250,6 @@ SMODS.Joker {
 --dos
 SMODS.Joker {
 	key = "sea_tea",
-	loc_txt = {
-		name = "Sea Tea",
-		text = {
-			"{C:chips}+#1#{} Chips",
-			"{C:chips}-#2#{} Chips per",
-			"round played"
-		}
-	},
 	config = {
 		chips = 125,
 		chips_loss = 25,
@@ -360,13 +305,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "glasses",
-	loc_txt = {
-		name = "Cloudy Glasses",
-		text = {
-			"{C:attention}Glass Cards{} can",
-			"{C:attention}no longer{} break"
-		}
-	},
 	config = {
 		thorning_is_older = false
 	},
@@ -397,13 +335,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "gerson",
-	loc_txt = {
-		name = "Gerson",
-		text = {
-			"All cards and packs",
-			"in shop are {C:money}$#1#{} cheaper"
-		}
-	},
 	config = {
 		discount = 1
 	},
@@ -432,14 +363,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "torn_notebook",
-	loc_txt = {
-		name = "Torn Notebook",
-		text = {
-			"Each card of {C:clubs}Club{}",
-			"suit held in hand",
-			"gives {C:chips}+#1#{} Chips"
-		}
-	},
 	config = {
 		chips = 30,
 		has_scored = false
@@ -476,15 +399,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "undyne_the_undying",
-	loc_txt = {
-		name = "Undyne the Undying",
-		text = {
-			"This Joker gains {C:mult}+#1#{} Mult",
-			"for every card",
-			"{C:attention}discarded{} this round",
-			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
-		}
-	},
 	config = {
 		mult_per_card = 3,
 		mult = 0
@@ -523,13 +437,6 @@ SMODS.Joker {
 --tres
 SMODS.Joker {
 	key = "mad_dummy",
-	loc_txt = {
-		name = "Mad Dummy",
-		text = {
-			"{C:red}Destroys{} {C:attention}#1#{} random card",
-			"held in hand at end of round"
-		}
-	},
 	config = {
 		cards_destroyed = 1
 	},
@@ -578,14 +485,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "hotland",
-	loc_txt = {
-		name = "Hotland",
-		text = {
-			"If {C:attention}first hand{} of round has",
-			"only one played card, add a",
-			"random {C:attention}Seal{} to it"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -623,18 +522,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "alphys",
-	loc_txt = {
-		name = "Alphys",
-		text = {
-			"Gives a random {C:attention}Bonus{}",
-			"when Blind is selected",
-			--[["{C:inactive}[Bonuses are {C:blue}+#1#{C:inactive} Hands,",
-			"{C:red}+#2#{C:inactive} Discards, {C:attention}+#3#{C:inactive} hand size,",
-			"{C:chips}+#4#{C:inactive} Chips, {C:mult}+#5#{C:inactive} Mult, {X:mult,C:white}X#6#{C:inactive} Mult,",
-			"{C:inactive}retriggering all scored cards,",
-			"{C:inactive}or disabling the current {C:attention}Boss Blind"]]
-		}
-	},
 	config = {
 		values = {
 			hand_count = 2,
@@ -809,14 +696,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "instant_noodles",
-	loc_txt = {
-		name = "Instant Noodles",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult",
-			"Destroyed when",
-			"{C:attention}Boss Blind{} is defeated"
-		}
-	},
 	config = {
 		xmult = 3
 	},
@@ -862,14 +741,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "true_lab",
-	loc_txt = {
-		name = "True Lab",
-		text = {
-			"Gains {C:mult}+#1#{} Mult when",
-			"a card is {C:attention}copied{}",
-			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
-		}
-	},
 	config = {
 		mult = 0,
 		mult_gain = 10,

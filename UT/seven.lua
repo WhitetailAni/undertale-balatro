@@ -1,13 +1,5 @@
 SMODS.Joker {
 	key = "doghole",
-	loc_txt = {
-		name = "Dog Hole",
-		text = {
-			"Doesn't grant {X:mult,C:white}X100{} Mult,",
-			"because it wouldn't be very",
-			"interesting if it did.",
-		}
-	},
 	config = {
 		values = {
 			chips_count = 90,
@@ -91,12 +83,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "mysterious_artifact",
-	loc_txt = {
-		name = "Mysterious Artifact",
-		text = {
-			"{C:red}???"
-		}
-	},
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = false,

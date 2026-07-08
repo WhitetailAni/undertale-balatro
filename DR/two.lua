@@ -1,14 +1,6 @@
 -- field
 SMODS.Joker {
 	key = "sweet_capn_cakes",
-	loc_txt = {
-		name = "Sweet Cap'n Cakes",
-		text = {
-			"{C:blue}Common{} jokers each",
-			"give {C:chips}+#1#{} Chips and",
-			"{C:mult}+#2#{} Mult when sccored"
-		}
-	},
 	config = {
 			chips = 10,
 			mult = 5,
@@ -34,16 +26,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "kris_tea",
-	loc_txt = {
-		name = "Kris Tea",
-		text = {
-			"{C:chips}+#1#{} Chips for each played {C:spades}Spade{} card",
-			"{X:mult,C:white}X#2#{} Mult for each played {C:hearts}Heart{} card",
-			"{C:mult}+#3#{} Mult for each played {C:clubs}Club{} card",
-			"{C:money}$#4#{} for each played {C:diamonds}Diamond{} card",
-			"Destroyed after {C:attention}#5# {C:inactive}[#6#]{} rounds"
-		}
-	},
 	config = {
 			chips = 40,
 			xmult = 1.25,
@@ -118,14 +100,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "cyber_world",
-	loc_txt = {
-		name = "Cyber World",
-		text = {
-			"{C:green}#1# in #2#{} chance to create",
-			"a {C:planet}Planet{} card when a",
-			"{C:tarot}Tarot{} card is used"
-		}
-	},
 	config = {
 			odds = 2
 	},
@@ -167,14 +141,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "pin",
-	loc_txt = {
-		name = "Royal Pin",
-		text = {
-			"Gains {C:chips}+#1#{} Chips when a",
-			"{C:attention}face{} card is scored",
-			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
-		}
-	},
 	config = {
 		chip_gain = 3,
 		chips = 0
@@ -202,13 +168,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "starwalker",
-	loc_txt = {
-		name = "Starwalker",
-		text = {
-			"These cards are {C:red}Pissing me off.",
-			"{C:chips}+#1#{} Chips if all played cards are       {C:diamonds}Diamond suit{}"
-		}
-	},
 	config = {
 			chips = 90
 	},
@@ -239,14 +198,6 @@ SMODS.Joker {
 --city
 SMODS.Joker {
 	key = "watch",
-	loc_txt = {
-		name = "Silver Watch",
-		text = {
-			"Played cards give {C:mult}+#1#{}",
-			"Mult when scored",
-			"{C:red}only one hand per round"
-		}
-	},
 	config = {
 			mult = 15
 	},
@@ -272,14 +223,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "swatch",
-	loc_txt = {
-		name = "Swatch",
-		text = {
-			"This Joker gains {C:mult}+#1#{} Mult when",
-			"{C:attention}anything{} is bought in the shop",
-			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
-		},
-	},
 	config = {
 		mult_gain = 1,
 		mult = 0
@@ -307,15 +250,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "queen",
-	loc_txt = {
-		name = "Q5U4EX7YY2E9N",
-		text = {
-			"This Joker gains {C:mult}+#1#{} Mult",
-			"per {C:attention}consecutive hand played",
-			"without a scoring {C:attention}numerical{} card",
-			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
-		},
-	},
 	config = {
 		mult_gain = 3,
 		mult = 0
@@ -357,13 +291,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "tasque_manager",
-	loc_txt = {
-		name = "Tasque Manager",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult if your {C:attention{full",
-			"{C:attention}deck{} is exactly {C:attention}#2#{} cards"
-		}
-	},
 	config = {
 			xmult = 3
 	},
@@ -387,15 +314,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "twin_ribbon",
-	loc_txt = {
-		name = "Twin Ribbon",
-		text = {
-			"{C:mult}+#1#{} Mult for each",
-			"{C:attention}change{} in hand",
-			"size from {C:attention}#2#",
-			"{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
-		}
-	},
 	config = {
 		mult = 25
 	},
@@ -424,14 +342,6 @@ SMODS.Joker {
 --mansion
 SMODS.Joker {
 	key = "spamton",
-	loc_txt = {
-		name = "Spamton G. Spamton",
-		text = {
-			"Each played {C:attention}Ace{}, {C:attention}9{}, or {C:attention}7",
-			"has a {C:green}#1# in #2#{} chance",
-			"to give {C:money}$#3#{} when scored"
-		}
-	},
 	config = {
 		odds = 2,
 		bigbucks = 2
@@ -460,15 +370,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "pipis",
-	loc_txt = {
-		name = "Pipis",
-		text = {
-			"{C:mult}-#1#{} Mult",
-			"{X:mult,C:white}X#2#{} Mult during {C:attention}Boss Blind{}" ,
-			"Destroyed when {C:attention}Boss",
-			"{C:attention}Blind{} is defeated"
-		}
-	},
 	config = {
 		mult = 5,
 		xmult = 1.25
@@ -530,13 +431,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "spamton_neo",
-	loc_txt = {
-		name = "SPAMTON NEO",
-		text = {
-			"RETRIGGER [EveryHotSingle]",
-			"{C:attention}1{}, {C:attention}9{}, OR {C:attention}7!!"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -559,14 +453,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dealmaker",
-	loc_txt = {
-		name = "Dealmaker",
-		text = {
-			"Each scored card",
-			"gives {C:money}$#1#{} when",
-			"{C:red}#2#{} discards remaining"
-		}
-	},
 	config = {
 		bigbucks = 1,
 		discards_remaining = 0
@@ -591,16 +477,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "revivemint",
-	loc_txt = {
-		name = "Revivemint",
-		text = {
-			"Creates a {C:tarot}#1#{} card",
-			"when {C:attention}Blind{} is selected",
-			"{C:green}#2# in #3#{} chance for this",
-			"card to destroy itself",
-			"when {C:attention}Blind{} is selected",
-		}
-	},
 	config = {
 		odds = 6
 	},

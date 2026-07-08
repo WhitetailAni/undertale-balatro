@@ -1,15 +1,6 @@
 --row one
 SMODS.Joker {
 	key = "tough_glove",
-	loc_txt = {
-		name = "Tough Glove",
-		text = {
-			"Gains {C:mult}+#1#{} Mult",
-			"if played hand",
-			"contains a {C:attention}#2#{}",
-			"{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)",
-		}
-	},
 	config = {
 		mult_gain = 2,
 		mult = 0
@@ -45,13 +36,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "manly_bandana",
-	loc_txt = {
-		name = "Manly Bandana",
-		text = {
-			"{C:mult}+#1#{} Mult for each",
-			"remaining {C:blue}Hand{}"
-		}
-	},
 	config = {
 		mult = 7
 	},
@@ -75,15 +59,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "snowman_piece",
-	loc_txt = {
-		name = "Snowman Piece",
-		text = {
-			"Gains {C:chips}+#1#{} Chips at",
-			"end of round, destroys",
-			"itself after {C:attention}#2#{} {C:inactive}[#3#]{} rounds",
-			"{C:inactive}(Currently {C:chips}+#4#{C:inactive} Chips)",
-		}
-	},
 	config = {
 		chip_gain = 20,
 		chips = 0,
@@ -147,16 +122,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "nice_cream",
-	loc_txt = {
-		name = "Nice Cream",
-		text = {
-			"{C:green}#1# in #2#{} chance to {C:attention}create{} a {C:tarot}Tarot{}",
-			"card when a {C:planet}Planet{} card is used",
-			"{C:green}#1# in #3#{} chance to be {C:attention}destroyed{}",
-			"when a {C:planet}Planet{} card is used",
-			"{C:inactive}(Must have room){}"
-		}
-	},
 	config = {
 		tarot_odds = 2,
 		destroy_odds = 8
@@ -225,15 +190,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "silver_key",
-	loc_txt = {
-		name = "Silver Key",
-		text = {
-			"Create a {C:spectral}Spectral{} card",
-			"when {C:attention}Boss Blind{}",
-			"is defeated",
-			"{C:inactive}(Must have room){}"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -286,13 +242,6 @@ SMODS.Joker {
 --row two
 SMODS.Joker {
 	key = "sans",
-	loc_txt = {
-		name = "sans.",
-		text = {
-			"{X:mult,C:white}x#1#{} mult if played",
-			"hand is a {C:attention}#2#{}"
-		}
-	},
 	config = {
 		xmult = 3
 	},
@@ -317,14 +266,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "papyrus",
-	loc_txt = {
-		name = "THE GREAT PAPYRUS!",
-		text = {
-			"RETRIGGER ALL SCORED",
-			"CARDS IF PLAYED HAND",
-			"CONTAINS A {C:attention}#1#{}!!!"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -348,15 +289,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "snowdin",
-	loc_txt = {
-		name = "Snowdin",
-		text = {
-			"Creates a {C:planet}Planet{}",
-			"Card if played hand",
-			"contains a {C:attention}#1#{}",
-			"{C:inactive}(Must have room){}"
-		}
-	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -389,13 +321,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "monster_kid",
-	loc_txt = {
-		name = "Monster Kid",
-		text = {
-			"{C:green}#1# in #2#{} chance for {C:mult}+#3#{} Mult",
-			"{C:green}#1# in #2#{} chance for {C:chips}-#4#{} Chips",
-		}
-	},
 	config = {
 		odds = 2,
 		mult = 20,
@@ -426,14 +351,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "undyne",
-	loc_txt = {
-		name = "Undyne",
-		text = {
-			"Each card of {C:spades}Spade{}",
-			"suit held in hand",
-			"gives {X:mult,C:white}X#1#{} Mult"
-		}
-	},
 	config = {
 		xmult = 1.25,
 		has_scored = false
@@ -471,15 +388,6 @@ SMODS.Joker {
 --row three
 SMODS.Joker {
 	key = "ballet_shoes",
-	loc_txt = {
-		name = "Ballet Shoes",
-		text = {
-			"Gains {C:chips}+#1#{} Chips",
-			"when a {C:attention}playing card{}",
-			"is destroyed",
-			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
-		}
-	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -518,13 +426,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "echo_flower",
-	loc_txt = {
-		name = "Echo Flower",
-		text = {
-			"Retriggers {C:attention}every{}",
-			"{C:attention}other{} scored card"
-		}
-	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -549,14 +450,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "abandoned_quiche",
-	loc_txt = {
-		name = "Abandoned Quiche",
-		text = {
-			"{C:green}#1# in #2#{} chance this card is",
-			"{C:attention}destroyed{} at end of round",
-			"and creates {C:attention}#3#{} Tags"
-		}
-	},
 	config = {
 		odds = 5,
 		tag_count = 3
@@ -620,14 +513,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "waterfall",
-	loc_txt = {
-		name = "Waterfall",
-		text = {
-			"Each card of {C:diamonds}Diamond{}",
-			"suit held in hand has a",
-			"{C:green}#1# in #2#{} chance to give {C:money}$#3#{}"
-		}
-	},
 	config = {
 		odds = 2,
 		money = 1
@@ -667,13 +552,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "old_tutu",
-	loc_txt = {
-		name = "Old Tutu",
-		text = {
-			"Retrigger all",
-			"played {C:attention}Bonus{} cards"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,

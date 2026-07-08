@@ -1,14 +1,6 @@
 --unum
 SMODS.Joker {
 	key = "dummy",
-	loc_txt = {
-		name = "Dummy",
-		text = {
-			"{C:chips}+#1#{} Chips for",
-			"each {C:attention}Joker{}",
-			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
-		}
-	},
 	config = {
 		chips = 20,
 	},
@@ -36,14 +28,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "froggit",
-	loc_txt = {
-		name = "Froggit",
-		text = {
-			"Each played card",
-			"gives {C:chips}+#1#{} Chips and",
-			"{C:mult}+#2#{} Mult when scored"
-		},
-	},
 	config = {
 		chips = 5,
 		mult = 2
@@ -69,13 +53,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "toby_temmie",
-	loc_txt = {
-		name = "Toby and Temmie",
-		text = {
-			"Creates a {C:purple}Voucher Tag",
-			"when {C:attention}Boss Blind is defeated"
-		},
-	},
 	config = {
 		slot_count = 1,
 		slotted = false,
@@ -101,13 +78,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "mad_mew_mew",
-	loc_txt = {
-		name = "Mad Mew Mew",
-		text = {
-			"Earn {C:money}$#1#{} when a {C:attention}King{}",
-			"or {C:attention}Jack{} is destroyed"
-		},
-	},
 	config = {
 		money = 5,
 	},
@@ -140,13 +110,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "amalgam",
-	loc_txt = {
-		name = "Amalgamates",
-		text = {
-			"{C:attention}Wild Cards{} give {C:mult}+#1#{}",
-			"Mult when scored"
-		},
-	},
 	config = {
 		mult = 5,
 	},
@@ -170,10 +133,11 @@ SMODS.Joker {
 }
 
 --duo
+---- TO BE REPLACED!!
 SMODS.Joker {
 	key = "micro_froggit",
 	loc_txt = {
-		name = "Micro Froggit",
+		name = "Legally Distinct Frog-Themed Joker",
 		text = {
 			"Each played {C:attention}7{} or",
 			"{C:attention}2{} gives {C:mult}+#1#{} Mult",
@@ -220,17 +184,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "CORE",
-	loc_txt = {
-		name = "CORE",
-		text = {
-			"{C:attention}#1#s{} count as",
-			"{C:attention}#2#es{}"
-		},
-		unlock = {
-			"Discard a",
-			"{E:1,C:attention}#1#"
-		}
-	},
 	--unlocked = false
 	unlock_condition = {type = 'discard_custom'},
 	rarity = 2,
@@ -257,18 +210,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "barrier",
-	loc_txt = {
-		name = "The Barrier",
-		text = {
-			"{C:attention}Debuffed cards{} give",
-			"{C:money}$#1#{} when scored"
-		},
-		unlock = {
-			"In one hand,",
-			"earn at least",
-			"{E:1,C:attention}1e11{} chips"
-		},
-	},
 	config = {
 		money = 2,
 	},
@@ -297,18 +238,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "surface",
-	loc_txt = {
-		name = "The Surface",
-		text = {
-			"Played {C:attention}Stone Cards{} give",
-			"{C:mult}+#1#{} Mult when scored"
-		},
-		unlock = {
-			"Have at least {E:1,C:attention}5",
-			"{E:1,C:attention}Stone Cards{} in",
-			"your deck",
-		},
-	},
 	config = {
 		mult = 5,
 	},
@@ -337,18 +266,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "end",
-	loc_txt = {
-		name = "The End",
-		text = {
-			"Earn {C:money}$12{} when",
-			"{C:attention}Boss Blind{} is defeated"
-		},
-		unlock = {
-			"Win a run with any",
-			"deck on at least",
-			"{E:1,V:1}#1#{} difficulty",
-		},
-	},
 	config = {
 		extra = 12,
 		was_boss = false,
@@ -378,17 +295,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "fun_value",
-	loc_txt = {
-		name = "fun value",
-		text = {
-			"Each Joker has a {C:green}#1# in #2#",
-			"chance to give {X:mult,C:white}X#3#{} Mult"
-		},
-		unlock = {
-			"{E:1,C:green}#1# in 10{} chance to unlock",
-			"after {E:1,C:attention}winning{} a run",
-		},
-	},
 	config = {
 		xmult = 1.5,
 		odds = 3
@@ -424,18 +330,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "true_reset",
-	loc_txt = {
-		name = "True Reset",
-		text = {
-			"{C:attention}Sell{} this card to {S:1.1,C:red,E:2}destroy all",
-			"{S:1.1,C:red,E:2}Jokers{} and create an equal",
-			"number of {C:dark_edition}Negative{} Tags",
-		},
-		unlock = {
-			"Beat the {E:1,C:attention}Ante{}",
-			"{E:1,C:attention}0{} Boss Blind"
-		}
-	},
 	--unlocked = false
 	unlock_condition = { type = 'round_win' },
 	rarity = 2,
@@ -478,20 +372,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "gaster",
-	loc_txt = {
-		name = "______",
-		text = {
-			"{C:gaster}WELCOME.",
-			"{C:gaster}HAVE YOU BEEN LOOKING FOR ME?",
-			"{C:gaster}HOW WONDERFUL.",
-			"{C:gaster}I HAVE BEEN LOOKING FOR YOU AS WELL."
-		},
-		unlock = {
-			"{C:gaster}AT THAT TIME,",
-			"{C:gaster}I WILL ASK YOU",
-			"{C:gaster}A FEW QUESTIONS."
-		}
-	},
 	--unlocked = false
 	unlock_condition = {type = 'win_custom'},
 	rarity = 3,
@@ -538,17 +418,6 @@ end
 
 SMODS.Joker {
 	key = "SURVEY_PROGRAM",
-	loc_txt = {
-		name = "SURVEY_PROGRAM",
-		text = {
-			"Gains {X:mult,C:white}X#1#{} Mult when",
-			"a {C:spectral}Spectral{} card is used",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-		},
-		unlock = {
-			"Win {E:1,C:attention}5{} runs {C:inactive}[#1#]"
-		}
-	},
 	config = {
 		xmult_gain = 0.5,
 		xmult = 1
@@ -593,17 +462,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "SURVEY_PROGRAM_DR",
-	loc_txt = {
-		name = "SURVEY_PROGRAM",
-		text = {
-			"Gains {X:mult,C:white}X#1#{} Mult when",
-			"a {C:spectral}Prophecy{} card is used",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-		},
-		unlock = {
-			"Win {E:1,C:attention}5{} runs {C:inactive}[#1#]"
-		}
-	},
 	no_collection = true,
 	in_pool = function(self, args)
 		return false
@@ -613,17 +471,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "vessel",
-	loc_txt = {
-		name = "VESSEL",
-		text = {
-			"Gains {X:mult,C:white}X#1#{} Mult",
-			"for each sold {C:attention}Joker",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-		},
-		unlock = {
-			"Sell {E:1,C:attention}30{} Jokers"
-		}
-	},
 	config = {
 		xmult_gain = 0.15,
 		xmult = 1

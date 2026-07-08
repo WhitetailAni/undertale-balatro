@@ -189,3 +189,37 @@ function joker_rarity(common, uncommon, rare, legendary)
 		SMODS.ObjectTypes["Joker"].rarities[4] = { key = "Legendary", weight = legendary }
 	end
 end
+
+SMODS.Joker {
+	key = "netskie",
+	config = {
+		mult = 8
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 5 },
+	soul_pos = { x = 1, y = 8 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_ERAM")
+		if math.fmod(os.time(), 16) == 0  then
+			return {
+				key = "j_UTDR_john_mantle",
+				vars = { probabilities_normal, odds }
+			}
+		end
+		return { vars = { probabilities_normal, odds } }
+	end,
+	calculate = function(self, card, context)
+		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
+			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
+			play_sound("UTDR_ERAM", 1.0, 0.7)
+			return {
+				remove = true,
+				removed = context.other_card
+			}
+		end
+	end
+}

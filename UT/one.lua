@@ -1,15 +1,6 @@
 --first row
 SMODS.Joker {
 	key = "bandage",
-	--[[
-	loc_txt = {
-		name = "Bandage",
-		text = {
-			"{C:chips}+#1#{} Chips",
-			"and {C:mult}+#2#{} Mult"
-		}
-	},
-	]]
 	config = {
 		mult = 5,
 		chips = 20
@@ -36,14 +27,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "stick",
-	--[[
-	loc_txt = {
-		name = "Stick",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult"
-		}
-	},
-	]]
 	config = {
 		xmult = 1.5,
 	},
@@ -68,13 +51,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "flowey",
-	loc_txt = {
-		name = "Flowey",
-		text = {
-			"{C:mult}+#1#{} Mult",
-			"{C:red}-#2#{} hand size"
-		}
-	},
 	config = {
 		mult = 99,
 		hand_loss = 2
@@ -105,15 +81,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "candy",
-	loc_txt = {
-		name = "Monster Candy",
-		text = {
-			"Each played {C:attention}Ace{}, {C:attention}2{}, or {C:attention}3{}",
-			"gives {C:mult}+#1#{} Mult when scored",
-			"{C:green}#2# in #3#{} chance this card is",
-			"destroyed at end of round"
-		}
-	},
 	config = {
 		mult = 5,
 		odds = 4,
@@ -168,17 +135,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "spider_donut",
-	loc_txt = {
-		name = "Spider Donut",
-		text = {
-			"Each played {C:attention}7{} gives",
-			"{C:mult}+#1#{} mult when scored",
-			"Each played {C:attention}9{} gives",
-			"{C:mult}+#2#{} mult when scored,",
-			"but this Joker is",
-			"{C:attention}destroyed{} after scoring"
-		}
-	},
 	config = {
 		seven = 7,
 		nine = 9,
@@ -239,13 +195,6 @@ SMODS.Joker {
 --second row
 SMODS.Joker {
 	key = "mt_ebott",
-	loc_txt = {
-		name = "Mt. Ebott",
-		text = {
-			"{C:attention}+#1#{} hand size,",
-			"{C:attention}lose all discards{}",
-		}
-	},
 	config = {
 		hand_size = 5
 	},
@@ -273,14 +222,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "ruins",
-	loc_txt = {
-		name = "Ruins",
-		text = {
-			"{C:chips}+#1#{} Chips if played",
-			"hand contains",
-			"{C:attention}4{} or fewer cards"
-		}
-	},
 	config = {
 		chips = 100
 	},
@@ -355,14 +296,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "toy_knife",
-	loc_txt = {
-		name = "Toy Knife",
-		text = {
-			"{C:mult}+#1#{} Mult every",
-			"{C:attention}#2#{} hands played",
-			"{C:inactive}#3# remaining"
-		}
-	},
 	config = {
 		mult = 30,
 		cycled = 3,
@@ -400,15 +333,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "home",
-	loc_txt = {
-		name = "Home",
-		text = {
-			"{C:chips}Chips{} are rounded up to",
-			"next multiple of {C:attention}#1#{}",
-			"{C:mult}Mult{} is rounded up to",
-			"next multiple of {C:attention}#2#{}"
-		}
-	},
 	config = {
 		mult_round = 10,
 		chips_round = 50
@@ -443,15 +367,6 @@ SMODS.Joker {
 --third row
 SMODS.Joker {
 	key = "napstablook",
-	loc_txt = {
-		name = "Napstablook",
-		text = {
-			"{C:chips}+#1#{} Chips for each",
-			"empty {C:attention}Joker{} slot",
-			"{s:0.8}Napstablook included{}",
-			"{C:inactive}(Currently {C:chips}+#2#{} Chips)"
-		}
-	},
 	config = {
 		chips_per = 40,
 		chips = 0
@@ -500,15 +415,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "butterscotch-cinnamon_pie",
-	loc_txt = {
-		name = "Butterscotch-Cinnamon Pie",
-		text = {
-			"Sell this card to",
-			"{C:attention}end{} the current Blind",
-			"without {C:money}cashing out{}",
-			"{C:inactive}(Excludes {C:attention}Boss Blinds{C:inactive})"
-		}
-	},
 	config = {
 		spared = false,
 		old_bones = ""
@@ -545,14 +451,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "ribbon",
-	loc_txt = {
-		name = "Faded Ribbon",
-		text = {
-			"{C:attention}Glass Cards{} have a",
-			"{C:green}#1# in #2#{} chance to be",
-			"destroyed"
-		}
-	},
 	config = {
 		odds = 8,
 		noelle_is_older = false
@@ -586,15 +484,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "snail_pie",
-	loc_txt = {
-		name = "Snail Pie",
-		text = {
-			"Sell this card to",
-			"apply {C:dark_edition}#1#{}, {C:dark_edition}#2#{},",
-			"or {C:dark_edition}#3#{} to",
-			"{C:attention}#4#{} random Jokers"
-		}
-	},
 	config = {
 		jokers = 2
 	},
@@ -632,15 +521,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "toriel",
-	loc_txt = {
-		name = "Toriel",
-		text = {
-			"When {C:attention}Boss Blind{} is",
-			"selected, create an",
-			"{C:green}Uncommon{} or {C:red}Rare{} {C:attention}Joker{}",
-			"{C:inactive}(Must have room){}"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,

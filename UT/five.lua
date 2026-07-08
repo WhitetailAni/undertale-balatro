@@ -1,19 +1,6 @@
 --first
 SMODS.Joker {
 	key = "worn_dagger",
-	loc_txt = {
-		name = "Worn Dagger",
-		text = {
-			"Scored cards of {C:hearts}Heart{}",
-			"suit give {C:money}$#1#{} or {C:chips}+#2#{}",
-			"Chips when scored"
-		},
-		unlock = {
-			"Have no more than",
-			"{E:1,C:money}$50{} at any point ",
-			"during a run"
-		},
-	},
 	config = {
 		money = 1,
 		chips = 20
@@ -46,18 +33,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "patience",
-	loc_txt = {
-		name = "Patience",
-		text = {
-			"Doubles {C:money}interest{} and",
-			"{C:money}Blind payout{} if round",
-			"was won on {C:attention}final hand{}"
-		},
-		unlock = {
-			"Win a run {E:1,C:attention}without{}",
-			"skipping any Blinds"
-		}
-	},
 	config = {
 		final_hand = false,
 		increased_interest = false
@@ -91,19 +66,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "boss_monster_soul",
-	loc_txt = {
-		name = "Boss Monster Soul",
-		text = {
-			"Gains {C:chips}+#1#{} Chips when a playing",
-			"card is either {C:attention}destroyed{}",
-			"or {C:attention}added{} to your deck",
-			"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
-		},
-		unlock = {
-			"Discard a",
-			"{E:1,C:attention}Full House{}"
-		}
-	},
 	config = {
 		chips = 0,
 		chip_gain = 35
@@ -145,19 +107,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "bravery",
-	loc_txt = {
-		name = "Bravery",
-		text = {
-			"This Joker gains {X:mult,C:white}X#1#{} Mult",
-			"for each shop visited",
-			"{C:attention}without buying anything{}",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-		},
-		unlock = {
-			"Play a hand containing",
-			"at least 4 {E:1,C:attention}Glass Cards{}"
-		}
-	},
 	config = {
 		xmult_gain = 0.25,
 		xmult = 1,
@@ -194,18 +143,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "last_dream",
-	loc_txt = {
-		name = "Last Dream",
-		text = {
-			"{C:chips}+#1#{} Chips",
-			"if all played cards",
-			"are of {C:hearts}Heart{} suit"
-		},
-		unlock = {
-			"Reach Ante",
-			"level {E:1,C:attention}10{}"
-		}
-	},
 	config = {
 		chips = 200
 	},
@@ -238,19 +175,6 @@ SMODS.Joker {
 --next
 SMODS.Joker {
 	key = "justice",
-	loc_txt = {
-		name = "Justice",
-		text = {
-			"This Joker gains",
-			"{C:mult}+#1#{} Mult at",
-			"end of round",
-			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
-		},
-		unlock = {
-			"Play a",
-			"{E:1,C:attention}secret hand"
-		}
-	},
 	config = {
 		mult = 0,
 		mult_gain = 4,
@@ -287,19 +211,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "asgore",
-	loc_txt = {
-		name = "Asgore",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult for every",
-			"{C:attention}Consumable{} card held",
-			"{C:blue}+#2#{} consumable slots",
-			"{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"
-		},
-		unlock = {
-			"Have at least",
-			"{E:1,C:attention}7{} Jokers"
-		}
-	},
 	config = {
 		xmult_per = 0.75,
 		slots = 4
@@ -336,18 +247,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "asriel",
-	loc_txt = {
-		name = "Asriel",
-		text = {
-			"Each played {C:attention}Ace{} gives",
-			"{X:mult,C:white}X#1#{} Mult when scored",
-			"{C:inactive}Activates after {C:attention}#2# {C:inactive}[#3#] rounds"
-		},
-		unlock = {
-			"Play a 5 card hand",
-			"containing only {E:1,C:attention}Aces{}"
-		}
-	},
 	config = {
 		xmult = 2.5,
 		threshold = 6,
@@ -383,21 +282,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "omega_flowey",
-	loc_txt = {
-		name = "Omega Flowey",
-		text = {
-			"Prevents Death if chips",
-			"scored are at least",
-			"{C:attention}#1#%{} of required chips,",
-			"gains {X:mult,C:white}X#2#{} Mult when",
-			"Death is prevented",
-			"{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"
-		},
-		unlock = {
-			"Lose a run on",
-			"Ante level {E:1,C:attention}8{}"
-		}
-	},
 	config = {
 		extra = {
 			required_chips = 50,
@@ -454,19 +338,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "integrity",
-	loc_txt = {
-		name = "Integrity",
-		text = {
-			"{C:chips}+#1#{} Chips if",
-			"all played cards have",
-			"the {C:attention}same{} Enhancement"
-		},
-		unlock = {
-			"Play any hand",
-			"type {E:1,C:attention}25{} times",
-			"in one run"
-		}
-	},
 	config = {
 		chips = 150
 	},
@@ -499,20 +370,6 @@ SMODS.Joker {
 --last
 SMODS.Joker {
 	key = "real_knife",
-	loc_txt = {
-		name = "Real Knife",
-		text = {
-			"Gains {X:mult,C:white}X#1#{} Mult when",
-			"a {C:attention}playing card{} with",
-			"{C:hearts}Heart{} suit is destroyed",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{} Mult)"
-		},
-		unlock = {
-			"Thin your full",
-			"deck to {E:1,C:attention}30{}",
-			"cards or less"
-		}
-	},
 	--unlocked = false
 	unlock_condition = {type = 'modify_deck'},
 	rarity = 3,
@@ -561,18 +418,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "kindness",
-	loc_txt = {
-		name = "Kindness",
-		text = {
-			"{C:dark_edition}#1#{} Cards grant {C:chips}+#2#{} Chips",
-			"{C:dark_edition}#3#{} Cards grant {C:mult}+#4#{} Mult",
-			"{C:dark_edition}#5#{} Cards grant {X:mult,C:white}X#6#{} Mult",
-		},
-		unlock = {
-			"Use no {E:1,C:red}discards{} for",
-			"{E:1,C:attention}3{} consecutive rounds",
-		}
-	},
 	config = {
 		foil = 100,
 		holo = 25,
@@ -651,18 +496,6 @@ end
 
 SMODS.Joker {
 	key = "heart_locket",
-	loc_txt = {
-		name = "Heart Locket",
-		text = {
-			"{C:attention}Steel Cards{} give",
-			"{C:mult}+#3#{} Mult when scored"
-		},
-		unlock = {
-			"Have at least {E:1,C:attention}5{}",
-			"{E:1,C:attention}Steel Cards{} in",
-			"your deck"
-		}
-	},
 	config = {
 		mult = 15
 	},
@@ -689,19 +522,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "perseverance",
-	loc_txt = {
-		name = "Perseverance",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult if you have",
-			"at most {C:attention}#2#{} Enhanced",
-			"cards in your full deck",
-			"{C:inactive}(Currently {C:attention}#3#{C:inactive})"
-		},
-		unlock = {
-			"Win a run on",
-			"{E:1,C:attention}your final hand{}"
-		}
-	},
 	config = {
 		enhancement_count = 0,
 		cap = 8,
@@ -739,16 +559,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "chara",
-	loc_txt = {
-		name = "​",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult",
-			"{C:red}-#2#{} hand size"
-		},
-		unlock = {
-			"{E:1,C:red}Five heart nines.{}"
-		}
-	},
 	config = {
 		xmult = 5,
 		hand_loss = 3
