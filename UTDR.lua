@@ -17,6 +17,42 @@ G.FUNCS.restart_game_smods = function(e)
 	SMODS.restart_game()
 end
 
+-- asriel colors
+local asriel_colors = {
+	HEX("FF0000"),
+	HEX("FCA600"),
+	HEX("FFFF00"),
+	HEX("00c000"),
+	HEX("42FCFF"),
+	HEX("003CFF"),
+	HEX("D535D9"),
+}
+
+SMODS.DynaTextEffect {
+	key = "asriel",
+	func = function(dynatext, index, letter)
+		local s = #asriel_colors
+		local o = index * -0.5
+		local t = (G.TIMERS.REAL + o)
+		--letter.colour = asriel_colors[((math.floor(t) + s) % s) + 1]
+		letter.colour = mix_colours(
+			asriel_colors[((math.floor(t) + s + 1) % s) + 1],
+			asriel_colors[((math.floor(t) + s) % s) + 1],
+			t % 1.0)
+		--[[
+		letter.colour = mix_colours(
+			asriel_colors[i + 1],
+			asriel_colors[((i + 1) % s) + 1],
+			t / frequency
+		)
+		]]
+		letter.offset.y = math.sin(t * 2.0 + o) * 16
+		letter.offset.x = math.cos(t * 1.0 + o) * 16
+	end,
+}
+
+-- config tabs
+
 UTDR.config_tab = function()
 	return {
 		n = G.UIT.ROOT,
@@ -164,11 +200,11 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/two.lua'))()
 	assert(SMODS.load_file('DR/three.lua'))()
 	assert(SMODS.load_file('DR/four.lua'))()
-	
+
 	assert(SMODS.load_file('DR/five_A.lua'))()
 	assert(SMODS.load_file('DR/five_B.lua'))()
 	assert(SMODS.load_file('DR/flowery.lua'))()
-	
+
 	assert(SMODS.load_file('DR/99.lua'))()
 
 	assert(SMODS.load_file('DR/deck.lua'))()

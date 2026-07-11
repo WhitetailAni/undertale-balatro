@@ -138,6 +138,8 @@ SMODS.Joker {
 	config = {
 		seven = 7,
 		nine = 9,
+		seven_rank = "7",
+		nine_rank = "9",
 		destroy_self = false
 	},
 	rarity = 1,
@@ -147,15 +149,15 @@ SMODS.Joker {
 	pos = { x = 4, y = 0 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.seven, card.ability.nine } }
+		return { vars = { card.ability.seven, card.ability.nine, localize((card.ability.seven_rank), 'ranks'), localize((card.ability.nine_rank), 'ranks') } }
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
-			if context.other_card.base.value == "7" then
+			if context.other_card.base.value == card.ability.seven_rank then
 				return {
 					mult = card.ability.seven
 				}
-			elseif context.other_card.base.value == "9" then
+			elseif context.other_card.base.value == card.ability.nine_rank then
 				card.ability.destroy_self = true
 				return {
 					mult = card.ability.nine
@@ -185,7 +187,7 @@ SMODS.Joker {
 					end
 				}))
 				return {
-					message = "Eaten!"
+					message = localize("k_eaten_ex")
 				}
 			end
 		end
@@ -382,14 +384,16 @@ SMODS.Joker {
 			return {
 				vars = {
 					card.ability.chips_per,
-					card.ability.chips
+					card.ability.chips,
+					localize({ type = 'name_text', set = "Joker", key = "j_UTDR_napstablook" }) or 'Napstablook'
 				}
 			}
 		else
 			return {
 				vars = {
 					card.ability.chips_per,
-					card.ability.chips_per
+					card.ability.chips_per,
+					localize({ type = 'name_text', set = "Joker", key = "j_UTDR_napstablook" }) or 'Napstablook'
 				}
 			}
 		end
@@ -464,7 +468,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
 		local probabilities_glass, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "glass")
-		return { vars = { probabilities_glass, odds } }
+		return { vars = { probabilities_glass, odds, localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		if #SMODS.find_card("j_UTDR_noelle") > 0 then
@@ -528,7 +532,7 @@ SMODS.Joker {
 	pos = { x = 0, y = 5 },
 	cost = 9,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult } }
+		return { vars = { card.ability.xmult, localize("k_uncommon"), localize("k_rare") } }
 	end,
 	calculate = function(self, card, context)
 		if context.setting_blind and not (context.blueprint_card or card).getting_sliced and #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit and context.blind.boss then
@@ -544,16 +548,16 @@ SMODS.Joker {
 				color = G.C.RED
 				rarity = 0.75
 			end
-			
-			
-			
+
+
+
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					local card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
 					if card.label == 'j_UTDR_asgore' then
 						print("Divorcee Identified.")
 						card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
-						print("Target Destroyed."..card.label)
+						print("Target Destroyed." .. card.label)
 					end
 					print("add his sorry ass to the deck")
 					card:add_to_deck()
@@ -563,19 +567,20 @@ SMODS.Joker {
 					return true
 				end
 			}))
-			
+
 			G.E_MANAGER:add_event(Event({
-							trigger = "before",
-							delay = 1.0,
-							func = (function()
-									for i = 1, #G.jokers.cards do
-				print(G.jokers.cards[i].label .. i)
-			end
-								return true
-							end)}))
-			
-			
-			
+				trigger = "before",
+				delay = 1.0,
+				func = (function()
+					for i = 1, #G.jokers.cards do
+						print(G.jokers.cards[i].label .. i)
+					end
+					return true
+				end)
+			}))
+
+
+
 			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
 				{ message = localize('k_plus_joker'), colour = color })
 		end

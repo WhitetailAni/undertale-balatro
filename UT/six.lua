@@ -59,7 +59,8 @@ SMODS.Joker {
 		in_build = false
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.slot_count } }
+		info_queue[#info_queue + 1] = { key = 'tag_voucher', set = 'Tag' }
+		return { vars = { card.ability.slot_count, localize { type = 'name_text', set = 'Tag', key = 'tag_voucher' } } }
 	end,
 	rarity = 1,
 	blueprint_compat = false,
@@ -69,7 +70,7 @@ SMODS.Joker {
 	cost = 6,
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
-			card:juice_up(0.3,0.5)
+			card:juice_up(0.3, 0.5)
 			local tag = Tag("tag_voucher")
 			add_tag(tag)
 		end
@@ -82,7 +83,7 @@ SMODS.Joker {
 		money = 5,
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.money } }
+		return { vars = { card.ability.money, localize("King", 'ranks') or "King", localize("Jack", 'ranks') or "Jack" } }
 	end,
 	rarity = 1,
 	blueprint_compat = true,
@@ -114,8 +115,8 @@ SMODS.Joker {
 		mult = 5,
 	},
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_wild 
-		return { vars = { card.ability.mult } }
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+		return { vars = { card.ability.mult, localize({ type = 'name_text', set = "Enhanced", key = "m_wild" }) or "Wild Card" } }
 	end,
 	rarity = 1,
 	blueprint_compat = true,
@@ -151,7 +152,7 @@ SMODS.Joker {
 		mult = 7
 	},
 	--unlocked = false
-	unlock_condition = {type = 'hand', count = 20, hand = 'Pair'},
+	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -166,11 +167,11 @@ SMODS.Joker {
 		if G.PROFILES[G.SETTINGS.profile].hand_usage["Pair"] then
 			return { vars = { G.PROFILES[G.SETTINGS.profile].hand_usage["Pair"].count } }
 		else
-			return { vars = { 0 }}
+			return { vars = { 0 } }
 		end
 	end,
 	--unlocked = false
-	unlock_condition = {type = 'hand', count = 20, hand = 'Pair'},
+	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
 			if context.other_card.base.value == "7" or context.other_card.base.value == "2" then
@@ -185,7 +186,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "CORE",
 	--unlocked = false
-	unlock_condition = {type = 'discard_custom'},
+	unlock_condition = { type = 'discard_custom' },
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -219,7 +220,7 @@ SMODS.Joker {
 		chips = 100000000000
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.money } }
+		return { vars = { card.ability.money, localize("k_debuffed") } }
 	end,
 	rarity = 1,
 	blueprint_compat = true,
@@ -244,8 +245,12 @@ SMODS.Joker {
 	--unlocked = false
 	unlock_condition = { type = 'modify_deck', extra = { count = 5, enhancement = 'Stone Card', e_key = 'm_stone' } },
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_stone 
-		return { vars = { card.ability.mult } }
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+		return { vars = { card.ability.mult, localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) } }
+	end,
+	locked_loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) } }
 	end,
 	rarity = 1,
 	blueprint_compat = true,
@@ -276,7 +281,7 @@ SMODS.Joker {
 		return { vars = { card.ability.mult } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
-		return { vars = { localize{ type = 'name_text', set = 'Stake', key = G.P_CENTER_POOLS.Stake[4].key }, colours = {get_stake_col(4) } } }
+		return { vars = { localize { type = 'name_text', set = 'Stake', key = G.P_CENTER_POOLS.Stake[4].key }, colours = { get_stake_col(4) } } }
 	end,
 	rarity = 2,
 	blueprint_compat = false,
@@ -287,7 +292,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.setting_blind and not context.blueprint then
 			card.ability.was_boss = G.GAME.blind.boss
-        end
+		end
 	end
 }
 
@@ -314,7 +319,7 @@ SMODS.Joker {
 	pos = { x = 9, y = 8 },
 	cost = 8,
 	calculate = function(self, card, context)
-		if context.other_joker and pseudorandom("fun_value") < G.GAME.probabilities.normal/card.ability.odds then
+		if context.other_joker and pseudorandom("fun_value") < G.GAME.probabilities.normal / card.ability.odds then
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					context.other_joker:juice_up(0.5, 0.5)
@@ -338,6 +343,10 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 2, y = 8 },
 	cost = 7,
+	loc_vars = function(card, info_queue, card)
+		info_queue[#info_queue + 1] = { key = 'tag_negative', set = 'Tag' }
+		return { vars = { localize { type = 'name_text', set = 'Tag', key = 'tag_negative' } } }
+	end,
 	calculate = function(self, card, context)
 		if context.selling_self and not context.blueprint then
 			play_sound("UTDR_true_reset", 1.0, 1.5)
@@ -360,7 +369,7 @@ SMODS.Joker {
 								self = nil
 								return true;
 							end
-						})) 
+						}))
 						return true
 					end
 				}))
@@ -373,7 +382,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "gaster",
 	--unlocked = false
-	unlock_condition = {type = 'win_custom'},
+	unlock_condition = { type = 'win_custom' },
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -393,13 +402,13 @@ SMODS.Joker {
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
-		
+
 		joker_rarity(0.7, 0.25, 0.05, 0)
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and not context.blueprint then
 			card.ability.in_build = false
-			
+
 			joker_rarity(0.7, 0.25, 0.05, 0)
 		end
 	end
@@ -423,16 +432,13 @@ SMODS.Joker {
 		xmult = 1
 	},
 	loc_vars = function(self, info_queue, card)
-		if UTDR.config_file.deltarune then
-			return { key = "j_UTDR_SURVEY_PROGRAM_DR", vars = { card.ability.xmult_gain, card.ability.xmult } }
-		end
-		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
+		return { vars = { card.ability.xmult_gain, card.ability.xmult, localize("k_spectral") } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		return { vars = { G.PROFILES[G.SETTINGS.profile].career_stats.c_wins } }
 	end,
 	--unlocked = false
-	unlock_condition = {type = 'win_custom', count = 5},
+	unlock_condition = { type = 'win_custom', count = 5 },
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -446,17 +452,22 @@ SMODS.Joker {
 			G.E_MANAGER:add_event(
 				Event({
 					func = function()
-						card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize { type='variable', key='a_xmult', vars = { card.ability.xmult } }, colour = G.C.MULT });
+						card_eval_status_text(card, 'extra', nil, nil, nil,
+							{
+								message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } },
+								colour =
+									G.C.MULT
+							});
 						return true
 					end
 				})
 			)
 			return
-        elseif context.joker_main then
-        	return {
-        		xmult = card.ability.xmult
-        	}
-        end
+		elseif context.joker_main then
+			return {
+				xmult = card.ability.xmult
+			}
+		end
 	end
 }
 
@@ -479,7 +490,7 @@ SMODS.Joker {
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
 	--unlocked = false
-	unlock_condition = {type = 'money'},
+	unlock_condition = { type = 'money' },
 	check_for_unlock = function(self, args)
 		if args.type == 'money' then
 			if G.PROFILES[G.SETTINGS.profile].career_stats.c_jokers_sold >= 30 then
@@ -500,16 +511,21 @@ SMODS.Joker {
 			G.E_MANAGER:add_event(
 				Event({
 					func = function()
-						card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } }, colour = G.C.MULT });
+						card_eval_status_text(card, 'extra', nil, nil, nil,
+							{
+								message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } },
+								colour =
+									G.C.MULT
+							});
 						return true
 					end
 				})
 			)
 			return
-        elseif context.joker_main then
-        	return {
-        		xmult = card.ability.xmult
-        	}
-        end
+		elseif context.joker_main then
+			return {
+				xmult = card.ability.xmult
+			}
+		end
 	end
 }

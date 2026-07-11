@@ -14,14 +14,15 @@ SMODS.Joker {
 		in_build = false
 	},
 	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = { key = 'tag_negative', set = 'Tag' }
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_TGEM")
-		if math.fmod(os.time(), 16) == 0  then
+		if math.fmod(os.time(), 16) == 0 then
 			return {
 				key = "j_UTDR_tension_slop",
-				vars = { card.ability.tag_count }
+				vars = { card.ability.tag_count, localize { type = 'name_text', set = 'Tag', key = 'tag_charm' } }
 			}
 		end
-		return { vars = { card.ability.tag_count } }
+		return { vars = { card.ability.tag_count, localize { type = 'name_text', set = 'Tag', key = 'tag_charm' } } }
 	end,
 	rarity = 1,
 	blueprint_compat = false,
@@ -32,29 +33,12 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.selling_self then
 			for i = 1, card.ability.tag_count do
-				card:juice_up(0.3,0.5)
+				card:juice_up(0.3, 0.5)
 				local tag = Tag("tag_charm")
 				add_tag(tag)
 			end
 		end
 	end
-}
-
---dummy joker so ERAM can say john mantle some of the time
-SMODS.Joker {
-	key = "tension_slop",
-	loc_txt = {
-		name = "Tension Slop",
-		text = {
-			"Sell this card to",
-			"create {C:attention}#1#{} random",
-			"{C:tarot}Charm Tags",
-		}
-	},
-	no_collection = true,
-	in_pool = function(self, args)
-		return false
-	end,
 }
 
 SMODS.Joker {
@@ -112,6 +96,9 @@ SMODS.Joker {
 			"{C:attention}longer appear{} in shop"
 		}
 	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_common") } }
+	end,
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -129,13 +116,13 @@ SMODS.Joker {
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
-		
+
 		joker_rarity(0.7, 0.25, 0.05, 0)
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and not context.blueprint then
 			card.ability.in_build = false
-			
+
 			joker_rarity(0.7, 0.25, 0.05, 0)
 		end
 	end
@@ -146,10 +133,13 @@ SMODS.Joker {
 	loc_txt = {
 		name = "Shelter Code",
 		text = {
-			"{C:green}Uncommon{} and {C:red}Rare{} Jokers appear",
+			"{C:green}#1#{} and {C:red}#2#{} Jokers appear",
 			"in shop {C:attention}more often"
 		}
 	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_uncommon"), localize("k_rare") } }
+	end,
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -167,13 +157,13 @@ SMODS.Joker {
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
-		
+
 		joker_rarity(0.7, 0.25, 0.05, 0)
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and not context.blueprint then
 			card.ability.in_build = false
-			
+
 			joker_rarity(0.7, 0.25, 0.05, 0)
 		end
 	end
@@ -204,10 +194,10 @@ SMODS.Joker {
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_ERAM")
-		if math.fmod(os.time(), 16) == 0  then
+		if math.fmod(os.time(), 16) == 0 then
 			return {
-				key = "j_UTDR_john_mantle",
-				vars = { probabilities_normal, odds }
+				key = "j_UTDR_mantle_holder",
+				vars = { probabilities_normal, odds } -- TODO: this should get the variables for the actual joker
 			}
 		end
 		return { vars = { probabilities_normal, odds } }

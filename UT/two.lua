@@ -12,11 +12,13 @@ SMODS.Joker {
 	pos = { x = 2, y = 1 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.mult_gain,
-			G.localization.misc.poker_hands['Flush'],
-			card.ability.mult
-		} }
+		return {
+			vars = {
+				card.ability.mult_gain,
+				G.localization.misc.poker_hands['Flush'],
+				card.ability.mult
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Flush']) and not context.blueprint then
@@ -72,12 +74,14 @@ SMODS.Joker {
 	pos = { x = 1, y = 1 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.chip_gain,
-			card.ability.round_limit,
-			card.ability.rounds,
-			card.ability.chips
-		} }
+		return {
+			vars = {
+				card.ability.chip_gain,
+				card.ability.round_limit,
+				card.ability.rounds,
+				card.ability.chips
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -93,17 +97,20 @@ SMODS.Joker {
 						card:juice_up(0.3, 0.4)
 						card.states.drag.is = true
 						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
 							func = function()
 								G.jokers:remove_card(card)
 								card:remove()
 								card = nil
 								return true;
 							end
-						})) 
+						}))
 						return true
 					end
-				})) 
+				}))
 				return {
 					message = "Melted!"
 				}
@@ -133,9 +140,10 @@ SMODS.Joker {
 	pos = { x = 3, y = 1 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, tarot_odds = SMODS.get_probability_vars(card, 1, card.ability.tarot_odds, "UT_nice_cream_tarot")
+		local probabilities_normal, tarot_odds = SMODS.get_probability_vars(card, 1, card.ability.tarot_odds,
+			"UT_nice_cream_tarot")
 		local _, destroy_odds = SMODS.get_probability_vars(card, 1, card.ability.destroy_odds, "UT_nice_cream_destroy")
-		return { vars = { probabilities_normal, tarot_odds, destroy_odds } }
+		return { vars = { probabilities_normal, tarot_odds, destroy_odds, localize("k_tarot"), localize("k_planet") } }
 	end,
 	calculate = function(self, card, context)
 		if context.using_consumeable and context.consumeable.ability.set == 'Planet' then
@@ -168,23 +176,26 @@ SMODS.Joker {
 							card:juice_up(0.3, 0.4)
 							card.states.drag.is = true
 							card.children.center.pinch.x = true
-							G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+							G.E_MANAGER:add_event(Event({
+								trigger = 'after',
+								delay = 0.3,
+								blockable = false,
 								func = function()
 									G.jokers:remove_card(card)
 									card:remove()
 									card = nil
 									return true;
 								end
-							})) 
+							}))
 							return true
 						end
-					})) 
+					}))
 					return {
 						message = "Melted!"
 					}
 				end
 			end
-        end
+		end
 	end
 }
 
@@ -197,27 +208,27 @@ SMODS.Joker {
 	pos = { x = 7, y = 3 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		if UTDR.config_file.deltarune then
-			return { key = "j_UTDR_silver_key_DR" }
-		end
+		return { vars = { localize("k_spectral") } }
 	end,
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss then
-            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then 
+			if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
 				G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
 				G.E_MANAGER:add_event(Event({
 					trigger = 'before',
 					delay = 0.0,
 					func = (function()
-							local card = create_card('Spectral',G.consumeables, nil, nil, nil, nil, nil, 'silver_key')
-							card:add_to_deck()
-							G.consumeables:emplace(card)
-							G.GAME.consumeable_buffer = 0
+						local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil, 'silver_key')
+						card:add_to_deck()
+						G.consumeables:emplace(card)
+						G.GAME.consumeable_buffer = 0
 						return true
-					end)}))
-				card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
+					end)
+				}))
+				card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+					{ message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
 			end
-        end
+		end
 	end
 }
 
@@ -296,7 +307,7 @@ SMODS.Joker {
 	pos = { x = 2, y = 5 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { G.localization.misc.poker_hands['Straight'] } }
+		return { vars = { G.localization.misc.poker_hands['Straight'], localize("k_planet") } }
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Straight']) then
@@ -310,7 +321,8 @@ SMODS.Joker {
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
 						card:juice_up(0.3, 0.5)
-						card_eval_status_text(self, 'extra', nil, nil, nil, {message = localize('k_plus_planet'), colour = G.C.SECONDARY_SET.Planet})
+						card_eval_status_text(self, 'extra', nil, nil, nil,
+							{ message = localize('k_plus_planet'), colour = G.C.SECONDARY_SET.Planet })
 					end
 					return true
 				end
@@ -341,11 +353,11 @@ SMODS.Joker {
 			if SMODS.pseudorandom_probability(card, "monster_kid_mult", 1, card.ability.odds, "UT_monster_kid_mult") then
 				SMODS.calculate_effect({ mult = card.ability.mult }, card)
 			end
-			
+
 			if SMODS.pseudorandom_probability(card, "monster_kid_chips", 1, card.ability.odds, "UT_monster_kid_chips") then
 				SMODS.calculate_effect({ chips = -card.ability.chips }, card)
 			end
-        end
+		end
 	end
 }
 
@@ -362,7 +374,7 @@ SMODS.Joker {
 	pos = { x = 7, y = 5 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult } }
+		return { vars = { card.ability.xmult, localize("Spades", 'suits_singular') or "Spade" } }
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers then
@@ -381,7 +393,7 @@ SMODS.Joker {
 			end
 		elseif context.after and context.cardarea == G.jokers then
 			card.ability.has_scored = true
-        end
+		end
 	end
 }
 
@@ -407,11 +419,12 @@ SMODS.Joker {
 				func = function()
 					G.E_MANAGER:add_event(Event({
 						func = function()
-							card.ability.chips = card.ability.chips + #context.removed*card.ability.chip_gain
+							card.ability.chips = card.ability.chips + #context.removed * card.ability.chip_gain
 							return true
 						end
 					}))
-					card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize{ type = 'variable', key = 'a_chips', vars = { card.ability.chips + #context.removed*card.ability.chip_gain } } })
+					card_eval_status_text(card, 'extra', nil, nil, nil,
+						{ message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.chips + #context.removed * card.ability.chip_gain } } })
 					return true
 				end
 			}))
@@ -484,7 +497,7 @@ SMODS.Joker {
 						add_tag(tag)
 					end
 				end
-				
+
 				G.E_MANAGER:add_event(Event({
 					func = function()
 						play_sound('tarot1')
@@ -492,22 +505,25 @@ SMODS.Joker {
 						card:juice_up(0.3, 0.4)
 						card.states.drag.is = true
 						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
 							func = function()
 								G.jokers:remove_card(card)
 								card:remove()
 								card = nil
 								return true;
 							end
-						})) 
+						}))
 						return true
 					end
-				})) 
+				}))
 				return {
 					message = "Abandoned!"
 				}
 			end
-        end
+		end
 	end
 }
 
@@ -525,7 +541,7 @@ SMODS.Joker {
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, 'UT_waterfall')
-		return { vars = { probabilities_normal, odds, card.ability.money } }
+		return { vars = { probabilities_normal, odds, card.ability.money, localize("Diamonds", 'suits_singular') } }
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers then
@@ -544,7 +560,7 @@ SMODS.Joker {
 					}
 				end
 			end
-        elseif context.after and context.cardarea == G.jokers then
+		elseif context.after and context.cardarea == G.jokers then
 			card.ability.has_scored = true
 		end
 	end
@@ -558,6 +574,10 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 8, y = 1 },
 	cost = 7,
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
+		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_bonus" }) } }
+	end,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
 			return {

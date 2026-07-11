@@ -57,9 +57,9 @@ SMODS.Joker {
 				"glue",
 			})
 		end
-		return { vars = { card.ability.xmult } }
+		return { vars = { card.ability.xmult, localize("9", "ranks") or "9" } }
 	end,
-		rarity = 3,
+	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -81,8 +81,8 @@ SMODS.Joker {
 					card = context.blueprint_card or card
 				}
 			end
-		
-		--sound effect checking
+
+			--sound effect checking
 		elseif context.showdown_blind_effect then
 			play_flowery_sound("nonono")
 		elseif context.joker_main then
@@ -99,7 +99,7 @@ SMODS.Joker {
 			elseif #aquas > 0 and #seths > 0 and #yellows > 0 and #blues > 0 and #oranges > 0 and #greens > 0 then
 				play_flowery_sound("lend_me_your_power")
 				card.ability.all_flowers = true
-				
+
 				for i = 1, #aquas do
 					aquas[i]:set_eternal(true)
 					aquas[i]:set_edition({ negative = true }, true)
@@ -133,7 +133,7 @@ SMODS.Joker {
 					pinks[i]:set_eternal(true)
 					pinks[i]:set_edition({ negative = true }, true)
 				end
-			else 
+			else
 				play_flowery_sound_random({
 					"blingo_blizzard",
 					"flowers_blooms_in_your_heart",
@@ -222,7 +222,7 @@ SMODS.Joker {
 				else
 					play_flowery_sound("ja_orange_2")
 				end
-			elseif context.card.config.center.key == "j_UTDR_aqua" or context.card.config.center.key == "j_UTDR_seth" or context.card.config.center.key == "j_UTDR_yellow"or  context.card.config.center.key == "j_UTDR_blue" or context.card.config.center.key == "j_UTDR_green" then
+			elseif context.card.config.center.key == "j_UTDR_aqua" or context.card.config.center.key == "j_UTDR_seth" or context.card.config.center.key == "j_UTDR_yellow" or context.card.config.center.key == "j_UTDR_blue" or context.card.config.center.key == "j_UTDR_green" then
 				play_flowery_sound_random({
 					"its_so_human",
 					"my_human",
