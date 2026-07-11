@@ -14,7 +14,7 @@ SMODS.Joker {
 		in_build = false
 	},
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = { key = 'tag_negative', set = 'Tag' }
+		info_queue[#info_queue + 1] = { key = 'tag_charm', set = 'Tag' }
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_TGEM")
 		if math.fmod(os.time(), 16) == 0 then
 			return {
