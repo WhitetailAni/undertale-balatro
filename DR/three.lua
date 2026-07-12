@@ -20,9 +20,17 @@ SMODS.Joker {
 				selected_hand = "Three of a Kind"
 			end
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex') })
-			update_hand_text( {sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, { handname=localize(selected_hand, 'poker_hands'), chips = G.GAME.hands[selected_hand].chips, mult = G.GAME.hands[selected_hand].mult, level=G.GAME.hands[selected_hand].level})
+			update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
+				{
+					handname = localize(selected_hand, 'poker_hands'),
+					chips = G.GAME.hands[selected_hand].chips,
+					mult = G
+						.GAME.hands[selected_hand].mult,
+					level = G.GAME.hands[selected_hand].level
+				})
 			level_up_hand(card, selected_hand, nil, 1)
-			update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+			update_hand_text({ sound = 'button', volume = 0.7, pitch = 1.1, delay = 0 },
+				{ mult = 0, chips = 0, handname = '', level = '' })
 		end
 	end
 }
@@ -39,11 +47,11 @@ SMODS.Joker {
 	pos = { x = 4, y = 5 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_steel 
-		return { vars = { card.ability.chips } }
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+		return { vars = { card.ability.chips, localize({ type = 'name_text', set = "Enhanced", key = "m_steel" }) or "Steel Card" } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and SMODS.has_enhancement( context.other_card, "m_steel") then
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_steel") then
 			return {
 				chips = card.ability.chips
 			}
@@ -63,7 +71,7 @@ SMODS.Joker {
 		selected_hand = "High Card"
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { G.localization.misc.poker_hands[card.ability.selected_hand]} }
+		return { vars = { G.localization.misc.poker_hands[card.ability.selected_hand], localize("k_tarot") } }
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
@@ -80,9 +88,10 @@ SMODS.Joker {
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
 						card:juice_up(0.3, 0.5)
-						local number = pseudorandom_element({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }, "tenna_blip")
-						play_sound('UTDR_tenna_blip_'..number, 1.0, 0.7)
-						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Amazing!" } )
+						local number = pseudorandom_element({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" },
+							"tenna_blip")
+						play_sound('UTDR_tenna_blip_' .. number, 1.0, 0.7)
+						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Amazing!" })
 					end
 					return true
 				end
@@ -104,12 +113,13 @@ SMODS.Joker {
 		selected_suit = 'Hearts'
 	},
 	loc_vars = function(self, info_queue, card)
-		return { 
-			vars = { card.ability.mult_gain,
-			localize(card.ability.selected_suit, 'suits_singular'),
-			card.ability.mult ,
-			colours =  {
-				G.C.SUITS[card.ability.selected_suit] }
+		return {
+			vars = {
+				card.ability.mult_gain,
+				localize(card.ability.selected_suit, 'suits_singular'),
+				card.ability.mult,
+				colours = {
+					G.C.SUITS[card.ability.selected_suit] }
 			}
 		}
 	end,
@@ -168,7 +178,7 @@ SMODS.Joker {
 	pos = { x = 5, y = 5 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_wild 
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
 		local quote = pseudorandom_element({
 			"Bable",
 			"Beble",
@@ -189,7 +199,7 @@ SMODS.Joker {
 			quote = "Buble"
 			card.ability.said_buble = true
 		end
-		return { vars = { card.ability.bigbucks, quote } }
+		return { vars = { card.ability.bigbucks, quote, localize({ type = 'name_text', set = "Enhanced", key = "m_wild" }) or "Wild Card" } }
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_wild") then
@@ -213,10 +223,12 @@ SMODS.Joker {
 	pos = { x = 8, y = 6 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.bigbucks,
-			G.localization.misc.poker_hands['Three of a Kind']
-		} }
+		return {
+			vars = {
+				card.ability.bigbucks,
+				G.localization.misc.poker_hands['Three of a Kind']
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Three of a Kind']) then
@@ -252,13 +264,13 @@ SMODS.Joker {
 			local cards_destroyed = G.hand.cards
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "SWOON", colour = G.C.RED })
 			G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.1,
-					func = function()
-						play_sound("UTDR_swoon", 1.0, 1.0)
-						return true
-					end
-				}))
+				trigger = 'after',
+				delay = 0.1,
+				func = function()
+					play_sound("UTDR_swoon", 1.0, 1.0)
+					return true
+				end
+			}))
 			for i = 1, #G.hand.cards do
 				local knife = G.hand.cards[i]
 				G.E_MANAGER:add_event(Event({
@@ -272,19 +284,19 @@ SMODS.Joker {
 				G.E_MANAGER:add_event(Event({
 					trigger = 'after',
 					delay = 0.1,
-					func = function() 
+					func = function()
 						if SMODS.has_enhancement(knife, "m_glass") then
 							knife:shatter()
 						else
 							knife:start_dissolve(nil, false)
-						end						
+						end
 						return true
 					end
 				}))
-            end
-            card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
-			SMODS.calculate_context({remove_playing_cards = true, removed = cards_destroyed })
-        end
+			end
+			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
+			SMODS.calculate_context({ remove_playing_cards = true, removed = cards_destroyed })
+		end
 	end
 }
 
@@ -375,6 +387,9 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 0, y = 7 },
 	cost = 8,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_uncommon"), localize("k_rare") } }
+	end,
 	add_to_deck = function(self, card, from_debuff)
 		G.E_MANAGER:add_event(Event({
 			func = function()
@@ -405,6 +420,9 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 1, y = 7 },
 	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_tarot") } }
+	end,
 	calculate = function(self, card, context)
 		if context.remove_playing_cards and not context.blueprint then
 			for i = 1, #context.removed do
@@ -418,7 +436,7 @@ SMODS.Joker {
 							new_card:add_to_deck()
 							G.consumeables:emplace(new_card)
 							card:juice_up(0.3, 0.5)
-							card_eval_status_text(card, 'extra', nil, nil, nil, { message = "GOT STRONGER" } )
+							card_eval_status_text(card, 'extra', nil, nil, nil, { message = "GOT STRONGER" })
 						end
 						return true
 					end
@@ -436,23 +454,27 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 5, y = 4 },
 	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_tarot"), localize("k_planet") } }
+	end,
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers then
 			G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.4,
-					func = function()
-						if G.consumeables.config.card_limit > #G.consumeables.cards then
-							play_sound('timpani')
-							local new_card = create_card(pseudorandom_element({'Tarot', 'Planet'}, "ramb"), G.consumeables, nil, nil, nil, nil, nil, 'ramb')
-							new_card:add_to_deck()
-							G.consumeables:emplace(new_card)
-							card:juice_up(0.3, 0.5)
-							card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Nice, luv." } )
-						end
-						return true
+				trigger = 'after',
+				delay = 0.4,
+				func = function()
+					if G.consumeables.config.card_limit > #G.consumeables.cards then
+						play_sound('timpani')
+						local new_card = create_card(pseudorandom_element({ 'Tarot', 'Planet' }, "ramb"), G.consumeables,
+							nil, nil, nil, nil, nil, 'ramb')
+						new_card:add_to_deck()
+						G.consumeables:emplace(new_card)
+						card:juice_up(0.3, 0.5)
+						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Nice, luv." })
 					end
-				}))
+					return true
+				end
+			}))
 		end
 	end
 }
@@ -471,9 +493,9 @@ SMODS.Joker {
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_ERAM")
-		if math.fmod(os.time(), 16) == 0  then
+		if math.fmod(os.time(), 16) == 0 then
 			return {
-				key = "j_UTDR_john_mantle",
+				key = "j_UTDR_mantle_holder",
 				vars = { probabilities_normal, odds }
 			}
 		end
@@ -491,9 +513,9 @@ SMODS.Joker {
 	end
 }
 
---dummy joker so ERAM can say john mantle some of the time
+--dummy joker so ERAM can say mantle holder some of the time
 SMODS.Joker {
-	key = "john_mantle",
+	key = "mantle_holder",
 	no_collection = true,
 	in_pool = function(self, args)
 		return false
@@ -527,9 +549,19 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.setting_blind and G.GAME.blind.boss then
 			ease_hands_played(card.ability.hands)
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize{type = 'variable', key = 'a_hands', vars = {card.ability.hands}}, colour = G.C.BLUE })
-            ease_discard(card.ability.discards)
-            card_eval_status_text(card, 'extra', nil, nil, nil, { message = "+"..card.ability.discards.." "..G.localization.misc.dictionary.k_hud_discards, colour = G.C.RED })
+			card_eval_status_text(card, 'extra', nil, nil, nil,
+				{
+					message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.hands } },
+					colour = G.C
+						.BLUE
+				})
+			ease_discard(card.ability.discards)
+			card_eval_status_text(card, 'extra', nil, nil, nil,
+				{
+					message = "+" .. card.ability.discards .. " " .. G.localization.misc.dictionary.k_hud_discards,
+					colour =
+						G.C.RED
+				})
 		end
 	end
 }

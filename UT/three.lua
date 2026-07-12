@@ -57,12 +57,12 @@ SMODS.Joker {
 			}
 		elseif context.ending_shop and not context.blueprint then
 			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
-        elseif context.end_of_round and context.cardarea == G.jokers and card.ability.extra.hands_remaining == 0 then
-        	if SMODS.pseudorandom_probability(card, "punch_card_super_secret", 1, card.ability.extra.super_secret_chance, "UT_punch_card_secret") then
-        		SMODS.add_card({ key = "j_UTDR_nice_cream" })
-        		card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Punched!", colour = G.C.ATTENTION })
-        	end
-        end
+		elseif context.end_of_round and context.cardarea == G.jokers and card.ability.extra.hands_remaining == 0 then
+			if SMODS.pseudorandom_probability(card, "punch_card_super_secret", 1, card.ability.extra.super_secret_chance, "UT_punch_card_secret") then
+				SMODS.add_card({ key = "j_UTDR_nice_cream" })
+				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Punched!", colour = G.C.ATTENTION })
+			end
+		end
 	end
 }
 
@@ -85,27 +85,29 @@ SMODS.Joker {
 	pos = { x = 3, y = 2 },
 	cost = 2,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.chip_min,
-			card.ability.chip_max,
-			card.ability.mult_min,
-			card.ability.mult_max,
-			card.ability.xmult_min,
-			card.ability.xmult_max,
-			card.ability.money_min,
-			card.ability.money_max
-		} }
+		return {
+			vars = {
+				card.ability.chip_min,
+				card.ability.chip_max,
+				card.ability.mult_min,
+				card.ability.mult_max,
+				card.ability.xmult_min,
+				card.ability.xmult_max,
+				card.ability.money_min,
+				card.ability.money_max
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card.base.value == "2" then
 			local rand = pseudorandom("temmie_flakes")
-				
+
 			local zeroth = 0
 			local first = 1 / 4
 			local second = 2 / 4
 			local third = 3 / 4
 			local fourth = 1
-			
+
 			if zeroth < rand and rand < first then
 				return {
 					chips = math.floor(pseudorandom("temmie_flakes_chips") * 25) + 5
@@ -123,7 +125,7 @@ SMODS.Joker {
 					dollars = math.floor(pseudorandom("temmie_flakes_money") * 4)
 				}
 			end
-        end
+		end
 	end
 }
 
@@ -151,17 +153,17 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
-        	return {
-        		xmult = card.ability.xmult
-        	}
-        elseif context.setting_blind and context.cardarea == G.jokers and not context.blueprint and #G.jokers.cards < G.jokers.config.card_limit then
+			return {
+				xmult = card.ability.xmult
+			}
+		elseif context.setting_blind and context.cardarea == G.jokers and not context.blueprint and #G.jokers.cards < G.jokers.config.card_limit then
 			local count = math.floor(pseudorandom("annoying_dog_count") * 10)
 			play_sound("UTDR_bark", 1.0, 0.7)
 			for i = 1, count do
-        			SMODS.add_card({ key = "j_UTDR_dog_residue" })
-        			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Bark!", colour = G.C.ATTENTION })
-        	end
-        end
+				SMODS.add_card({ key = "j_UTDR_dog_residue" })
+				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Bark!", colour = G.C.ATTENTION })
+			end
+		end
 	end
 }
 
@@ -177,7 +179,7 @@ SMODS.Joker {
 	pos = { x = 4, y = 2 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult } }
+		return { vars = { card.ability.xmult, localize("2", 'ranks') or "2" } }
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card.base.value == "2" and context.other_card.config.center_key ~= "c_base" then
@@ -186,7 +188,7 @@ SMODS.Joker {
 				colour = G.C.MULT,
 				card = context.blueprint_card or card
 			}
-        end
+		end
 	end
 }
 
@@ -202,49 +204,40 @@ SMODS.Joker {
 	pos = { x = 6, y = 3 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		if UTDR.config_file.deltarune then
-			return { key = "j_UTDR_mystery_key_DR" }
-		end
+		return { vars = { localize("Ace", 'ranks') or "Ace", localize("k_spectral") } }
 	end,
 	calculate = function(self, card, context)
 		if context.setting_blind and not context.blueprint then
 			card.ability.spectral_gen = false
 		elseif context.destroying_card and not context.blueprint then
-            if #context.full_hand == 2 and G.GAME.current_round.hands_played == 0 and not card.ability.spectral_gen then
-        		for i = 1, #context.full_hand do
-        			if context.full_hand[i].base.value ~= "Ace" then
-        				return nil
-        			end
-        		end
-                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                    G.E_MANAGER:add_event(Event({
-                        trigger = 'before',
-                        delay = 0.0,
-                        func = (function()
-                                local card = create_card('Spectral',G.consumeables, nil, nil, nil, nil, nil, 'myst_key')
-                                card:add_to_deck()
-                                G.consumeables:emplace(card)
-                                G.GAME.consumeable_buffer = 0
-                            return true
-                        end)}))
-                    card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, { message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
-                    card.ability.spectral_gen = true
-                end
-               	return true
-            end
-            return nil
-        end
+			if #context.full_hand == 2 and G.GAME.current_round.hands_played == 0 and not card.ability.spectral_gen then
+				for i = 1, #context.full_hand do
+					if context.full_hand[i].base.value ~= "Ace" then
+						return nil
+					end
+				end
+				if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+					G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+					G.E_MANAGER:add_event(Event({
+						trigger = 'before',
+						delay = 0.0,
+						func = (function()
+							local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil, 'myst_key')
+							card:add_to_deck()
+							G.consumeables:emplace(card)
+							G.GAME.consumeable_buffer = 0
+							return true
+						end)
+					}))
+					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+						{ message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
+					card.ability.spectral_gen = true
+				end
+				return true
+			end
+			return nil
+		end
 	end
-}
-
-SMODS.Joker {
-	key = "mystery_key_DR",
-	no_collection = true,
-	in_pool = function(self, args)
-		return false
-	end,
-	atlas = "UT_jokers",
 }
 
 --dos
@@ -269,7 +262,7 @@ SMODS.Joker {
 				chips = card.ability.chips
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			if card.ability.chips - card.ability.chips_loss <= 0 then 
+			if card.ability.chips - card.ability.chips_loss <= 0 then
 				G.E_MANAGER:add_event(Event({
 					func = function()
 						play_sound('tarot1')
@@ -277,17 +270,20 @@ SMODS.Joker {
 						card:juice_up(0.3, 0.4)
 						card.states.drag.is = true
 						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
 							func = function()
 								G.jokers:remove_card(card)
 								card:remove()
 								card = nil
 								return true;
 							end
-						})) 
+						}))
 						return true
 					end
-				})) 
+				}))
 				return {
 					message = "Evaporated!",
 					colour = G.C.BLUE
@@ -295,7 +291,7 @@ SMODS.Joker {
 			else
 				card.ability.chips = card.ability.chips - card.ability.chips_loss
 				return {
-					message = localize{ type = 'variable', key = 'a_chips_minus', vars = { card.ability.chips_loss } },
+					message = localize { type = 'variable', key = 'a_chips_minus', vars = { card.ability.chips_loss } },
 					colour = G.C.CHIPS
 				}
 			end
@@ -315,7 +311,8 @@ SMODS.Joker {
 	pos = { x = 1, y = 2 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_glass
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		if #SMODS.find_card("j_UTDR_thornring") > 0 then
@@ -374,7 +371,7 @@ SMODS.Joker {
 	pos = { x = 2, y = 2 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chips } }
+		return { vars = { card.ability.chips, localize("Clubs", 'suits_singular') or "Club" } }
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and not context.blueprint then
@@ -393,7 +390,7 @@ SMODS.Joker {
 			end
 		elseif context.after and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.has_scored = true
-        end
+		end
 	end
 }
 
@@ -411,27 +408,27 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "UT_jokers",
 	pos = { x = 3, y = 7 },
-	cost = 7,calculate = function(self, card, context)
-		if context.joker_main then
-			return {
-				mult = card.ability.mult
-			}
-		elseif context.discard and not context.other_card.debuff and not context.blueprint then
-			card.ability.mult = card.ability.mult + card.ability.mult_per_card
-			return {
-				message = localize { type = 'variable', key = 'a_mult',vars = { card.ability.mult_gain }},
-				colour = G.C.RED,
-				delay = 0.45, 
-				card = card
-			}
-		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			card.ability.mult = 0
-			return {
-				message = localize('k_reset'),
-				colour = G.C.RED
-			}
-        end
+	cost = 7, calculate = function(self, card, context)
+	if context.joker_main then
+		return {
+			mult = card.ability.mult
+		}
+	elseif context.discard and not context.other_card.debuff and not context.blueprint then
+		card.ability.mult = card.ability.mult + card.ability.mult_per_card
+		return {
+			message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult_gain } },
+			colour = G.C.RED,
+			delay = 0.45,
+			card = card
+		}
+	elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+		card.ability.mult = 0
+		return {
+			message = localize('k_reset'),
+			colour = G.C.RED
+		}
 	end
+end
 }
 
 --tres
@@ -453,11 +450,12 @@ SMODS.Joker {
 		if context.end_of_round and context.cardarea == G.jokers and #G.hand.cards > 0 then
 			local knife = pseudorandom_element(G.hand.cards, pseudoseed('mad_dummy'))
 			G.E_MANAGER:add_event(Event({
-            	trigger = 'after',
-            	delay = 0.1,
-            	func = function()
+				trigger = 'after',
+				delay = 0.1,
+				func = function()
 					play_sound("UTDR_dummy", 1, 0.7)
-					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "Futile!", colour = G.C.RED})
+					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+						{ message = "Futile!", colour = G.C.RED })
 					if context.blueprint then
 						context.blueprint_card:juice_up(0.3, 0.5)
 					else
@@ -467,19 +465,19 @@ SMODS.Joker {
 				end
 			}))
 			G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function() 
-                    if SMODS.has_enhancement(knife, "m_glass") then
+				trigger = 'after',
+				delay = 0.1,
+				func = function()
+					if SMODS.has_enhancement(knife, "m_glass") then
 						knife:shatter()
 					else
 						knife:start_dissolve(nil, false)
 					end
-					SMODS.calculate_context({remove_playing_cards = true, removed = { knife }})
-                    return true
-                end
-            }))
-        end
+					SMODS.calculate_context({ remove_playing_cards = true, removed = { knife } })
+					return true
+				end
+			}))
+		end
 	end
 }
 
@@ -501,7 +499,11 @@ SMODS.Joker {
 				delay = 0.4,
 				func = function()
 					if not context.scoring_hand[1].seal then
-						card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Sealed!", colour = G.C.ATTENTION})
+						card_eval_status_text(card, 'extra', nil, nil, nil, {
+							message = "Sealed!",
+							colour = G.C
+								.ATTENTION
+						})
 						context.scoring_hand[1]:set_seal(
 							SMODS.poll_seal({ guaranteed = true, type_key = "hotland" }),
 							true,
@@ -511,7 +513,7 @@ SMODS.Joker {
 					end
 					play_sound("gold_seal", 1.2, 0.4)
 					card:juice_up()
-					
+
 					return true
 				end,
 			}))
@@ -531,7 +533,7 @@ SMODS.Joker {
 			mult_count = 25,
 			xmult_count = 2
 		},
-		
+
 		states = {
 			hand = false,
 			discard = false,
@@ -550,21 +552,23 @@ SMODS.Joker {
 	pos = { x = 1, y = 6 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.values.hand_count,
-			card.ability.values.discard_count,
-			card.ability.values.hand_size_count,
-			card.ability.values.chips_count,
-			card.ability.values.mult_count,
-			card.ability.values.xmult_count,
-		} }
+		return {
+			vars = {
+				card.ability.values.hand_count,
+				card.ability.values.discard_count,
+				card.ability.values.hand_size_count,
+				card.ability.values.chips_count,
+				card.ability.values.mult_count,
+				card.ability.values.xmult_count,
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.setting_blind and not card.getting_sliced then
 			local rand = pseudorandom("alphys")
 			play_sound("UTDR_alphys", 1.0, 0.7)
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Called in!" })
-			
+
 			if G.GAME.blind.boss then
 				local zeroth = 0
 				local first = 1 / 8
@@ -575,7 +579,7 @@ SMODS.Joker {
 				local sixth = 6 / 8
 				local seventh = 7 / 8
 				local eighth = 1
-				
+
 				if zeroth < rand and rand < first then
 					card.ability.states.hand = true
 				elseif first < rand and rand < second then
@@ -602,7 +606,7 @@ SMODS.Joker {
 				local fifth = 5 / 7
 				local sixth = 6 / 7
 				local seventh = 1
-				
+
 				if zeroth < rand and rand < first then
 					card.ability.states.hand = true
 				elseif first < rand and rand < second then
@@ -619,30 +623,30 @@ SMODS.Joker {
 					card.ability.states.retrigger = true
 				end
 			end
-			
+
 			if card.ability.states.hand then
 				G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.values.hand_count
-        		ease_hands_played(card.ability.values.hand_count)
+				ease_hands_played(card.ability.values.hand_count)
 			elseif card.ability.states.discard then
 				G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.values.discard_count
-        		ease_hands_played(card.ability.values.discard_count)
+				ease_hands_played(card.ability.values.discard_count)
 			elseif card.ability.states.hand_size then
 				G.hand:change_size(card.ability.values.hand_size_count)
 			elseif card.ability.states.chicot then
 				G.E_MANAGER:add_event(Event({
 					func = function()
-                    	G.E_MANAGER:add_event(Event({
-                    		func = function()
+						G.E_MANAGER:add_event(Event({
+							func = function()
 								G.GAME.blind:disable()
 								play_sound('timpani')
 								delay(0.4)
 								return true
 							end
 						}))
-                    	card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('ph_boss_disabled') })
-                		return true
-                	end
-                }))
+						card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('ph_boss_disabled') })
+						return true
+					end
+				}))
 			end
 		elseif context.joker_main then
 			if card.ability.states.chips then
@@ -667,17 +671,17 @@ SMODS.Joker {
 		elseif context.end_of_round and context.cardarea == G.jokers then
 			if card.ability.states.hand then
 				G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.values.hand_count
-        		ease_hands_played(-card.ability.values.hand_count)
-        		
-        		card.ability.states.hand = false
+				ease_hands_played(-card.ability.values.hand_count)
+
+				card.ability.states.hand = false
 			elseif card.ability.states.discard then
 				G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.values.discard_count
-        		ease_hands_played(-card.ability.values.discard_count)
-        		
-        		card.ability.states.discard = false
+				ease_hands_played(-card.ability.values.discard_count)
+
+				card.ability.states.discard = false
 			elseif card.ability.states.hand_size then
 				G.hand:change_size(-card.ability.values.hand_size_count)
-				
+
 				card.ability.states.hand_size = false
 			elseif card.ability.states.chips then
 				card.ability.states.chips = false
@@ -714,28 +718,31 @@ SMODS.Joker {
 				xmult = card.ability.xmult
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
-            G.E_MANAGER:add_event(Event({
+			G.E_MANAGER:add_event(Event({
 				func = function()
 					play_sound('tarot1')
 					card.T.r = -0.2
 					card:juice_up(0.3, 0.4)
 					card.states.drag.is = true
 					card.children.center.pinch.x = true
-					G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+					G.E_MANAGER:add_event(Event({
+						trigger = 'after',
+						delay = 0.3,
+						blockable = false,
 						func = function()
 							G.jokers:remove_card(card)
 							card:remove()
 							card = nil
 							return true;
 						end
-					})) 
+					}))
 					return true
 				end
-			})) 
+			}))
 			return {
 				message = "Cooked!"
 			}
-        end
+		end
 	end
 }
 

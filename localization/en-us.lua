@@ -18,12 +18,12 @@ return {
 			["j_UTDR_spider_donut"] = {
 				["name"] = "Spider Donut",
 				["text"] = {
-					"Each played {C:attention}7{} gives",
-					"{C:mult}+#1#{} mult when scored",
-					"Each played {C:attention}9{} gives",
-					"{C:mult}+#2#{} mult when scored,",
-					"but this Joker is",
-					"{C:attention}destroyed{} after scoring",
+					"Each played {C:attention}#3#{} gives",
+					"{C:mult}+#1#{} Mult when scored",
+					"Each played {C:attention}#4#{} gives",
+					"{C:mult}+#2#{} Mult when scored",
+					"and {C:attention}destroys{} this",
+					"Joker after scoring",
 				},
 			},
 			["j_UTDR_snail_pie"] = {
@@ -47,7 +47,7 @@ return {
 			["j_UTDR_sweet_capn_cakes"] = {
 				["name"] = "Sweet Cap'n Cakes",
 				["text"] = {
-					"{C:blue}Common{} jokers each",
+					"{C:common}#3#{} Jokers each",
 					"give {C:chips}+#1#{} Chips and",
 					"{C:mult}+#2#{} Mult when sccored",
 				},
@@ -63,7 +63,7 @@ return {
 			["j_UTDR_ribbon"] = {
 				["name"] = "Faded Ribbon",
 				["text"] = {
-					"{C:attention}Glass Cards{} have a",
+					"{C:attention}#3#s{} have a",
 					"{C:green}#1# in #2#{} chance to be",
 					"destroyed",
 				},
@@ -85,17 +85,17 @@ return {
 			["j_UTDR_berdly"] = {
 				["name"] = "Berdly",
 				["text"] = {
-					"Played {C:attention}Lucky Cards{}",
+					"Played {C:attention}#3#s{}",
 					"give {C:mult}+#1#{} Mult and",
 					"{C:money}$#2#{} when scored",
-					"{C:attention}Lucky Cards{} can",
+					"{C:attention}#3#s{} can",
 					"{C:red}no longer trigger",
 				},
 			},
 			["j_UTDR_mike"] = {
 				["name"] = "Mike",
 				["text"] = {
-					"Gives {C:money}$#1#{} if played",
+					"Earn {C:money}$#1#{} if played",
 					"hand contains a",
 					"{C:attention}#2#{}",
 				},
@@ -112,7 +112,7 @@ return {
 			["j_UTDR_find_her_dogg_girl"] = {
 				["name"] = "December",
 				["text"] = {
-					"{C:blue}Common{} Jokers {C:attention}no",
+					"{C:common}#1#{} Jokers {C:attention}no",
 					"{C:attention}longer appear{} in shop",
 				},
 			},
@@ -136,7 +136,7 @@ return {
 			["j_UTDR_bravery"] = {
 				["unlock"] = {
 					"Play a hand containing",
-					"at least 4 {E:1,C:attention}Glass Cards{}",
+					"at least 4 {E:1,C:attention}#1#s{}",
 				},
 				["text"] = {
 					"This Joker gains {X:mult,C:white}X#1#{} Mult",
@@ -156,16 +156,15 @@ return {
 			["j_UTDR_shelter_code"] = {
 				["name"] = "Shelter Code",
 				["text"] = {
-					"{C:green}Uncommon{} and {C:red}Rare{} Jokers appear",
+					"{C:uncommon}#1#{} and {C:rare}#2#{} Jokers appear",
 					"in shop {C:attention}more often",
 				},
 			},
 			["j_UTDR_snowman_piece"] = {
 				["name"] = "Snowman Piece",
 				["text"] = {
-					"Gains {C:chips}+#1#{} Chips at",
-					"end of round, destroys",
-					"itself after {C:attention}#2#{} {C:inactive}[#3#]{} rounds",
+					"Gains {C:chips}+#1#{} Chips at end of round,",
+					"{C:red}self-destructs{} after {C:attention}#2#{} {C:inactive}[#3#]{} rounds",
 					"{C:inactive}(Currently {C:chips}+#4#{C:inactive} Chips)",
 				},
 			},
@@ -180,7 +179,7 @@ return {
 				["name"] = "Hammer of Justice",
 				["text"] = {
 					"This Joker gains {X:mult,C:white}X#1#{} Mult per",
-					"{C:attention}Voucher{} redeemed this run",
+					"{C:attention}#3#{} redeemed this run",
 					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
 				},
 			},
@@ -211,7 +210,7 @@ return {
 				["name"] = "Clover",
 				["text"] = {
 					"Played cards with",
-					"{C:clubs}Club{} suit give",
+					"{C:clubs}#3#{} suit give",
 					"{C:chips}+#1#{} Chips and",
 					"{C:mult}+#2#{} Mult{} when scored",
 				},
@@ -228,7 +227,7 @@ return {
 				["name"] = "Lancer",
 				["text"] = {
 					"Played cards with",
-					"{C:spades}Spade{} suit give",
+					"{C:spades}#2#{} suit give",
 					"{C:chips}+#1#{} Chips when scored",
 				},
 			},
@@ -243,7 +242,7 @@ return {
 			["j_UTDR_boss_monster_soul"] = {
 				["unlock"] = {
 					"Discard a",
-					"{E:1,C:attention}Full House{}",
+					"{E:1,C:attention}#1#{}",
 				},
 				["text"] = {
 					"Gains {C:chips}+#1#{} Chips when a playing",
@@ -259,7 +258,7 @@ return {
 				},
 				["text"] = {
 					"Gains {X:mult,C:white}X#1#{} Mult when",
-					"a {C:spectral}Spectral{} card is used",
+					"a {C:spectral}#3#{} card is used",
 					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
 				},
 				["name"] = "SURVEY_PROGRAM",
@@ -268,7 +267,7 @@ return {
 				["name"] = "Jevil",
 				["text"] = {
 					"Retrigger all",
-					"played {C:attention}Wild Cards{}",
+					"played {C:attention}#1#s{}",
 				},
 			},
 			["j_UTDR_king"] = {
@@ -276,7 +275,7 @@ return {
 				["text"] = {
 					"Gains {X:mult,C:white}X#1#{} Mult when a",
 					"{C:attention}playing card{} not of",
-					"{C:spades}Spade{} suit is destroyed",
+					"{C:spades}#3#{} suit is destroyed",
 					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
 				},
 			},
@@ -288,7 +287,7 @@ return {
 				["text"] = {
 					"{X:mult,C:white}X#1#{} Mult if you have",
 					"at most {C:attention}#2#{} Enhanced",
-					"cards in your full deck",
+					"cards in your #4#",
 					"{C:inactive}(Currently {C:attention}#3#{C:inactive})",
 				},
 				["name"] = "Perseverance",
@@ -326,7 +325,7 @@ return {
 					"{E:1,C:attention}1e11{} chips",
 				},
 				["text"] = {
-					"{C:attention}Debuffed cards{} give",
+					"{C:attention}#2# cards{} give",
 					"{C:money}$#1#{} when scored",
 				},
 				["name"] = "The Barrier",
@@ -339,7 +338,7 @@ return {
 				["text"] = {
 					"{C:attention}Sell{} this card to {S:1.1,C:red,E:2}destroy all",
 					"{S:1.1,C:red,E:2}Jokers{} and create an equal",
-					"number of {C:dark_edition}Negative{} Tags",
+					"number of {C:dark_edition}#1#s{}",
 				},
 				["name"] = "True Reset",
 			},
@@ -354,7 +353,7 @@ return {
 				["name"] = "Starwalker",
 				["text"] = {
 					"These cards are {C:red}Pissing me off.",
-					"{C:chips}+#1#{} Chips if all played cards are       {C:diamonds}Diamond suit{}",
+					"{C:chips}+#1#{} Chips if all played cards are       {C:diamonds}#2# suit{}",
 				},
 			},
 			["j_UTDR_dog_residue"] = {
@@ -378,7 +377,7 @@ return {
 			["j_UTDR_snowdin"] = {
 				["name"] = "Snowdin",
 				["text"] = {
-					"Creates a {C:planet}Planet{}",
+					"Creates a {C:planet}#2#{}",
 					"Card if played hand",
 					"contains a {C:attention}#1#{}",
 					"{C:inactive}(Must have room){}",
@@ -395,7 +394,7 @@ return {
 				["name"] = "Mettaton",
 				["text"] = {
 					"If {C:attention}first hand{} of round is",
-					"a single card of {C:clubs}Club{} suit",
+					"a single card of {C:clubs}#2#{} suit",
 					"destroy it and earn {C:money}$#1#{}",
 				},
 			},
@@ -421,8 +420,8 @@ return {
 			["j_UTDR_mad_mew_mew"] = {
 				["name"] = "Mad Mew Mew",
 				["text"] = {
-					"Earn {C:money}$#1#{} when a {C:attention}King{}",
-					"or {C:attention}Jack{} is destroyed",
+					"Earn {C:money}$#1#{} when a {C:attention}#2#{}",
+					"or {C:attention}#3#{} is destroyed",
 				},
 			},
 			["j_UTDR_micro_froggit"] = {
@@ -475,8 +474,8 @@ return {
 				["name"] = "Mystery Key",
 				["text"] = {
 					"If {C:attention}first hand{} of round is",
-					"a pair of {C:attention}Aces{}, destroy one",
-					"and create a {C:spectral}Spectral{} card",
+					"a pair of {C:attention}#1#s{}, destroy one",
+					"and create a {C:spectral}#2#{} card",
 					"{C:inactive}(Must have room){}",
 				},
 			},
@@ -515,11 +514,11 @@ return {
 			["j_UTDR_surface"] = {
 				["unlock"] = {
 					"Have at least {E:1,C:attention}5",
-					"{E:1,C:attention}Stone Cards{} in",
+					"{E:1,C:attention}#1#s{} in",
 					"your deck",
 				},
 				["text"] = {
-					"Played {C:attention}Stone Cards{} give",
+					"Played {C:attention}#2#s{} give",
 					"{C:mult}+#1#{} Mult when scored",
 				},
 				["name"] = "The Surface",
@@ -539,37 +538,17 @@ return {
 					"{C:blue}pLaY twO!!!1!!{}",
 				},
 			},
-			["j_UTDR_mystery_key_DR"] = {
-				["name"] = "Mystery Key",
-				["text"] = {
-					"If {C:attention}first hand{} of round is",
-					"a pair of {C:attention}Aces{}, destroy one",
-					"and create a {C:spectral}Prophecy{} card",
-					"{C:inactive}(Must have room){}",
-				},
-			},
 			["j_UTDR_tension_slop"] = {
 				["name"] = "Tension Slop",
 				["text"] = {
 					"Sell this card to",
-					"create {C:attention}#1#{} random",
-					"{C:tarot}Charm Tags",
+					"create {C:attention}#1#{}",
+					"{C:tarot}#2#s",
 				},
 			},
 			["j_ring_master"] = {
 				["text"] = {
 				},
-			},
-			["j_UTDR_SURVEY_PROGRAM_DR"] = {
-				["unlock"] = {
-					"Win {E:1,C:attention}5{} runs {C:inactive}[#1#]",
-				},
-				["text"] = {
-					"Gains {X:mult,C:white}X#1#{} Mult when",
-					"a {C:spectral}Prophecy{} card is used",
-					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
-				},
-				["name"] = "SURVEY_PROGRAM",
 			},
 			["j_UTDR_doghole"] = {
 				["name"] = "Dog Hole",
@@ -595,7 +574,7 @@ return {
 			["j_UTDR_torn_notebook"] = {
 				["name"] = "Torn Notebook",
 				["text"] = {
-					"Each card of {C:clubs}Club{}",
+					"Each card of {C:clubs}#2#{}",
 					"suit held in hand",
 					"gives {C:chips}+#1#{} Chips",
 				},
@@ -609,32 +588,31 @@ return {
 			["j_UTDR_seam"] = {
 				["name"] = "Seam",
 				["text"] = {
-					"Only {C:attention}Mega{} booster packs",
+					"Only {C:attention}Mega{} Booster Packs",
 					"show up in shop",
 				},
 			},
 			["j_UTDR_oddcontroller"] = {
 				["name"] = "Odd Controller",
 				["text"] = {
-					"{C:green}Uncommon{} and {C:red}Rare",
+					"{C:green}#1#{} and {C:red}#2#",
 					"Jokers in shop are {C:attention}free",
 				},
 			},
 			["j_UTDR_philosopher"] = {
 				["name"] = "Philosopher",
 				["text"] = {
-					"{C:planet}Planet{} cards may",
-					"appear in any of",
-					"the {C:attention}Arcana Packs",
+					"{C:planet}#1#{} cards may appear",
+					"in any {C:attention}#2#",
 				},
 			},
 			["j_UTDR_nice_cream"] = {
 				["name"] = "Nice Cream",
 				["text"] = {
-					"{C:green}#1# in #2#{} chance to {C:attention}create{} a {C:tarot}Tarot{}",
-					"card when a {C:planet}Planet{} card is used",
+					"{C:green}#1# in #2#{} chance to {C:attention}create{} a {C:tarot}#4#{}",
+					"card when a {C:planet}#5#{} card is used",
 					"{C:green}#1# in #3#{} chance to be {C:attention}destroyed{}",
-					"when a {C:planet}Planet{} card is used",
+					"when a {C:planet}#5#{} card is used",
 					"{C:inactive}(Must have room){}",
 				},
 			},
@@ -649,14 +627,14 @@ return {
 			["j_UTDR_amalgam"] = {
 				["name"] = "Amalgamates",
 				["text"] = {
-					"{C:attention}Wild Cards{} give {C:mult}+#1#{}",
+					"{C:attention}#2#s{} give {C:mult}+#1#{}",
 					"Mult when scored",
 				},
 			},
 			["j_UTDR_watercooler"] = {
 				["name"] = "Watercooler",
 				["text"] = {
-					"Played {C:attention}Wild Cards{} give",
+					"Played {C:attention}#3#s{} give",
 					"{C:money}$#1#{} when scored",
 					"{s:0.8,C:watercooler}#2#        ",
 				},
@@ -712,7 +690,7 @@ return {
 			["j_UTDR_gingerguard"] = {
 				["name"] = "Ginger Guard",
 				["text"] = {
-					"Played {C:attention}Steel{} cards give",
+					"Played {C:attention}#2#s{} give",
 					"{C:chips}+#1#{} Chips when scored",
 				},
 			},
@@ -727,7 +705,7 @@ return {
 			["j_UTDR_tenna"] = {
 				["name"] = "Mr. (Ant) Tenna",
 				["text"] = {
-					"Creates a {C:tarot}Tarot{} card when",
+					"Creates a {C:tarot}#2#{} card when",
 					"played hand is a {C:attention}#1#{}",
 					"{s:0.8}hand changes at end of round",
 					"{C:inactive}(Must have room)",
@@ -769,8 +747,8 @@ return {
 					"during a run",
 				},
 				["text"] = {
-					"Scored cards of {C:hearts}Heart{}",
-					"suit give {C:money}$#1#{} or {C:chips}+#2#{}",
+					"Scoring {C:hearts}#3#{} give",
+					"{C:money}$#1#{} or {C:chips}+#2#{}",
 					"Chips when scored",
 				},
 				["name"] = "Worn Dagger",
@@ -778,7 +756,7 @@ return {
 			["j_UTDR_mettaton_steak"] = {
 				["name"] = "Steak in the Shape of Mettaton's Face",
 				["text"] = {
-					"{C:attention}Face{} cards held in hand give {C:mult}+#1#{} Mult",
+					"{C:attention}#2#{} held in hand give {C:mult}+#1#{} Mult",
 				},
 			},
 			["j_UTDR_glamburger"] = {
@@ -806,7 +784,7 @@ return {
 				["text"] = {
 					"Sell this card to",
 					"create {C:attention}#1#{} random",
-					"{C:tarot}Tarot{} cards",
+					"{C:tarot}#2#{} cards",
 					"{C:inactive}(Must have room){}",
 				},
 			},
@@ -814,11 +792,7 @@ return {
 				["name"] = "Titan",
 				["text"] = {
 					"Retrigger each played",
-					"{C:attention}Stone Card #1#{} times",
-				},
-			},
-			["j_seance"] = {
-				["text"] = {
+					"{C:attention}#2# #1#{} times",
 				},
 			},
 			["j_UTDR_tension_gem"] = {
@@ -826,7 +800,7 @@ return {
 				["text"] = {
 					"Sell this card to",
 					"create {C:attention}#1#{} random",
-					"{C:tarot}Charm Tags",
+					"{C:tarot}#2#s",
 				},
 			},
 			["j_UTDR_carol"] = {
@@ -845,19 +819,10 @@ return {
 					"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
 				},
 			},
-			["j_UTDR_silver_key_DR"] = {
-				["name"] = "Silver Key",
-				["text"] = {
-					"Create a {C:spectral}Prophecy{} card",
-					"when {C:attention}Boss Blind{}",
-					"is defeated",
-					"{C:inactive}(Must have room){}",
-				},
-			},
 			["j_UTDR_ramb"] = {
 				["name"] = "Ramb",
 				["text"] = {
-					"Creates a {C:tarot}Tarot{} or {C:planet}Planet",
+					"Creates a {C:tarot}#1#{} or {C:planet}#2#",
 					"card at end of round",
 					"{C:inactive}(Must have room)",
 				},
@@ -865,7 +830,7 @@ return {
 			["j_UTDR_noelle"] = {
 				["name"] = "Noelle",
 				["text"] = {
-					"{C:attention}Glass Cards{} give {X:mult,C:white}X#1#{} Mult,",
+					"{C:attention}#4#s{} give {X:mult,C:white}X#1#{} Mult,",
 					"but have a {C:green}#2# in #3#{}",
 					"chance to break",
 				},
@@ -873,7 +838,7 @@ return {
 			["j_UTDR_temmie_armor"] = {
 				["name"] = "Temmie Armor",
 				["text"] = {
-					"Played {C:attention}Enhanced 2's{} each",
+					"Played {C:attention}Enhanced #2#s{} each",
 					"give {X:mult,C:white}X#1#{} Mult when scored",
 				},
 			},
@@ -911,7 +876,7 @@ return {
 			["j_UTDR_waterfall"] = {
 				["name"] = "Waterfall",
 				["text"] = {
-					"Each card of {C:diamonds}Diamond{}",
+					"Each card of {C:diamonds}#4#{}",
 					"suit held in hand has a",
 					"{C:green}#1# in #2#{} chance to give {C:money}$#3#{}",
 				},
@@ -1025,7 +990,7 @@ return {
 				["text"] = {
 					"{C:chips}+#1#{} Chips for each",
 					"empty {C:attention}Joker{} slot",
-					"{s:0.8}Napstablook included{}",
+					"{s:0.8}#3# included{}",
 					"{C:inactive}(Currently {C:chips}+#2#{} Chips)",
 				},
 			},
@@ -1055,7 +1020,7 @@ return {
 			["j_UTDR_hero_sword"] = {
 				["name"] = "HERO_SWORD",
 				["text"] = {
-					"Creates a {C:tarot}Tarot{} card when a",
+					"Creates a {C:tarot}#1#{} card when a",
 					"a {C:attention}playing card{} is destroyed",
 					"{C:inactive}(Must have room)",
 				},
@@ -1063,7 +1028,7 @@ return {
 			["j_UTDR_princess_ribbon"] = {
 				["name"] = "Princess Ribbon",
 				["text"] = {
-					"Played {C:attention}Glass Cards{} give",
+					"Played {C:attention}#2#s{} give",
 					"{C:chips}+#1#{} Chips when scored",
 				},
 			},
@@ -1088,7 +1053,7 @@ return {
 				["text"] = {
 					"{C:mult}+#1#{} Mult for each",
 					"card above {C:attention}#2#{}",
-					"in your full deck",
+					"in your #4#",
 					"{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)",
 				},
 			},
@@ -1110,7 +1075,7 @@ return {
 			["j_UTDR_FRIEND"] = {
 				["name"] = "_FRIEND",
 				["text"] = {
-					"{C:FRIEND}Creates a {C:FRIEND_PINK}Prophecy{C:FRIEND} card",
+					"{C:FRIEND}Creates a {C:FRIEND_PINK}#4#{C:FRIEND} card",
 					"{C:FRIEND}after {C:FRIEND_YELLOW}#1# {C:FRIEND_PINK}[#2#]{C:FRIEND} cards",
 					"{C:FRIEND}are {C:FRIEND_YELLOW}destroyed{}",
 					"{C:FRIEND}(Must have room)",
@@ -1124,7 +1089,7 @@ return {
 				["text"] = {
 					"{C:chips}+#1#{} Chips",
 					"if all played cards",
-					"are of {C:hearts}Heart{} suit",
+					"are of {C:hearts}#2#{} suit",
 				},
 				["name"] = "Last Dream",
 			},
@@ -1138,7 +1103,7 @@ return {
 			["j_UTDR_undyne"] = {
 				["name"] = "Undyne",
 				["text"] = {
-					"Each card of {C:spades}Spade{}",
+					"Each card of {C:spades}#2#{}",
 					"suit held in hand",
 					"gives {X:mult,C:white}X#1#{} Mult",
 				},
@@ -1146,11 +1111,11 @@ return {
 			["j_UTDR_heart_locket"] = {
 				["unlock"] = {
 					"Have at least {E:1,C:attention}5{}",
-					"{E:1,C:attention}Steel Cards{} in",
+					"{E:1,C:attention}#1#s{} in",
 					"your deck",
 				},
 				["text"] = {
-					"{C:attention}Steel Cards{} give",
+					"{C:attention}#4#s{} give",
 					"{C:mult}+#3#{} Mult when scored",
 				},
 				["name"] = "Heart Locket",
@@ -1169,7 +1134,7 @@ return {
 			["j_UTDR_shackle"] = {
 				["name"] = "Iron Shackle",
 				["text"] = {
-					"{C:attention}Gold Cards{} and {C:attention}Steel Cards",
+					"{C:attention}#1#s{} and {C:attention}#2#s",
 					"are considered the",
 					"{C:attention}same enhancement",
 				},
@@ -1177,17 +1142,17 @@ return {
 			["j_UTDR_devilsknife"] = {
 				["name"] = "Devilsknife",
 				["text"] = {
-					"Played {C:attention}Wild Cards{} give",
+					"Played {C:attention}#2#s{} give",
 					"{X:mult,C:white}X#1#{} Mult when scored",
 				},
 			},
 			["j_UTDR_kris_tea"] = {
 				["name"] = "Kris Tea",
 				["text"] = {
-					"{C:chips}+#1#{} Chips for each played {C:spades}Spade{} card",
-					"{X:mult,C:white}X#2#{} Mult for each played {C:hearts}Heart{} card",
-					"{C:mult}+#3#{} Mult for each played {C:clubs}Club{} card",
-					"{C:money}$#4#{} for each played {C:diamonds}Diamond{} card",
+					"{C:chips}+#1#{} Chips for each played {C:spades}#7#{} card",
+					"{X:mult,C:white}X#2#{} Mult for each played {C:hearts}#8#{} card",
+					"{C:mult}+#3#{} Mult for each played {C:clubs}#9#{} card",
+					"{C:money}$#4#{} for each played {C:diamonds}#10#{} card",
 					"Destroyed after {C:attention}#5# {C:inactive}[#6#]{} rounds",
 				},
 			},
@@ -1195,8 +1160,8 @@ return {
 				["name"] = "Cyber World",
 				["text"] = {
 					"{C:green}#1# in #2#{} chance to create",
-					"a {C:planet}Planet{} card when a",
-					"{C:tarot}Tarot{} card is used",
+					"a {C:planet}#3#{} card when a",
+					"{C:tarot}#4#{} card is used",
 				},
 			},
 			["j_UTDR_pipis"] = {
@@ -1213,7 +1178,7 @@ return {
 				["text"] = {
 					"Removes the {C:attention}negative",
 					"{C:attention}effects{} of all",
-					"{C:spectral}Prophecy{} cards",
+					"{C:spectral}#1#{} cards",
 				},
 			},
 			["j_UTDR_manly_bandana"] = {
@@ -1228,7 +1193,7 @@ return {
 				["text"] = {
 					"{C:mult}+#1#{} Mult for each",
 					"empty {C:attention}Joker{} slot",
-					"{s:0.8}Ralsei's Dummy included{}",
+					"{s:0.8}#3# included{}",
 					"{C:inactive}(Currently {C:mult}+#2#{} Mult)",
 				},
 			},
@@ -1247,14 +1212,14 @@ return {
 			["j_UTDR_asriel"] = {
 				["unlock"] = {
 					"Play a 5 card hand",
-					"containing only {E:1,C:attention}Aces{}",
+					"containing only {E:1,C:attention}#4#s{}",
 				},
 				["text"] = {
-					"Each played {C:attention}Ace{} gives",
+					"Each played {C:attention}#4#{} gives",
 					"{X:mult,C:white}X#1#{} Mult when scored",
 					"{C:inactive}Activates after {C:attention}#2# {C:inactive}[#3#] rounds",
 				},
-				["name"] = "Asriel",
+				["name"] = "{E:UTDR_asriel}ASRIEL DREEMURR",
 			},
 			["j_UTDR_toy_knife"] = {
 				["name"] = "Toy Knife",
@@ -1292,7 +1257,7 @@ return {
 				["name"] = "Old Tutu",
 				["text"] = {
 					"Retrigger all",
-					"played {C:attention}Bonus{} cards",
+					"played {C:attention}#1#s{}",
 				},
 			},
 			["j_UTDR_susie"] = {
@@ -1306,7 +1271,7 @@ return {
 			["j_UTDR_flowery"] = {
 				["name"] = "Flowery",
 				["text"] = {
-					"Each played {C:attention}9{} gives",
+					"Each played {C:attention}#2#{} gives",
 					"{X:mult,C:white}X#1#{} Mult and is",
 					" {C:attention}retriggered{} when scored",
 				},
@@ -1328,7 +1293,7 @@ return {
 			["j_UTDR_thornring"] = {
 				["name"] = "Thorn Ring",
 				["text"] = {
-					"Played {C:attention}Glass Cards{}",
+					"Played {C:attention}#1#s{}",
 					"{S:1.1,C:red,E:2}always{} break, {C:red}and...?{}",
 				},
 			},
@@ -1368,7 +1333,7 @@ return {
 				["name"] = "Titan Spawn",
 				["text"] = {
 					"Gains {C:mult}+#1#{} Mult when a",
-					"{C:attention}Stone Card{} is scored",
+					"{C:attention}#3#{} is scored",
 					"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
 				},
 			},
@@ -1391,7 +1356,7 @@ return {
 			["j_UTDR_spamton"] = {
 				["name"] = "Spamton G. Spamton",
 				["text"] = {
-					"Each played {C:attention}Ace{}, {C:attention}9{}, or {C:attention}7",
+					"Each played {C:attention}#4#{}, {C:attention}#5#{}, or {C:attention}#6#",
 					"has a {C:green}#1# in #2#{} chance",
 					"to give {C:money}$#3#{} when scored",
 				},
@@ -1401,7 +1366,7 @@ return {
 				["text"] = {
 					"All Seals are",
 					"considered",
-					"{C:attention}Gold Seals{} ",
+					"{C:attention}#1#s{} ",
 				},
 			},
 			["j_UTDR_oldman"] = {
@@ -1440,8 +1405,8 @@ return {
 					"{C:attention}Blind{} is defeated",
 				},
 			},
-			["j_UTDR_john_mantle"] = {
-				["name"] = "John Mantle",
+			["j_UTDR_mantle_holder"] = {
+				["name"] = "Mantle Holder",
 				["text"] = {
 					"{C:attention}Discarded{} cards have",
 					"a {C:green}#1# in #2#{} chance to",
@@ -1461,7 +1426,7 @@ return {
 				["text"] = {
 					"When {C:attention}Boss Blind{} is",
 					"selected, create an",
-					"{C:green}Uncommon{} or {C:red}Rare{} {C:attention}Joker{}",
+					"{C:green}#2#{} or {C:red}#3#{} {C:attention}Joker{}",
 					"{C:inactive}(Must have room){}",
 				},
 			},
@@ -1491,7 +1456,7 @@ return {
 			["j_UTDR_silver_key"] = {
 				["name"] = "Silver Key",
 				["text"] = {
-					"Create a {C:spectral}Spectral{} card",
+					"Create a {C:spectral}#1#{} card",
 					"when {C:attention}Boss Blind{}",
 					"is defeated",
 					"{C:inactive}(Must have room){}",
@@ -1507,7 +1472,7 @@ return {
 			["j_UTDR_glasses"] = {
 				["name"] = "Cloudy Glasses",
 				["text"] = {
-					"{C:attention}Glass Cards{} can",
+					"{C:attention}#1#s{} can",
 					"{C:attention}no longer{} break",
 				},
 			},
@@ -1516,7 +1481,7 @@ return {
 				["text"] = {
 					"Sell this card to",
 					"create {C:attention}#1#{} random",
-					"{C:planet}Planet{} cards",
+					"{C:planet}#2#{} cards",
 					"{C:inactive}(Must have room){}",
 				},
 			},
@@ -1537,7 +1502,7 @@ return {
 			["j_UTDR_toby_temmie"] = {
 				["name"] = "Toby and Temmie",
 				["text"] = {
-					"Creates a {C:purple}Voucher Tag",
+					"Creates a {C:purple}#2#",
 					"when {C:attention}Boss Blind is defeated",
 				},
 			},
@@ -1570,13 +1535,6 @@ return {
 					"{C:gaster}I HAVE BEEN LOOKING FOR YOU AS WELL.",
 				},
 				["name"] = "______",
-			},
-		},
-		["Voucher"] = {
-			["v_omen_globe"] = {
-				["text"] = {
-					"{C:spectral}Prophecy{} cards may",
-				},
 			},
 		},
 		["Back"] = {
@@ -1801,6 +1759,8 @@ return {
 		["dictionary"] = {
 			["k_UTDR_more"] = "more",
 			["k_UTDR_less"] = "less",
+			["k_UTDR_splat_ex"] = "Splat!",
+			["k_UTDR_burned_ex"] = "Burned!"
 		},
 	},
 }

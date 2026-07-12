@@ -20,7 +20,7 @@ SMODS.Joker {
 		mult_per = 0.5
 	},
 	loc_vars = function(self, info_queue, card)
-		if G.deck.cards then
+		if G.deck then
 			return { vars = { card.ability.mult_per, card.ability.mult_per * #G.deck.cards } }
 		else
 			return { vars = { card.ability.mult_per, card.ability.mult_per * 52 } }
@@ -57,11 +57,13 @@ SMODS.Joker {
 	pos = { x = 0, y = 6 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.chip_gain,
-			G.localization.misc.poker_hands['High Card'],
-			card.ability.chips
-		} }
+		return {
+			vars = {
+				card.ability.chip_gain,
+				G.localization.misc.poker_hands['High Card'],
+				card.ability.chips
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and context.scoring_name == "High Card" and not context.blueprint then
@@ -144,6 +146,7 @@ SMODS.Joker {
 	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_SEALS['gold_seal'] or G.P_SEALS[SMODS.Seal.badge_to_key['gold_seal'] or '']
+		return { vars = { localize { type = 'name_text', set = "Other", key = 'gold_seal' } } }
 	end,
 	rarity = 2,
 	blueprint_compat = false,
@@ -169,6 +172,9 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 6, y = 6 },
 	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_planet"), localize({ type = 'name_text', key = "p_arcana_normal", set = 'Other' }) } }
+	end,
 }
 
 --second sanctuary
@@ -197,7 +203,7 @@ SMODS.Joker {
 		return { vars = { card.ability.xmult_first, card.ability.xmult_too_long } }
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers  then
+		if context.before and context.cardarea == G.jokers then
 			if G.GAME.current_round.hands_played == 1 then
 				return {
 					sound = "UTDR_your_taking_too_long",
@@ -259,24 +265,27 @@ SMODS.Joker {
 						card:juice_up(0.3, 0.4)
 						card.states.drag.is = true
 						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
 							func = function()
 								G.jokers:remove_card(card)
 								card:remove()
 								card = nil
 								return true;
 							end
-						})) 
+						}))
 						return true
 					end
-				})) 
+				}))
 				return {
 					message = "Drank!"
 				}
 			else
 				card.ability.extra = card.ability.extra - card.ability.hole_in_my_pocket
 				return {
-					message = "-$"..card.ability.hole_in_my_pocket,
+					message = "-$" .. card.ability.hole_in_my_pocket,
 					colour = G.C.RED,
 					sound = "coin6",
 					card = card
@@ -307,7 +316,7 @@ SMODS.Joker {
 		xmult = 1
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
+		return { vars = { card.ability.xmult_gain, card.ability.xmult, localize("k_voucher") } }
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
 		card.ability.xmult = card.ability.xmult + card.ability.xmult_gain * #get_keys(G.GAME.used_vouchers)
@@ -385,7 +394,7 @@ SMODS.Joker {
 		xmult = 1,
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_per, card.ability.xmult} }
+		return { vars = { card.ability.xmult_per, card.ability.xmult } }
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -402,7 +411,12 @@ SMODS.Joker {
 							return true
 						end
 					}))
-					card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult + xmult_gain } }, colour = G.C.MULT })
+					card_eval_status_text(card, 'extra', nil, nil, nil,
+						{
+							message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult + xmult_gain } },
+							colour =
+								G.C.MULT
+						})
 					return true
 				end
 			}))
@@ -425,8 +439,8 @@ SMODS.Joker {
 		chips = 50
 	},
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_glass 
-		return { vars = { card.ability.chips } }
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+		return { vars = { card.ability.chips, localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' } }
 	end,
 	rarity = 1,
 	blueprint_compat = true,
@@ -464,8 +478,8 @@ SMODS.Joker {
 	pos = { x = 3, y = 6 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_stone 
-		return { vars = { card.ability.mult_gain, card.ability.mult } }
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+		return { vars = { card.ability.mult_gain, card.ability.mult, localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) or "Stone Card" } }
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_stone") and not context.blueprint then
@@ -502,13 +516,13 @@ SMODS.Joker {
 	soul_pos = { x = 6, y = 7 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.e_negative
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
 		return { vars = { card.ability.turn_cap, card.ability.turns, G.localization.descriptions.Edition.e_negative.name } }
 	end,
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.turns = card.ability.turns + 1
-			card:juice_up(0.3,0.4)
+			card:juice_up(0.3, 0.4)
 			if card.ability.turns >= card.ability.turn_cap then
 				local eval = function(card)
 					return card.ability.turns >= card.ability.turn_cap
@@ -524,14 +538,14 @@ SMODS.Joker {
 			end
 			if joker then
 				G.E_MANAGER:add_event(Event({
-						trigger = 'after',
-						delay = 0.4,
-						func = function()
-							joker:set_edition("e_negative", true)
-							return true
-						end
-					}))
-				end
+					trigger = 'after',
+					delay = 0.4,
+					func = function()
+						joker:set_edition("e_negative", true)
+						return true
+					end
+				}))
+			end
 		end
 	end
 }
@@ -549,8 +563,8 @@ SMODS.Joker {
 		repetitions = 4
 	},
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue+1] = G.P_CENTERS.m_stone 
-		return { vars = { card.ability.repetitions } }
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+		return { vars = { card.ability.repetitions, localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) or "Stone Card" } }
 	end,
 	rarity = 3,
 	blueprint_compat = true,
@@ -598,7 +612,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
 			card.ability.card_count = card.ability.card_count - 1
-			SMODS.calculate_effect( {dollars = card.ability.bigbucks}, context.other_card)
+			SMODS.calculate_effect({ dollars = card.ability.bigbucks }, context.other_card)
 			if card.ability.card_count == 0 then
 				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Drank!" })
 				G.E_MANAGER:add_event(Event({
@@ -610,17 +624,20 @@ SMODS.Joker {
 						card:juice_up(0.3, 0.4)
 						card.states.drag.is = true
 						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
 							func = function()
 								G.jokers:remove_card(card)
 								card:remove()
 								card = nil
 								return true;
 							end
-						})) 
+						}))
 						return true
 					end
-				})) 
+				}))
 			end
 		end
 	end

@@ -12,9 +12,11 @@ SMODS.Joker {
 	pos = { x = 8, y = 2 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.money
-		} }
+		return {
+			vars = {
+				card.ability.money
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
@@ -26,7 +28,7 @@ SMODS.Joker {
 					dollars = card.ability.money
 				}
 			end
-        end
+		end
 	end
 }
 
@@ -43,9 +45,9 @@ SMODS.Joker {
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
 		if card.ability.in_build then
-			return { vars = { G.consumeables.config.card_limit } }
+			return { vars = { G.consumeables.config.card_limit, localize("k_tarot") } }
 		else
-			return { vars = { 2 }}
+			return { vars = { 2, localize("k_tarot") } }
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
@@ -72,7 +74,7 @@ SMODS.Joker {
 						return true
 					end
 				}))
-        	end
+			end
 		end
 	end
 }
@@ -90,11 +92,13 @@ SMODS.Joker {
 	pos = { x = 3, y = 6 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.chip_gain,
-			G.localization.misc.poker_hands['Pair'],
-			card.ability.chips
-		} }
+		return {
+			vars = {
+				card.ability.chip_gain,
+				G.localization.misc.poker_hands['Pair'],
+				card.ability.chips
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Pair']) and not context.blueprint then
@@ -125,9 +129,9 @@ SMODS.Joker {
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
 		if card.ability.in_build then
-			return { vars = { G.consumeables.config.card_limit } }
+			return { vars = { G.consumeables.config.card_limit, localize("k_planet") } }
 		else
-			return { vars = { 2 }}
+			return { vars = { 2, localize("k_planet") } }
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
@@ -154,7 +158,7 @@ SMODS.Joker {
 						return true
 					end
 				}))
-        	end
+			end
 		end
 	end
 }
@@ -187,7 +191,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main and context.cardarea == G.jokers then
 			return {
-				chips = card.ability.chips_per *  #G.consumeables.cards
+				chips = card.ability.chips_per * #G.consumeables.cards
 			}
 		end
 	end
@@ -215,7 +219,7 @@ SMODS.Joker {
 	pos = { x = 6, y = 2 },
 	cost = 1,
 	add_to_deck = function(self, card, from_debuff)
-		if not from_debuff and pseudorandom("double_negative") < 1/1000 then
+		if not from_debuff and pseudorandom("double_negative") < 1 / 1000 then
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					card:set_edition({ negative = true }, true)
@@ -255,7 +259,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
 			if tonumber(context.other_card.base.value, 10) ~= nil and not SMODS.has_enhancement(context.other_card, "m_stone") then
-				if pseudorandom("cowboy_hat") < 1/2 then
+				if pseudorandom("cowboy_hat") < 1 / 2 then
 					return {
 						mult = card.ability.low_mult
 					}
@@ -379,17 +383,21 @@ SMODS.Joker {
 	pos = { x = 8, y = 3 },
 	cost = 4,
 	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, mult_chance = SMODS.get_probability_vars(card, 1, card.ability.mult_chance, "UT_glamburger_mult")
-		local _, bigbucks_chance = SMODS.get_probability_vars(card, 1, card.ability.bigbucks_chance, "UT_glamburger_money")
+		local probabilities_normal, mult_chance = SMODS.get_probability_vars(card, 1, card.ability.mult_chance,
+			"UT_glamburger_mult")
+		local _, bigbucks_chance = SMODS.get_probability_vars(card, 1, card.ability.bigbucks_chance,
+			"UT_glamburger_money")
 		local _, munch_chance = SMODS.get_probability_vars(card, 1, card.ability.munch_chance, "UT_glamburger_munch")
-		return { vars = {
-			mult_chance,
-			card.ability.mult,
-			bigbucks_chance,
-			card.ability.bigbucks,
-			munch_chance,
-			probabilities_normal
-		} }
+		return {
+			vars = {
+				mult_chance,
+				card.ability.mult,
+				bigbucks_chance,
+				card.ability.bigbucks,
+				munch_chance,
+				probabilities_normal
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -408,17 +416,20 @@ SMODS.Joker {
 						card:juice_up(0.3, 0.4)
 						card.states.drag.is = true
 						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
 							func = function()
 								G.jokers:remove_card(card)
 								card:remove()
 								card = nil
 								return true;
 							end
-						})) 
+						}))
 						return true
 					end
-				})) 
+				}))
 				return {
 					message = "Oh no!"
 				}
@@ -439,23 +450,23 @@ SMODS.Joker {
 	pos = { x = 2, y = 6 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.money } }
+		return { vars = { card.ability.money, localize("Clubs", 'suits_singular') or "Club" } }
 	end,
 	calculate = function(self, card, context)
 		if context.destroying_card and not context.blueprint then
-			if #context.full_hand == 1 and context.full_hand[1]:is_suit( "Clubs") and G.GAME.current_round.hands_played == 0 then
-                SMODS.calculate_effect({ dollars = card.ability.money }, card)
-               	return true
-            end
-            return nil
-        end
+			if #context.full_hand == 1 and context.full_hand[1]:is_suit("Clubs") and G.GAME.current_round.hands_played == 0 then
+				SMODS.calculate_effect({ dollars = card.ability.money }, card)
+				return true
+			end
+			return nil
+		end
 	end
 }
 
 SMODS.Joker {
 	key = "new_home",
 	config = {
-			chips = 300
+		chips = 300
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -468,10 +479,10 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main and G.GAME.current_round.hands_left == 0 then
-        	return {
+			return {
 				chips = card.ability.chips
 			}
-        end
+		end
 	end
 }
 
@@ -488,14 +499,16 @@ SMODS.Joker {
 	pos = { x = 6, y = 6 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_per, card.ability.money, (1 + card.ability.xmult_per*math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0))/card.ability.money)) } }
+		return { vars = { card.ability.xmult_per, card.ability.money, (1 + card.ability.xmult_per * math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money)) } }
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main and to_number(math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0))/card.ability.money)) >= 1 then
-        	return {
-				xmult = 1 + to_number(card.ability.xmult_per*math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0))/card.ability.money))
+		if context.joker_main and to_number(math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money)) >= 1 then
+			return {
+				xmult = 1 +
+					to_number(card.ability.xmult_per *
+						math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money))
 			}
-        end
+		end
 	end
 }
 
@@ -512,7 +525,7 @@ SMODS.Joker {
 	pos = { x = 9, y = 3 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult } }
+		return { vars = { card.ability.mult, localize("k_face_cards") } }
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and not context.blueprint then
@@ -523,6 +536,6 @@ SMODS.Joker {
 			}
 		elseif context.after and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.has_scored = true
-        end
+		end
 	end
 }
