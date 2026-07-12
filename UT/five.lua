@@ -328,7 +328,7 @@ SMODS.Joker {
 			return {
 				xmult = card.ability.extra.xmult
 			}
-		elseif context.game_over and to_big(G.GAME.chips) / G.GAME.blind.chips >= to_big(card.ability.extra.required_chips / 100) and not context.blueprint then
+		elseif context.game_over and G.GAME.chips / G.GAME.blind.chips >= card.ability.extra.required_chips / 100 and not context.blueprint then
 			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
 			G.E_MANAGER:add_event(Event({
 				func = function()

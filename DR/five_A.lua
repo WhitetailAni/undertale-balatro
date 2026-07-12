@@ -213,3 +213,57 @@ SMODS.Joker {
 		end
 	end
 }
+
+SMODS.Joker {
+	key = "dogcheck",
+	config = {
+		totem_chance = 6,
+		old_bones = ""
+	},
+	--unlocked = false
+	rarity = 1,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 9, y = 2 },
+	cost = 10,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { G.GAME.probabilities.normal, card.ability.totem_chance } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		if not from_debuff then
+			card.ability.old_bones = G.localization.misc.dictionary.ph_mr_bones
+		end
+	end,
+	calculate = function(self, card, context)
+		if context.game_over and pseudorandom("dogcheck") > 0.83 and not context.blueprint then
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					local tag = Tag(get_next_tag_key("dogcheck"))
+					if tag.name == "Orbital Tag" then
+						local _poker_hands = {}
+						for k, v in pairs(G.GAME.hands) do
+							if v.visible then
+								_poker_hands[#_poker_hands + 1] = k
+							end
+						end
+						tag.ability.orbital_hand = pseudorandom_element(_poker_hands, pseudoseed("dogcheck_orbital"))
+					end
+					if tag.name == "Boss Tag" then
+						i = i - 1 --reroll tags can break if a booster pack tag is generated
+					else
+						add_tag(tag)
+					end
+					return true
+				end
+			}))
+			G.localization.misc.dictionary.ph_mr_bones = "Placeholder Text I dont Know what should go here okay."
+			return {
+				saved = true,
+				colour = G.C.RED
+			}
+		elseif context.ending_shop and not context.blueprint then
+			G.localization.misc.dictionary.ph_mr_bones = card.ability.old_bones
+		end
+	end
+}

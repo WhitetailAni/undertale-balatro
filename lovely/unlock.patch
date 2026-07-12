@@ -172,7 +172,7 @@ payload = '''
 		end
 	end
 	if card.key == 'j_UT_worn_dagger' then 
-		if to_big(G.GAME.dollar_max) <= to_big(50) then
+		if G.GAME.dollar_max <= 50 then
 			ret = true
 			unlock_card(card)
 		end
@@ -207,8 +207,8 @@ target = "functions/common_events.lua"
 pattern = "if args.type == 'money' then"
 position = "after"
 payload = '''
-	if to_big(G.GAME.dollar_max) < to_big(G.GAME.dollars) then
-		G.GAME.dollar_max = to_big(G.GAME.dollars)
+	if G.GAME.dollar_max < G.GAME.dollars then
+		G.GAME.dollar_max = G.GAME.dollars
 	end
 '''
 match_indent = true

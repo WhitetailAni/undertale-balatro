@@ -1,13 +1,5 @@
 SMODS.Joker {
 	key = "aqua",
-	loc_txt = {
-		name = "Aqua",
-		text = {
-			"Played cards give a",
-			"{C:attention}random{} amount of",
-			"{C:mult}Mult{} when scored",
-		}
-	},
 	config = {
 		lower_bound = 1,
 		upper_bound = 10
@@ -30,18 +22,10 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "flowery",
-	loc_txt = {
-		name = "Flowery",
-		text = {
-			"Each played {C:attention}9{} ",
-			"gives {X:mult,C:white}X#1#{} Mult and",
-			"is {C:attention}retriggered{}",
-			"when scored",
-		}
-	},
 	config = {
 		xmult = 1.5,
-		all_flowers = false
+		all_flowers = false,
+		orange_active = false,
 	},
 	loc_vars = function(self, info_queue, card)
 		if not card.debuff then
@@ -57,7 +41,7 @@ SMODS.Joker {
 				"glue",
 			})
 		end
-		return { vars = { card.ability.xmult } }
+		return { vars = { card.ability.xmult, localize("9", "ranks") or "9" } }
 	end,
 		rarity = 3,
 	blueprint_compat = true,
@@ -81,12 +65,13 @@ SMODS.Joker {
 					card = context.blueprint_card or card
 				}
 			end
-		elseif not context.blueprint then
-		
+		elseif not context.blueprint then --we dont want blueprint or brainstorm doubletalking, do we? (i discovered that this would happen while verifying blueprint compat. MY EARS)
 			--sound effect checking
 			if context.showdown_blind_effect then
 				play_flowery_sound("nonono")
-			elseif context.joker_main then
+			elseif context.after then
+				card.ability.orange_active = false
+			elseif context.before then
 				local aquas = SMODS.find_card("j_UTDR_aqua")
 				local seths = SMODS.find_card("j_UTDR_seth")
 				local yellows = SMODS.find_card("j_UTDR_yellow")
@@ -95,9 +80,8 @@ SMODS.Joker {
 				local greens = SMODS.find_card("j_UTDR_green")
 				local flowerys = SMODS.find_card("j_UTDR_flowery")
 				local pinks = SMODS.find_card("j_UTDR_pink")
-				if G.GAME.round_resets.hands == 0 or card.ability.all_flowers then
-					play_flowery_sound("last_jarona")
-				elseif #aquas > 0 and #seths > 0 and #yellows > 0 and #blues > 0 and #oranges > 0 and #greens > 0 then
+				
+				if #aquas > 0 and #seths > 0 and #yellows > 0 and #blues > 0 and #oranges > 0 and #greens > 0 then
 					play_flowery_sound("lend_me_your_power")
 					card.ability.all_flowers = true
 					
@@ -120,6 +104,7 @@ SMODS.Joker {
 					for i = 1, #oranges do
 						oranges[i]:set_eternal(true)
 						oranges[i]:set_edition({ negative = true }, true)
+						oranges[i].config.center.config.all_flowers = true
 					end
 					for i = 1, #greens do
 						greens[i]:set_eternal(true)
@@ -134,44 +119,24 @@ SMODS.Joker {
 						pinks[i]:set_eternal(true)
 						pinks[i]:set_edition({ negative = true }, true)
 					end
-				else 
+				end 
+			elseif context.joker_main then
+				local oranges = SMODS.find_card("j_UTDR_orange")
+				for i = 1, #oranges do
+					if oranges[i].config.center.config.card_was_sold then
+						card.ability.orange_active = true
+					end
+				end
+				if G.GAME.current_round.hands_left == 0 then
+					play_flowery_sound("last_jarona")
+				elseif card.ability.all_flowers then
 					play_flowery_sound_random({
-						"blingo_blizzard",
-						"flowers_blooms_in_your_heart",
-						"wow",
-						"try_my_flavor",
-						"the_diner",
-						"the_boys",
-						"thatsgreat",
-						"thats_my_dreams",
-						"take_that",
-						"suckle_it_up",
-						"spiral_dance",
-						"smile_again",
-						"say_that_again",
-						"prism_blow",
-						"powering_up",
-						"minipeppers",
-						"leaf_it_to_me",
-						"jarona1",
-						"jarona2",
-						"jarona3",
-						"jarona4",
-						"its_all_yours",
-						"its_all_in_a_name",
-						"im_only_trying_to_help_you",
-						"huhillshowyou",
-						"huh",
-						"hoo",
-						"hah",
-						"glue",
-						"give_it_to_you",
-						"get_a_chance_1",
-						"get_a_chance_2",
-						"forget_it",
-						"youre_a_hero",
-						"glue",
+						"last_jarona",
+						"lend_me_your_power",
+						"omega_flowery"
 					})
+				elseif not card.ability.orange_active then
+					play_flowery_sound_grabbag()
 				end
 			elseif context.blind_defeated then
 				play_flowery_sound_random({
@@ -255,17 +220,14 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "orange",
-	loc_txt = {
-		name = "Orange",
-		text = {
-			"{C:mult}+#1#{} Mult after a card is sold",
-			"{C:inactive}(Resets at end of round){}"
-		}
-	},
 	config = {
 		mult = 40,
-		card_was_sold = false
+		card_was_sold = false,
+		all_flowers = false
 	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.mult } }
+	end,
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -273,24 +235,33 @@ SMODS.Joker {
 	pos = { x = 8, y = 0 },
 	cost = 3,
 	calculate = function(self, card, context)
-		if context.selling_card then
+		if context.selling_card and not card.ability.card_was_sold then
 			card.ability.card_was_sold = true
 			return {
-				message = (self.ability.invis_rounds < self.ability.extra) and (self.ability.invis_rounds..'/'..self.ability.extra) or localize('k_active_ex'),
+				message = localize('k_active_ex'),
 				colour = G.C.FILTER
 			}
-		elseif context.joker_main and card.ability.card_was_sold then
-			if #SMODS.find_card("j_UTDR_flowery") > 0 then
-				if pseudorandom("ja_orange") > 0.5 then
-					play_flowery_sound("ja_orange_1")
-				else
-					play_flowery_sound("ja_orange_2")
-				end
+		elseif context.selling_self then
+			local flowerys = SMODS.find_card("j_UTDR_flowery", true)
+			for i = 1, #flowerys do
+				flowerys[i].config.center.config.orange_active = false
 			end
+		elseif context.joker_main and card.ability.card_was_sold and not card.ability.all_flowers then
+			if #SMODS.find_card("j_UTDR_flowery") > 0 then
+				local which_sfx = pseudorandom("ja_orange")
+				if which_sfx > 0.8 then
+					play_flowery_sound("ja_orange_1")
+				elseif which_sfx > 0.6 then
+					play_flowery_sound("ja_orange_2")
+				else
+					play_flowery_sound_grabbag()
+				end
+			end		
 			return {
 				mult = card.ability.mult
 			}
 		elseif context.end_of_round and context.main_eval then
+			card.ability.card_was_sold = false
 			return {
 				message = localize('k_reset')
 			}

@@ -20,8 +20,8 @@ if #shadowguys then
 	for i = 1, #shadowguys do
 		shadowguys[i]:juice_up(0.3, 0.4)
 		play_sound(pseudorandom_element({"UTDR_shadowguy_1", "UTDR_shadowguy_2", "UTDR_shadowguy_3"}, shadowguys[i].T.x), 1.0, 0.7)
-		G.GAME.hands[hand].chips = G.GAME.hands[hand].chips + to_big(shadowguys[i].ability.chip_gain)
-		G.GAME.hands[hand].mult = G.GAME.hands[hand].mult + to_big(shadowguys[i].ability.mult_gain)
+		G.GAME.hands[hand].chips = G.GAME.hands[hand].chips + shadowguys[i].ability.chip_gain
+		G.GAME.hands[hand].mult = G.GAME.hands[hand].mult + shadowguys[i].ability.mult_gain
 	end
 end
 G.GAME.hands[hand].level = math.max(0, G.GAME.hands[hand].level + amount)
@@ -41,8 +41,8 @@ local shadowguys_chips_factor = 0
 local shadowguys_mult_factor = 0
 if #shadowguys then
 	for i = 1, #shadowguys do
-		shadowguys_chips_factor = shadowguys_chips_factor + to_big(shadowguys[i].ability.chip_gain)
-		shadowguys_mult_factor = shadowguys_mult_factor + to_big(shadowguys[i].ability.mult_gain)
+		shadowguys_chips_factor = shadowguys_chips_factor + shadowguys[i].ability.chip_gain
+		shadowguys_mult_factor = shadowguys_mult_factor + shadowguys[i].ability.mult_gain
 	end
 end
 '''
@@ -215,7 +215,8 @@ function CardArea:remove_card(card, discarded_only)
         end
     end
     if self.config.type == 'discard' or self.config.type == 'deck' then
-    	if #SMODS.find_card("j_UTDR_carol") > 0 then
+    	if #SMODS.find_card("j_UTDR_carol") > 0 and not self.config.type == "deck" then
+    		print(self.config)
 			local nextcard = _cards[#_cards]
 			
 			local desired_id = 2

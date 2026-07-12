@@ -554,8 +554,16 @@ return {
 				["name"] = "Dog Hole",
 				["text"] = {
 					"Doesn't grant {X:mult,C:white}X100{} Mult,",
-					"because it wouldn't be very",
-					"interesting if it did.",
+					"because it {C:attention}wouldn't be very",
+					"{C:attention{interesting{} if it did.",
+				},
+			},
+			["j_UTDR_dogcheck"] = {
+				["name"] = "DOGCHECK",
+				["text"] = {
+					"{C:green}#1# in #2#{} chance to prevent",
+					"death and create",
+					"a {C:attention}random{} tag",
 				},
 			},
 			["j_UTDR_mysterious_artifact"] = {
@@ -1274,6 +1282,13 @@ return {
 					"Each played {C:attention}#2#{} gives",
 					"{X:mult,C:white}X#1#{} Mult and is",
 					" {C:attention}retriggered{} when scored",
+				},
+			},
+			["j_UTDR_orange"] = {
+				["name"] = "Orange",
+				["text"] = {
+					"{C:mult}+#1#{} Mult after a card is sold",
+					" {C:inactive}(Resets at end of round)",
 				},
 			},
 			["j_UTDR_real_knife"] = {

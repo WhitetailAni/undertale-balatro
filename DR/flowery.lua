@@ -629,3 +629,43 @@ function play_flowery_sound_random(table)
 		play_sound("UTDR_flowery_"..sfx, 1.0, 0.7)
 	end
 end
+
+function play_flowery_sound_grabbag()
+	play_flowery_sound_random({
+		"blingo_blizzard",
+		"flowers_blooms_in_your_heart",
+		"wow",
+		"try_my_flavor",
+		"the_diner",
+		"the_boys",
+		"thatsgreat",
+		"thats_my_dreams",
+		"take_that",
+		"suckle_it_up",
+		"spiral_dance",
+		"smile_again",
+		"say_that_again",
+		"prism_blow",
+		"powering_up",
+		"minipeppers",
+		"leaf_it_to_me",
+		"jarona1",
+		"jarona2",
+		"jarona3",
+		"jarona4",
+		"its_all_yours",
+		"its_all_in_a_name",
+		"im_only_trying_to_help_you",
+		"huhillshowyou",
+		"huh",
+		"hoo",
+		"hah",
+		"glue",
+		"give_it_to_you",
+		"get_a_chance_1",
+		"get_a_chance_2",
+		"forget_it",
+		"youre_a_hero",
+		"glue",
+	})
+end
