@@ -33,7 +33,7 @@ SMODS.Joker {
 	key = "aqua",
 	config = {
 		lower_bound = 1,
-		upper_bound = 10
+		upper_bound = 6
 	},
 	rarity = 1,
 	blueprint_compat = true,
