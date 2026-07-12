@@ -421,7 +421,6 @@ SMODS.Joker {
 	key = "butterscotch-cinnamon_pie",
 	config = {
 		spared = false,
-		old_bones = ""
 	},
 	rarity = 2,
 	blueprint_compat = false,
@@ -429,11 +428,6 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 7, y = 0 },
 	cost = 8,
-	add_to_deck = function(self, card, from_debuff)
-		if not from_debuff then
-			card.ability.old_bones = G.localization.misc.dictionary.ph_mr_bones
-		end
-	end,
 	calculate = function(self, card, context)
 		if context.selling_self and G.GAME.blind.in_blind and not G.GAME.blind.boss and not context.blueprint then
 			card.ability.spared = true
@@ -441,14 +435,11 @@ SMODS.Joker {
 			G.STATE_COMPLETE = true
 			end_round()
 		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = "Spared by Buttspie"
 			return {
-				message = "Spared!",
+				message = "totem_UTDR_buttspie",
 				saved = true,
 				colour = G.C.RED
 			}
-		elseif context.ending_shop and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
 		end
 	end
 }

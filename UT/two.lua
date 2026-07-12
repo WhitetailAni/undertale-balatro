@@ -22,12 +22,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Flush']) and not context.blueprint then
-			card.ability.mult = card.ability.mult + card.ability.mult_gain
-			return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.MULT,
-				card = card
-			}
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "mult",
+				scalar_value = "mult_gain",
+				message_colour = G.C.MULT
+			})
 		elseif context.joker_main then
 			return {
 				mult = card.ability.mult
@@ -115,13 +115,13 @@ SMODS.Joker {
 					message = "Melted!"
 				}
 			elseif context.end_of_round and context.cardarea == G.jokers then
-				card.ability.chips = card.ability.chips + card.ability.chip_gain
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "chips",
+					scalar_value = "chip_gain",
+					message_colour = G.C.CHIPS
+				})
 				card.ability.rounds = card.ability.rounds + 1
-				return {
-					message = localize('k_upgrade_ex'),
-					colour = G.C.CHIPS,
-					card = card
-				}
 			end
 		end
 	end
@@ -415,19 +415,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.remove_playing_cards and not context.blueprint then
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							card.ability.chips = card.ability.chips + #context.removed * card.ability.chip_gain
-							return true
-						end
-					}))
-					card_eval_status_text(card, 'extra', nil, nil, nil,
-						{ message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.chips + #context.removed * card.ability.chip_gain } } })
-					return true
-				end
-			}))
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "chips",
+				scalar_value = "chip_gain",
+				message_colour = G.C.CHIPS
+			})
 			return
 		elseif context.joker_main then
 			return {

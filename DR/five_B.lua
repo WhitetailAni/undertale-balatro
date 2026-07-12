@@ -220,7 +220,15 @@ SMODS.Joker {
 					else
 						play_flowery_sound("my_king")
 					end
-				elseif context.card.config.center.key == "j_UTDR_aqua" or context.card.config.center.key == "j_UTDR_seth" or context.card.config.center.key == "j_UTDR_yellow"or  context.card.config.center.key == "j_UTDR_blue" or context.card.config.center.key == "j_UTDR_green" or context.card.config.center.key == "j_UTDR_orange" then
+				elseif context.card.config.center.key == "j_UTDR_flowery" then
+					play_flowery_sound_random({
+						"flowery",
+						"itsme",
+						"leaf_it_to_me",
+						"flowery",
+						"flowery2",
+					})
+				elseif is_card_flower(context.card, true, false) then
 					play_flowery_sound_random({
 						"its_so_human",
 						"my_human",
@@ -249,7 +257,7 @@ SMODS.Joker {
 					"hey",
 					"hey_boys",
 				})
-			elseif context.selling_self then
+			elseif (context.selling_card and is_card_flower(context.card, true, true)) or context.selling_self then
 				play_flowery_sound("goodbye")
 			end
 		end
@@ -271,7 +279,7 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
 	pos = { x = 8, y = 0 },
-	cost = 3,
+	cost = 5,
 	calculate = function(self, card, context)
 		if context.selling_card and not card.ability.card_was_sold then
 			card.ability.card_was_sold = true

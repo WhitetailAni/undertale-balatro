@@ -1,13 +1,5 @@
 SMODS.Joker {
 	key = "tension_gem",
-	loc_txt = {
-		name = "Tension Gem",
-		text = {
-			"Sell this card to",
-			"create {C:attention}#1#{} random",
-			"{C:tarot}Charm Tags",
-		}
-	},
 	config = {
 		tag_count = 3,
 		slotted = false,
@@ -43,12 +35,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "lord_of_hammer",
-	loc_txt = {
-		name = "Lord of the Hammer",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult if {C:attention}Joker{} slots are full",
-		}
-	},
 	config = {
 		xmult = 2,
 	},
@@ -72,13 +58,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "carol",
-	loc_txt = {
-		name = "Carol",
-		text = {
-			"Cards are drawn in order",
-			"of rank, {C:attention}lowest to highest"
-		}
-	},
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -89,13 +68,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "find_her_dogg_girl",
-	loc_txt = {
-		name = "December",
-		text = {
-			"{C:blue}Common{} Jokers {C:attention}no",
-			"{C:attention}longer appear{} in shop"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { localize("k_common") } }
 	end,
@@ -104,7 +76,7 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
 	pos = { x = 5, y = 1 },
-	cost = 12,
+	cost = 8,
 	add_to_deck = function(self, card, from_debuff)
 		joker_rarity(0, 0.25, 0.05, 0)
 		card.ability.in_build = true
@@ -130,13 +102,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "shelter_code",
-	loc_txt = {
-		name = "Shelter Code",
-		text = {
-			"{C:green}#1#{} and {C:red}#2#{} Jokers appear",
-			"in shop {C:attention}more often"
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { localize("k_uncommon"), localize("k_rare") } }
 	end,
@@ -145,7 +110,7 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
 	pos = { x = 2, y = 0 },
-	cost = 12,
+	cost = 8,
 	add_to_deck = function(self, card, from_debuff)
 		joker_rarity(0.7, 0.5, 0.1, 0)
 		card.ability.in_build = true
@@ -225,7 +190,7 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
 	pos = { x = 9, y = 2 },
-	cost = 10,
+	cost = 6,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { G.GAME.probabilities.normal, card.ability.totem_chance } }
 	end,
@@ -272,7 +237,7 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
 	pos = { x = 3, y = 1 },
-	cost = 9,
+	cost = 5,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			if G.GAME.blind.boss then

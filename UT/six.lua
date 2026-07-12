@@ -134,22 +134,11 @@ SMODS.Joker {
 }
 
 --duo
----- TO BE REPLACED!!
 SMODS.Joker {
-	key = "micro_froggit",
-	loc_txt = {
-		name = "Legally Distinct Frog-Themed Joker",
-		text = {
-			"Each played {C:attention}7{} or",
-			"{C:attention}2{} gives {C:mult}+#1#{} Mult",
-			"when scored"
-		},
-		unlock = {
-			"Play {E:1,C:attention}20{} Pairs {C:inactive}[#1#]"
-		}
-	},
+	key = "lesser_dog",
 	config = {
-		mult = 7
+		mult_gain = 1,
+		mult = 0
 	},
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
@@ -158,10 +147,9 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "UT_jokers",
 	pos = { x = 6, y = 8 },
-	display_size = { w = 33.5, h = 47.5 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult } }
+		return { vars = { card.ability.mult_gain, card.ability.mult } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		if G.PROFILES[G.SETTINGS.profile].hand_usage["Pair"] then
@@ -172,13 +160,19 @@ SMODS.Joker {
 	end,
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
+	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
+		if other_card.config.center.key ~= "j_UTDR_lesser_dog" then
+			card.ability.mult = card.ability.mult + card.ability.mult_gain
+			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT })
+		else
+			print("Uh Oh")
+		end
+	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
-			if context.other_card.base.value == "7" or context.other_card.base.value == "2" then
-				return {
-					mult = card.ability.mult
-				}
-			end
+		if context.joker_main then
+			return {
+				mult = card.ability.mult
+			}
 		end
 	end
 }
@@ -507,21 +501,12 @@ SMODS.Joker {
 	cost = 7,
 	calculate = function(self, card, context)
 		if context.selling_card and context.card ~= card and context.card.ability.set == "Joker" and not context.blueprint then
-			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
-			G.E_MANAGER:add_event(
-				Event({
-					func = function()
-						card_eval_status_text(card, 'extra', nil, nil, nil,
-							{
-								message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } },
-								colour =
-									G.C.MULT
-							});
-						return true
-					end
-				})
-			)
-			return
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "xmult",
+				scalar_value = "xmult_gain",
+				message_colour = G.C.MULT
+			})
 		elseif context.joker_main then
 			return {
 				xmult = card.ability.xmult

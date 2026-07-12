@@ -62,6 +62,7 @@ position = "before"
 payload = '''
 joker_grey = G.C.JOKER_GREY,
 gaster = G.C.GASTER,
+steel = G.C.STEEL,
 FRIEND = G.C.FRIEND,
 FRIEND_PINK = G.C.FRIEND_PINK,
 FRIEND_YELLOW = G.C.FRIEND_YELLOW,
@@ -82,6 +83,7 @@ FRIEND = HEX('eeeeee'),
 FRIEND_PINK = HEX('fda9c0'),
 FRIEND_YELLOW = HEX('ffdd45'),
 WATERCOOLER = HEX('2d9bd7'),
+STEEL = HEX('afb4be'),
 '''
 match_indent = true
 

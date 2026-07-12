@@ -551,13 +551,12 @@ SMODS.Joker {
 	cost = 6,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and not context.blueprint then
-			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
-			card_eval_status_text(card, 'extra', nil, nil, nil,
-				{
-					message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } },
-					colour = G.C
-						.MULT
-				})
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "xmult",
+				scalar_value = "xmult_gain",
+				message_colour = G.C.MULT
+			})
 		elseif context.joker_main then
 			return {
 				xmult = card.ability.xmult

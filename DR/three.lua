@@ -141,12 +141,12 @@ SMODS.Joker {
 				end
 			end
 			if suit_count > 0 then
-				card.ability.mult = card.ability.mult + card.ability.mult_gain
-				return {
-					card = card,
-					message = localize('k_upgrade_ex'),
-					colour = G.C.MULT
-				}
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "mult",
+					scalar_value = "mult_gain",
+					message_colour = G.C.MULT
+				})
 			else
 				card.ability.mult = 0
 				return {
@@ -294,7 +294,12 @@ SMODS.Joker {
 					end
 				}))
 			end
-			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "xmult",
+				scalar_value = "xmult_gain",
+				message_colour = G.C.MULT
+			})
 			SMODS.calculate_context({ remove_playing_cards = true, removed = cards_destroyed })
 		end
 	end
@@ -492,13 +497,6 @@ SMODS.Joker {
 	soul_pos = { x = 1, y = 8 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_ERAM")
-		if math.fmod(os.time(), 16) == 0 then
-			return {
-				key = "j_UTDR_mantle_holder",
-				vars = { probabilities_normal, odds }
-			}
-		end
 		return { vars = { probabilities_normal, odds } }
 	end,
 	calculate = function(self, card, context)
@@ -511,15 +509,6 @@ SMODS.Joker {
 			}
 		end
 	end
-}
-
---dummy joker so ERAM can say mantle holder some of the time
-SMODS.Joker {
-	key = "mantle_holder",
-	no_collection = true,
-	in_pool = function(self, args)
-		return false
-	end,
 }
 
 SMODS.Joker {

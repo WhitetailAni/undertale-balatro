@@ -102,12 +102,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Pair']) and not context.blueprint then
-			card.ability.chips = card.ability.chips + card.ability.chip_gain
-			return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.CHIPS,
-				card = card
-			}
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "chips",
+				scalar_value = "chip_gain",
+				message_colour = G.C.CHIPS
+			})
 		elseif context.joker_main then
 			return {
 				chips = card.ability.chips

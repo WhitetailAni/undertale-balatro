@@ -165,9 +165,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card:is_face() and not context.blueprint then
-			card.ability.chips = card.ability.chips + card.ability.chip_gain
-			card_eval_status_text(card, 'extra', nil, nil, nil,
-				{ message = localize('k_upgrade_ex'), colour = G.C.CHIPS })
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "chips",
+				scalar_value = "chip_gain",
+				message_colour = G.C.CHIPS
+			})
 		elseif context.joker_main then
 			return {
 				chips = card.ability.chips
@@ -252,54 +255,48 @@ SMODS.Joker {
 				mult = card.ability.mult
 			}
 		elseif context.open_booster or context.buying_card and not context.blueprint then
-			card.ability.mult = card.ability.mult + card.ability.mult_gain
-			card_eval_status_text(card, 'extra', nil, nil, nil,
-				{
-					message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult } },
-					colour = G.C
-						.MULT
-				})
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "mult",
+				scalar_value = "mult_gain",
+				message_colour = G.C.MULT
+			})
 		end
 	end
 }
 
 SMODS.Joker {
 	key = "queen",
-	config = {
-		mult_gain = 3,
-		mult = 0
-	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult_gain, card.ability.mult } }
-	end,
 	rarity = 2,
-	blueprint_compat = true,
+	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "DR_jokers",
 	pos = { x = 3, y = 3 },
 	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers and not context.blueprint then
-			for i = 1, #context.scoring_hand do
-				if tonumber(context.scoring_hand[i].base.value) then
-					card.ability.mult = 0
-					return {
-						card = card,
-						message = localize('k_reset'),
-						colour = G.C.MULT
-					}
+		if context.before and not context.blueprint then
+			local faces = {}
+			for k, v in ipairs(context.scoring_hand) do
+				if v:is_face() then 
+					faces[#faces+1] = v
+					v:set_ability("m_steel", nil, true)
+					G.E_MANAGER:add_event(Event({
+						func = function()
+							v:juice_up()
+							return true
+						end
+					})) 
 				end
 			end
-			card.ability.mult = card.ability.mult + card.ability.mult_gain
-			return {
-				card = card,
-				message = localize('k_upgrade_ex'),
-				colour = G.C.MULT
-			}
-		elseif context.joker_main then
-			return {
-				mult = card.ability.mult
-			}
+			if #faces > 0 then 
+				return {
+					message = localize('k_UTDR_robot'),
+					colour = G.C.STEEL,
+				}
+			end
 		end
 	end
 }

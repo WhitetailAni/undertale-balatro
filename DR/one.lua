@@ -133,7 +133,7 @@ SMODS.Joker {
 	key = "k_round",
 	config = {
 		chip_gain = 5,
-		chip_loss = 5,
+		chip_loss = -5,
 		chips = 0
 	},
 	pixel_size = { w = 68, h = 68 },
@@ -148,17 +148,19 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.pre_discard and context.cardarea == G.jokers and card.ability.chips > 0 and not context.blueprint then
-			card.ability.chips = card.ability.chips - card.ability.chip_loss
-			return {
-				message = localize { type = 'variable', key = 'a_chips_minus', vars = { card.ability.chip_loss } },
-				colour = G.C.CHIPS
-			}
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "chips",
+				scalar_value = "chip_loss",
+				message_colour = G.C.CHIPS
+			})
 		elseif context.before and context.cardarea == G.jokers and not context.blueprint then
-			card.ability.chips = card.ability.chips + card.ability.chip_gain
-			return {
-				message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.chip_gain } },
-				colour = G.C.CHIPS
-			}
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "chips",
+				scalar_value = "chip_gain",
+				message_colour = G.C.CHIPS
+			})
 		elseif context.joker_main then
 			return {
 				chips = card.ability.chips
@@ -212,31 +214,28 @@ SMODS.Joker {
 	config = {
 		xmult_gain = 0.2,
 		xmult = 1,
+		total_gain = 0
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult, localize("Spades", 'suits_singular') or "Spade" } }
 	end,
 	calculate = function(self, card, context)
 		if context.remove_playing_cards and not context.blueprint then
+			card.ability.total_gain = 0
 			local nonspades = 0
 			for i = 1, #context.removed do
 				if (not context.removed[i]:is_suit("Spades") or SMODS.has_any_suit(context.removed[i])) then
 					nonspades = nonspades + 1
 				end
 			end
+			card.ability.total_gain = card.ability.xmult_gain * nonspades
 			if nonspades > 0 then
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						card.ability.xmult = card.ability.xmult + nonspades * card.ability.xmult_gain
-						card_eval_status_text(card, 'extra', nil, nil, nil,
-							{
-								message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } },
-								colour =
-									G.C.MULT
-							})
-						return true
-					end
-				}))
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "xmult",
+					scalar_value = "total_gain",
+					message_colour = G.C.MULT
+				})
 			end
 			return
 		elseif context.joker_main then
@@ -319,12 +318,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Straight']) and not context.blueprint then
-			card.ability.mult = card.ability.mult + card.ability.mult_gain
-			return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.MULT,
-				card = card
-			}
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "mult",
+				scalar_value = "mult_gain",
+				message_colour = G.C.MULT
+			})
 		elseif context.joker_main then
 			return {
 				mult = card.ability.mult
@@ -359,13 +358,13 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers then
-			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
 			card.ability.hands = card.ability.hands + 1
-			return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.MULT,
-				card = card
-			}
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "xmult",
+				scalar_value = "xmult_gain",
+				message_colour = G.C.MULT
+			})
 		elseif context.joker_main then
 			return {
 				xmult = card.ability.xmult
@@ -393,8 +392,7 @@ SMODS.Joker {
 						return true
 					end
 				}))
-				local susie = SMODS.find_card("j_UTDR_susie", true)
-				if #susie > 0 and pseudorandom('susie_ate_the_cake') > 0.7 then
+				if #SMODS.find_card("j_UTDR_susie") > 0 then
 					susie:juice_up(0.3, 0.3);
 					return {
 						message = "Consumed by the Dragon"
@@ -430,12 +428,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.before and context.cardarea == G.jokers and context.scoring_name == card.ability.selected_hand and not context.blueprint then
-			card.ability.chips = card.ability.chips + card.ability.chip_gain
-			return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.CHIPS,
-				card = card
-			}
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "chips",
+				scalar_value = "chip_gain",
+				message_colour = G.C.MULT
+			})
 		elseif context.joker_main then
 			return {
 				chips = card.ability.chips
@@ -461,9 +459,9 @@ SMODS.Joker {
 	pos = { x = 6, y = 0 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
-		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_steel" }), localize({ type = 'name_text', set = "Enhanced", key = "m_gold" }), card.ability.mult } }
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_gold" }), localize({ type = 'name_text', set = "Enhanced", key = "m_steel" }), card.ability.mult } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.in_build = true

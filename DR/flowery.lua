@@ -669,3 +669,13 @@ function play_flowery_sound_grabbag()
 		"glue",
 	})
 end
+
+function is_card_flower(card, include_pink, include_flowery)
+	if include_pink and card.config.center.key == "j_UTDR_pink" then
+		return true
+	end
+	if include_flowery and card.config.center.key == "j_UTDR_flowery" then
+		return true
+	end
+	return card.config.center.key == "j_UTDR_aqua" or card.config.center.key == "j_UTDR_seth" or card.config.center.key == "j_UTDR_yellow"or  card.config.center.key == "j_UTDR_blue" or card.config.center.key == "j_UTDR_green" or card.config.center.key == "j_UTDR_orange"
+end

@@ -245,7 +245,7 @@ SMODS.Joker {
 	key = "sea_tea",
 	config = {
 		chips = 125,
-		chips_loss = 25,
+		chips_loss = -25,
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -289,11 +289,12 @@ SMODS.Joker {
 					colour = G.C.BLUE
 				}
 			else
-				card.ability.chips = card.ability.chips - card.ability.chips_loss
-				return {
-					message = localize { type = 'variable', key = 'a_chips_minus', vars = { card.ability.chips_loss } },
-					colour = G.C.CHIPS
-				}
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "chips",
+					scalar_value = "chips_loss",
+					message_colour = G.C.CHIPS
+				})
 			end
 		end
 	end
@@ -414,13 +415,12 @@ SMODS.Joker {
 			mult = card.ability.mult
 		}
 	elseif context.discard and not context.other_card.debuff and not context.blueprint then
-		card.ability.mult = card.ability.mult + card.ability.mult_per_card
-		return {
-			message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult_gain } },
-			colour = G.C.RED,
-			delay = 0.45,
-			card = card
-		}
+		SMODS.scale_card(card, {
+			ref_table = card.ability,
+			ref_value = "mult",
+			scalar_value = "mult_per_card",
+			message_colour = G.C.MULT
+		})
 	elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 		card.ability.mult = 0
 		return {
@@ -763,12 +763,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.copied_card and not context.blueprint then
-			card.ability.mult = card.ability.mult + card.ability.mult_gain
-			return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.MULT,
-				card = card
-			}
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "mult",
+				scalar_value = "mult_gain",
+				message_colour = G.C.MULT
+			})
 		elseif context.joker_main then
 			return {
 				mult = card.ability.mult

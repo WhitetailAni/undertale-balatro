@@ -70,7 +70,8 @@ SMODS.Joker {
 	key = "boss_monster_soul",
 	config = {
 		chips = 0,
-		chip_gain = 35
+		chip_gain = 35,
+		increase_count = 0
 	},
 	--unlocked = false
 	unlock_condition = { type = 'discard_custom' },
@@ -88,7 +89,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if (context.cards_destroyed or context.remove_playing_cards or context.playing_card_added) and not context.blueprint then
-			local increase_count = 0
+			card.ability.increase_count = 0
 			if context.cards_destroyed then
 				increase_count = card.ability.chip_gain * #context.glass_shattered
 			elseif context.remove_playing_cards then
@@ -96,12 +97,12 @@ SMODS.Joker {
 			elseif context.playing_card_added then
 				increase_count = card.ability.chip_gain * #context.cards
 			end
-			card.ability.chips = card.ability.chips + increase_count
-			return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.CHIPS,
-				card = card
-			}
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "chips",
+				scalar_value = "increase_count",
+				message_colour = G.C.CHIPS
+			})
 		elseif context.joker_main then
 			return {
 				chips = card.ability.chips
@@ -142,9 +143,12 @@ SMODS.Joker {
 			card.ability.bought = true
 		elseif context.ending_shop and not context.blueprint then
 			if not card.ability.bought then
-				card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
-				card_eval_status_text(card, 'extra', nil, nil, nil,
-					{ message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } } })
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "xmult",
+					scalar_value = "xmult_gain",
+					message_colour = G.C.MULT
+				})
 			end
 		end
 	end
@@ -213,9 +217,12 @@ SMODS.Joker {
 				mult = card.ability.mult
 			}
 		elseif context.end_of_round and not context.blueprint and not card.ability.mult_gained and not context.blueprint then
-			card.ability.mult = card.ability.mult + card.ability.mult_gain
-			card_eval_status_text(card, 'extra', nil, nil, nil,
-				{ message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult } } })
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "mult",
+				scalar_value = "mult_gain",
+				message_colour = G.C.MULT
+			})
 			card.ability.mult_gained = true
 		end
 	end
@@ -321,7 +328,12 @@ SMODS.Joker {
 				xmult = card.ability.xmult
 			}
 		elseif context.game_over and G.GAME.chips / G.GAME.blind.chips >= card.ability.required_chips / 100 and not context.blueprint then
-			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "xmult",
+				scalar_value = "xmult_gain",
+				message_colour = G.C.MULT
+			})
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					G.hand_text_area.blind_chips:juice_up()
@@ -332,9 +344,7 @@ SMODS.Joker {
 			}))
 			play_sound("UTDR_omega_flowey", 1.0, 0.7)
 			return {
-				message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } },
 				saved = "totem_UTDR_omegaflowey",
-				colour = G.C.RED
 			}
 		end
 	end

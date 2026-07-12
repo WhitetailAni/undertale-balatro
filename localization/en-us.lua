@@ -219,7 +219,7 @@ return {
 				["name"] = "K. Round",
 				["text"] = {
 					"{C:chips}+#1#{} Chips for each {C:attention}hand{} played",
-					"{C:red}-#2#{} Chips for each {C:attention}discard{} used",
+					"{C:red}#2#{} Chips for each {C:attention}discard{} used",
 					"{C:inactive}(Currently {C:attention}+#3#{C:inactive} Chips)",
 				},
 			},
@@ -424,16 +424,16 @@ return {
 					"or {C:attention}#3#{} is destroyed",
 				},
 			},
-			["j_UTDR_micro_froggit"] = {
+			["j_UTDR_lesser_dog"] = {
 				["unlock"] = {
 					"Play {E:1,C:attention}20{} Pairs {C:inactive}[#1#]",
 				},
 				["text"] = {
-					"Each played {C:attention}7{} or",
-					"{C:attention}2{} gives {C:mult}+#1#{} Mult",
-					"when scored",
+					"Gains {C:mult}+#1#{} Mult when",
+					"other jokers scale",
+					"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
 				},
-				["name"] = "Micro Froggit",
+				["name"] = "Lesser Dog",
 			},
 			["j_UTDR_hotland"] = {
 				["name"] = "Hotland",
@@ -708,7 +708,7 @@ return {
 			["j_UTDR_gingerguard"] = {
 				["name"] = "Ginger Guard",
 				["text"] = {
-					"Played {C:attention}#2#s{} give",
+					"Played {C:steel}#2#s{} give",
 					"{C:chips}+#1#{} Chips when scored",
 				},
 			},
@@ -903,7 +903,7 @@ return {
 				["name"] = "Sea Tea",
 				["text"] = {
 					"{C:chips}+#1#{} Chips",
-					"{C:chips}-#2#{} Chips per",
+					"{C:chips}#2#{} Chips per",
 					"round played",
 				},
 			},
@@ -1133,7 +1133,7 @@ return {
 					"your deck",
 				},
 				["text"] = {
-					"{C:attention}#4#s{} give",
+					"{C:steel}#4#s{} give",
 					"{C:mult}+#3#{} Mult when scored",
 				},
 				["name"] = "Heart Locket",
@@ -1152,7 +1152,7 @@ return {
 			["j_UTDR_shackle"] = {
 				["name"] = "Iron Shackle",
 				["text"] = {
-					"{C:attention}#1#s{} and {C:attention}#2#s",
+					"{C:gold}#1#s{} and {C:steel}#2#s",
 					"are considered the",
 					"{C:attention}same enhancement",
 				},
@@ -1409,7 +1409,7 @@ return {
 				["text"] = {
 					"All Seals are",
 					"considered",
-					"{C:attention}#1#s{} ",
+					"{C:gold}#1#s{} ",
 				},
 			},
 			["j_UTDR_oldman"] = {
@@ -1426,10 +1426,8 @@ return {
 			["j_UTDR_queen"] = {
 				["name"] = "Q5U4EX7YY2E9N",
 				["text"] = {
-					"This Joker gains {C:mult}+#1#{} Mult",
-					"per {C:attention}consecutive hand played",
-					"without a scoring {C:attention}numerical{} card",
-					"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+					"All Played {C:attention}Face{} Cards Become",
+					"{C:steel}Steel Cards{} When Scored"
 				},
 			},
 			["j_UTDR_sanctuary"] = {
@@ -1446,14 +1444,6 @@ return {
 					"{C:chips}+#1#{} Chips",
 					"Destroyed when {C:attention}Boss",
 					"{C:attention}Blind{} is defeated",
-				},
-			},
-			["j_UTDR_mantle_holder"] = {
-				["name"] = "Mantle Holder",
-				["text"] = {
-					"{C:attention}Discarded{} cards have",
-					"a {C:green}#1# in #2#{} chance to",
-					"be {C:red}destroyed",
 				},
 			},
 			["j_UTDR_ERAM"] = {
@@ -1803,11 +1793,13 @@ return {
 			["totem_UTDR_omegaflowey"] = "HAHAHAHAHAHAHAHAHAHAHA!!",
 			["totem_UTDR_dogcheck"] = "Placeholder text i Dont Know what should go here okay.",
 			["totem_UTDR_blue"] = "Still Dont !!! yaoi n shit idk",
+			["totem_UTDR_buttspie"] = "Spared by Buttspie",
 			
 			["k_UTDR_more"] = "more",
 			["k_UTDR_less"] = "less",
 			["k_UTDR_splat_ex"] = "Splat!",
-			["k_UTDR_burned_ex"] = "Burned!"
+			["k_UTDR_burned_ex"] = "Burned!",
+			["k_UTDR_robot"] = "Roboticized!",
 		},
 	},
 }
