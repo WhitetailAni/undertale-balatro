@@ -18,8 +18,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 1, y = 6 },
+	atlas = "DR_jokers_2",
+	pos = { x = 4, y = 2 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
 		return { vars = {
@@ -86,8 +86,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = false,
-	atlas = "DR_jokers",
-	pos = { x = 2, y = 9 },
+	atlas = "DR_jokers_2",
+	pos = { x = 5, y = 2 },
 	cost = 12,
 	add_to_deck = function(self, card, from_debuff)
 		play_sound("UTDR_badexplosion", 1.0, 0.7)

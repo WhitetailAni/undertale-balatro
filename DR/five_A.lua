@@ -25,9 +25,9 @@ SMODS.Joker {
 	end,
 	rarity = 1,
 	blueprint_compat = false,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 8, y = 8 },
+	eternal_compat = false,
+	atlas = "DR_jokers_2",
+	pos = { x = 1, y = 2 },
 	cost = 6,
 	calculate = function(self, card, context)
 		if context.selling_self then
@@ -72,10 +72,10 @@ SMODS.Joker {
 		return { vars = { card.ability.xmult } }
 	end,
 	rarity = 3,
-	blueprint_compat = false,
+	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 8, y = 8 },
+	atlas = "DR_jokers_2",
+	pos = { x = 2, y = 2 },
 	cost = 6,
 	calculate = function(self, card, context)
 		if context.joker_main and G.jokers.config.card_limit == #G.jokers.cards then
@@ -98,8 +98,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 6, y = 6 },
+	atlas = "DR_jokers_2",
+	pos = { x = 8, y = 1 },
 	cost = 5,
 }
 
@@ -115,8 +115,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 2, y = 9 },
+	atlas = "DR_jokers_2",
+	pos = { x = 5, y = 1 },
 	cost = 12,
 	add_to_deck = function(self, card, from_debuff)
 		joker_rarity(0, 0.25, 0.05, 0)
@@ -153,8 +153,8 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 2, y = 9 },
+	atlas = "DR_jokers_2",
+	pos = { x = 2, y = 0 },
 	cost = 12,
 	add_to_deck = function(self, card, from_debuff)
 		joker_rarity(0.7, 0.5, 0.1, 0)
@@ -198,8 +198,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 3, y = 5 },
+	atlas = "DR_jokers_2",
+	pos = { x = 7, y = 1 },
 	soul_pos = { x = 1, y = 8 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
