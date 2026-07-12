@@ -218,7 +218,6 @@ SMODS.Joker {
 	key = "dogcheck",
 	config = {
 		totem_chance = 6,
-		old_bones = ""
 	},
 	--unlocked = false
 	rarity = 1,
@@ -229,11 +228,6 @@ SMODS.Joker {
 	cost = 10,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { G.GAME.probabilities.normal, card.ability.totem_chance } }
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		if not from_debuff then
-			card.ability.old_bones = G.localization.misc.dictionary.ph_mr_bones
-		end
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and pseudorandom("dogcheck") > 0.83 and not context.blueprint then
@@ -257,13 +251,60 @@ SMODS.Joker {
 					return true
 				end
 			}))
-			G.localization.misc.dictionary.ph_mr_bones = "Placeholder Text I dont Know what should go here okay."
 			return {
-				saved = true,
-				colour = G.C.RED
+				saved = "totem_UTDR_dogcheck",
 			}
-		elseif context.ending_shop and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = card.ability.old_bones
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "newsletter",
+	config = {
+		extra = 6,
+		boss_type = ""
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra } }
+	end,
+	rarity = 3,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 3, y = 1 },
+	cost = 9,
+	calculate = function(self, card, context)
+		if context.joker_main then
+			if G.GAME.blind.boss then
+				boss_type = "boss"
+			else
+				boss_type = G.GAME.blind.name
+			end
+		elseif context.end_of_round then
+			if not context.beat_boss then
+				local card_type = "Planet"
+				if boss_type == "Big Blind" then
+					card_type = "Tarot"
+				end
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.4,
+					func = function()
+						if G.consumeables.config.card_limit > #G.consumeables.cards then
+							play_sound('timpani')
+							local new_card = create_card(card_type, G.consumeables, nil, nil, nil, nil, nil, 'newsletter')
+							new_card:add_to_deck()
+							G.consumeables:emplace(new_card)
+							if context.blueprint then
+								context.blueprint_card:juice_up(0.3, 0.5)
+							else
+								card:juice_up(0.3, 0.5)
+							end
+						end
+						return true
+					end
+				}))
+			end
 		end
 	end
 }

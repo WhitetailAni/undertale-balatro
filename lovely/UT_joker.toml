@@ -14,7 +14,7 @@ end
 '''
 position = "at"
 payload = '''
-if self.ability.name == 'Golden Joker' or self.label == 'j_UTDR_burgerpants' or (self.label == 'j_UTDR_end' and self.ability.was_boss) or self.label == 'j_UTDR_scarlixir' then
+if self.ability.name == 'Golden Joker' or self.label == 'j_UTDR_burgerpants' or (self.label == 'j_UTDR_end' and self.ability.was_boss) or self.label == 'j_UTDR_scarlixir' or (self.label == 'j_UTDR_newsletter' and self.ability.boss_type == "boss") then
 	return self.ability.extra
 end
 '''

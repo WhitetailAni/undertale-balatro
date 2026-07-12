@@ -298,12 +298,9 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "omega_flowey",
 	config = {
-		extra = {
-			required_chips = 50,
-			xmult_gain = 1,
-			xmult = 1
-		},
-		old_bones = ""
+		required_chips = 50,
+		xmult_gain = 1,
+		xmult = 1
 	},
 	check_for_unlock = function(self, args)
 		return (args.type == "loss_ante" and args.ante == 8)
@@ -316,20 +313,15 @@ SMODS.Joker {
 	pos = { x = 9, y = 6 },
 	cost = 10,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.required_chips, card.ability.extra.xmult_gain, card.ability.extra.xmult } }
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		if not from_debuff then
-			card.ability.old_bones = G.localization.misc.dictionary.ph_mr_bones
-		end
+		return { vars = { card.ability.required_chips, card.ability.xmult_gain, card.ability.xmult } }
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				xmult = card.ability.extra.xmult
+				xmult = card.ability.xmult
 			}
-		elseif context.game_over and G.GAME.chips / G.GAME.blind.chips >= card.ability.extra.required_chips / 100 and not context.blueprint then
-			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+		elseif context.game_over and G.GAME.chips / G.GAME.blind.chips >= card.ability.required_chips / 100 and not context.blueprint then
+			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					G.hand_text_area.blind_chips:juice_up()
@@ -338,15 +330,12 @@ SMODS.Joker {
 					return true
 				end
 			}))
-			G.localization.misc.dictionary.ph_mr_bones = "HAHAHAHAHAHAHAHAHAHAHA!!"
 			play_sound("UTDR_omega_flowey", 1.0, 0.7)
 			return {
-				message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.xmult } },
-				saved = true,
+				message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } },
+				saved = "totem_UTDR_omegaflowey",
 				colour = G.C.RED
 			}
-		elseif context.ending_shop and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = card.ability.old_bones
 		end
 	end
 }

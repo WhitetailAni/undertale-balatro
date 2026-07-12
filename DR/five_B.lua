@@ -1,4 +1,35 @@
 SMODS.Joker {
+	key = "flower_castle",
+	config = {
+		chips = 0,
+		chip_gain = 2
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.chip_gain, localize("Clubs", 'suits_singular'), card.ability.chips } }
+	end,
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 2, y = 1 },
+	cost = 3,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) then
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "chips",
+				scalar_value = "chip_gain",
+				message_colour = G.C.CHIPS
+			})
+		elseif context.joker_main then
+			return {
+				chips = card.ability.chips
+			}
+		end
+	end
+}
+
+SMODS.Joker {
 	key = "aqua",
 	config = {
 		lower_bound = 1,
@@ -26,6 +57,7 @@ SMODS.Joker {
 		xmult = 1.5,
 		all_flowers = false,
 		orange_active = false,
+		final_hand = false,
 	},
 	loc_vars = function(self, info_queue, card)
 		if not card.debuff then
@@ -129,6 +161,7 @@ SMODS.Joker {
 				end
 				if G.GAME.current_round.hands_left == 0 then
 					play_flowery_sound("last_jarona")
+					card.ability.final_hand = true
 				elseif card.ability.all_flowers then
 					play_flowery_sound_random({
 						"last_jarona",
@@ -139,15 +172,20 @@ SMODS.Joker {
 					play_flowery_sound_grabbag()
 				end
 			elseif context.blind_defeated then
-				play_flowery_sound_random({
-					"heh_one_more_for_the_fans",
-					"heh_its_my_jarona",
-					"according_to_plant",
-					"wow",
-					"thatsgreat",
-					"leaf_it_to_me",
-					"give_it_to_you",
-				})
+				if card.ability.final_hand and pseudorandom("its_my_jarona") > 0.6 then
+					play_flowery_sound("heh_its_my_jarona")
+					card.ability.final_hand = false
+				else
+					play_flowery_sound_random({
+						"heh_one_more_for_the_fans",
+						"heh_its_my_jarona",
+						"according_to_plant",
+						"wow",
+						"thatsgreat",
+						"leaf_it_to_me",
+						"give_it_to_you",
+					})
+				end
 			elseif context.game_over or context.skipping_booster then
 				play_flowery_sound_random({
 					"sustingus",
@@ -247,7 +285,7 @@ SMODS.Joker {
 				flowerys[i].config.center.config.orange_active = false
 			end
 		elseif context.joker_main and card.ability.card_was_sold and not card.ability.all_flowers then
-			if #SMODS.find_card("j_UTDR_flowery") > 0 then
+			if #SMODS.find_card("j_UTDR_flowery") > 0 and G.GAME.current_round.hands_left > 0 then
 				local which_sfx = pseudorandom("ja_orange")
 				if which_sfx > 0.8 then
 					play_flowery_sound("ja_orange_1")
@@ -260,11 +298,80 @@ SMODS.Joker {
 			return {
 				mult = card.ability.mult
 			}
-		elseif context.end_of_round and context.main_eval then
+		elseif context.end_of_round and context.main_eval and card.ability.card_was_sold then
 			card.ability.card_was_sold = false
 			return {
 				message = localize('k_reset')
 			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "blue",
+	config = {
+		required_chips = 75,
+	},
+	--unlocked = false
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 4, y = 0 },
+	cost = 10,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.required_chips } }
+	end,
+	calculate = function(self, card, context)
+		if context.game_over and G.GAME.chips / G.GAME.blind.chips >= card.ability.required_chips / 100 and not context.blueprint then
+			G.E_MANAGER:add_event(Event({
+				trigger = 'after',
+				delay = 0.4,
+				func = function()
+					if G.consumeables.config.card_limit > #G.consumeables.cards then
+						play_sound('timpani')
+						local new_card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'blue_tarot')
+						new_card:add_to_deck()
+						G.consumeables:emplace(new_card)
+						if context.blueprint then
+							context.blueprint_card:juice_up(0.3, 0.5)
+						else
+							card:juice_up(0.3, 0.5)
+						end
+					end
+					return true
+				end
+			}))
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					G.hand_text_area.blind_chips:juice_up()
+					G.hand_text_area.game_chips:juice_up()
+					play_sound('tarot1')
+					return true
+				end
+			}))
+			return {
+				saved = "totem_UTDR_blue",
+			}
+		elseif context.end_of_round and context.main_eval and not context.game_over then
+			G.E_MANAGER:add_event(Event({
+				trigger = 'after',
+				delay = 0.4,
+				func = function()
+					if G.consumeables.config.card_limit > #G.consumeables.cards then
+						play_sound('timpani')
+						local new_card = create_card('Planet', G.consumeables, nil, nil, nil, nil, nil, 'blue_planet') --wow didnt know he was mormon
+						new_card:add_to_deck()
+						G.consumeables:emplace(new_card)
+						if context.blueprint then
+							context.blueprint_card:juice_up(0.3, 0.5)
+						else
+							card:juice_up(0.3, 0.5)
+						end
+					end
+					return true
+				end
+			}))
 		end
 	end
 }

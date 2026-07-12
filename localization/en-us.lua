@@ -566,6 +566,16 @@ return {
 					"a {C:attention}random{} tag",
 				},
 			},
+			["j_UTDR_newsletter"] = {
+				["name"] = "Newsletter",
+				["text"] = {
+					"Creates a {C:planet}Planet{} card when",
+					"{C:attention}Small Blind{} is defeated",
+					"Creates a {C:tarot}Tarot{} card when",
+					"{C:attention}Big Blind{} is defeated",
+					"Earn {C:money}$#1#{} when {C:attention}Boss Blind{} is defeated",
+				},
+			},
 			["j_UTDR_mysterious_artifact"] = {
 				["name"] = "Mysterious Artifact",
 				["text"] = {
@@ -1189,6 +1199,24 @@ return {
 					"{C:spectral}#1#{} cards",
 				},
 			},
+			["j_UTDR_blue"] = {
+				["name"] = "Blue",
+				["text"] = {
+					"{C:attention}Prevents Death{} if chips",
+					"scored are at least",
+					"{C:attention}#1#%{} of required chips,",
+					"creates a {C:tarot}Tarot{} card when",
+					"Death is prevented",
+				},
+			},
+			["j_UTDR_flower_castle"] = {
+				["name"] = "Flower Castle",
+				["text"] = {
+					"Gains {C:chips}+#1#{} Chips for each",
+					"played card of {C:clubs}#2#{} suit",
+					"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)"
+				},
+			},
 			["j_UTDR_manly_bandana"] = {
 				["name"] = "Manly Bandana",
 				["text"] = {
@@ -1772,6 +1800,10 @@ return {
 	},
 	["misc"] = {
 		["dictionary"] = {
+			["totem_UTDR_omegaflowey"] = "HAHAHAHAHAHAHAHAHAHAHA!!",
+			["totem_UTDR_dogcheck"] = "Placeholder text i Dont Know what should go here okay.",
+			["totem_UTDR_blue"] = "Still Dont !!! yaoi n shit idk",
+			
 			["k_UTDR_more"] = "more",
 			["k_UTDR_less"] = "less",
 			["k_UTDR_splat_ex"] = "Splat!",
