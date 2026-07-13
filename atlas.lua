@@ -19,6 +19,14 @@ SMODS.Atlas {
     py = 95
 }
 
+--[[SMODS.Atlas {
+    key = "lesser_dog",
+    path = "lesser_dog.png",
+    px = 71,
+    py = 95,
+    atlas_table = "ANIMATION_ATLAS"
+}]]
+
 SMODS.Atlas {
     key = "boosters",
     path = "booster.png",

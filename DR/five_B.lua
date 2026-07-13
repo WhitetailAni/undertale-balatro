@@ -30,6 +30,22 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+	key = "petal_feather",
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 2, y = 0 },
+	cost = 3,
+	calculate = function(self, card, context)
+		if context.evaluate_poker_hand then
+			print(context.full_hand[1])
+			
+		end
+	end
+}
+
+SMODS.Joker {
 	key = "aqua",
 	config = {
 		lower_bound = 1,
@@ -58,6 +74,7 @@ SMODS.Joker {
 		all_flowers = false,
 		orange_active = false,
 		final_hand = false,
+		cannot_speak = false,
 	},
 	loc_vars = function(self, info_queue, card)
 		if not card.debuff then
@@ -97,7 +114,7 @@ SMODS.Joker {
 					card = context.blueprint_card or card
 				}
 			end
-		elseif not context.blueprint then --we dont want blueprint or brainstorm doubletalking, do we? (i discovered that this would happen while verifying blueprint compat. MY EARS)
+		elseif not (context.blueprint or card.ability.cannot_speak) then --we dont want blueprint or brainstorm doubletalking, do we? (i discovered that this would happen while verifying blueprint compat. MY EARS)
 			--sound effect checking
 			if context.showdown_blind_effect then
 				play_flowery_sound("nonono")
@@ -196,17 +213,19 @@ SMODS.Joker {
 					"get_a_chance_2",
 					"forget_it"
 				})
-			elseif context.buying_card then
-				if context.card.config.center.key == "j_UTDR_ralsei" then
+			elseif context.card_added then
+				if context.card.config.center.key == "j_UTDR_flowery" then
+					context.card.config.center.config.cannot_speak = true --multiple flowerys and yet only one can speak. what a conundrum
+				elseif context.card.config.center.key == "j_UTDR_ralsei" then
 					play_flowery_sound("hey_raly")
 				elseif context.card.config.center.key == "j_UTDR_susie" then
-					if #SMODS.find_card("j_UTDR_kris") then
+					if #SMODS.find_card("j_UTDR_kris") > 0 then
 						play_flowery_sound("my_favorite_two")
 					else
 						play_flowery_sound("susie")
 					end
 				elseif context.card.config.center.key == "j_UTDR_kris" then
-					if #SMODS.find_card("j_UTDR_susie") then
+					if #SMODS.find_card("j_UTDR_susie") > 0 then
 						play_flowery_sound("my_favorite_two")
 					else
 						play_flowery_sound_random({
@@ -215,7 +234,7 @@ SMODS.Joker {
 						})
 					end
 				elseif context.card.config.center.key == "j_UTDR_asgore" then
-					if #SMODS.find_card("j_UTDR_kris") then
+					if #SMODS.find_card("j_UTDR_kris") > 0 then
 						play_flowery_sound("your_dad")
 					else
 						play_flowery_sound("my_king")

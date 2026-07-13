@@ -34,6 +34,54 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+	key = "the_lake",
+	rarity = 1,
+	config = {
+		rank_increase = 1,
+	},
+	loc_vars = function(self, info_queue, card)
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "xaviers_lake")
+		if math.fmod(os.time(), 1024) == 0  then
+			return { 
+				vars = { card.ability.rank_increase },
+				key = "j_UTDR_xaviers_lake",
+			}
+		end
+		return { vars = { card.ability.rank_increase } }
+	end,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 4, y = 1 },
+	cost = 6,
+	calculate = function(self, card, context)
+		if context.before then
+			local scoring_hand = {}
+			for i = 1, #context.scoring_hand do
+				scoring_hand[context.scoring_hand[i]] = true
+			end
+			
+			local unscoring_hand_indexes = {}
+			for i = 1, #context.full_hand do
+				if not scoring_hand[context.full_hand[i]] then
+					table.insert(unscoring_hand_indexes, i)
+				end
+			end
+			
+			for i = 1, #unscoring_hand_indexes do
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						SMODS.modify_rank(context.full_hand[unscoring_hand_indexes[i]], card.ability.rank_increase)
+						context.full_hand[unscoring_hand_indexes[i]]:juice_up()
+						return true
+					end
+				}))
+			end
+		end
+	end
+}
+
+SMODS.Joker {
 	key = "lord_of_hammer",
 	config = {
 		xmult = 2,

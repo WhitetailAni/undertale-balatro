@@ -1412,6 +1412,31 @@ return {
 					"{C:gold}#1#s{} ",
 				},
 			},
+			["j_UTDR_petal_feather"] = {
+				["name"] = "Petal Feather",
+				["text"] = {
+					"{C:attention}Adjacent{} hand types are",
+					"considered the {C:attention}same",
+				},
+			},
+			["j_UTDR_the_lake"] = {
+				["name"] = "The Lake",
+				["text"] = {
+					"Increases the rank of {C:attention}played",
+					"{C:attention}but unscoring{} cards by {C:attention}#1#{}",
+				},
+			},
+			["j_UTDR_xaviers_lake"] = {
+				["name"] = "The Lake",
+				["text"] = {
+					"Does anyone know how to get to {C:watercooler}The Lake... {C:inactive}The Lake.",
+					"Does anyone know how to get to {C:watercooler}The Lake... {C:inactive}The Lake.",
+					"Do {C:attention}you{} know how to get to {C:watercooler}The Lake... {C:inactive}The Lake?",
+					"Do {C:attention}you{} know how to get to {C:watercooler}The Lake... {C:inactive}The Lake?",
+					"Does anyone know how to get to {C:watercooler}The Lake... {C:inactive}The Lake.",
+					"Oh No... I'm headed right towards the {C:red}Cyclone...{}"
+				},
+			},
 			["j_UTDR_oldman"] = {
 				["name"] = "Old Man",
 				["text"] = {
