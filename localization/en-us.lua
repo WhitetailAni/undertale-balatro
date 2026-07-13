@@ -1631,6 +1631,15 @@ return {
 				},
 				["name"] = "Festival",
 			},
+			["j_UTDR_susies_idea"] = {
+				["text"] = {
+					"When round begins,",
+					"add a random {C:attention}playing",
+					"{C:attention}card{} with a random",
+					"{C:attention}Enhancement{} to your hand",
+				},
+				["name"] = "{element:1}Susie's Idea",
+			},
 		},
 		["Back"] = {
 			["b_ghost"] = {

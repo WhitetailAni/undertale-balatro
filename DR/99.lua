@@ -480,6 +480,67 @@ G.FUNCS.redprint_compat = function(e)
 end
 
 SMODS.Joker {
+	key = "susies_idea",
+	blueprint_compat = true,
+	rarity = 2,
+	cost = 5,
+	pos = { x = 1, y = 0 },
+	atlas = "DR_jokers_2",
+	loc_vars = function(self, info_queue, card)
+		if self.susie and self.susie.remove then
+			self.susie:remove()
+			self.susie = nil
+		end
+		self.susie = Sprite(0, 0, 0.5,
+			0.5 * (G.ASSET_ATLAS["UTDR_susies_idea"].py / G.ASSET_ATLAS["UTDR_susies_idea"].px),
+			G.ASSET_ATLAS["UTDR_susies_idea"], { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.susie } },
+			}
+		}
+		return {
+			vars = {
+				elements = { element }
+			}
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.first_hand_drawn then
+			local new_card = SMODS.create_card {
+				set = "Enhanced",
+				enhancement = SMODS.poll_enhancement { key = "UTDR_susies_idea", guaranteed = true },
+				area = G.discard,
+				key_append = "UTDR_susies_idea" }
+			G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+			new_card.playing_card = G.playing_card
+			table.insert(G.playing_cards, new_card)
+
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					G.hand:emplace(new_card)
+					new_card:start_materialize()
+					G.GAME.blind:debuff_card(new_card)
+					G.hand:sort()
+					if context.blueprint_card then
+						context.blueprint_card:juice_up()
+					else
+						card:juice_up()
+					end
+					SMODS.calculate_context({ playing_card_added = true, cards = { new_card } })
+					save_run()
+					return true
+				end
+			}))
+
+			return nil, true -- This is for Joker retrigger purposes
+		end
+	end,
+}
+
+SMODS.Joker {
 	key = "susie",
 	loc_txt = {
 		name = "Susie",

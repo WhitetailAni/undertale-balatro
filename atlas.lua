@@ -28,6 +28,13 @@ SMODS.Atlas {
 }]]
 
 SMODS.Atlas {
+    key = "susies_idea",
+    path = "susies_idea.png",
+    px = 32,
+    py = 25
+}
+
+SMODS.Atlas {
     key = "boosters",
     path = "booster.png",
     px = 71,
@@ -64,9 +71,9 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
-	key = "splash",
-	path = "splash.png",
-	px = 312,
-	py = 169,
-	atlas_table = "ASSET_ATLAS"
+    key = "splash",
+    path = "splash.png",
+    px = 312,
+    py = 169,
+    atlas_table = "ASSET_ATLAS"
 }
