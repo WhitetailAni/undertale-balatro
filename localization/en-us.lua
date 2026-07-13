@@ -147,10 +147,10 @@ return {
 				["name"] = "Bravery",
 			},
 			["j_UTDR_sans"] = {
-				["name"] = "sans.",
+				["name"] = "{f:UTDR_ComicSansUT}sans.",
 				["text"] = {
-					"{X:mult,C:white}x#1#{} mult if played",
-					"hand is a {C:attention}#2#{}",
+					"{X:mult,C:white,f:UTDR_ComicSansUT} x#1# {f:UTDR_ComicSansUT} mult if played",
+					"{f:UTDR_ComicSansUT}hand is a {f:UTDR_ComicSansUT,C:attention}#2#{f:UTDR_ComicSansUT}",
 				},
 			},
 			["j_UTDR_shelter_code"] = {
@@ -1013,11 +1013,11 @@ return {
 				},
 			},
 			["j_UTDR_papyrus"] = {
-				["name"] = "THE GREAT PAPYRUS!",
+				["name"] = "{f:UTDR_PapyrusUT}THE GREAT PAPYRUS!",
 				["text"] = {
-					"RETRIGGER ALL SCORED",
-					"CARDS IF PLAYED HAND",
-					"CONTAINS A {C:attention}#1#{}!!!",
+					"{f:UTDR_PapyrusUT}RETRIGGER ALL SCORED",
+					"{f:UTDR_PapyrusUT}CARDS IF PLAYED HAND",
+					"{f:UTDR_PapyrusUT}CONTAINS A {f:UTDR_PapyrusUT,C:attention}#1#{f:UTDR_PapyrusUT}!!!",
 				},
 			},
 			["j_UTDR_shadowguy"] = {

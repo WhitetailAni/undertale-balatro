@@ -154,6 +154,16 @@ if UTDR.config_file['undertale'] then
 	assert(SMODS.load_file('UT/six.lua'))()
 	assert(SMODS.load_file('UT/seven.lua'))()
 
+	SMODS.Font {
+		key = "ComicSansUT",
+		path = "UndertaleSans.ttf"
+	}
+
+	SMODS.Font {
+		key = "PapyrusUT",
+		path = "UndertalePapyrus.ttf"
+	}
+
 	SMODS.Back {
 		key = "dog",
 		--[[
