@@ -33,6 +33,31 @@ SMODS.Joker {
 	end
 }
 
+-- is it stealing from another mod when the mod developer is working on this one
+SMODS.Joker {
+	key = "festival",
+	blueprint_compat = false,
+	perishable_compat = true,
+	eternal_compat = true,
+	attributes = {
+		"passive",
+	},
+	rarity = 1,
+	cost = 5,
+	atlas = "DR_jokers_2",
+	pos = { x = 1, y = 1 },
+	config = { extra = { booster_mod = 1 } },
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.booster_mod } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) + card.ability.extra.booster_mod
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) - card.ability.extra.booster_mod
+	end
+}
+
 SMODS.Joker {
 	key = "the_lake",
 	rarity = 1,
@@ -41,8 +66,8 @@ SMODS.Joker {
 	},
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "xaviers_lake")
-		if math.fmod(os.time(), 1024) == 0  then
-			return { 
+		if math.fmod(os.time(), 1024) == 0 then
+			return {
 				vars = { card.ability.rank_increase },
 				key = "j_UTDR_xaviers_lake",
 			}
@@ -60,14 +85,14 @@ SMODS.Joker {
 			for i = 1, #context.scoring_hand do
 				scoring_hand[context.scoring_hand[i]] = true
 			end
-			
+
 			local unscoring_hand_indexes = {}
 			for i = 1, #context.full_hand do
 				if not scoring_hand[context.full_hand[i]] then
 					table.insert(unscoring_hand_indexes, i)
 				end
 			end
-			
+
 			for i = 1, #unscoring_hand_indexes do
 				G.E_MANAGER:add_event(Event({
 					func = function()

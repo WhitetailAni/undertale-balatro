@@ -430,7 +430,7 @@ return {
 				},
 				["text"] = {
 					"Gains {C:mult}+#1#{} Mult when",
-					"other jokers scale",
+					"other Jokers {C:attention}scale{}",
 					"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
 				},
 				["name"] = "Lesser Dog",
@@ -1594,6 +1594,43 @@ return {
 				},
 				["name"] = "______",
 			},
+			["j_UTDR_dog_shrine"] = {
+				["text"] = {
+					"{C:red}$#1#{} at the end",
+					"of round, {C:attention}and...?{}"
+				},
+				["name"] = "Dog Shrine",
+			},
+			["j_UTDR_check_it_out_im_in_the_house_like_carpet"] = {
+				["text"] = {
+					"Creates a {V:1}#3#{} card",
+					"after {C:attention}#2#{} {C:inactive}[#1#]{} hands played",
+					"{C:inactive}(Must have room){}"
+				},
+				["name"] = "Roast Chicken",
+			},
+			["j_UTDR_lord_of_the_hammer"] = {
+				["text"] = {
+					"{X:mult,C:white} X#1# {} Mult if",
+					"{C:attention}Joker{} slots are full"
+				},
+				["name"] = "Lord of the Hammer",
+			},
+			["j_UTDR_pink"] = {
+				["text"] = {
+					"{C:green}#1# in #2#{} chance for each",
+					"scoring card of {V:1}#4#{} suit",
+					"to create a {C:dark_edition}#5#{} {V:2}#3#{} card",
+					"{C:inactive}(Must have room){}"
+				},
+				["name"] = "Pink",
+			},
+			["j_UTDR_festival"] = {
+				["text"] = {
+					"{C:attention}+#1#{} cards per Booster Pack"
+				},
+				["name"] = "Festival",
+			},
 		},
 		["Back"] = {
 			["b_ghost"] = {
@@ -1819,7 +1856,7 @@ return {
 			["totem_UTDR_dogcheck"] = "Placeholder text i Dont Know what should go here okay.",
 			["totem_UTDR_blue"] = "Still Dont !!! yaoi n shit idk",
 			["totem_UTDR_buttspie"] = "Spared by Buttspie",
-			
+
 			["k_UTDR_more"] = "more",
 			["k_UTDR_less"] = "less",
 			["k_UTDR_splat_ex"] = "Splat!",

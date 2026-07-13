@@ -35,12 +35,11 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
-	pos = { x = 2, y = 0 },
+	pos = { x = 1, y = 1 },
 	cost = 3,
 	calculate = function(self, card, context)
 		if context.evaluate_poker_hand then
 			print(context.full_hand[1])
-			
 		end
 	end
 }
@@ -92,11 +91,12 @@ SMODS.Joker {
 		end
 		return { vars = { card.ability.xmult, localize("9", "ranks") or "9" } }
 	end,
-		rarity = 3,
+	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
 	pos = { x = 9, y = 0 },
+	soul_pos = { x = 0, y = 3 },
 	cost = 3,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play then
@@ -129,11 +129,11 @@ SMODS.Joker {
 				local greens = SMODS.find_card("j_UTDR_green")
 				local flowerys = SMODS.find_card("j_UTDR_flowery")
 				local pinks = SMODS.find_card("j_UTDR_pink")
-				
+
 				if #aquas > 0 and #seths > 0 and #yellows > 0 and #blues > 0 and #oranges > 0 and #greens > 0 then
 					play_flowery_sound("lend_me_your_power")
 					card.ability.all_flowers = true
-					
+
 					for i = 1, #aquas do
 						aquas[i]:set_eternal(true)
 						aquas[i]:set_edition({ negative = true }, true)
@@ -168,7 +168,7 @@ SMODS.Joker {
 						pinks[i]:set_eternal(true)
 						pinks[i]:set_edition({ negative = true }, true)
 					end
-				end 
+				end
 			elseif context.joker_main then
 				local oranges = SMODS.find_card("j_UTDR_orange")
 				for i = 1, #oranges do
@@ -321,7 +321,7 @@ SMODS.Joker {
 				else
 					play_flowery_sound_grabbag()
 				end
-			end		
+			end
 			return {
 				mult = card.ability.mult
 			}
@@ -401,4 +401,73 @@ SMODS.Joker {
 			}))
 		end
 	end
+}
+
+SMODS.Joker {
+	key = "pink",
+	config = {
+		extra = {
+			odds = 4,
+			suit = "Hearts",
+			card_type = "Tarot"
+		}
+	},
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 0, y = 1 },
+	cost = 8,
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'j_UTDR_pink')
+		return {
+			vars = {
+				numerator,
+				denominator,
+				localize("k_" .. string.lower(card.ability.extra.card_type)),
+				localize(card.ability.extra.suit, 'suits_singular') or "Heart",
+				localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
+				colours = {
+					G.C.SUITS[card.ability.extra.suit],
+					G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER
+				}
+			}
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and (context.other_card:is_suit(card.ability.extra.suit) or SMODS.has_any_suit(context.other_card)) and SMODS.pseudorandom_probability(card, 'j_UTDR_pink', 1, card.ability.extra.odds) then
+			-- check if should add consumable
+			local do_message = false
+			if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+				do_message = true
+			end
+			-- create spectral
+			if do_message then
+				G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+				return {
+					extra = {
+						message = localize('k_plus_' .. string.lower(card.ability.extra.card_type)),
+						colour = G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER,
+						message_card = card,
+						func = function() -- This is for timing purposes, everything here runs after the message
+							G.E_MANAGER:add_event(Event({
+								func = (function()
+									SMODS.add_card {
+										set = card.ability.extra.card_type,
+										edition = "e_negative",
+										key_append = 'UTDR_pink' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
+
+									}
+									G.GAME.consumeable_buffer = 0
+									return true
+								end)
+							}))
+						end
+					},
+				}
+			end
+		end
+	end,
+
 }

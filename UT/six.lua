@@ -137,19 +137,22 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "lesser_dog",
 	config = {
-		mult_gain = 1,
-		mult = 0
+		extra = {
+
+			mult_gain = 1,
+			mult = 0
+		}
 	},
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 6, y = 8 },
+	atlas = "DR_jokers_2",
+	pos = { x = 3, y = 3 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult_gain, card.ability.mult } }
+		return { vars = { card.ability.extra.mult_gain, card.ability.extra.mult } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		if G.PROFILES[G.SETTINGS.profile].hand_usage["Pair"] then
@@ -162,7 +165,13 @@ SMODS.Joker {
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
 	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
 		if other_card.config.center.key ~= "j_UTDR_lesser_dog" then
-			card.ability.mult = card.ability.mult + card.ability.mult_gain
+			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					self:set_sprites(card)
+					return true
+				end,
+			}))
 			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT })
 		else
 			print("Uh Oh")
@@ -171,8 +180,17 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				mult = card.ability.mult
+				mult = card.ability.extra.mult
 			}
+		end
+	end,
+	set_sprites = function(self, card, front)
+		if card.ability and card.ability.extra and card.ability.extra.mult and card.ability.extra.mult_gain then
+			card.children.center:set_sprite_pos({
+				x = 3 +
+					math.min(6, math.floor(card.ability.extra.mult / card.ability.extra.mult_gain)),
+				y = 3
+			})
 		end
 	end
 }
@@ -466,15 +484,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "SURVEY_PROGRAM_DR",
-	no_collection = true,
-	in_pool = function(self, args)
-		return false
-	end,
-	atlas = "UT_jokers",
-}
-
-SMODS.Joker {
 	key = "vessel",
 	config = {
 		xmult_gain = 0.15,
@@ -496,7 +505,7 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "lesser_dog",
+	atlas = "UT_jokers",
 	--pos = { x = 1, y = 9 },
 	cost = 6,
 	calculate = function(self, card, context)

@@ -642,3 +642,30 @@ SMODS.Joker {
 		end
 	end
 }
+
+SMODS.Joker {
+	key = "lord_of_the_hammer",
+	config = {
+		extra = {
+			xmult = 2
+		}
+	},
+	rarity = 3,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 2, y = 2 },
+	cost = 8,
+	loc_vars = function(self, info_queue, card)
+		return {
+			vars = { card.ability.extra.xmult }
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main and G.jokers and #G.jokers.cards >= G.jokers.config.card_limit then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+	end
+}
