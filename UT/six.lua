@@ -111,23 +111,34 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "amalgam",
-	config = {
-		mult = 5,
-	},
-	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
-		return { vars = { card.ability.mult, localize({ type = 'name_text', set = "Enhanced", key = "m_wild" }) or "Wild Card" } }
-	end,
 	rarity = 1,
-	blueprint_compat = true,
+	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "UT_jokers",
 	pos = { x = 3, y = 8 },
-	cost = 4,
+	cost = 5,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, 'm_wild') then
+		if context.end_of_round and context.main_eval and #G.hand.cards>0 then
+			for i = 1, #G.hand.cards do
+				-- Randomize Suit & Rank
+				local suit = pseudorandom_element(SMODS.Suits, 'utdr_amalgam_suit')
+				local rank = pseudorandom_element(SMODS.Ranks, 'utdr_amalgam_rank')
+				
+				-- Change them
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						local c = G.hand.cards[i]
+						c:juice_up()
+						SMODS.change_base(c, suit.key, rank.key)
+						return true
+					end
+				}))
+			end
+
 			return {
-				mult = card.ability.mult
+				message = localize("k_UTDR_upgrade_qu"),
+				sound = "UTDR_amalgam",
+				pitch = pseudorandom('utdr_amalgam_sound')*.5+.5
 			}
 		end
 	end

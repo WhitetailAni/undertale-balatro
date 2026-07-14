@@ -263,3 +263,10 @@ SMODS.Sound {
 	pitch = 1.0,
 	volume = 0.7
 }
+
+SMODS.Sound {
+	key = "amalgam",
+	path = "amalgam.wav",
+	pitch = 1.0,
+	volume = 0.7
+}

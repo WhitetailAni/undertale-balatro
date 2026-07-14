@@ -645,8 +645,9 @@ return {
 			["j_UTDR_amalgam"] = {
 				["name"] = "Amalgamates",
 				["text"] = {
-					"{C:attention}#2#s{} give {C:mult}+#1#{}",
-					"Mult when scored",
+					"At end of round, randomize",
+					"{C:attention}rank{} and {C:attention}suit{} of all",
+					"cards held in hand"
 				},
 			},
 			["j_UTDR_watercooler"] = {
@@ -1913,6 +1914,7 @@ return {
 			["totem_UTDR_dogcheck"] = "Placeholder text i Dont Know what should go here okay.",
 			["totem_UTDR_blue"] = "Still Dont !!! yaoi n shit idk",
 			["totem_UTDR_buttspie"] = "Spared by Buttspie",
+			["k_UTDR_upgrade_qu"] = "Upgrade?",
 
 			["k_UTDR_more"] = "more",
 			["k_UTDR_less"] = "less",
