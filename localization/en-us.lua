@@ -1664,6 +1664,15 @@ return {
 					"{C:attention}Enhancement{} to your hand",
 				},
 			},
+			["j_UTDR_yellow"] = {
+				["name"] = "Yellow",
+				["text"] = {
+					"{X:mult,C:white} X#1# {} Mult if scoring hand",
+					"contains exactly {C:attention}#2#{} ranks",
+					"{C:inactive,s:0.75}(This Joker is {C:red,s:0.75}destroyed {C:inactive,s:0.75}if{}",
+					"{C:inactive,s:0.75}it hasn't triggered this Ante)"
+				}
+			}
 		},
 		["Back"] = {
 			["b_ghost"] = {
@@ -1895,6 +1904,7 @@ return {
 			["k_UTDR_splat_ex"] = "Splat!",
 			["k_UTDR_burned_ex"] = "Burned!",
 			["k_UTDR_robot"] = "Roboticized!",
+			["k_UTDR_yellow_thanks"] = "Thanks, y'all!"
 		},
 	},
 }

@@ -39,24 +39,24 @@ SMODS.Joker {
 	soul_pos = { x = 2, y = 3 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		local h = math.floor(pseudorandom("utdr_petal_feather_preview")*#G.handlist+1)
+		local h = math.floor(pseudorandom("utdr_petal_feather_preview") * #G.handlist + 1)
 
-		local rets = {G.handlist[h]}
-		rets[#rets+1] = G.handlist[h-1]
-		rets[#rets+1] = G.handlist[h+1]
+		local rets = { G.handlist[h] }
+		rets[#rets + 1] = G.handlist[h - 1]
+		rets[#rets + 1] = G.handlist[h + 1]
 
-		return { vars = rets, key = self.key..(#rets == 2 and "_1hand" or "") }
+		return { vars = rets, key = self.key .. (#rets == 2 and "_1hand" or "") }
 	end,
 	calculate = function(self, card, context)
 		if context.evaluate_poker_hand then
 			local t = SMODS.shallow_copy(context.poker_hands)
 
-			for i,v in ipairs(G.handlist) do
+			for i, v in ipairs(G.handlist) do
 				if v == context.scoring_name then
 					print(context.scoring_name)
-					local next = {G.handlist[i-1], G.handlist[i+1] }
-					
-					for _,v2 in ipairs(next) do
+					local next = { G.handlist[i - 1], G.handlist[i + 1] }
+
+					for _, v2 in ipairs(next) do
 						t[v2] = t[v]
 					end
 				end
@@ -362,6 +362,79 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+	key = "yellow",
+	config = {
+		extra = {
+			required_suit_num = 2,
+			xmult = 2,
+			did_effect_at_any_point = false
+		}
+	},
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = false,
+	atlas = "DR_jokers_2",
+	pos = { x = 3, y = 0 },
+	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult, card.ability.extra.required_suit_num } }
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main then
+			local suits = {}
+			local suit_count = 0
+			for i = 1, #context.scoring_hand do
+				if not context.scoring_hand[i].debuff then
+					suits[context.scoring_hand[i].base.suit] = (suits[context.scoring_hand[i].base.suit] or 0) + 1
+					if (suits[context.scoring_hand[i].base.suit] == 1) then
+						suit_count = suit_count + 1
+					end
+				end
+			end
+			if suit_count == card.ability.extra.required_suit_num then
+				if not context.blueprint then
+					card.ability.extra.did_effect_at_any_point = true
+				end
+				return {
+					xmult = card.ability.extra.xmult
+				}
+			end
+		end
+		if context.ante_change and not context.blueprint then
+			if card.ability.extra.did_effect_at_any_point then
+				card.ability.extra.did_effect_at_any_point = false
+			else
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound('tarot1')
+						card.T.r = -0.2
+						card:juice_up(0.3, 0.4)
+						card.states.drag.is = true
+						card.children.center.pinch.x = true
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
+							func = function()
+								G.jokers:remove_card(card)
+								card:remove()
+								card = nil
+								return true;
+							end
+						}))
+						return true
+					end
+				}))
+				return {
+					message = localize("k_UTDR_yellow_thanks"),
+					message_colour = G.C.YELLOW,
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker {
 	key = "blue",
 	config = {
 		required_chips = 75,
@@ -515,9 +588,9 @@ SMODS.Joker {
 	disguise = function(self_self, self_card)
 		local keys = {}
 		for key, value in pairs(G.localization.descriptions.Joker) do
-		  keys[#keys + 1] = key
+			keys[#keys + 1] = key
 		end
-		
+
 		local j = 1
 		for i = 1, #keys do
 			if keys[i]:find("UTDR", 1, true) then
@@ -527,8 +600,8 @@ SMODS.Joker {
 		end
 		for i = j, #keys do
 			keys[i] = nil
-    	end
-		
+		end
+
 		--make sure it sticks to 1 joker!!
 		local chosen_joker_key = ""
 		if not self_card.config.disguised then
@@ -538,18 +611,26 @@ SMODS.Joker {
 			chosen_joker_key = self_card.config.chosen_joker_key
 		end
 		self_card.config.disguised = true
-		
+
 		--reset to default "Kee kee~"
-		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = G.localization.descriptions.Joker["j_UTDR_netskie_disguise_base"].text
-		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = G.localization.descriptions.Joker["j_UTDR_netskie_disguise_base"].text_parsed
-		
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = G.localization.descriptions.Joker
+			["j_UTDR_netskie_disguise_base"].text
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = G.localization.descriptions.Joker
+			["j_UTDR_netskie_disguise_base"].text_parsed
+
 		--put the desired text before the "Kee kee~" since parsing the text hard and ill just have the game do it
-		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = prepend_to_table(G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text, G.localization.descriptions.Joker[chosen_joker_key].text)
-		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = prepend_to_table(G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed, G.localization.descriptions.Joker[chosen_joker_key].text_parsed)
-	
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = prepend_to_table(
+			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text,
+			G.localization.descriptions.Joker[chosen_joker_key].text)
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = prepend_to_table(
+			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed,
+			G.localization.descriptions.Joker[chosen_joker_key].text_parsed)
+
 		--idk if we Need to copy over the base .text and .name but ill do it in case theres any sneaky detection jokers.
-		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name = G.localization.descriptions.Joker[chosen_joker_key].name
-		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name_parsed = G.localization.descriptions.Joker[chosen_joker_key].name_parsed
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name = G.localization.descriptions.Joker
+			[chosen_joker_key].name
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name_parsed = G.localization.descriptions.Joker
+			[chosen_joker_key].name_parsed
 
 		local center = G.P_CENTERS[chosen_joker_key]
 		local can_localize = false
@@ -560,46 +641,46 @@ SMODS.Joker {
 				end
 			end
 		end
-		
+
 		local dummy = SMODS.create_card({
 			key = chosen_joker_key,
 			skip_materialize = true,
 			set = "Joker",
 			no_edition = true
 		})
-		
+
 		--print("self_self")
-		
+
 		for key, value in pairs(self_self) do
 			--print(key)
 		end
-		
+
 		--print(" ")
 		--print("self_card")
-		
+
 		for key, value in pairs(self_card) do
 			--print(key)
 		end
-		
+
 		--print(self_self)
 		--print(self_card.mod)
-		
+
 		--print(self_card)
 		--print(card.children)
 		--print(card.children.center)
 		--self_card.config.center:set_sprite_pos({ x = 2, y = 1 })
-		
+
 		--local dummy_sprite = Sprite:init(0, 0, 71, 75, "DR_jokers_2", { x = 2, y = 1 })
 		--print(dummy_sprite)
-		
-		local vars = { vars = { } }
+
+		local vars = { vars = {} }
 		if can_localize then
 			local card = dummy.config.center
 			card["ability"] = dummy.config.center.config
 			vars = center:loc_vars({}, card)
 			dummy:remove()
 		end
-		
+
 		return vars["vars"]
 	end,
 	loc_vars = function(self, info_queue, card)
@@ -631,10 +712,10 @@ SMODS.Joker {
 }
 
 function prepend_to_table(tabble, new_items)
-    local tabbble = {}
-    for _, v in ipairs(new_items) do
-        table.insert(tabbble, v)
-    end
-    table.insert(tabbble, tabble[1])
-    return tabbble
+	local tabbble = {}
+	for _, v in ipairs(new_items) do
+		table.insert(tabbble, v)
+	end
+	table.insert(tabbble, tabble[1])
+	return tabbble
 end
