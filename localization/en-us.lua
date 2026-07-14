@@ -1417,6 +1417,17 @@ return {
 				["text"] = {
 					"{C:attention}Adjacent{} hand types are",
 					"considered the {C:attention}same",
+					"{C:inactive}(ex: {C:attention}#1#{C:inactive} also contains",
+					"{C:attention}#2#{C:inactive} and {C:attention}#3#{C:inactive})"
+				},
+			},
+			["j_UTDR_petal_feather_1hand"] = {
+				["name"] = "Petal Feather",
+				["text"] = {
+					"{C:attention}Adjacent{} hand types are",
+					"considered the {C:attention}same",
+					"{C:inactive}(ex: {C:attention}#1#{C:inactive} also",
+					"{C:inactive}contains {C:attention}#2#{C:inactive})"
 				},
 			},
 			["j_UTDR_the_lake"] = {

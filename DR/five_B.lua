@@ -31,16 +31,42 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "petal_feather",
-	rarity = 1,
-	blueprint_compat = true,
+	rarity = 2,
+	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
 	pos = { x = 2, y = 0 },
 	soul_pos = { x = 2, y = 3 },
-	cost = 3,
+	cost = 7,
+	loc_vars = function(self, info_queue, card)
+		local h = math.floor(pseudorandom("utdr_petal_feather_preview")*#G.handlist+1)
+
+		local rets = {G.handlist[h]}
+		rets[#rets+1] = G.handlist[h-1]
+		rets[#rets+1] = G.handlist[h+1]
+
+		return { vars = rets, key = self.key..(#rets == 2 and "_1hand" or "") }
+	end,
 	calculate = function(self, card, context)
 		if context.evaluate_poker_hand then
-			print(context.full_hand[1])
+			local t = SMODS.shallow_copy(context.poker_hands)
+
+			for i,v in ipairs(G.handlist) do
+				if v == context.scoring_name then
+					print(context.scoring_name)
+					local next = {G.handlist[i-1], G.handlist[i+1] }
+					
+					for _,v2 in ipairs(next) do
+						t[v2] = t[v]
+					end
+				end
+			end
+
+			--print(context.poker_hands)
+
+			return {
+				replace_poker_hands = t
+			}
 		end
 	end
 }
