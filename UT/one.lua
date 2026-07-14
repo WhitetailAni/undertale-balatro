@@ -548,11 +548,8 @@ SMODS.Joker {
 					if card.label == 'j_UTDR_asgore' then
 						card:remove()
 						card = nil
-						print("Divorcee Identified.")
 						card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
-						print("Target Destroyed." .. card.label)
 					end
-					print("add his sorry ass to the deck")
 					card:add_to_deck()
 					G.jokers:emplace(card)
 					card:start_materialize()
