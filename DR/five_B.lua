@@ -310,6 +310,178 @@ SMODS.Joker {
 	end
 }
 
+G.FUNCS.get_unscored_cards = function(context)
+	local scored_map = {}
+	for _, v in ipairs(context.scoring_hand) do scored_map[v] = true end
+	local unscored_cards = {}
+	for _, v in ipairs(context.full_hand) do
+		if not scored_map[v] then
+			table.insert(unscored_cards, v)
+		end
+	end
+	return unscored_cards
+end
+
+SMODS.Joker {
+	key = "flowery_scarf",
+	atlas = "DR_jokers_2",
+	pos = { x = 6, y = 1 },
+	config = { extra = { old = {} } },
+	cost = 1,
+	rarity = 1,
+	blueprint_compat = false,
+	perishable_compat = true,
+	calculate = function(self, card, context)
+		if context.before and not context.blueprint then
+			local cards_to_enhance = {}
+			for _, playing_card in ipairs(G.FUNCS.get_unscored_cards(context)) do
+				if not playing_card.debuff then
+					table.insert(cards_to_enhance, playing_card)
+				end
+			end
+			if #cards_to_enhance > 0 then
+				return {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.SECONDARY_SET.Enhanced,
+					func = function()
+						for i, playing_card in ipairs(cards_to_enhance) do
+							local new_enhancement = SMODS.poll_enhancement { key = "UTDR_flowery_scarf", guaranteed = true }
+							local percent = 0.85 + (i - 0.999) / (#G.play.cards - 0.998) * 0.3
+							local idx = 0
+							for k, v in pairs(context.full_hand) do
+								if v == playing_card then
+									idx = k
+									if not card.ability.extra.old[k] then
+										card.ability.extra.old[k] = {
+											cen = playing_card.config.center,
+											vis = playing_card:should_hide_front(),
+										}
+									end
+									break
+								end
+							end
+							playing_card:set_ability(new_enhancement, nil, false)
+							local new = {
+								cen = playing_card.config.center,
+								vis = playing_card:should_hide_front(),
+							}
+							if idx ~= 0 then
+								local old = card.ability.extra.old[idx]
+								playing_card:set_sprites(old.cen, nil)
+								playing_card.front_hidden = old.vis
+							end
+							G.E_MANAGER:add_event(Event({
+								trigger = 'immediate',
+								func = function()
+									play_sound('card1', percent)
+									playing_card:flip()
+									return true
+								end
+							}))
+							G.E_MANAGER:add_event(Event({
+								trigger = 'after',
+								delay = 0.2,
+								func = function()
+									playing_card:set_sprites(new.cen, nil)
+									playing_card.front_hidden = new.vis
+									card.ability.extra.old[idx] = nil
+									return true
+								end
+							}))
+							G.E_MANAGER:add_event(Event({
+								trigger = 'after',
+								delay = 0.2,
+								func = function()
+									play_sound('tarot2', percent)
+									playing_card:flip()
+									return true
+								end
+							}))
+						end
+						return true
+					end
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "green",
+	atlas = "DR_jokers_2",
+	pos = { x = 7, y = 0 },
+	blueprint_compat = true,
+	perishable_compat = true,
+	cost = 5,
+	rarity = 1,
+	config = {
+		extra = {
+			card_type = "Tarot",
+			booster_counter = 0,
+			booster_requirement = 2,
+		}
+	},
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
+		return {
+			vars = {
+				card.ability.extra.booster_counter,
+				card.ability.extra.booster_requirement,
+				localize("k_" .. string.lower(card.ability.extra.card_type)),
+				localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
+				colours = {
+					G.C.SUITS[card.ability.extra.suit],
+					G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER
+				}
+			}
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.open_booster then
+			local do_create = false
+			if not context.blueprint then
+				card.ability.extra.booster_counter = card.ability.extra.booster_counter + 1
+				if card.ability.extra.booster_counter >= card.ability.extra.booster_requirement then
+					card.ability.extra.booster_counter = 0
+					do_create = true
+				end
+			end
+			if do_create then
+				-- check if should add consumable
+				local do_message = false
+				if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+					do_message = true
+				end
+				-- create tarot
+				if do_message then
+					G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+					return {
+						extra = {
+							message = localize('k_plus_' .. string.lower(card.ability.extra.card_type)),
+							colour = G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER,
+							message_card = card,
+							func = function() -- This is for timing purposes, everything here runs after the message
+								G.E_MANAGER:add_event(Event({
+									func = (function()
+										SMODS.add_card {
+											set = card.ability.extra.card_type,
+											edition = "e_negative",
+											key_append = 'UTDR_green' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
+										}
+										G.GAME.consumeable_buffer = 0
+										return true
+									end)
+								}))
+							end
+						},
+					}
+				end
+			end
+		end
+	end
+
+}
+
 SMODS.Joker {
 	key = "orange",
 	config = {
@@ -542,7 +714,7 @@ SMODS.Joker {
 			if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
 				do_message = true
 			end
-			-- create spectral
+			-- create tarot
 			if do_message then
 				G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
 				return {

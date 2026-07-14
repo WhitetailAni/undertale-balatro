@@ -1672,7 +1672,22 @@ return {
 					"{C:inactive,s:0.75}(This Joker is {C:red,s:0.75}destroyed {C:inactive,s:0.75}if{}",
 					"{C:inactive,s:0.75}it hasn't triggered this Ante)"
 				}
-			}
+			},
+			["j_UTDR_green"] = {
+				["name"] = "Green",
+				["text"] = {
+					"Creates a {C:dark_edition}#4#{} {V:2}#3#{} card",
+					"every {C:attention}#2#{} {C:inactive}[#1#]{} Booster Packs opened",
+					"{C:inactive}(Must have room){}"
+				},
+			},
+			["j_UTDR_flowery_scarf"] = {
+				["name"] = "Flowery Scarf",
+				["text"] = {
+					"Gives a random {C:attention}Enhancement{} to",
+					"played but {c:attention}unscored{} cards",
+				},
+			},
 		},
 		["Back"] = {
 			["b_ghost"] = {
