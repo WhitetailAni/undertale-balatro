@@ -35,7 +35,8 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
-	pos = { x = 1, y = 1 },
+	pos = { x = 2, y = 0 },
+	soul_pos = { x = 2, y = 3 },
 	cost = 3,
 	calculate = function(self, card, context)
 		if context.evaluate_poker_hand then
