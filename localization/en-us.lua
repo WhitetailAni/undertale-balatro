@@ -1688,6 +1688,15 @@ return {
 					"played but {c:attention}unscored{} cards",
 				},
 			},
+			["j_UTDR_lightners_live"] = {
+				["name"] = "Lightners Live",
+				["text"] = {
+					"This Joker gains {C:mult}+#1#{} Mult for each",
+					"consecutive hand containing a",
+					"scoring {C:attention}#3#{} or {C:attention}#4#{}",
+					"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
+				}
+			}
 		},
 		["Back"] = {
 			["b_ghost"] = {
@@ -1919,7 +1928,8 @@ return {
 			["k_UTDR_splat_ex"] = "Splat!",
 			["k_UTDR_burned_ex"] = "Burned!",
 			["k_UTDR_robot"] = "Roboticized!",
-			["k_UTDR_yellow_thanks"] = "Thanks, y'all!"
+			["k_UTDR_yellow_thanks"] = "Thanks, y'all!",
+			["k_upgrade_qm"] = "Upgrade?"
 		},
 	},
 }
