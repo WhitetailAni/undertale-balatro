@@ -546,6 +546,8 @@ SMODS.Joker {
 				func = function()
 					local card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
 					if card.label == 'j_UTDR_asgore' then
+						card:remove()
+						card = nil
 						print("Divorcee Identified.")
 						card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
 						print("Target Destroyed." .. card.label)
