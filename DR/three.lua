@@ -166,6 +166,73 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+	key = "lightners_live",
+	config = {
+		extra = {
+			ranks = {
+				"7",
+				"4"
+			},
+			mult_inc = 2,
+			mult = 0
+		}
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	atlas = "DR_jokers_2",
+	pos = { x = 8, y = 2 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		local vars = { card.ability.extra.mult_inc, card.ability.extra.mult }
+		for _, rank in ipairs(card.ability.extra.ranks) do
+			table.insert(vars, localize(rank, "ranks"))
+		end
+		return { vars = vars }
+	end,
+	calculate = function(self, card, context)
+		if context.before and not context.blueprint then
+			local found_rank = false
+			for _, playing_card in ipairs(context.scoring_hand) do
+				for i, rank in ipairs(card.ability.extra.ranks) do
+					if playing_card.base.value == rank and not playing_card.debuff then
+						found_rank = true
+						break
+					end
+				end
+				if found_rank then
+					break
+				end
+			end
+			if found_rank then
+				SMODS.scale_card(card, {
+					ref_table = card.ability.extra,
+					ref_value = "mult",
+					scalar_value = "mult_inc",
+					scaling_message = {
+						message = localize("k_upgrade_ex"),
+						colour = G.C.MULT
+					}
+				})
+			else
+				card.ability.extra.mult = 0
+				return {
+					message = localize("k_reset"),
+					colour = G.C.MULT
+				}
+			end
+		end
+		if context.joker_main then
+			return {
+				mult = card.ability.extra.mult
+			}
+		end
+	end
+
+}
+
+SMODS.Joker {
 	key = "watercooler",
 	config = {
 		bigbucks = 2,
