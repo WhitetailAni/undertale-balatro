@@ -67,6 +67,7 @@ FRIEND = G.C.FRIEND,
 FRIEND_PINK = G.C.FRIEND_PINK,
 FRIEND_YELLOW = G.C.FRIEND_YELLOW,
 watercooler = G.C.WATERCOOLER,
+netskie = G.C.NETSKIE,
 '''
 match_indent = true
 
@@ -84,6 +85,7 @@ FRIEND_PINK = HEX('fda9c0'),
 FRIEND_YELLOW = HEX('ffdd45'),
 WATERCOOLER = HEX('2d9bd7'),
 STEEL = HEX('afb4be'),
+NETSKIE = HEX('ff00d6'),
 '''
 match_indent = true
 

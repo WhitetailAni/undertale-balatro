@@ -7,7 +7,6 @@ SMODS.Joker {
 	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = { key = 'tag_charm', set = 'Tag' }
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_TGEM")
 		if math.fmod(os.time(), 16) == 0 then
 			return {
 				key = "j_UTDR_tension_slop",
@@ -34,8 +33,12 @@ SMODS.Joker {
 }
 
 -- is it stealing from another mod when the mod developer is working on this one
+--its not i promise
 SMODS.Joker {
 	key = "festival",
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.booster_mod } }
+	end,
 	blueprint_compat = false,
 	perishable_compat = true,
 	eternal_compat = true,
@@ -46,15 +49,14 @@ SMODS.Joker {
 	cost = 5,
 	atlas = "DR_jokers_2",
 	pos = { x = 1, y = 1 },
-	config = { extra = { booster_mod = 1 } },
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.booster_mod } }
-	end,
+	config = {
+		booster_mod = 1
+	},
 	add_to_deck = function(self, card, from_debuff)
-		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) + card.ability.extra.booster_mod
+		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) + card.ability.booster_mod
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) - card.ability.extra.booster_mod
+		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) - card.ability.booster_mod
 	end
 }
 
@@ -65,7 +67,6 @@ SMODS.Joker {
 		rank_increase = 1,
 	},
 	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "xaviers_lake")
 		if math.fmod(os.time(), 1024) == 0 then
 			return {
 				vars = { card.ability.rank_increase },
@@ -219,40 +220,6 @@ function joker_rarity(common, uncommon, rare, legendary)
 end
 
 SMODS.Joker {
-	key = "netskie",
-	config = {
-		mult = 8
-	},
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 7, y = 1 },
-	soul_pos = { x = 1, y = 8 },
-	cost = 5,
-	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_ERAM")
-		if math.fmod(os.time(), 16) == 0 then
-			return {
-				key = "j_UTDR_mantle_holder",
-				vars = { probabilities_normal, odds } -- TODO: this should get the variables for the actual joker
-			}
-		end
-		return { vars = { probabilities_normal, odds } }
-	end,
-	calculate = function(self, card, context)
-		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
-			play_sound("UTDR_ERAM", 1.0, 0.7)
-			return {
-				remove = true,
-				removed = context.other_card
-			}
-		end
-	end
-}
-
-SMODS.Joker {
 	key = "dogcheck",
 	config = {
 		totem_chance = 6,
@@ -345,4 +312,65 @@ SMODS.Joker {
 			end
 		end
 	end
+}
+
+SMODS.Joker {
+	key = "susies_idea",
+	blueprint_compat = true,
+	rarity = 2,
+	cost = 5,
+	pos = { x = 1, y = 0 },
+	atlas = "DR_jokers_2",
+	loc_vars = function(self, info_queue, card)
+		if self.susie and self.susie.remove then
+			self.susie:remove()
+			self.susie = nil
+		end
+		self.susie = Sprite(0, 0, 0.5,
+			0.5 * (G.ASSET_ATLAS["UTDR_susies_idea"].py / G.ASSET_ATLAS["UTDR_susies_idea"].px),
+			G.ASSET_ATLAS["UTDR_susies_idea"], { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.susie } },
+			}
+		}
+		return {
+			vars = {
+				elements = { element }
+			}
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.first_hand_drawn then
+			local new_card = SMODS.create_card {
+				set = "Enhanced",
+				enhancement = SMODS.poll_enhancement { key = "UTDR_susies_idea", guaranteed = true },
+				area = G.discard,
+				key_append = "UTDR_susies_idea" }
+			G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+			new_card.playing_card = G.playing_card
+			table.insert(G.playing_cards, new_card)
+
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					G.hand:emplace(new_card)
+					new_card:start_materialize()
+					G.GAME.blind:debuff_card(new_card)
+					G.hand:sort()
+					if context.blueprint_card then
+						context.blueprint_card:juice_up()
+					else
+						card:juice_up()
+					end
+					SMODS.calculate_context({ playing_card_added = true, cards = { new_card } })
+					save_run()
+					return true
+				end
+			}))
+
+			return nil, true -- This is for Joker retrigger purposes
+		end
+	end,
 }

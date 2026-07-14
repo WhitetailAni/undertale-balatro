@@ -420,7 +420,7 @@ SMODS.Joker {
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
-		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'j_UTDR_pink')
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'pink')
 		return {
 			vars = {
 				numerator,
@@ -457,7 +457,6 @@ SMODS.Joker {
 										set = card.ability.extra.card_type,
 										edition = "e_negative",
 										key_append = 'UTDR_pink' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
-
 									}
 									G.GAME.consumeable_buffer = 0
 									return true
@@ -469,5 +468,146 @@ SMODS.Joker {
 			end
 		end
 	end,
-
 }
+
+SMODS.Joker {
+	key = "netskie",
+	config = {
+		mult = 8,
+		in_build = false,
+		disguised = false,
+		chosen_joker_key = "",
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 7, y = 1 },
+	soul_pos = { x = 1, y = 8 },
+	cost = 5,
+	disguise = function(self_self, self_card)
+		local keys = {}
+		for key, value in pairs(G.localization.descriptions.Joker) do
+		  keys[#keys + 1] = key
+		end
+		
+		local j = 1
+		for i = 1, #keys do
+			if keys[i]:find("UTDR", 1, true) then
+				keys[j] = keys[i]
+				j = j + 1
+			end
+		end
+		for i = j, #keys do
+			keys[i] = nil
+    	end
+		
+		--make sure it sticks to 1 joker!!
+		local chosen_joker_key = ""
+		if not self_card.config.disguised then
+			chosen_joker_key = pseudorandom_element(keys, "netskie_joker")
+			self_card.config.chosen_joker_key = chosen_joker_key
+		else
+			chosen_joker_key = self_card.config.chosen_joker_key
+		end
+		self_card.config.disguised = true
+		
+		--reset to default "Kee kee~"
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = G.localization.descriptions.Joker["j_UTDR_netskie_disguise_base"].text
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = G.localization.descriptions.Joker["j_UTDR_netskie_disguise_base"].text_parsed
+		
+		--put the desired text before the "Kee kee~" since parsing the text hard and ill just have the game do it
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = prepend_to_table(G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text, G.localization.descriptions.Joker[chosen_joker_key].text)
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = prepend_to_table(G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed, G.localization.descriptions.Joker[chosen_joker_key].text_parsed)
+	
+		--idk if we Need to copy over the base .text and .name but ill do it in case theres any sneaky detection jokers.
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name = G.localization.descriptions.Joker[chosen_joker_key].name
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name_parsed = G.localization.descriptions.Joker[chosen_joker_key].name_parsed
+
+		local center = G.P_CENTERS[chosen_joker_key]
+		local can_localize = false
+		if center then
+			for key, value in pairs(center) do
+				if key == "loc_vars" then
+					can_localize = true
+				end
+			end
+		end
+		
+		local dummy = SMODS.create_card({
+			key = chosen_joker_key,
+			skip_materialize = true,
+			set = "Joker",
+			no_edition = true
+		})
+		
+		--print("self_self")
+		
+		for key, value in pairs(self_self) do
+			--print(key)
+		end
+		
+		--print(" ")
+		--print("self_card")
+		
+		for key, value in pairs(self_card) do
+			--print(key)
+		end
+		
+		--print(self_self)
+		--print(self_card.mod)
+		
+		--print(self_card)
+		--print(card.children)
+		--print(card.children.center)
+		--self_card.config.center:set_sprite_pos({ x = 2, y = 1 })
+		
+		--local dummy_sprite = Sprite:init(0, 0, 71, 75, "DR_jokers_2", { x = 2, y = 1 })
+		--print(dummy_sprite)
+		
+		local vars = { vars = { } }
+		if can_localize then
+			local card = dummy.config.center
+			card["ability"] = dummy.config.center.config
+			vars = center:loc_vars({}, card)
+			dummy:remove()
+		end
+		
+		return vars["vars"]
+	end,
+	loc_vars = function(self, info_queue, card)
+		if not card.in_build then
+			return {
+				vars = self:disguise(self, card),
+				key = "j_UTDR_netskie_disguise",
+			}
+		end
+		return { vars = { card.ability.mult } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		card.ability.in_build = true
+		--play_sound("UTDR_netskie", 1.0, 0.7)
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		card.ability.in_build = false
+	end,
+	calculate = function(self, card, context)
+		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
+			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
+			play_sound("UTDR_ERAM", 1.0, 0.7)
+			return {
+				remove = true,
+				removed = context.other_card
+			}
+		end
+	end
+}
+
+function prepend_to_table(tabble, new_items)
+    local tabbble = {}
+    for _, v in ipairs(new_items) do
+        table.insert(tabbble, v)
+    end
+    table.insert(tabbble, tabble[1])
+    return tabbble
+end

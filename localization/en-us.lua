@@ -156,8 +156,8 @@ return {
 			["j_UTDR_shelter_code"] = {
 				["name"] = "Shelter Code",
 				["text"] = {
-					"{C:uncommon}#1#{} and {C:rare}#2#{} Jokers appear",
-					"in shop {C:attention}more often",
+					"{C:uncommon}#1#{} and {C:rare}#2#{} Jokers",
+					"appear in shop more often",
 				},
 			},
 			["j_UTDR_snowman_piece"] = {
@@ -555,15 +555,15 @@ return {
 				["text"] = {
 					"Doesn't grant {X:mult,C:white}X100{} Mult,",
 					"because it {C:attention}wouldn't be very",
-					"{C:attention{interesting{} if it did.",
+					"{C:attention}interesting{} if it did.",
 				},
 			},
 			["j_UTDR_dogcheck"] = {
 				["name"] = "DOGCHECK",
 				["text"] = {
-					"{C:green}#1# in #2#{} chance to prevent",
-					"death and create",
-					"a {C:attention}random{} tag",
+					"{C:green}#1# in #2#{} chance to",
+					"prevent death and",
+					"create a {C:attention}random{} tag",
 				},
 			},
 			["j_UTDR_newsletter"] = {
@@ -1093,7 +1093,7 @@ return {
 			["j_UTDR_FRIEND"] = {
 				["name"] = "_FRIEND",
 				["text"] = {
-					"{C:FRIEND}Creates a {C:FRIEND_PINK}#4#{C:FRIEND} card",
+					"{C:FRIEND}Creates a {C:FRIEND_PINK}#3#{C:FRIEND} card",
 					"{C:FRIEND}after {C:FRIEND_YELLOW}#1# {C:FRIEND_PINK}[#2#]{C:FRIEND} cards",
 					"{C:FRIEND}are {C:FRIEND_YELLOW}destroyed{}",
 					"{C:FRIEND}(Must have room)",
@@ -1577,7 +1577,19 @@ return {
 				["text"] = {
 					"{C:attention}Enhanced{} cards give",
 					"{C:mult}+#1#{} Mult when scored",
-					"{C:pink}Kee kee~",
+					"{E:1,C:pink}Kee kee~",
+				},
+			},
+			["j_UTDR_netskie_disguise"] = {
+				["name"] = "Default",
+				["text"] = {
+					"{C:netskie}Kee kee~"
+				},
+			},
+			["j_UTDR_netskie_disguise_base"] = {
+				["name"] = "Default",
+				["text"] = {
+					"{C:netskie}Kee kee~"
 				},
 			},
 			["j_UTDR_gaster"] = {
@@ -1596,7 +1608,7 @@ return {
 			},
 			["j_UTDR_dog_shrine"] = {
 				["text"] = {
-					"{C:red}$#1#{} at the end",
+					"{C:red}-$#1#{} at the end",
 					"of round, {C:attention}and...?{}"
 				},
 				["name"] = "Dog Shrine",
@@ -1617,28 +1629,29 @@ return {
 				["name"] = "Lord of the Hammer",
 			},
 			["j_UTDR_pink"] = {
+				["name"] = "Pink",
 				["text"] = {
-					"{C:green}#1# in #2#{} chance for each",
-					"scoring card of {V:1}#4#{} suit",
-					"to create a {C:dark_edition}#5#{} {V:2}#3#{} card",
+					"{C:green}#1# in #2#{} chance for",
+					"each scoring card of",
+					"{V:1}#4#{} suit to create",
+					"a {C:dark_edition}#5#{} {V:2}#3#{} card",
 					"{C:inactive}(Must have room){}"
 				},
-				["name"] = "Pink",
 			},
 			["j_UTDR_festival"] = {
-				["text"] = {
-					"{C:attention}+#1#{} cards per Booster Pack"
-				},
 				["name"] = "Festival",
+				["text"] = {
+					"{C:attention}+#1#{} cards per",
+					"Booster Pack"
+				},
 			},
 			["j_UTDR_susies_idea"] = {
+				["name"] = "{element:1}Susie's Idea",
 				["text"] = {
-					"When round begins,",
-					"add a random {C:attention}playing",
-					"{C:attention}card{} with a random",
+					"When round begins, add a {C:attention}random",
+					"playing card with a {C:attention}random",
 					"{C:attention}Enhancement{} to your hand",
 				},
-				["name"] = "{element:1}Susie's Idea",
 			},
 		},
 		["Back"] = {

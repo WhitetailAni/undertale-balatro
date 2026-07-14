@@ -125,18 +125,21 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
 	pos = { x = 3, y = 2 },
-	config = { extra = { money = -1, extra_boosters = 1 } },
+	config = {
+		money = 1,
+		extra_boosters = 1
+	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.money } }
+		return { vars = { card.ability.money } }
 	end,
 	calc_dollar_bonus = function(self, card)
-		return card.ability.extra.money
+		return -card.ability.money
 	end,
 	add_to_deck = function(self, card, from_debuff)
-		SMODS.change_booster_limit(card.ability.extra.extra_boosters)
+		SMODS.change_booster_limit(card.ability.extra_boosters)
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		SMODS.change_booster_limit(-card.ability.extra.extra_boosters)
+		SMODS.change_booster_limit(-card.ability.extra_boosters)
 	end
 }
 

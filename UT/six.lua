@@ -506,7 +506,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
-	--pos = { x = 1, y = 9 },
+	pos = { x = 1, y = 9 },
 	cost = 6,
 	calculate = function(self, card, context)
 		if context.selling_card and context.card ~= card and context.card.ability.set == "Joker" and not context.blueprint then
