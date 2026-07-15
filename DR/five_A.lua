@@ -221,7 +221,7 @@ SMODS.Joker {
 	pos = { x = 9, y = 2 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.totem_chance, 'DR_spamton')
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.totem_chance, 'DR_dogcheck')
 		return { vars = { probabilities_normal, odds } }
 	end,
 	calculate = function(self, card, context)
@@ -251,6 +251,33 @@ SMODS.Joker {
 			}
 		end
 	end
+}
+
+SMODS.Joker {
+	key = "sound_of_justice",
+	config = {
+		retrigger_chance = 4,
+	},
+	--unlocked = false
+	rarity = 3,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 0, y = 0 },
+	cost = 7,
+	loc_vars = function(self, info_queue, card)
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 3, card.ability.retrigger_chance, 'DR_sound_of_justice')
+		return { vars = { probabilities_normal, odds } }
+	end,
+	calculate = function(self, card, context)
+		if context.repetition and context.cardarea == G.play and SMODS.pseudorandom_probability(card, "sound_of_justice", 3, card.ability.retrigger_chance, "DR_sound_of_justice") then
+			return {
+				repetitions = 1,
+			}
+		elseif context.selling_self then
+			G.GAME.blind:set_text(true)
+		end
+	end,
 }
 
 SMODS.Joker {

@@ -367,3 +367,22 @@ payload = '''
 {name = 'colour_2', ref_table = G.C, ref_value = 'BALLGAME'},
 '''
 match_indent = true
+
+#sound of justice
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = '''
+function Blind:set_text()
+    if self.config.blind then
+        if self.disabled then
+'''
+position = 'at'
+payload = '''
+function Blind:set_text(vengeance)
+    if self.config.blind then
+        if not vengeance and (self.disabled or #SMODS.find_card("j_UTDR_sound_of_justice")) then
+'''
+match_indent = true
+
+

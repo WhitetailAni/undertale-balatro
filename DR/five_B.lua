@@ -198,9 +198,7 @@ SMODS.Joker {
 		if context.repetition and context.cardarea == G.play then
 			if context.other_card:get_id() == 9 then
 				return {
-					message = localize('k_again_ex'),
 					repetitions = 1,
-					card = context.blueprint_card or card
 				}
 			end
 		elseif context.individual and context.cardarea == G.play then

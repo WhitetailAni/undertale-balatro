@@ -272,9 +272,7 @@ SMODS.Joker {
 		if context.repetition and context.cardarea == G.play and next(context.poker_hands['Straight']) then
 			play_sound("UTDR_papyrus", 1.0, 0.7)
 			return {
-				message = localize('k_again_ex'),
 				repetitions = 1,
-				card = context.blueprint_card or card
 			}
 		end
 	end
@@ -427,9 +425,7 @@ SMODS.Joker {
 			else
 				card.ability.other_card = true
 				return {
-					message = localize('k_again_ex'),
 					repetitions = 1,
-					card = card
 				}
 			end
 		end
@@ -556,9 +552,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
 			return {
-				message = localize('k_again_ex'),
 				repetitions = 1,
-				card = context.blueprint_card or card
 			}
 		end
 	end

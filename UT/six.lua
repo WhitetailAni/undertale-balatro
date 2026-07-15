@@ -332,11 +332,11 @@ SMODS.Joker {
 	--unlocked = false
 	unlock_condition = { type = 'win_custom' },
 	loc_vars = function(card, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, 'DR_spamton')
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, 'DR_fun_value')
 		return { vars = { probabilities_normal, odds, card.ability.xmult } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.unlock_chance, 'DR_spamton')
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.unlock_chance, 'DR_fun_value_locked')
 		return { vars = { probabilities_normal, odds } }
 	end,
 	rarity = 2,

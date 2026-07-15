@@ -663,9 +663,7 @@ SMODS.Joker {
 			end
 		elseif context.repetition and context.cardarea == G.play and card.ability.states.retrigger then
 			return {
-				message = localize('k_again_ex'),
 				repetitions = 1,
-				card = context.blueprint_card or card
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers then
 			if card.ability.states.hand then

@@ -326,9 +326,7 @@ SMODS.Joker {
 		if context.repetition and context.cardarea == G.play and G.GAME.current_round.hands_played == 0 then
 			if played_secret_hand(context.poker_hands) then
 				return {
-					message = localize('k_again_ex'),
 					repetitions = 1,
-					card = context.blueprint_card or card
 				}
 			end
 		end

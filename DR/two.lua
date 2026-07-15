@@ -457,9 +457,7 @@ SMODS.Joker {
 			local rank = context.other_card.base.value
 			if rank == "Ace" or rank == "9" or rank == "7" then
 				return {
-					message = localize('k_again_ex'),
 					repetitions = 1,
-					card = context.blueprint_card or card
 				}
 			end
 		end

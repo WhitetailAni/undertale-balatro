@@ -1088,6 +1088,15 @@ return {
 					"Only {C:red}Jokers{} appear in shop",
 				},
 			},
+			["j_UTDR_sound_of_justice"] = {
+				["name"] = "Sound of Justice",
+				["text"] = {
+					"{C:green}#1# in #2#{} chance to {C:attention}retrigger",
+					"each scored card",
+					"{C:red}Blind requirements",
+					"{C:red}are not displayed",
+				},
+			},
 			["j_UTDR_top_cake"] = {
 				["name"] = "Top Cake",
 				["text"] = {

@@ -619,9 +619,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and (context.other_card:is_suit(card.ability.selected_suit) or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == card.ability.selected_rank then
 			return {
-				message = localize('k_again_ex'),
 				repetitions = card.ability.repetitions,
-				card = context.blueprint_card or card
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			local selected_card = pseudorandom_element(G.playing_cards, "ralsei")
