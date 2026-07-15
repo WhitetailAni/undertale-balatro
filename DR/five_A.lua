@@ -254,6 +254,59 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+	key = "roots",
+	config = {
+		old_tarot_rate = 0,
+		old_planet_rate = 0,
+		old_spectral_rate = 0
+	},
+	--unlocked = false
+	rarity = 3,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 9, y = 1 },
+	cost = 7,
+	add_to_deck = function(self, card, from_debuff)
+		card.ability.old_tarot_rate = G.GAME.tarot_rate
+		card.ability.old_planet_rate = G.GAME.planet_rate
+		card.ability.old_spectral_rate = G.GAME.spectral_rate
+	
+		G.GAME.tarot_rate = 0
+		G.GAME.planet_rate = 0
+		G.GAME.spectral_rate = 0
+	end,
+	update = function(self, card, dt)
+		if not (card.area and card.area.config.collection) then
+			G.GAME.tarot_rate = 0
+			G.GAME.planet_rate = 0
+			G.GAME.spectral_rate = 0
+		end
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.GAME.tarot_rate = card.ability.old_tarot_rate
+		G.GAME.planet_rate = card.ability.old_planet_rate
+		G.GAME.spectral_rate = card.ability.old_spectral_rate
+	end,
+	calculate = function(self, card, context)
+		if context.voucher_redeem then
+			local voucher_key = context.voucher.config.center.key
+			if voucher_key == "v_planet_tycoon" or voucher_key == "v_planet_merchant" then
+				--keep track of what the rate SHOULD be if planet/tarot tycoon/merchant were bought. dont let those effects go to waste! just delay em some
+				card.ability.old_planet_rate = card.ability.old_planet_rate * context.voucher.config.center.config.extra
+			end
+			if voucher_key == "v_tarot_tycoon" or voucher_key == "v_tarot_merchant" then
+				card.ability.old_tarot_rate = card.ability.old_tarot_rate * context.voucher.config.center.config.extra
+			end
+		elseif context.starting_shop or context.reroll_shop then
+			G.GAME.tarot_rate = 0
+			G.GAME.planet_rate = 0
+			G.GAME.spectral_rate = 0
+		end
+	end,
+}
+
+SMODS.Joker {
 	key = "newsletter",
 	config = {
 		money = 6,

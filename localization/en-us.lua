@@ -1082,6 +1082,12 @@ return {
 					"{S:1.1,C:dark_edition,E:2}You found it!{}",
 				},
 			},
+			["j_UTDR_roots"] = {
+				["name"] = "ROOTS",
+				["text"] = {
+					"Only {C:red}Jokers{} appear in shop",
+				},
+			},
 			["j_UTDR_top_cake"] = {
 				["name"] = "Top Cake",
 				["text"] = {
