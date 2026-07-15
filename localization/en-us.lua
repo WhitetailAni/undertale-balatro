@@ -563,7 +563,7 @@ return {
 				["text"] = {
 					"{C:green}#1# in #2#{} chance to",
 					"prevent death and",
-					"create a {C:attention}random{} tag",
+					"create a {C:attention}random tag",
 				},
 			},
 			["j_UTDR_newsletter"] = {
@@ -646,7 +646,7 @@ return {
 				["name"] = "Amalgamates",
 				["text"] = {
 					"At end of round, randomize",
-					"{C:attention}rank{} and {C:attention}suit{} of all",
+					"{C:attention}rank{} and {C:attention}suit{} of {C:attention}all",
 					"cards held in hand"
 				},
 			},
@@ -1200,16 +1200,6 @@ return {
 					"{C:spectral}#1#{} cards",
 				},
 			},
-			["j_UTDR_blue"] = {
-				["name"] = "Blue",
-				["text"] = {
-					"{C:attention}Prevents Death{} if chips",
-					"scored are at least",
-					"{C:attention}#1#%{} of required chips,",
-					"creates a {C:tarot}Tarot{} card when",
-					"Death is prevented",
-				},
-			},
 			["j_UTDR_flower_castle"] = {
 				["name"] = "Flower Castle",
 				["text"] = {
@@ -1311,13 +1301,6 @@ return {
 					"Each played {C:attention}#2#{} gives",
 					"{X:mult,C:white}X#1#{} Mult and is",
 					" {C:attention}retriggered{} when scored",
-				},
-			},
-			["j_UTDR_orange"] = {
-				["name"] = "Orange",
-				["text"] = {
-					"{C:mult}+#1#{} Mult after a card is sold",
-					" {C:inactive}(Resets at end of round)",
 				},
 			},
 			["j_UTDR_real_knife"] = {
@@ -1562,12 +1545,55 @@ return {
 				},
 			},
 			["j_UTDR_aqua"] = {
-				["name"] = "Aqua",
+				["name"] = "{C:flower_aqua,element:1}Aqua ",
 				["text"] = {
 					"Played cards give a",
 					"{C:attention}random{} amount of",
 					"{C:mult}Mult{} when scored",
 				},
+			},
+			["j_UTDR_seth"] = {
+				["name"] = "{C:flower_seth,element:1}Seth ",
+				["text"] = {
+					"{C:green}#1# in #2#{} chance to upgrade your",
+					"{C:attention}most played poker hand{}",
+					"when a {C:planet}#3#{} card is used",
+				},
+			},
+			["j_UTDR_orange"] = {
+				["name"] = "{C:flower_orange,element:1}Orange ",
+				["text"] = {
+					"{C:mult}+#1#{} Mult after a card is sold",
+					" {C:inactive}(Resets at end of round)",
+				},
+			},
+			["j_UTDR_green"] = {
+				["name"] = "{C:flower_green,element:1}Green ",
+				["text"] = {
+					"Creates a {C:dark_edition}#4#{} {V:2}#3#{}",
+					"card every {C:attention}#2#{} {C:inactive}[#1#]{}",
+					"Booster Packs opened",
+					"{C:inactive}(Must have room){}"
+				},
+			},
+			["j_UTDR_blue"] = {
+				["name"] = "{C:flower_blue,element:1}Blue ",
+				["text"] = {
+					"{C:attention}Prevents Death{} if chips",
+					"scored are at least",
+					"{C:attention}#1#%{} of required chips,",
+					"creates a {C:tarot}Tarot{} card when",
+					"Death is prevented",
+				},
+			},
+			["j_UTDR_yellow"] = {
+				["name"] = "{C:flower_yellow,element:1}Yellow ",
+				["text"] = {
+					"{X:mult,C:white} X#1# {} Mult if scoring hand",
+					"contains exactly {C:attention}#2#{} ranks",
+					"{C:inactive,s:0.75}(This Joker is {C:red,s:0.75}destroyed {C:inactive,s:0.75}if{}",
+					"{C:inactive,s:0.75}it hasn't triggered this Ante)"
+				}
 			},
 			["j_UTDR_toby_temmie"] = {
 				["name"] = "Toby and Temmie",
@@ -1589,19 +1615,19 @@ return {
 				["text"] = {
 					"{C:attention}Enhanced{} cards give",
 					"{C:mult}+#1#{} Mult when scored",
-					"{E:1,C:pink}Kee kee~",
+					"{E:1,C:netskie}Kee kee~",
 				},
 			},
 			["j_UTDR_netskie_disguise"] = {
 				["name"] = "Default",
 				["text"] = {
-					"{C:netskie}Kee kee~"
+					"{E:1,C:netskie}Kee kee~"
 				},
 			},
 			["j_UTDR_netskie_disguise_base"] = {
 				["name"] = "Default",
 				["text"] = {
-					"{C:netskie}Kee kee~"
+					"{E:1,C:netskie}Kee kee~"
 				},
 			},
 			["j_UTDR_gaster"] = {
@@ -1627,7 +1653,7 @@ return {
 			},
 			["j_UTDR_check_it_out_im_in_the_house_like_carpet"] = {
 				["text"] = {
-					"Creates a {V:1}#3#{} card",
+					"Creates a {C:planet}#3#{} card",
 					"after {C:attention}#2#{} {C:inactive}[#1#]{} hands played",
 					"{C:inactive}(Must have room){}"
 				},
@@ -1660,41 +1686,25 @@ return {
 			["j_UTDR_susies_idea"] = {
 				["name"] = "{element:1}Susie's Idea",
 				["text"] = {
-					"When round begins, add a {C:attention}random",
+					"When round begins, add a",
 					"playing card with a {C:attention}random",
-					"{C:attention}Enhancement{} to your hand",
-				},
-			},
-			["j_UTDR_yellow"] = {
-				["name"] = "Yellow",
-				["text"] = {
-					"{X:mult,C:white} X#1# {} Mult if scoring hand",
-					"contains exactly {C:attention}#2#{} ranks",
-					"{C:inactive,s:0.75}(This Joker is {C:red,s:0.75}destroyed {C:inactive,s:0.75}if{}",
-					"{C:inactive,s:0.75}it hasn't triggered this Ante)"
-				}
-			},
-			["j_UTDR_green"] = {
-				["name"] = "Green",
-				["text"] = {
-					"Creates a {C:dark_edition}#4#{} {V:2}#3#{} card",
-					"every {C:attention}#2#{} {C:inactive}[#1#]{} Booster Packs opened",
-					"{C:inactive}(Must have room){}"
+					"{C:attention}edition{} to your hand",
 				},
 			},
 			["j_UTDR_flowery_scarf"] = {
 				["name"] = "Flowery Scarf",
 				["text"] = {
-					"Gives a random {C:attention}Enhancement{} to",
-					"played but {c:attention}unscored{} cards",
+					"Played but {C:attention}unscoring",
+					"cards are given a",
+					"{C:attention}random Enhancement",
 				},
 			},
 			["j_UTDR_lightners_live"] = {
 				["name"] = "Lightners Live",
 				["text"] = {
-					"This Joker gains {C:mult}+#1#{} Mult for each",
-					"consecutive hand containing a",
-					"scoring {C:attention}#3#{} or {C:attention}#4#{}",
+					"Gains {C:mult}+#1#{} Mult for each",
+					"consecutive hand containing",
+					"a scoring {C:attention}#3#{} or {C:attention}#4#{}",
 					"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
 				}
 			}

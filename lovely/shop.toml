@@ -8,7 +8,75 @@ priority = 1
 target = 'card.lua'
 pattern = 'if self.ability.rental then self.cost = 1 end'
 position = 'after'
-payload = "if #SMODS.find_card('j_UTDR_oddcontroller') > 0 and (self.config.center.rarity == 2 or self.config.center.rarity == 3) then self.cost = 0 end"
+payload = '''
+if #SMODS.find_card('j_UTDR_oddcontroller') > 0 and (self.config.center.rarity == 2 or self.config.center.rarity == 3) then self.cost = 0 end
+if self.config.center.key == "j_UTDR_netskie" and key then self.cost = G.P_CENTERS[key].cost end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''
+function Card:set_cost()
+    self.extra_cost = 0 + G.GAME.inflation
+
+    self:set_cost_value()
+    self:set_sell_value()
+'''
+position = "at"
+payload = '''
+function Card:set_cost(key)
+    self.extra_cost = 0 + G.GAME.inflation
+
+    self:set_cost_value(key)
+    self:set_sell_value()
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''
+function Card:set_sell_value()
+    self.sell_cost = math.max(1, math.floor(self.cost/2)) + (self.ability.extra_value or 0)
+end
+'''
+position = "at"
+payload = '''
+function Card:set_sell_value()
+    self.sell_cost = math.max(1, math.floor(self.cost/2)) + (self.ability.extra_value or 0)
+    if self.config.center.key == "j_UTDR_netskie" and key then self.sell_cost = 2 end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "function Card:set_cost_value()"
+position = "at"
+payload = "function Card:set_cost_value(key)"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''
+function Card:set_cost()
+    self.extra_cost = 0 + G.GAME.inflation
+
+    self:set_cost_value()
+    self:set_sell_value()
+'''
+position = "at"
+payload = '''
+function Card:set_cost(key)
+    self.extra_cost = 0 + G.GAME.inflation
+
+    self:set_cost_value(key)
+    self:set_sell_value()
+'''
 match_indent = true
 
 [[patches]]

@@ -53,7 +53,6 @@ SMODS.Joker {
 
 			for i, v in ipairs(G.handlist) do
 				if v == context.scoring_name then
-					print(context.scoring_name)
 					local next = { G.handlist[i - 1], G.handlist[i + 1] }
 
 					for _, v2 in ipairs(next) do
@@ -61,8 +60,6 @@ SMODS.Joker {
 					end
 				end
 			end
-
-			--print(context.poker_hands)
 
 			return {
 				replace_poker_hands = t
@@ -73,21 +70,93 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "aqua",
-	config = {
-		lower_bound = 1,
-		upper_bound = 6
-	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers_2",
 	pos = { x = 6, y = 0 },
 	cost = 3,
+	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+		return {
+			vars = {
+				elements = { element }
+			}
+		}
+	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
 			return {
-				mult = (math.floor(pseudorandom("aqua") * 10) + 1),
+				mult = (math.floor(pseudorandom("aqua") * 6) + 1),
 				card = context.blueprint_card or card
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "seth",
+	config = {
+		levelup_chance = 5,
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 5, y = 0 },
+	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		local probabilities_normal, levelup_chance = SMODS.get_probability_vars(card, 1, card.ability.levelup_chance,
+			"DR_seth")
+	
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 4, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+		
+		return {
+			vars = {
+				probabilities_normal,
+				levelup_chance,
+				localize("k_planet"),
+				elements = { element }
+			}
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.using_consumeable and context.consumeable.config.center.set == "Planet" and SMODS.pseudorandom_probability(card, "seth_levelup", 1, card.ability.levelup_chance, "DR_seth_levelup") then
+			local most_played_count = 0
+			local most_played = "Pair"
+			for key, value in pairs(G.GAME.hands) do
+				if value.played >= most_played_count and value.visible then
+					most_played = key
+					most_played_count = value.played
+				end
+			end
+			
+			return {
+				level_up = 1,
+				level_up_hand = most_played,
+				message = localize("k_upgrade_ex")
 			}
 		end
 	end
@@ -422,6 +491,19 @@ SMODS.Joker {
 		}
 	},
 	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.45, 0.45, G.ASSET_ATLAS["UTDR_flowers"], { x = 2, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+	
 		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
 		return {
 			vars = {
@@ -432,8 +514,9 @@ SMODS.Joker {
 				colours = {
 					G.C.SUITS[card.ability.extra.suit],
 					G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER
-				}
-			}
+				},
+				elements = { element },
+			},
 		}
 	end,
 	calculate = function(self, card, context)
@@ -490,7 +573,25 @@ SMODS.Joker {
 		all_flowers = false
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult } }
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 3, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+	
+		return {
+			vars = {
+				card.ability.mult,
+				elements = { element },
+			},
+		}
 	end,
 	rarity = 2,
 	blueprint_compat = true,
@@ -549,7 +650,24 @@ SMODS.Joker {
 	pos = { x = 3, y = 0 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.xmult, card.ability.extra.required_suit_num } }
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 5, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+	
+		return { vars = {
+			card.ability.extra.xmult,
+			card.ability.extra.required_suit_num,
+			elements = { element }
+		} }
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -619,7 +737,25 @@ SMODS.Joker {
 	pos = { x = 4, y = 0 },
 	cost = 10,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.required_chips } }
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 1, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+	
+		return {
+			vars = {
+				card.ability.required_chips,
+				elements = { element }
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and G.GAME.chips / G.GAME.blind.chips >= card.ability.required_chips / 100 and not context.blueprint then
@@ -748,6 +884,7 @@ SMODS.Joker {
 		mult = 8,
 		in_build = false,
 		disguised = false,
+		disguised_pos = { x = 7, y = 1 },
 		chosen_joker_key = "",
 	},
 	rarity = 1,
@@ -756,9 +893,9 @@ SMODS.Joker {
 	atlas = "DR_jokers_2",
 	pos = { x = 7, y = 1 },
 	soul_pos = { x = 1, y = 8 },
-	cost = 5,
+	cost = 4,
 	disguise = function(self_self, self_card)
-		local keys = {}
+		--[[local keys = {}
 		for key, value in pairs(G.localization.descriptions.Joker) do
 			keys[#keys + 1] = key
 		end
@@ -772,12 +909,36 @@ SMODS.Joker {
 		end
 		for i = j, #keys do
 			keys[i] = nil
-		end
+		end]]
+		--get all UTDR joker keys. for now limited to just DR_2 atlas jokers so
 
 		--make sure it sticks to 1 joker!!
 		local chosen_joker_key = ""
 		if not self_card.config.disguised then
-			chosen_joker_key = pseudorandom_element(keys, "netskie_joker")
+			chosen_joker_key = pseudorandom_element({
+				"j_UTDR_aqua",
+				"j_UTDR_seth",
+				"j_UTDR_blue",
+				"j_UTDR_yellow",
+				"j_UTDR_green",
+				"j_UTDR_orange",
+				"j_UTDR_pink",
+				"j_UTDR_dogcheck",
+				"j_UTDR_shelter_code",
+				"j_UTDR_flowery_scarf",
+				"j_UTDR_lord_of_hammer",
+				"j_UTDR_tension_gem",
+				"j_UTDR_festival",
+				"j_UTDR_the_lake",
+				"j_UTDR_carol",
+				"j_UTDR_find_her_dogg_girl",
+				"j_UTDR_newsletter",
+				"j_UTDR_susies_idea",
+				"j_UTDR_flower_castle",
+				"j_UTDR_doghole",
+				"j_UTDR_dogshrine",
+				"j_UTDR_check_it_out_im_in_the_house_like_carpet"
+			}, "netskie_joker")
 			self_card.config.chosen_joker_key = chosen_joker_key
 		else
 			chosen_joker_key = self_card.config.chosen_joker_key
@@ -805,12 +966,11 @@ SMODS.Joker {
 			[chosen_joker_key].name_parsed
 
 		local center = G.P_CENTERS[chosen_joker_key]
+		self_card.config.disguised_pos = center.pos
 		local can_localize = false
-		if center then
-			for key, value in pairs(center) do
-				if key == "loc_vars" then
-					can_localize = true
-				end
+		for key, value in pairs(center) do
+			if key == "loc_vars" then
+				can_localize = true
 			end
 		end
 
@@ -821,42 +981,18 @@ SMODS.Joker {
 			no_edition = true
 		})
 
-		--print("self_self")
-
-		for key, value in pairs(self_self) do
-			--print(key)
-		end
-
-		--print(" ")
-		--print("self_card")
-
-		for key, value in pairs(self_card) do
-			--print(key)
-		end
-
-		--print(self_self)
-		--print(self_card.mod)
-
-		--print(self_card)
-		--print(card.children)
-		--print(card.children.center)
-		--self_card.config.center:set_sprite_pos({ x = 2, y = 1 })
-
-		--local dummy_sprite = Sprite:init(0, 0, 71, 75, "DR_jokers_2", { x = 2, y = 1 })
-		--print(dummy_sprite)
-
 		local vars = { vars = {} }
 		if can_localize then
 			local card = dummy.config.center
 			card["ability"] = dummy.config.center.config
 			vars = center:loc_vars({}, card)
-			dummy:remove()
 		end
+		dummy:remove()
 
 		return vars["vars"]
 	end,
 	loc_vars = function(self, info_queue, card)
-		if not card.in_build then
+		if not (card.ability.in_build or (card.area and card.area.config.collection)) then
 			return {
 				vars = self:disguise(self, card),
 				key = "j_UTDR_netskie_disguise",
@@ -864,12 +1000,28 @@ SMODS.Joker {
 		end
 		return { vars = { card.ability.mult } }
 	end,
+	update = function(self, card, dt)
+		if not card.ability.in_build then
+			card:set_cost(card.config.center.config.chosen_joker_key)
+		end
+		if not (card.ability.in_build or (card.area and card.area.config.collection)) then
+			card.children.center:set_sprite_pos(card.config.center.config.disguised_pos)			
+		else
+			card.children.center:set_sprite_pos({ x = 7, y = 1 })
+		end
+	end,
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.in_build = true
-		--play_sound("UTDR_netskie", 1.0, 0.7)
+		play_sound("UTDR_netskie", 1.0, 0.7)
+		card:juice_up(1, 1)
+		card.children.center:set_sprite_pos({ x = 7, y = 1 })
+		card:set_cost()
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
+	end,
+	set_ability = function(self, card, initial, delay_sprites)
+		self:disguise(self, card)
 	end,
 	calculate = function(self, card, context)
 		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then

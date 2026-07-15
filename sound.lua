@@ -270,3 +270,10 @@ SMODS.Sound {
 	pitch = 1.0,
 	volume = 0.7
 }
+
+SMODS.Sound {
+	key = "netskie",
+	path = "netskie.wav",
+	pitch = 1.0,
+	volume = 0.7
+}

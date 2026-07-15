@@ -148,11 +148,8 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "lesser_dog",
 	config = {
-		extra = {
-
-			mult_gain = 1,
-			mult = 0
-		}
+		mult_gain = 1,
+		mult = 0
 	},
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
@@ -163,7 +160,7 @@ SMODS.Joker {
 	pos = { x = 3, y = 3 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.mult_gain, card.ability.extra.mult } }
+		return { vars = { card.ability.mult_gain, card.ability.mult } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		if G.PROFILES[G.SETTINGS.profile].hand_usage["Pair"] then
@@ -176,7 +173,7 @@ SMODS.Joker {
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
 	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
 		if other_card.config.center.key ~= "j_UTDR_lesser_dog" then
-			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+			card.ability.mult = card.ability.mult + card.ability.mult_gain
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					self:set_sprites(card)
@@ -191,15 +188,15 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				mult = card.ability.extra.mult
+				mult = card.ability.mult
 			}
 		end
 	end,
 	set_sprites = function(self, card, front)
-		if card.ability and card.ability.extra and card.ability.extra.mult and card.ability.extra.mult_gain then
+		if card.ability and card.ability.mult and card.ability.mult_gain then
 			card.children.center:set_sprite_pos({
 				x = 3 +
-					math.min(6, math.floor(card.ability.extra.mult / card.ability.extra.mult_gain)),
+					math.min(6, math.floor(card.ability.mult / 8)),
 				y = 3
 			})
 		end

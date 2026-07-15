@@ -154,7 +154,11 @@ SMODS.Joker {
 	pos = { x = 6, y = 2 },
 	config = { extra = { hands = 0, hands_required = 3, consumable_type = "Planet" } },
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.hands, card.ability.extra.hands_required, localize("k_" .. string.lower(card.ability.extra.consumable_type)), colours = { G.C.SECONDARY_SET[card.ability.extra.consumable_type] or G.C.FILTER } } }
+		return { vars = {
+			card.ability.extra.hands,
+			card.ability.extra.hands_required,
+			localize("k_" .. string.lower(card.ability.extra.consumable_type)),
+		} }
 	end,
 	calculate = function(self, card, context)
 		if context.after then

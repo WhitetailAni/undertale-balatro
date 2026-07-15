@@ -68,6 +68,13 @@ FRIEND_PINK = G.C.FRIEND_PINK,
 FRIEND_YELLOW = G.C.FRIEND_YELLOW,
 watercooler = G.C.WATERCOOLER,
 netskie = G.C.NETSKIE,
+
+flower_aqua = G.C.FLOWER_AQUA,
+flower_seth = G.C.FLOWER_SETH,
+flower_orange = G.C.FLOWER_ORANGE,
+flower_green = G.C.FLOWER_GREEN,
+flower_blue = G.C.FLOWER_BLUE,
+flower_yellow = G.C.FLOWER_YELLOW,
 '''
 match_indent = true
 
@@ -86,6 +93,13 @@ FRIEND_YELLOW = HEX('ffdd45'),
 WATERCOOLER = HEX('2d9bd7'),
 STEEL = HEX('afb4be'),
 NETSKIE = HEX('ff00d6'),
+
+FLOWER_AQUA = HEX('46e3ff'),
+FLOWER_SETH = HEX('eb63eb'),
+FLOWER_ORANGE = HEX('ffa040'),
+FLOWER_GREEN = HEX('00a651'),
+FLOWER_BLUE = HEX('00aef0'),
+FLOWER_YELLOW = HEX('fff200'),
 '''
 match_indent = true
 

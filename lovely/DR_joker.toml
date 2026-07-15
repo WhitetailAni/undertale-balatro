@@ -9,6 +9,17 @@ priority = -2
 [patches.pattern]
 target = "functions/common_events.lua"
 pattern = '''
+SMODS.upgrade_poker_hands({
+	hands = hand,
+	func = function(base, hand, parameter, level_up)
+			return base + G.GAME.hands[hand]['l_' .. parameter] * level_up
+	end,
+	level_up = amount,
+	from = card,
+	instant = instant,
+	StatusText = statustext
+})
+--[[
 G.GAME.hands[hand].level = math.max(0, G.GAME.hands[hand].level + amount)
 G.GAME.hands[hand].mult = math.max(G.GAME.hands[hand].s_mult + G.GAME.hands[hand].l_mult*(G.GAME.hands[hand].level - 1), 1)
 G.GAME.hands[hand].chips = math.max(G.GAME.hands[hand].s_chips + G.GAME.hands[hand].l_chips*(G.GAME.hands[hand].level - 1), 0)
@@ -47,6 +58,20 @@ if #shadowguys then
 end
 '''
 match_indent = true
+
+#lovely patched out this to use their own code. however, mine works just fine, thank-you. We will be using mine.
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+]]
+G.E_MANAGER:add_event(Event({
+'''
+payload = '''
+G.E_MANAGER:add_event(Event({
+'''
 
 [[patches]]
 [patches.pattern]
@@ -327,6 +352,8 @@ if _card then
 end
 '''
 match_indent = true
+
+
 
 
 
