@@ -232,24 +232,6 @@ SMODS.Joker {
 	end
 }
 
-SMODS.Joker {
-	key = "silver_key_DR",
-	loc_txt = {
-		name = "Silver Key",
-		text = {
-			"Create a {C:spectral}Prophecy{} card",
-			"when {C:attention}Boss Blind{}",
-			"is defeated",
-			"{C:inactive}(Must have room){}"
-		}
-	},
-	no_collection = true,
-	in_pool = function(self, args)
-		return false
-	end,
-	atlas = "UT_jokers",
-}
-
 --row two
 SMODS.Joker {
 	key = "sans",

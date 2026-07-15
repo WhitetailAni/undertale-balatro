@@ -144,6 +144,17 @@ SMODS.Joker {
 	end,
 }
 
+function joker_rarity(common, uncommon, rare, legendary)
+	SMODS.ObjectTypes["Joker"].rarities[1].weight = common
+	SMODS.ObjectTypes["Joker"].rarities[2].weight = uncommon
+	SMODS.ObjectTypes["Joker"].rarities[3].weight = rare
+	if legendary == 0 then
+		SMODS.ObjectTypes["Joker"].rarities[4] = nil
+	else
+		SMODS.ObjectTypes["Joker"].rarities[4] = { key = "Legendary", weight = legendary }
+	end
+end
+
 -- load UT
 if UTDR.config_file['undertale'] then
 	assert(SMODS.load_file('UT/one.lua'))()

@@ -228,7 +228,7 @@ SMODS.Joker {
 		end
 	end,
 	--comment out this function and then start a blind with annoying dog! it's fun!!
-	--oooops did i reenable it with a really slim chance..... oops!!!
+	--oooops did i reenable it with a really slim chance..... oops!!! oooops!!!!!!!!
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.mult } }
 	end,
@@ -337,16 +337,8 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "burgerpants",
-	loc_txt = {
-		name = "Burgerpants",
-		text = {
-			"Earn {C:money}$#1#{} at",
-			"end of round",
-			"{C:red}-#2#{} hand size"
-		}
-	},
 	config = {
-		extra = 6,
+		money = 6,
 		hand_loss = 1
 	},
 	rarity = 1,
@@ -356,14 +348,17 @@ SMODS.Joker {
 	pos = { x = 5, y = 6 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra, card.ability.hand_loss } }
+		return { vars = { card.ability.money, card.ability.hand_loss } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		G.hand:change_size(-card.ability.hand_loss)
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		G.hand:change_size(card.ability.hand_loss)
-	end
+	end,
+	calc_dollar_bonus = function(self, card)
+		return card.ability.money
+	end,
 }
 
 --bottom

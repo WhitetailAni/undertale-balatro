@@ -134,7 +134,6 @@ SMODS.Joker {
 	config = {
 		xmult = 3,
 		slots = 2,
-		secret_chance = 6
 	},
 	rarity = 3,
 	blueprint_compat = true,

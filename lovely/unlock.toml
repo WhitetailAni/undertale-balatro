@@ -186,7 +186,8 @@ payload = '''
 		end
 	end
 	if card.key == 'j_UT_fun_value' then 
-		if pseudorandom("fun_value_unlock") < G.GAME.probabilities.normal/10 then
+		
+		if SMODS.pseudorandom_probability(card, "funvalue_unlock", 1, 10, "DR_funvalue_unlock") then
 			ret = true
 			unlock_card(card)
 		end

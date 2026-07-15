@@ -43,7 +43,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				Xmult = card.ability.xmult
+				xmult = card.ability.xmult
 			}
 		end
 	end
@@ -251,14 +251,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "human_soul",
-	loc_txt = {
-		name = "Human Soul",
-		text = {
-			"{C:attention}+#1#{} hand size for",
-			"each {C:attention}Joker{} card",
-			"{C:inactive}(Currently {C:attention}+#2#{C:inactive} hand size)"
-		}
-	},
 	config = {
 		hand_size_gain = 1,
 		joker_count = 0,
@@ -527,28 +519,23 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.setting_blind and not (context.blueprint_card or card).getting_sliced and #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit and context.blind.boss then
-			local uncommon_or_rare = pseudorandom("toriel")
-			local color = nil
-			local rarity = 0
 			G.GAME.joker_buffer = G.GAME.joker_buffer +
 				math.min(1, G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
-			if uncommon_or_rare < 1 / 2 then
-				color = G.C.GREEN
-				rarity = 1
-			else
-				color = G.C.RED
-				rarity = 0.75
-			end
-
-
+				
+			local uncommon_or_rare pseudorandom_element({
+				{ color = G.C.GREEN, rarity = 1 },
+				{ color = G.C.GREEN, rarity = 1 },
+				{ color = G.C.GREEN, rarity = 1 },
+				{ color = G.C.RED, rarity = 0.75 }
+			}, "toriel_rarity")
 
 			G.E_MANAGER:add_event(Event({
 				func = function()
-					local card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
+					local card = create_card('Joker', G.jokers, nil, uncommon_or_rare.rarity, nil, nil, nil, 'toriel_joker')
 					if card.label == 'j_UTDR_asgore' then
 						card:remove()
 						card = nil
-						card = create_card('Joker', G.jokers, nil, rarity, nil, nil, nil, 'toriel')
+						card = create_card('Joker', G.jokers, nil, uncommon_or_rare.rarity, nil, nil, nil, 'toriel_joker')
 					end
 					card:add_to_deck()
 					G.jokers:emplace(card)
@@ -558,21 +545,8 @@ SMODS.Joker {
 				end
 			}))
 
-			G.E_MANAGER:add_event(Event({
-				trigger = "before",
-				delay = 1.0,
-				func = (function()
-					for i = 1, #G.jokers.cards do
-						print(G.jokers.cards[i].label .. i)
-					end
-					return true
-				end)
-			}))
-
-
-
 			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-				{ message = localize('k_plus_joker'), colour = color })
+				{ message = localize('k_plus_joker'), colour = uncommon_or_rare.color })
 		end
 	end
 }

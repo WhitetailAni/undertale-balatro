@@ -121,8 +121,8 @@ SMODS.Joker {
 		if context.end_of_round and context.main_eval and #G.hand.cards>0 then
 			for i = 1, #G.hand.cards do
 				-- Randomize Suit & Rank
-				local suit = pseudorandom_element(SMODS.Suits, 'utdr_amalgam_suit')
-				local rank = pseudorandom_element(SMODS.Ranks, 'utdr_amalgam_rank')
+				local suit = pseudorandom_element(SMODS.Suits, 'amalgam_suit')
+				local rank = pseudorandom_element(SMODS.Ranks, 'amalgam_rank')
 				
 				-- Change them
 				G.E_MANAGER:add_event(Event({
@@ -138,7 +138,7 @@ SMODS.Joker {
 			return {
 				message = localize("k_UTDR_upgrade_qu"),
 				sound = "UTDR_amalgam",
-				pitch = pseudorandom('utdr_amalgam_sound')*.5+.5
+				pitch = pseudorandom('amalgam_sound')*.5+.5
 			}
 		end
 	end
@@ -177,10 +177,10 @@ SMODS.Joker {
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					self:set_sprites(card)
+					card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT })
 					return true
 				end,
 			}))
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT })
 		else
 			print("Uh Oh")
 		end
@@ -195,8 +195,7 @@ SMODS.Joker {
 	set_sprites = function(self, card, front)
 		if card.ability and card.ability.mult and card.ability.mult_gain then
 			card.children.center:set_sprite_pos({
-				x = 3 +
-					math.min(6, math.floor(card.ability.mult / 8)),
+				x = 3 + math.min(6, math.floor(card.ability.mult / 8)), --you can pet lesser dog 55 times in UT, dividing that by the 7 different sprites available, the neck should extend every ~8 mult gains!
 				y = 3
 			})
 		end
@@ -290,15 +289,15 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "end",
+	key = "the_end",
 	config = {
-		extra = 12,
+		money = 12,
 		was_boss = false,
 	},
 	--unlocked = false
 	unlock_condition = { type = 'win_stake', stake = 4 },
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult } }
+		return { vars = { card.ability.money } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		return { vars = { localize { type = 'name_text', set = 'Stake', key = G.P_CENTER_POOLS.Stake[4].key }, colours = { get_stake_col(4) } } }
@@ -313,7 +312,12 @@ SMODS.Joker {
 		if context.setting_blind and not context.blueprint then
 			card.ability.was_boss = G.GAME.blind.boss
 		end
-	end
+	end,
+	calc_dollar_bonus = function(self, card)
+		if card.ability.was_boss then
+			return card.ability.money
+		end
+	end,
 }
 
 --tres
@@ -322,15 +326,18 @@ SMODS.Joker {
 	key = "fun_value",
 	config = {
 		xmult = 1.5,
-		odds = 3
+		odds = 3,
+		unlock_chance = 10
 	},
 	--unlocked = false
 	unlock_condition = { type = 'win_custom' },
 	loc_vars = function(card, info_queue, card)
-		return { vars = { G.GAME.probabilities.normal, card.ability.odds, card.ability.xmult } }
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, 'DR_spamton')
+		return { vars = { probabilities_normal, odds, card.ability.xmult } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
-		return { vars = { G.GAME.probabilities.normal } }
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.unlock_chance, 'DR_spamton')
+		return { vars = { probabilities_normal, odds } }
 	end,
 	rarity = 2,
 	blueprint_compat = true,
@@ -433,17 +440,6 @@ SMODS.Joker {
 		end
 	end
 }
-
-function joker_rarity(common, uncommon, rare, legendary)
-	SMODS.ObjectTypes["Joker"].rarities[1].weight = common
-	SMODS.ObjectTypes["Joker"].rarities[2].weight = uncommon
-	SMODS.ObjectTypes["Joker"].rarities[3].weight = rare
-	if legendary == 0 then
-		SMODS.ObjectTypes["Joker"].rarities[4] = nil
-	else
-		SMODS.ObjectTypes["Joker"].rarities[4] = { key = "Legendary", weight = legendary }
-	end
-end
 
 SMODS.Joker {
 	key = "SURVEY_PROGRAM",

@@ -432,7 +432,7 @@ SMODS.Joker {
 				ref_table = card.ability,
 				ref_value = "chips",
 				scalar_value = "chip_gain",
-				message_colour = G.C.MULT
+				message_colour = G.C.CHIPS
 			})
 		elseif context.joker_main then
 			return {

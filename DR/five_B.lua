@@ -285,7 +285,7 @@ SMODS.Joker {
 					play_flowery_sound_grabbag()
 				end
 			elseif context.blind_defeated then
-				if card.ability.final_hand and pseudorandom("its_my_jarona") > 0.6 then
+				if card.ability.final_hand and pseudorandom("its_my_jarona") > 0.67 then
 					play_flowery_sound("heh_its_my_jarona")
 					card.ability.final_hand = false
 				else
@@ -885,7 +885,10 @@ SMODS.Joker {
 		in_build = false,
 		disguised = false,
 		disguised_pos = { x = 7, y = 1 },
-		chosen_joker_key = "",
+		chosen_joker = {
+			joker_key = "",
+			atlas_key = ""
+		},
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -895,7 +898,7 @@ SMODS.Joker {
 	soul_pos = { x = 1, y = 8 },
 	cost = 4,
 	disguise = function(self_self, self_card)
-		--[[local keys = {}
+		local keys = {}
 		for key, value in pairs(G.localization.descriptions.Joker) do
 			keys[#keys + 1] = key
 		end
@@ -909,39 +912,15 @@ SMODS.Joker {
 		end
 		for i = j, #keys do
 			keys[i] = nil
-		end]]
-		--get all UTDR joker keys. for now limited to just DR_2 atlas jokers so
+		end
 
 		--make sure it sticks to 1 joker!!
 		local chosen_joker_key = ""
 		if not self_card.config.disguised then
-			chosen_joker_key = pseudorandom_element({
-				"j_UTDR_aqua",
-				"j_UTDR_seth",
-				"j_UTDR_blue",
-				"j_UTDR_yellow",
-				"j_UTDR_green",
-				"j_UTDR_orange",
-				"j_UTDR_pink",
-				"j_UTDR_dogcheck",
-				"j_UTDR_shelter_code",
-				"j_UTDR_flowery_scarf",
-				"j_UTDR_lord_of_hammer",
-				"j_UTDR_tension_gem",
-				"j_UTDR_festival",
-				"j_UTDR_the_lake",
-				"j_UTDR_carol",
-				"j_UTDR_find_her_dogg_girl",
-				"j_UTDR_newsletter",
-				"j_UTDR_susies_idea",
-				"j_UTDR_flower_castle",
-				"j_UTDR_doghole",
-				"j_UTDR_dogshrine",
-				"j_UTDR_check_it_out_im_in_the_house_like_carpet"
-			}, "netskie_joker")
-			self_card.config.chosen_joker_key = chosen_joker_key
+			chosen_joker_key = pseudorandom_element(keys, "netskie_joker")
+			self_card.config.chosen_joker.joker_key = chosen_joker_key
 		else
-			chosen_joker_key = self_card.config.chosen_joker_key
+			chosen_joker_key = self_card.config.chosen_joker.joker_key
 		end
 		self_card.config.disguised = true
 
@@ -966,6 +945,7 @@ SMODS.Joker {
 			[chosen_joker_key].name_parsed
 
 		local center = G.P_CENTERS[chosen_joker_key]
+		self_card.config.chosen_joker.atlas_key = G.P_CENTERS[chosen_joker_key].atlas
 		self_card.config.disguised_pos = center.pos
 		local can_localize = false
 		for key, value in pairs(center) do
@@ -988,8 +968,11 @@ SMODS.Joker {
 			vars = center:loc_vars({}, card)
 		end
 		dummy:remove()
-
-		return vars["vars"]
+		
+		if vars then
+			return vars["vars"]
+		end
+		return { }
 	end,
 	loc_vars = function(self, info_queue, card)
 		if not (card.ability.in_build or (card.area and card.area.config.collection)) then
@@ -1005,8 +988,10 @@ SMODS.Joker {
 			card:set_cost(card.config.center.config.chosen_joker_key)
 		end
 		if not (card.ability.in_build or (card.area and card.area.config.collection)) then
+			card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
 			card.children.center:set_sprite_pos(card.config.center.config.disguised_pos)			
 		else
+			card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers_2"]
 			card.children.center:set_sprite_pos({ x = 7, y = 1 })
 		end
 	end,
@@ -1024,13 +1009,16 @@ SMODS.Joker {
 		self:disguise(self, card)
 	end,
 	calculate = function(self, card, context)
-		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
-			play_sound("UTDR_ERAM", 1.0, 0.7)
-			return {
-				remove = true,
-				removed = context.other_card
-			}
+		if context.individual and context.cardarea == G.play then
+			keys = {}
+			for key, value in pairs(SMODS.get_enhancements(context.other_card)) do
+				keys[#keys + 1] = key
+			end
+			if #keys > 0 then
+				return {
+					mult = card.ability.mult
+				}
+			end
 		end
 	end
 }

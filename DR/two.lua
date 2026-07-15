@@ -437,7 +437,7 @@ SMODS.Joker {
 				end
 			}))
 			return {
-				message = "[7470 liked that]",
+				message = "["..pseudorandom('pipis_liked_that', 1173, 8824).." liked that]",
 				colour = G.C.BLUE
 			}
 		end

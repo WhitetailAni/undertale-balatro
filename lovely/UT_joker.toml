@@ -4,22 +4,6 @@ priority = -2
 
 [vars]
 
-[[patches]]
-[patches.pattern]
-target = "card.lua"
-pattern = '''
-if self.ability.name == 'Golden Joker' then
-	return self.ability.extra
-end
-'''
-position = "at"
-payload = '''
-if self.ability.name == 'Golden Joker' or self.label == 'j_UTDR_burgerpants' or (self.label == 'j_UTDR_end' and self.ability.was_boss) or self.label == 'j_UTDR_scarlixir' or (self.label == 'j_UTDR_newsletter' and self.ability.boss_type == "boss") then
-	return self.ability.extra
-end
-'''
-match_indent = true
-
 # kindness last resort reset
 [[patches]]
 [patches.pattern]
@@ -87,6 +71,7 @@ RENTAL = HEX('b18f43'),
 position = "after"
 payload = '''
 GASTER = HEX('000000'),
+BALLGAME = HEX('ff0000'),
 FRIEND = HEX('eeeeee'),
 FRIEND_PINK = HEX('fda9c0'),
 FRIEND_YELLOW = HEX('ffdd45'),

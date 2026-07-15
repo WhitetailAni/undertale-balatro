@@ -1,14 +1,6 @@
 --first sanctuary
 SMODS.Joker {
 	key = "sanctuary",
-	loc_txt = {
-		name = "Dark Sanctuary",
-		text = {
-			"Gives {C:mult}+#1#{} Mult for",
-			"each card in your deck",
-			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
-		}
-	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -37,15 +29,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "cupwalker",
-	loc_txt = {
-		name = "Cuptains",
-		text = {
-			"Gains {C:chips}+#1#{} Chips",
-			"if played hand is",
-			"a {C:attention}#2#",
-			"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)",
-		}
-	},
 	config = {
 		chip_gain = 4,
 		chips = 0
@@ -83,17 +66,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "oldman",
-	loc_txt = {
-		name = "Old Man",
-		text = {
-			"This Joker gains {C:mult}+#1#{} Mult",
-			"per {C:attention}consecutive{} hand",
-			"without playing any hand",
-			"type {C:attention}twice in a row",
-			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
-			"{s:0.8,C:joker_grey}I'm old!"
-		}
-	},
 	config = {
 		mult_gain = 1,
 		mult = 0,
@@ -136,14 +108,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "missmizzle",
-	loc_txt = {
-		name = "Miss Mizzle",
-		text = {
-			"All Seals are",
-			"considered",
-			"{C:attention}Gold Seals{} "
-		}
-	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_SEALS['gold_seal'] or G.P_SEALS[SMODS.Seal.badge_to_key['gold_seal'] or '']
 		return { vars = { localize { type = 'name_text', set = "Other", key = 'gold_seal' } } }
@@ -158,14 +122,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "philosopher",
-	loc_txt = {
-		name = "Philosopher",
-		text = {
-			"{C:planet}Planet{} cards may",
-			"appear in any of",
-			"the {C:attention}Arcana Packs"
-		}
-	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -180,15 +136,6 @@ SMODS.Joker {
 --second sanctuary
 SMODS.Joker {
 	key = "jackenstein",
-	loc_txt = {
-		name = "Jackenstein",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult on {C:attention}first",
-			"{C:attention}hand of round",
-			"{X:mult,C:white}X#2#{} Mult on all",
-			"subsequent hands"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -231,16 +178,8 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "scarlixir",
-	loc_txt = {
-		name = "Scarlixir",
-		text = {
-			"Earn {C:money}$#1#{} at end of",
-			"round, decreases",
-			"by {C:red}-$#2#{} every round"
-		}
-	},
 	config = {
-		extra = 8,
+		money = 8,
 		hole_in_my_pocket = 2,
 		first_round = true
 	},
@@ -251,13 +190,16 @@ SMODS.Joker {
 	pos = { x = 9, y = 6 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra, card.ability.hole_in_my_pocket } }
+		return { vars = { card.ability.money, card.ability.hole_in_my_pocket } }
+	end,
+	calc_dollar_bonus = function(self, card)
+		return card.ability.money
 	end,
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			if card.ability.first_round then
 				card.ability.first_round = false
-			elseif not ((card.ability.extra - card.ability.hole_in_my_pocket) > 0) then
+			elseif not ((card.ability.money - card.ability.hole_in_my_pocket) > 0) then
 				G.E_MANAGER:add_event(Event({
 					func = function()
 						play_sound('tarot1')
@@ -283,7 +225,7 @@ SMODS.Joker {
 					message = "Drank!"
 				}
 			else
-				card.ability.extra = card.ability.extra - card.ability.hole_in_my_pocket
+				card.ability.money = card.ability.money - card.ability.hole_in_my_pocket
 				return {
 					message = "-$" .. card.ability.hole_in_my_pocket,
 					colour = G.C.RED,
@@ -297,14 +239,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "motherfucking_gerson_boom",
-	loc_txt = {
-		name = "Hammer of Justice",
-		text = {
-			"This Joker gains {X:mult,C:white}X#1#{} Mult per",
-			"{C:attention}Voucher{} redeemed this run",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -339,13 +273,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "axe_of_justice",
-	loc_txt = {
-		name = "Justice Axe",
-		text = {
-			"Played cards give",
-			"{X:mult,C:white}X#1#{} Mult when scored"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -372,16 +299,9 @@ SMODS.Joker {
 	end
 }
 
+--no, THIS is the second sanctuary. dumbass
 SMODS.Joker {
 	key = "second_sanctuary",
-	loc_txt = {
-		name = "Second Sanctuary",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult for each card",
-			"{C:attention}removed{} from your deck",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -428,13 +348,6 @@ SMODS.Joker {
 --third sanctuary
 SMODS.Joker {
 	key = "princess_ribbon",
-	loc_txt = {
-		name = "Princess Ribbon",
-		text = {
-			"Played {C:attention}Glass Cards{} give",
-			"{C:chips}+#1#{} Chips when scored"
-		}
-	},
 	config = {
 		chips = 50
 	},
@@ -459,14 +372,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "spawn",
-	loc_txt = {
-		name = "Titan Spawn",
-		text = {
-			"Gains {C:mult}+#1#{} Mult when a",
-			"{C:attention}Stone Card{} is scored",
-			"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"
-		}
-	},
 	config = {
 		mult_gain = 2,
 		mult = 0
@@ -495,15 +400,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dark_fountain",
-	loc_txt = {
-		name = "Dark Fountain",
-		text = {
-			"After {C:attention}#1#{C:inactive} [#2#]{} rounds,",
-			"sell this card to",
-			"apply {C:dark_edition}#3#{} to the",
-			"Joker to the {C:attention}right"
-		}
-	},
 	config = {
 		turn_cap = 3,
 		turns = 0
@@ -552,13 +448,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "titan",
-	loc_txt = {
-		name = "Titan",
-		text = {
-			"Retrigger each played",
-			"{C:attention}Stone Card #1#{} times"
-		}
-	},
 	config = {
 		repetitions = 4
 	},
@@ -586,14 +475,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "bittertear",
-	loc_txt = {
-		name = "BitterTear",
-		text = {
-			"The next {C:attention}#1#{} played",
-			"cards give {C:money}$#2#{}",
-			"when scored"
-		}
-	},
 	config = {
 		bigbucks = 1,
 		card_count = 30

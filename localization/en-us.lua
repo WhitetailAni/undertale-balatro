@@ -445,7 +445,7 @@ return {
 			},
 			["j_UTDR_fun_value"] = {
 				["unlock"] = {
-					"{E:1,C:green}#1# in 10{} chance to unlock",
+					"{E:1,C:green}#1# in #2#{} chance to unlock",
 					"after {E:1,C:attention}winning{} a run",
 				},
 				["text"] = {
@@ -694,7 +694,7 @@ return {
 					"{C:red}-#2#{} hand size",
 				},
 			},
-			["j_UTDR_end"] = {
+			["j_UTDR_the_end"] = {
 				["unlock"] = {
 					"Win a run with any",
 					"deck on at least",
@@ -1931,7 +1931,7 @@ return {
 		["dictionary"] = {
 			["totem_UTDR_omegaflowey"] = "HAHAHAHAHAHAHAHAHAHAHA!!",
 			["totem_UTDR_dogcheck"] = "Placeholder text i Dont Know what should go here okay.",
-			["totem_UTDR_blue"] = "Still Dont !!! yaoi n shit idk",
+			["totem_UTDR_blue"] = "Still Dont !!",
 			["totem_UTDR_buttspie"] = "Spared by Buttspie",
 			["k_UTDR_upgrade_qu"] = "Upgrade?",
 

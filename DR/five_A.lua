@@ -208,17 +208,6 @@ SMODS.Joker {
 	end
 }
 
-function joker_rarity(common, uncommon, rare, legendary)
-	SMODS.ObjectTypes["Joker"].rarities[1].weight = common
-	SMODS.ObjectTypes["Joker"].rarities[2].weight = uncommon
-	SMODS.ObjectTypes["Joker"].rarities[3].weight = rare
-	if legendary == 0 then
-		SMODS.ObjectTypes["Joker"].rarities[4] = nil
-	else
-		SMODS.ObjectTypes["Joker"].rarities[4] = { key = "Legendary", weight = legendary }
-	end
-end
-
 SMODS.Joker {
 	key = "dogcheck",
 	config = {
@@ -232,10 +221,11 @@ SMODS.Joker {
 	pos = { x = 9, y = 2 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { G.GAME.probabilities.normal, card.ability.totem_chance } }
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.totem_chance, 'DR_spamton')
+		return { vars = { probabilities_normal, odds } }
 	end,
 	calculate = function(self, card, context)
-		if context.game_over and pseudorandom("dogcheck") > 0.83 and not context.blueprint then
+		if context.game_over and SMODS.pseudorandom_probability(card, "dogcheck", 1, card.ability.totem_chance, "DR_dogcheck") and not context.blueprint then
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					local tag = Tag(get_next_tag_key("dogcheck"))
@@ -266,11 +256,11 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "newsletter",
 	config = {
-		extra = 6,
+		money = 6,
 		boss_type = ""
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra } }
+		return { vars = { card.ability.money } }
 	end,
 	rarity = 3,
 	blueprint_compat = true,
@@ -278,6 +268,9 @@ SMODS.Joker {
 	atlas = "DR_jokers_2",
 	pos = { x = 3, y = 1 },
 	cost = 5,
+	calc_dollar_bonus = function(self, card)
+		return card.ability.money
+	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			if G.GAME.blind.boss then

@@ -395,6 +395,7 @@ SMODS.Joker {
 	config = {
 		xmult_gain = 0.6,
 		xmult = 1,
+		total_gain = 0,
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
@@ -405,6 +406,7 @@ SMODS.Joker {
 				xmult = card.ability.xmult
 			}
 		elseif context.remove_playing_cards and not context.blueprint then
+			card.ability.total_gain = 0
 			local hearts = 0
 			for i = 1, #context.removed do
 				if context.removed[i]:is_suit("Hearts") or SMODS.has_any_suit(context.removed[i]) then
@@ -412,20 +414,14 @@ SMODS.Joker {
 				end
 			end
 
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							card.ability.xmult = card.ability.xmult + hearts * card.ability.xmult_gain
-							return true
-						end
-					}))
-					play_sound("UTDR_lvup", 1.0, 0.7)
-					card_eval_status_text(card, 'extra', nil, nil, nil,
-						{ message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult + hearts * card.ability.xmult_gain } } })
-					return true
-				end
-			}))
+			card.ability.total_gain = hearts * card.ability.xmult_gain
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "xmult",
+				scalar_value = "total_gain",
+				message_colour = G.C.MULT
+			})
+			play_sound("UTDR_lvup", 1.0, 0.7)
 			return
 		end
 	end

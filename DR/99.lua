@@ -1,13 +1,6 @@
 --beginning
 SMODS.Joker {
 	key = "glowshard",
-	loc_txt = {
-		name = "Glowshard",
-		text = {
-			"Gains {C:money}$#1#{} of {C:attention}sell value",
-			"when a card is sold"
-		}
-	},
 	config = {
 		sell_value_gain = 1,
 		extra_value = 0
@@ -22,7 +15,7 @@ SMODS.Joker {
 	pos = { x = 1, y = 0 },
 	cost = 3,
 	calculate = function(self, card, context)
-		if context.selling_anything and context.card ~= card and not context.blueprint then
+		if context.selling_card and context.card ~= card and not context.blueprint then
 			card.ability.extra_value = card.ability.extra_value + card.ability.sell_value_gain
 			card:set_cost()
 			return {
@@ -35,16 +28,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "berdly",
-	loc_txt = {
-		name = "Berdly",
-		text = {
-			"Played {C:attention}Lucky Cards{}",
-			"give {C:mult}+#1#{} Mult and",
-			"{C:money}$#2#{} when scored",
-			"{C:attention}Lucky Cards{} can",
-			"{C:red}no longer trigger"
-		}
-	},
 	config = {
 		mult = 6,
 		bigbucks = 1,
@@ -75,13 +58,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "save",
-	loc_txt = {
-		name = "SAVE",
-		text = {
-			"After {C:attention}#1#{C:inactive} [#2#]{} rounds,",
-			"sell this card for {C:attention}-#3#{} Ante"
-		}
-	},
 	config = {
 		turn_cap = 3,
 		turns = 0,
@@ -116,14 +92,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "noelle",
-	loc_txt = {
-		name = "Noelle",
-		text = {
-			"{C:attention}Glass Cards{} give {X:mult,C:white}X#1#{} Mult,",
-			"but have a {C:green}#2# in #3#{}",
-			"chance to break"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -200,13 +168,6 @@ end
 
 SMODS.Joker {
 	key = "thornring",
-	loc_txt = {
-		name = "Thorn Ring",
-		text = {
-			"Played {C:attention}Glass Cards{}",
-			"{S:1.1,C:red,E:2}always{} break, {C:red}and...?{}"
-		}
-	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -266,14 +227,6 @@ SMODS.Joker {
 --cyber world
 SMODS.Joker {
 	key = "man",
-	loc_txt = {
-		name = "Man",
-		text = {
-			"{C:attention}Not too important,",
-			"{C:attention}not too unimportant.",
-			"{C:inactive}(Must have room)"
-		}
-	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -295,14 +248,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "kris",
-	loc_txt = {
-		name = "Kris",
-		text = {
-			"Copies ability of {C:attention}Joker{}",
-			"to the left for",
-			"{C:attention}first hand of round"
-		}
-	},
 	config = {
 		in_build = false,
 		krisprint_compat_string = "incompatible",
@@ -379,16 +324,6 @@ end
 
 SMODS.Joker {
 	key = "you",
-	loc_txt = {
-		name = "You",
-		text = {
-			"Copies abilities of {C:attention}Jokers{}",
-			"to the left and right"
-		},
-		unlock = {
-			"{s:1.3}?????",
-		}
-	},
 	config = {
 		in_build = false,
 		redprint_compat_string = "incompatible"
@@ -481,14 +416,6 @@ end
 
 SMODS.Joker {
 	key = "susie",
-	loc_txt = {
-		name = "Susie",
-		text = {
-			"{X:mult,C:white}X#1#{} Mult during {C:attention}Small Blind{}",
-			"{X:mult,C:white}X#2#{} Mult during {C:attention}Big Blind{}",
-			"{X:mult,C:white}X#3#{} Mult during {C:attention}Boss Blind{}",
-		},
-	},
 	config = {
 		xmult_small = 2,
 		xmult_big = 3,
@@ -528,14 +455,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "hometown",
-	loc_txt = {
-		name = "Hometown",
-		text = {
-			"Gains {X:mult,C:white}X#1#{} Mult for",
-			"{C:attention}each{} scored card",
-			"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)"
-		}
-	},
 	config = {
 		xmult_gain = 0.02,
 		xmult = 1,
@@ -568,15 +487,6 @@ SMODS.Joker {
 --dark night
 SMODS.Joker {
 	key = "ralsei_dummy",
-	loc_txt = {
-		name = "Ralsei's Dummy",
-		text = {
-			"{C:mult}+#1#{} Mult for each",
-			"empty {C:attention}Joker{} slot",
-			"{s:0.8}Ralsei's Dummy included{}",
-			"{C:inactive}(Currently {C:mult}+#2#{} Mult)"
-		}
-	},
 	config = {
 		mult_per = 6,
 		mult = 0
@@ -673,14 +583,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "ralsei",
-	loc_txt = {
-		name = "Ralsei",
-		text = {
-			"{C:attention}Retrigger{} each played",
-			"{V:1}#1# of #2#{C:attention} #3#{} times ",
-			"{s:0.8}rank and suit change at end of round",
-		},
-	},
 	config = {
 		selected_rank = 'Jack',
 		selected_suit = 'Hearts',
@@ -731,14 +633,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "shadow_crystal",
-	loc_txt = {
-		name = "Shadow Crystal",
-		text = {
-			"Removes the {C:attention}negative",
-			"{C:attention}effects{} of all",
-			"{C:spectral}Prophecy{} cards"
-		}
-	},
 	config = {
 		joker_slots = 1,
 		old_ouija = "",
@@ -810,12 +704,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "moss",
-	loc_txt = {
-		name = "Moss",
-		text = {
-			"{S:1.1,C:dark_edition,E:2}You found it!{}",
-		}
-	},
 	config = {
 		joker_slots = 1
 	},

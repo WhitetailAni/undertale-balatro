@@ -580,14 +580,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "shadow_mantle",
-	loc_txt = {
-		name = "Shadow Mantle",
-		text = {
-			"Gain {C:blue}+#1#{} Hands",
-			"and {C:red}+#2#{} Discards",
-			"during {C:attention}Boss Blind{}"
-		}
-	},
 	config = {
 		hands = 2,
 		discards = 2

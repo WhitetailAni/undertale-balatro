@@ -61,26 +61,6 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
-target = 'card.lua'
-pattern = '''
-function Card:set_cost()
-    self.extra_cost = 0 + G.GAME.inflation
-
-    self:set_cost_value()
-    self:set_sell_value()
-'''
-position = "at"
-payload = '''
-function Card:set_cost(key)
-    self.extra_cost = 0 + G.GAME.inflation
-
-    self:set_cost_value(key)
-    self:set_sell_value()
-'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
 target = '''=[SMODS _ "src/overrides.lua"]'''
 pattern = '''
 	local temp_in_pool = {}
