@@ -1,7 +1,7 @@
 {
     "id": "UTDR",
     "name": "Undertale/Deltarune",
-    "author": ["_VioMarks_", "WhitetailAni", "J8-Bit"],
+    "author": ["_VioMarks_", "WhitetailAni", "J8-Bit", "slimestuff."],
     "description": "Thank you Toby Fox, Temmie Chang, and the rest of the Undertale and Deltarune team for releasing this game 10 years ago. It really has changed a lot of lives past what anyone could have expected. Again, thank you.",
     "prefix": "UTDR",
     "main_file": "UTDR.lua",
