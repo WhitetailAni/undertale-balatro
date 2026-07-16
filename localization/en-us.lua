@@ -39,7 +39,7 @@ return {
 				["name"] = "The Roaring Knight",
 				["text"] = {
 					"At end of round, destroy",
-					"{C:red}all cards held in hand",
+					"{C:ballgame}all cards held in hand",
 					"and gain {X:mult,C:white}X#1#{} Mult",
 					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
 				},
@@ -336,8 +336,8 @@ return {
 					"{E:1,C:attention}0{} Boss Blind",
 				},
 				["text"] = {
-					"{C:attention}Sell{} this card to {S:1.1,C:red,E:2}destroy all",
-					"{S:1.1,C:red,E:2}Jokers{} and create an equal",
+					"{C:attention}Sell{} this card to {S:1.1,C:ballgame,E:2}destroy all",
+					"{S:1.1,C:ballgame,E:2}Jokers{} and create an equal",
 					"number of {C:dark_edition}#1#s{}",
 				},
 				["name"] = "True Reset",
@@ -409,11 +409,11 @@ return {
 			},
 			["j_UTDR_chara"] = {
 				["unlock"] = {
-					"{E:1,C:red}Five heart nines.{}",
+					"{E:1,C:ballgame}Five heart nines.{}",
 				},
 				["text"] = {
-					"{X:mult,C:white}X#1#{} Mult",
-					"{C:red}-#2#{} hand size",
+					"{X:ballgame,C:white}X#1#{} Mult",
+					"{C:ballgame}-#2#{} hand size",
 				},
 				["name"] = "​",
 			},
@@ -984,7 +984,7 @@ return {
 				["name"] = "Silver Watch",
 				["text"] = {
 					"Played cards give {C:mult}+#1#{}",
-					"Mult when scored",
+					"Mult when scored,",
 					"{C:red}only one hand per round",
 				},
 			},
@@ -999,7 +999,7 @@ return {
 			["j_UTDR_man"] = {
 				["name"] = "Man",
 				["text"] = {
-					"{C:attention}Not too important,",
+					"Not too important,",
 					"{C:attention}not too unimportant.",
 					"{C:inactive}(Must have room)",
 				},
@@ -1336,7 +1336,7 @@ return {
 				["name"] = "Thorn Ring",
 				["text"] = {
 					"Played {C:attention}#1#s{}",
-					"{S:1.1,C:red,E:2}always{} break, {C:red}and...?{}",
+					"{S:1.1,C:ballgame,E:2}always{} break, {C:ballgame}and...?{}",
 				},
 			},
 			["j_UTDR_hometown"] = {
@@ -1699,6 +1699,18 @@ return {
 					"{V:1}#4#{} suit to create",
 					"a {C:dark_edition}#5#{} consumable",
 					"{C:inactive}(Must have room){}"
+				},
+			},
+			["j_UTDR_lacquer_triangle"] = {
+				["name"] = "Lacquer Triangle",
+				["text"] = {
+					"{C:ballgame}-#1#{} hands",
+					"{C:gold}Gold{} capsule prizes",
+					"begin at {C:green}300 POINTs"
+				},
+				["unlock"] = {
+					"Try our discount code:",
+					"{C:ballgame}B  A  L  L",
 				},
 			},
 			["j_UTDR_festival"] = {

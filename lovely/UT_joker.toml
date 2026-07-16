@@ -59,6 +59,7 @@ flower_orange = G.C.FLOWER_ORANGE,
 flower_green = G.C.FLOWER_GREEN,
 flower_blue = G.C.FLOWER_BLUE,
 flower_yellow = G.C.FLOWER_YELLOW,
+ballgame = G.C.BALLGAME,
 '''
 match_indent = true
 

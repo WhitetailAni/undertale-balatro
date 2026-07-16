@@ -447,3 +447,29 @@ SMODS.Joker {
 		end
 	end,
 }
+
+SMODS.Joker {
+	key = "lacquer_triangle",
+	config = {
+		hands_lost = 1,
+	},
+	unlocked = false,
+	rarity = 3,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers_2",
+	pos = { x = 7, y = 2 },
+	cost = 12,
+	in_pool = function(self, args)
+		return false
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.hands_lost } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		ease_hands_played(-card.ability.hands_lost)
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		ease_hands_played(card.ability.hands_lost)
+	end,
+}
