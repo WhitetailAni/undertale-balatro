@@ -999,7 +999,7 @@ SMODS.Joker {
 		if not card.ability.in_build then
 			card:set_cost(card.config.center.config.chosen_joker_key)
 		end
-		if not (card.ability.in_build or (card and card.area and card.area.config.collection)) then
+		if not card.ability.in_build then
 			card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
 			card.children.center:set_sprite_pos(card.config.center.config.disguised_pos)			
 		else
@@ -1018,7 +1018,9 @@ SMODS.Joker {
 		card.ability.in_build = false
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
-		self:disguise(self, card)
+		if not card.area and card.area.config.collection then
+			self:disguise(self, card)
+		end
 	end,
 	calculate = function(self, card, context)
 		if context.reroll_shop then
