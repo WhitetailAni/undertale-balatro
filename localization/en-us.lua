@@ -1691,6 +1691,16 @@ return {
 					"{C:inactive}(Must have room){}"
 				},
 			},
+			["j_UTDR_pink_you"] = {
+				["name"] = "Pink",
+				["text"] = {
+					"{C:green}#1# in #2#{} chance for",
+					"each scoring card of",
+					"{V:1}#4#{} suit to create",
+					"a {C:dark_edition}#5#{} consumable",
+					"{C:inactive}(Must have room){}"
+				},
+			},
 			["j_UTDR_festival"] = {
 				["name"] = "Festival",
 				["text"] = {

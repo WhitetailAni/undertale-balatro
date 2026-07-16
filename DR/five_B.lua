@@ -827,6 +827,20 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
 		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'pink')
+		if #SMODS.find_card("j_UTDR_you") > 0 then
+		vars = {
+			numerator,
+			denominator,
+			localize("k_" .. string.lower(card.ability.extra.card_type)),
+			localize(card.ability.extra.suit, 'suits_singular') or "Heart",
+			localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
+			colours = {
+				G.C.SUITS[card.ability.extra.suit],
+				G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER
+			},
+			key = "j_UTDR_pink_you",
+		}
+		end
 		return {
 			vars = {
 				numerator,
@@ -985,7 +999,7 @@ SMODS.Joker {
 		if not card.ability.in_build then
 			card:set_cost(card.config.center.config.chosen_joker_key)
 		end
-		if not (card.ability.in_build or (card.area and card.area.config.collection)) then
+		if not (card.ability.in_build or (card and card.area and card.area.config.collection)) then
 			card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
 			card.children.center:set_sprite_pos(card.config.center.config.disguised_pos)			
 		else
@@ -1007,7 +1021,9 @@ SMODS.Joker {
 		self:disguise(self, card)
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
+		if context.reroll_shop then
+			card.ability.disguised = false
+		elseif context.individual and context.cardarea == G.play then
 			keys = {}
 			for key, value in pairs(SMODS.get_enhancements(context.other_card)) do
 				keys[#keys + 1] = key
