@@ -894,10 +894,11 @@ SMODS.Joker {
 		mult = 8,
 		in_build = false,
 		disguised = false,
-		disguised_pos = { x = 7, y = 1 },
 		chosen_joker = {
 			joker_key = "",
-			atlas_key = ""
+			atlas_key = "Joker",
+			center_pos = { x = 7, y = 10 },
+			floating_pos = { x = 1, y = 12 }
 		},
 	},
 	rarity = 1,
@@ -907,8 +908,7 @@ SMODS.Joker {
 	pos = { x = 7, y = 10 },
 	soul_pos = { x = 1, y = 12 },
 	cost = 4,
-	disguise = function(self_self, self_card)
-		print("check out my fit")
+	disguise = function(base_card)
 		local keys = {}
 		for key, value in pairs(G.localization.descriptions.Joker) do
 			keys[#keys + 1] = key
@@ -926,14 +926,28 @@ SMODS.Joker {
 		end
 
 		--make sure it sticks to 1 joker!!
-		local chosen_joker_key = ""
-		if not self_card.config.disguised then
-			chosen_joker_key = pseudorandom_element(keys, "netskie_joker")
-			self_card.config.chosen_joker.joker_key = chosen_joker_key
-		else
-			chosen_joker_key = self_card.config.chosen_joker.joker_key
+		if not base_card.config.disguised then
+			base_card.config.chosen_joker.joker_key = pseudorandom_element(keys, "netskie_joker")
 		end
-		self_card.config.disguised = true
+		base_card.config.disguised = true
+		base_card.config.chosen_joker.joker_key = "j_UTDR_chara"
+		
+		--if netskie chooses itself to disguise as, it gets Very Very Confused. it thinks it isnt disguised, so it will disguise itself again. and then it will think it isnt disguised again, so it will disguise itself again. and Again. and AGAIN. until balatro crashes.
+		--so we fix that by making it disguise itself as... Close To Itself! manually. its textbox is very slightly different :D
+		if base_card.config.chosen_joker.joker_key == "j_UTDR_netskie" then
+			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name = G.localization.descriptions.Joker
+			["j_UTDR_netskie_bad_disguise"].name
+			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name_parsed = G.localization.descriptions.Joker
+			["j_UTDR_netskie_bad_disguise"].name_parsed
+		
+			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = G.localization.descriptions.Joker
+			["j_UTDR_netskie_bad_disguise"].text
+			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = G.localization.descriptions.Joker
+			["j_UTDR_netskie_bad_disguise"].text_parsed
+		
+			base_card.config.chosen_joker.atlas_key = "UTDR_DR_jokers"
+			return { base_card.config.mult }
+		end
 
 		--reset to default "Kee kee~"
 		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = G.localization.descriptions.Joker
@@ -944,83 +958,97 @@ SMODS.Joker {
 		--put the desired text before the "Kee kee~" since parsing the text hard and ill just have the game do it
 		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = prepend_to_table(
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text,
-			G.localization.descriptions.Joker[chosen_joker_key].text)
+			G.localization.descriptions.Joker[base_card.config.chosen_joker.joker_key].text)
 		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = prepend_to_table(
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed,
-			G.localization.descriptions.Joker[chosen_joker_key].text_parsed)
+			G.localization.descriptions.Joker[base_card.config.chosen_joker.joker_key].text_parsed)
 
 		--idk if we Need to copy over the base .text and .name but ill do it in case theres any sneaky detection jokers.
 		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name = G.localization.descriptions.Joker
-			[chosen_joker_key].name
+			[base_card.config.chosen_joker.joker_key].name
 		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name_parsed = G.localization.descriptions.Joker
-			[chosen_joker_key].name_parsed
+			[base_card.config.chosen_joker.joker_key].name_parsed
 
-		local center = G.P_CENTERS[chosen_joker_key]
-		self_card.config.chosen_joker.atlas_key = G.P_CENTERS[chosen_joker_key].atlas
-		self_card.config.disguised_pos = center.pos
-		local can_localize = false
-		for key, value in pairs(center) do
-			if key == "loc_vars" then
-				can_localize = true
-			end
-		end
-
+		local center = G.P_CENTERS[base_card.config.chosen_joker.joker_key]
 		local dummy = SMODS.create_card({
-			key = chosen_joker_key,
+			key = base_card.config.chosen_joker.joker_key,
 			skip_materialize = true,
 			set = "Joker",
 			no_edition = true
 		})
-
-		local vars = { vars = {} }
+	
+		local can_localize = true
+		
+		--modded jokers work differently from vanilla jokers - each modded joker has its own separate loc_vars function, or, if they dont need it, none! so we have to check if there is one.
+		--however, vanilla jokers dont - Card has a global function that just checks each applicable jokers and returns what's appropriate, which could be nothing. so we can safely assume :generate_UIBox_ability_table can be called!
+		if center.original_mod then
+			can_localize = false
+			base_card.config.chosen_joker.atlas_key = G.P_CENTERS[base_card.config.chosen_joker.joker_key].atlas
+			for key, value in pairs(center) do
+				if key == "loc_vars" then
+					can_localize = true
+				end
+			end
+		end
+		
+		--set disguise sprite positions
+		base_card.config.chosen_joker.center_pos = center.pos
+		if center.soul_pos then
+			base_card.config.chosen_joker.floating_pos = center.soul_pos
+		end
+		
+		--modded jokers have loc_vars on their center, while vanilla jokers have generate_UIBox_ability_table on the global *Card*. thankfully, we create a card object, so we can just call it!!
+		local vars = { }
 		if can_localize then
 			local card = dummy.config.center
-			card["ability"] = dummy.config.center.config
-			vars = center:loc_vars({}, card)
+			card.ability = dummy.config.center.config
+			if center.original_mod then
+				vars = center:loc_vars({}, card)["vars"]
+			else
+				print("hello")
+				--card.ability.name == 
+				vars = dummy:generate_UIBox_ability_table(true)
+				print(vars)
+			end
 		end
 		dummy:remove()
 		
-		if vars then
-			return vars["vars"]
-		end
-		return { }
+		return vars
 	end,
 	loc_vars = function(self, info_queue, card)
 		if not (card.ability.in_build or (card.area and card.area.config.collection)) then
 			return {
-				vars = self:disguise(self, card),
+				vars = self:disguise(card),
 				key = "j_UTDR_netskie_disguise",
 			}
 		end
 		return { vars = { card.ability.mult } }
 	end,
-	update = function(self, card, dt)
-		if not card and card.area and card.area.config.collection then
-			if not card.ability.in_build then
-				card:set_cost(card.config.center.config.chosen_joker_key)
-			end
-			if not card.ability.in_build then
-				card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
-				card.children.center:set_sprite_pos(card.config.center.config.disguised_pos)			
-			else
-				card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
-				card.children.center:set_sprite_pos({ x = 7, y = 1 })
-			end
-		end
-	end,
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.in_build = true
 		play_sound("UTDR_netskie", 1.0, 0.7)
 		card:juice_up(1, 1)
-		card.children.center:set_sprite_pos({ x = 7, y = 1 })
+		card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
+		card.children.center:set_sprite_pos({ x = 7, y = 10 })
+		card.children.floating_sprite:set_sprite_pos({ x = 1, y = 12 })
 		card:set_cost()
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
-		if not card and card.area and card.area.config.collection then
-			self:disguise(self, card)
+		if not (card and card.area and card.area.config.collection) then
+			self:disguise(card)
+			if not card.ability.in_build then
+				card:set_cost(card.config.center.config.chosen_joker.joker_key)
+			end
+			if not card.ability.in_build then
+				card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
+				card.children.center:set_sprite_pos(card.config.center.config.chosen_joker.center_pos)
+				
+				card.children.floating_sprite.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
+				card.children.floating_sprite:set_sprite_pos(card.config.center.config.chosen_joker.floating_pos)
+			end
 		end
 	end,
 	calculate = function(self, card, context)

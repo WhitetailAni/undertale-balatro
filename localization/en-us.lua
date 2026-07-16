@@ -1652,6 +1652,14 @@ return {
 					"{E:1,C:netskie}Kee kee~"
 				},
 			},
+			["j_UTDR_netskie_bad_disguise"] = {
+				["name"] = "Netskie",
+				["text"] = {
+					"{C:attention}Enhanced{} cards give",
+					"{C:mult}+#1#{} Mult when scored",
+					"{E:1,C:netskie}Kon, kon, kee kee!",
+				},
+			},
 			["j_UTDR_gaster"] = {
 				["unlock"] = {
 					"{C:gaster}AT THAT TIME,",
