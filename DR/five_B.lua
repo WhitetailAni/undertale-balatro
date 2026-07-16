@@ -996,15 +996,17 @@ SMODS.Joker {
 		return { vars = { card.ability.mult } }
 	end,
 	update = function(self, card, dt)
-		if not card.ability.in_build then
-			card:set_cost(card.config.center.config.chosen_joker_key)
-		end
-		if not card.ability.in_build then
-			card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
-			card.children.center:set_sprite_pos(card.config.center.config.disguised_pos)			
-		else
-			card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers_2"]
-			card.children.center:set_sprite_pos({ x = 7, y = 1 })
+		if not card and card.area and card.area.config.collection then
+			if not card.ability.in_build then
+				card:set_cost(card.config.center.config.chosen_joker_key)
+			end
+			if not card.ability.in_build then
+				card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
+				card.children.center:set_sprite_pos(card.config.center.config.disguised_pos)			
+			else
+				card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers_2"]
+				card.children.center:set_sprite_pos({ x = 7, y = 1 })
+			end
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
@@ -1018,7 +1020,7 @@ SMODS.Joker {
 		card.ability.in_build = false
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
-		if not card.area and card.area.config.collection then
+		if not card and card.area and card.area.config.collection then
 			self:disguise(self, card)
 		end
 	end,
