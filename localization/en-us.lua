@@ -112,8 +112,8 @@ return {
 			["j_UTDR_find_her_dogg_girl"] = {
 				["name"] = "December",
 				["text"] = {
-					"{C:common}#1#{} Jokers {C:attention}no",
-					"{C:attention}longer appear{} in shop",
+					"{C:common}#1#{} Jokers {C:red}no",
+					"{C:red}longer appear{} in shop",
 				},
 			},
 			["j_UTDR_ralsei"] = {
@@ -354,6 +354,13 @@ return {
 				["text"] = {
 					"These cards are {C:red}Pissing me off.",
 					"{C:chips}+#1#{} Chips if all played cards are       {C:diamonds}#2# suit{}",
+				},
+			},
+			["j_UTDR_tro_piss_walker"] = {
+				["name"] = "{E:UTDR_tropiss}Tropical Starwalker",
+				["text"] = {
+					"These cards are {E:UTDR_tropiss}Tropissing me off.",
+					"{C:chips}+#1#{} Chips if all played cards are       {E:UTDR_tropiss}#2# suit{}",
 				},
 			},
 			["j_UTDR_dog_residue"] = {

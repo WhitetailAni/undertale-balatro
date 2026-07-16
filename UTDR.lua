@@ -47,6 +47,20 @@ SMODS.DynaTextEffect {
 	end,
 }
 
+SMODS.DynaTextEffect {
+	key = "tropiss",
+	func = function(dynatext, index, letter)
+		local s = #asriel_colors
+		local o = index * -0.5
+		local t = (G.TIMERS.REAL + o)
+		--letter.colour = asriel_colors[((math.floor(t) + s) % s) + 1]
+		letter.colour = mix_colours(
+			asriel_colors[((math.floor(t) + s + 1) % s) + 1],
+			asriel_colors[((math.floor(t) + s) % s) + 1],
+			t % 1.0)
+	end,
+}
+
 -- config tabs
 
 UTDR.config_tab = function()

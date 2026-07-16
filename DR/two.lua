@@ -192,6 +192,12 @@ SMODS.Joker {
 	soul_pos = { x = 7, y = 7 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
+		if math.fmod(os.time(), 64) == 0 then
+			return {
+				key = "j_UTDR_tro_piss_walker",
+				vars = { card.ability.chips, localize("Diamonds", 'suits_singular') or "Diamond" }
+			}
+		end
 		return { vars = { card.ability.chips, localize("Diamonds", 'suits_singular') or "Diamond" } }
 	end,
 	calculate = function(self, card, context)

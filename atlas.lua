@@ -12,13 +12,6 @@ SMODS.Atlas {
     py = 95
 }
 
-SMODS.Atlas {
-    key = "DR_jokers_2",
-    path = "DR_joker_2.png",
-    px = 71,
-    py = 95
-}
-
 --[[SMODS.Atlas {
     key = "lesser_dog",
     path = "lesser_dog.png",

@@ -10,8 +10,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 2, y = 1 },
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 10 },
 	cost = 3,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) then
@@ -34,9 +34,9 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 2, y = 0 },
-	soul_pos = { x = 2, y = 3 },
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 9 },
+	soul_pos = { x = 2, y = 12 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
 		local h = math.floor(pseudorandom("utdr_petal_feather_preview") * #G.handlist + 1)
@@ -73,8 +73,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 6, y = 0 },
+	atlas = "DR_jokers",
+	pos = { x = 6, y = 9 },
 	cost = 3,
 	loc_vars = function(self, info_queue, card)
 		if self.icon and self.icon.remove then
@@ -113,8 +113,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 5, y = 0 },
+	atlas = "DR_jokers",
+	pos = { x = 5, y = 9 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, levelup_chance = SMODS.get_probability_vars(card, 1, card.ability.levelup_chance,
@@ -190,9 +190,9 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 9, y = 0 },
-	soul_pos = { x = 0, y = 3 },
+	atlas = "DR_jokers",
+	pos = { x = 9, y = 9 },
+	soul_pos = { x = 0, y = 12 },
 	cost = 3,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play then
@@ -391,8 +391,8 @@ end
 
 SMODS.Joker {
 	key = "flowery_scarf",
-	atlas = "DR_jokers_2",
-	pos = { x = 6, y = 1 },
+	atlas = "DR_jokers",
+	pos = { x = 6, y = 10 },
 	config = { extra = { old = {} } },
 	cost = 1,
 	rarity = 1,
@@ -475,8 +475,8 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "green",
-	atlas = "DR_jokers_2",
-	pos = { x = 7, y = 0 },
+	atlas = "DR_jokers",
+	pos = { x = 7, y = 9 },
 	blueprint_compat = true,
 	perishable_compat = true,
 	cost = 5,
@@ -594,8 +594,8 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 8, y = 0 },
+	atlas = "DR_jokers",
+	pos = { x = 8, y = 9 },
 	cost = 5,
 	calculate = function(self, card, context)
 		if context.selling_card and not card.ability.card_was_sold then
@@ -635,17 +635,15 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "yellow",
 	config = {
-		extra = {
-			required_suit_num = 2,
-			xmult = 2,
-			did_effect_at_any_point = false
-		}
+		required_suit_num = 2,
+		xmult = 2,
+		all_punishments_worse_than_burying = false
 	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = false,
-	atlas = "DR_jokers_2",
-	pos = { x = 3, y = 0 },
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 9 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
 		if self.icon and self.icon.remove then
@@ -662,8 +660,8 @@ SMODS.Joker {
 		}
 	
 		return { vars = {
-			card.ability.extra.xmult,
-			card.ability.extra.required_suit_num,
+			card.ability.xmult,
+			card.ability.required_suit_num,
 			elements = { element }
 		} }
 	end,
@@ -679,18 +677,18 @@ SMODS.Joker {
 					end
 				end
 			end
-			if suit_count == card.ability.extra.required_suit_num then
+			if suit_count == card.ability.required_suit_num then
 				if not context.blueprint then
-					card.ability.extra.did_effect_at_any_point = true
+					card.ability.all_punishments_worse_than_burying = true
 				end
 				return {
-					xmult = card.ability.extra.xmult
+					xmult = card.ability.xmult
 				}
 			end
 		end
 		if context.ante_change and not context.blueprint then
-			if card.ability.extra.did_effect_at_any_point then
-				card.ability.extra.did_effect_at_any_point = false
+			if card.ability.all_punishments_worse_than_burying then
+				card.ability.all_punishments_worse_than_burying = false
 			else
 				G.E_MANAGER:add_event(Event({
 					func = function()
@@ -731,8 +729,8 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 4, y = 0 },
+	atlas = "DR_jokers",
+	pos = { x = 4, y = 9 },
 	cost = 10,
 	loc_vars = function(self, info_queue, card)
 		if self.icon and self.icon.remove then
@@ -821,8 +819,8 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 0, y = 1 },
+	atlas = "DR_jokers",
+	pos = { x = 0, y = 10 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
@@ -905,11 +903,12 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 7, y = 1 },
-	soul_pos = { x = 1, y = 8 },
+	atlas = "DR_jokers",
+	pos = { x = 7, y = 10 },
+	soul_pos = { x = 1, y = 12 },
 	cost = 4,
 	disguise = function(self_self, self_card)
+		print("check out my fit")
 		local keys = {}
 		for key, value in pairs(G.localization.descriptions.Joker) do
 			keys[#keys + 1] = key
@@ -1004,7 +1003,7 @@ SMODS.Joker {
 				card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
 				card.children.center:set_sprite_pos(card.config.center.config.disguised_pos)			
 			else
-				card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers_2"]
+				card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
 				card.children.center:set_sprite_pos({ x = 7, y = 1 })
 			end
 		end

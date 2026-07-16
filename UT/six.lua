@@ -156,8 +156,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 3, y = 3 },
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 12 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.mult_gain, card.ability.mult } }

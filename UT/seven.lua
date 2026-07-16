@@ -18,8 +18,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 4, y = 2 },
+	atlas = "DR_jokers",
+	pos = { x = 4, y = 11 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
 		return {
@@ -87,8 +87,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = false,
-	atlas = "DR_jokers_2",
-	pos = { x = 5, y = 2 },
+	atlas = "DR_jokers",
+	pos = { x = 5, y = 11 },
 	cost = 12,
 	add_to_deck = function(self, card, from_debuff)
 		play_sound("UTDR_badexplosion", 1.0, 0.7)
@@ -123,8 +123,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 3, y = 2 },
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 11 },
 	config = {
 		money = 1,
 		extra_boosters = 1
@@ -149,9 +149,9 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
+	atlas = "DR_jokers",
 	cost = 3,
-	pos = { x = 6, y = 2 },
+	pos = { x = 6, y = 11 },
 	config = { extra = { hands = 0, hands_required = 3, consumable_type = "Planet" } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = {

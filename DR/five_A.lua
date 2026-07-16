@@ -18,8 +18,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = false,
-	atlas = "DR_jokers_2",
-	pos = { x = 1, y = 2 },
+	atlas = "DR_jokers",
+	pos = { x = 1, y = 11 },
 	cost = 6,
 	calculate = function(self, card, context)
 		if context.selling_self then
@@ -47,8 +47,8 @@ SMODS.Joker {
 	},
 	rarity = 1,
 	cost = 5,
-	atlas = "DR_jokers_2",
-	pos = { x = 1, y = 1 },
+	atlas = "DR_jokers",
+	pos = { x = 1, y = 10 },
 	config = {
 		booster_mod = 1
 	},
@@ -77,8 +77,8 @@ SMODS.Joker {
 	end,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 4, y = 1 },
+	atlas = "DR_jokers",
+	pos = { x = 4, y = 10 },
 	cost = 6,
 	calculate = function(self, card, context)
 		if context.before then
@@ -118,8 +118,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 2, y = 2 },
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 11 },
 	cost = 6,
 	calculate = function(self, card, context)
 		if context.joker_main and G.jokers.config.card_limit == #G.jokers.cards then
@@ -135,8 +135,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 8, y = 1 },
+	atlas = "DR_jokers",
+	pos = { x = 8, y = 10 },
 	cost = 5,
 }
 
@@ -148,8 +148,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 5, y = 1 },
+	atlas = "DR_jokers",
+	pos = { x = 5, y = 10 },
 	cost = 8,
 	add_to_deck = function(self, card, from_debuff)
 		joker_rarity(0, 0.25, 0.05, 0)
@@ -182,8 +182,8 @@ SMODS.Joker {
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 2, y = 0 },
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 9 },
 	cost = 8,
 	add_to_deck = function(self, card, from_debuff)
 		joker_rarity(0.7, 0.5, 0.1, 0)
@@ -217,8 +217,8 @@ SMODS.Joker {
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 9, y = 2 },
+	atlas = "DR_jokers",
+	pos = { x = 9, y = 11 },
 	cost = 6,
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.totem_chance, 'DR_dogcheck')
@@ -262,8 +262,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 0, y = 0 },
+	atlas = "DR_jokers",
+	pos = { x = 0, y = 9 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 3, card.ability.retrigger_chance, 'DR_sound_of_justice')
@@ -291,8 +291,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 9, y = 1 },
+	atlas = "DR_jokers",
+	pos = { x = 9, y = 10 },
 	cost = 7,
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.old_tarot_rate = G.GAME.tarot_rate
@@ -345,8 +345,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 3, y = 1 },
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 10 },
 	cost = 5,
 	calc_dollar_bonus = function(self, card)
 		return card.ability.money
@@ -392,8 +392,8 @@ SMODS.Joker {
 	blueprint_compat = true,
 	rarity = 2,
 	cost = 5,
-	pos = { x = 1, y = 0 },
-	atlas = "DR_jokers_2",
+	pos = { x = 1, y = 9 },
+	atlas = "DR_jokers",
 	loc_vars = function(self, info_queue, card)
 		if self.susie and self.susie.remove then
 			self.susie:remove()
@@ -457,8 +457,8 @@ SMODS.Joker {
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
-	atlas = "DR_jokers_2",
-	pos = { x = 7, y = 2 },
+	atlas = "DR_jokers",
+	pos = { x = 7, y = 11 },
 	cost = 12,
 	in_pool = function(self, args)
 		return false
@@ -472,4 +472,68 @@ SMODS.Joker {
 	remove_from_deck = function(self, card, from_debuff)
 		ease_hands_played(card.ability.hands_lost)
 	end,
+}
+
+SMODS.Joker {
+	key = "lightners_live",
+	config = {
+		ranks = {
+			"7",
+			"4"
+		},
+		mult_inc = 2,
+		mult = 0
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	atlas = "DR_jokers",
+	pos = { x = 8, y = 11 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		local vars = { card.ability.mult_inc, card.ability.mult }
+		for _, rank in ipairs(card.ability.ranks) do
+			table.insert(vars, localize(rank, "ranks"))
+		end
+		return { vars = vars }
+	end,
+	calculate = function(self, card, context)
+		if context.before and not context.blueprint then
+			local found_rank = false
+			for _, playing_card in ipairs(context.scoring_hand) do
+				for i, rank in ipairs(card.ability.ranks) do
+					if playing_card.base.value == rank and not playing_card.debuff then
+						found_rank = true
+						break
+					end
+				end
+				if found_rank then
+					break
+				end
+			end
+			if found_rank then
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "mult",
+					scalar_value = "mult_inc",
+					scaling_message = {
+						message = localize("k_upgrade_ex"),
+						colour = G.C.MULT
+					}
+				})
+			else
+				card.ability.mult = 0
+				return {
+					message = localize("k_reset"),
+					colour = G.C.MULT
+				}
+			end
+		end
+		if context.joker_main then
+			return {
+				mult = card.ability.mult
+			}
+		end
+	end
 }
