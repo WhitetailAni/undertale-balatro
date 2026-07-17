@@ -300,3 +300,88 @@ function get_keys(t)
 	end
 	return keys
 end
+
+--[[SMODS.Challenge {
+	key = "flowers",
+	rules = {
+        custom = {
+            { id = "no_shop_jokers" },
+        },
+        modifiers = {
+        	{ id = "joker_slots", value = 8 },
+        }
+    },
+    restrictions = {
+    	banned_cards = {
+    		{ id = "c_temperance" },
+    		{ id = "c_judgement" },
+    		{ id = "c_wraith" },
+    		{ id = "c_ankh" },
+    		{ id = "c_hex" },
+    		{ id = "c_soul" },
+    		{ id = "c_ectoplasm" },
+    		{ id = "p_buffoon_normal_1" },
+    		{ id = "p_buffoon_normal_2" },
+    		{ id = "p_buffoon_jumbo_1" },
+    		{ id = "p_buffoon_mega_1" },
+    		{ id = "v_hone" },
+    		{ id = "v_glow_up" },
+    		{ id = "v_blank" },
+    		{ id = "v_antimatter" },
+    	},
+    	banned_tags = {
+    		{ id = "tag_uncommon" },
+    		{ id = "tag_rare" },
+    		{ id = "tag_negative" },
+    		{ id = "tag_foil" },
+    		{ id = "tag_holo" },
+    		{ id = "tag_polychrome" },
+    		{ id = "tag_buffoon" },
+    		{ id = "tag_top_up" },
+    	},
+    },
+	jokers = {
+		{ id = "j_UTDR_aqua" },
+	},
+	vouchers = {
+		{ id = "v_overstock_norm" },
+	},
+	apply = function(self)
+		G.GAME.interest = 1.5
+		--G.GAME.discount_percent = 25
+	end,
+	calculate = function(self, context)
+		if context.ante_change then
+			local ante = G.GAME.round_resets.ante
+			if ante == 1 then
+				SMODS.add_card({ key = "j_UTDR_seth" })
+				SMODS.find_card("j_UTDR_seth")[1]:juice_up()
+				SMODS.find_card("j_UTDR_seth")[1]:set_eternal(true)
+			elseif ante == 2 then
+				SMODS.add_card({ key = "j_UTDR_orange" })
+				SMODS.find_card("j_UTDR_orange")[1]:juice_up()
+				SMODS.find_card("j_UTDR_orange")[1]:set_eternal(true)
+			elseif ante == 3 then
+				SMODS.add_card({ key = "j_UTDR_green" })
+				SMODS.find_card("j_UTDR_green")[1]:juice_up()
+				SMODS.find_card("j_UTDR_green")[1]:set_eternal(true)
+			elseif ante == 4 then
+				SMODS.add_card({ key = "j_UTDR_blue" })
+				SMODS.find_card("j_UTDR_blue")[1]:juice_up()
+				SMODS.find_card("j_UTDR_blue")[1]:set_eternal(true)
+			elseif ante == 5 then
+				SMODS.add_card({ key = "j_UTDR_yellow" })
+				SMODS.find_card("j_UTDR_yellow")[1]:juice_up()
+				SMODS.find_card("j_UTDR_yellow")[1]:set_eternal(true)
+			elseif ante == 6 then
+				SMODS.add_card({ key = "j_UTDR_pink" })
+				SMODS.find_card("j_UTDR_pink")[1]:juice_up()
+				SMODS.find_card("j_UTDR_pink")[1]:set_eternal(true)
+			elseif ante == 7 then
+				SMODS.add_card({ key = "j_UTDR_flowery" })
+				SMODS.find_card("j_UTDR_flowery")[1]:juice_up()
+				SMODS.find_card("j_UTDR_flowery")[1]:set_eternal(true)
+			end
+		end
+	end
+}]]

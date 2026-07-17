@@ -1586,7 +1586,7 @@ return {
 				["name"] = "{C:flower_orange,element:1}Orange ",
 				["text"] = {
 					"{C:mult}+#1#{} Mult after a card is sold",
-					" {C:inactive}(Resets at end of round)",
+					"{C:inactive}(Resets at end of round)",
 				},
 			},
 			["j_UTDR_green"] = {
@@ -1612,7 +1612,7 @@ return {
 				["name"] = "{C:flower_yellow,element:1}Yellow ",
 				["text"] = {
 					"{X:mult,C:white} X#1# {} Mult if scoring hand",
-					"contains exactly {C:attention}#2#{} ranks",
+					"contains exactly {C:attention}#2# suits",
 					"{C:inactive,s:0.75}(This Joker is {C:red,s:0.75}destroyed {C:inactive,s:0.75}if{}",
 					"{C:inactive,s:0.75}it hasn't triggered this Ante)"
 				}
@@ -1980,6 +1980,9 @@ return {
 		},
 	},
 	["misc"] = {
+		["challenge_names"] = {
+			["c_UTDR_flowers"] = "Seven Colored Flowers"
+		},
 		["dictionary"] = {
 			["totem_UTDR_omegaflowey"] = "HAHAHAHAHAHAHAHAHAHAHA!!",
 			["totem_UTDR_dogcheck"] = "Placeholder text i Dont Know what should go here okay.",

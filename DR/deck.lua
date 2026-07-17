@@ -72,15 +72,6 @@ SMODS.Back {
 	apply = function(self)
 		G.GAME.win_ante = #self.config.boss_order --7
 		G.GAME.perscribed_bosses = {}
-		--[[
-		G.GAME.perscribed_bosses[1] = 'bl_fish'
-		G.GAME.perscribed_bosses[2] = 'bl_flint'
-		G.GAME.perscribed_bosses[3] = 'bl_house'
-		G.GAME.perscribed_bosses[4] = 'bl_wall'
-		G.GAME.perscribed_bosses[5] = 'bl_serpent'
-		G.GAME.perscribed_bosses[6] = 'bl_psychic'
-		G.GAME.perscribed_bosses[7] = 'bl_final_heart'
-		]]
 		for i, boss in ipairs(self.config.boss_order) do
 			G.GAME.perscribed_bosses[i] = boss
 		end

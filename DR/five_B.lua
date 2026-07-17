@@ -187,6 +187,9 @@ SMODS.Joker {
 		end
 		return { vars = { card.ability.xmult, localize("9", "ranks") or "9" } }
 	end,
+	add_to_deck = function(self, card, from_debuff)
+		self:last_jarona(card)
+	end,
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -194,6 +197,56 @@ SMODS.Joker {
 	pos = { x = 9, y = 9 },
 	soul_pos = { x = 0, y = 12 },
 	cost = 3,
+	last_jarona = function(self, card)
+		local aquas = SMODS.find_card("j_UTDR_aqua")
+		local seths = SMODS.find_card("j_UTDR_seth")
+		local yellows = SMODS.find_card("j_UTDR_yellow")
+		local blues = SMODS.find_card("j_UTDR_blue")
+		local oranges = SMODS.find_card("j_UTDR_orange")
+		local greens = SMODS.find_card("j_UTDR_green")
+		local flowerys = SMODS.find_card("j_UTDR_flowery")
+		local pinks = SMODS.find_card("j_UTDR_pink")
+
+		if #aquas > 0 and #seths > 0 and #yellows > 0 and #blues > 0 and #oranges > 0 and #greens > 0 and not card.ability.all_flowers then
+			play_flowery_sound("lend_me_your_power")
+			card.ability.all_flowers = true
+
+			for i = 1, #aquas do
+				aquas[i]:set_eternal(true)
+				aquas[i]:set_edition({ negative = true }, true)
+			end
+			for i = 1, #seths do
+				seths[i]:set_eternal(true)
+				seths[i]:set_edition({ negative = true }, true)
+			end
+			for i = 1, #yellows do
+				yellows[i]:set_eternal(true)
+				yellows[i]:set_edition({ negative = true }, true)
+			end
+			for i = 1, #blues do
+				blues[i]:set_eternal(true)
+				blues[i]:set_edition({ negative = true }, true)
+			end
+			for i = 1, #oranges do
+				oranges[i]:set_eternal(true)
+				oranges[i]:set_edition({ negative = true }, true)
+				oranges[i].config.center.config.all_flowers = true
+			end
+			for i = 1, #greens do
+				greens[i]:set_eternal(true)
+				greens[i]:set_edition({ negative = true }, true)
+			end
+			for i = 1, #flowerys do
+				flowerys[i]:set_eternal(true)
+				flowerys[i]:set_edition({ negative = true }, true)
+			end
+			--if you have her on the team, fun little bonus! not required for Last Jaronaing though
+			for i = 1, #pinks do
+				pinks[i]:set_eternal(true)
+				pinks[i]:set_edition({ negative = true }, true)
+			end
+		end
+	end,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play then
 			if context.other_card:get_id() == 9 then
@@ -215,54 +268,7 @@ SMODS.Joker {
 			elseif context.after then
 				card.ability.orange_active = false
 			elseif context.before then
-				local aquas = SMODS.find_card("j_UTDR_aqua")
-				local seths = SMODS.find_card("j_UTDR_seth")
-				local yellows = SMODS.find_card("j_UTDR_yellow")
-				local blues = SMODS.find_card("j_UTDR_blue")
-				local oranges = SMODS.find_card("j_UTDR_orange")
-				local greens = SMODS.find_card("j_UTDR_green")
-				local flowerys = SMODS.find_card("j_UTDR_flowery")
-				local pinks = SMODS.find_card("j_UTDR_pink")
-
-				if #aquas > 0 and #seths > 0 and #yellows > 0 and #blues > 0 and #oranges > 0 and #greens > 0 then
-					play_flowery_sound("lend_me_your_power")
-					card.ability.all_flowers = true
-
-					for i = 1, #aquas do
-						aquas[i]:set_eternal(true)
-						aquas[i]:set_edition({ negative = true }, true)
-					end
-					for i = 1, #seths do
-						seths[i]:set_eternal(true)
-						seths[i]:set_edition({ negative = true }, true)
-					end
-					for i = 1, #yellows do
-						yellows[i]:set_eternal(true)
-						yellows[i]:set_edition({ negative = true }, true)
-					end
-					for i = 1, #blues do
-						blues[i]:set_eternal(true)
-						blues[i]:set_edition({ negative = true }, true)
-					end
-					for i = 1, #oranges do
-						oranges[i]:set_eternal(true)
-						oranges[i]:set_edition({ negative = true }, true)
-						oranges[i].config.center.config.all_flowers = true
-					end
-					for i = 1, #greens do
-						greens[i]:set_eternal(true)
-						greens[i]:set_edition({ negative = true }, true)
-					end
-					for i = 1, #flowerys do
-						flowerys[i]:set_eternal(true)
-						flowerys[i]:set_edition({ negative = true }, true)
-					end
-					--if you have her on the team, fun little bonus! not required for Last Jaronaing though
-					for i = 1, #pinks do
-						pinks[i]:set_eternal(true)
-						pinks[i]:set_edition({ negative = true }, true)
-					end
-				end
+				self:last_jarona(card)
 			elseif context.joker_main then
 				local oranges = SMODS.find_card("j_UTDR_orange")
 				for i = 1, #oranges do
@@ -346,7 +352,11 @@ SMODS.Joker {
 						"its_so_human",
 						"my_human",
 					})
-				elseif not context.buying_self or context.open_booster then
+					if context.card.config.center.key == "j_UTDR_pink" and card.ability.all_flowers then
+						context.card:set_eternal(true)
+						context.card:set_edition({ negative = true }, true)
+					end
+				elseif (not context.buying_self or context.open_booster) and context.card.config.center.set == "Joker" then
 					play_flowery_sound_random({
 						"calling_for_help",
 						"heytherelittleguy",
@@ -600,6 +610,10 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.selling_card and not card.ability.card_was_sold then
 			card.ability.card_was_sold = true
+			local eval = function(card)
+				return not card.ability.card_was_sold
+			end
+			juice_card_until(card, eval, true)
 			return {
 				message = localize('k_active_ex'),
 				colour = G.C.FILTER
@@ -810,11 +824,9 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "pink",
 	config = {
-		extra = {
-			odds = 4,
-			suit = "Hearts",
-			card_type = "Tarot"
-		}
+		odds = 4,
+		suit = "Hearts",
+		card_type = "Tarot"
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -824,17 +836,17 @@ SMODS.Joker {
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
-		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'pink')
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.odds, 'pink')
 		if #SMODS.find_card("j_UTDR_you") > 0 then
 		vars = {
 			numerator,
 			denominator,
-			localize("k_" .. string.lower(card.ability.extra.card_type)),
-			localize(card.ability.extra.suit, 'suits_singular') or "Heart",
+			localize("k_" .. string.lower(card.ability.card_type)),
+			localize(card.ability.suit, 'suits_singular') or "Heart",
 			localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
 			colours = {
-				G.C.SUITS[card.ability.extra.suit],
-				G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER
+				G.C.SUITS[card.ability.suit],
+				G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
 			},
 			key = "j_UTDR_pink_you",
 		}
@@ -843,18 +855,18 @@ SMODS.Joker {
 			vars = {
 				numerator,
 				denominator,
-				localize("k_" .. string.lower(card.ability.extra.card_type)),
-				localize(card.ability.extra.suit, 'suits_singular') or "Heart",
+				localize("k_" .. string.lower(card.ability.card_type)),
+				localize(card.ability.suit, 'suits_singular') or "Heart",
 				localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
 				colours = {
-					G.C.SUITS[card.ability.extra.suit],
-					G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER
+					G.C.SUITS[card.ability.suit],
+					G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
 				}
 			}
 		}
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and (context.other_card:is_suit(card.ability.extra.suit) or SMODS.has_any_suit(context.other_card)) and SMODS.pseudorandom_probability(card, 'j_UTDR_pink', 1, card.ability.extra.odds) then
+		if context.individual and context.cardarea == G.play and (context.other_card:is_suit(card.ability.suit) or SMODS.has_any_suit(context.other_card)) and SMODS.pseudorandom_probability(card, 'j_UTDR_pink', 1, card.ability.odds) then
 			-- check if should add consumable
 			local do_message = false
 			if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
@@ -865,14 +877,14 @@ SMODS.Joker {
 				G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
 				return {
 					extra = {
-						message = localize('k_plus_' .. string.lower(card.ability.extra.card_type)),
-						colour = G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER,
+						message = localize('k_plus_' .. string.lower(card.ability.card_type)),
+						colour = G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER,
 						message_card = card,
 						func = function() -- This is for timing purposes, everything here runs after the message
 							G.E_MANAGER:add_event(Event({
 								func = (function()
 									SMODS.add_card {
-										set = card.ability.extra.card_type,
+										set = card.ability.card_type,
 										edition = "e_negative",
 										key_append = 'UTDR_pink' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
 									}
@@ -930,7 +942,6 @@ SMODS.Joker {
 			base_card.config.chosen_joker.joker_key = pseudorandom_element(keys, "netskie_joker")
 		end
 		base_card.config.disguised = true
-		base_card.config.chosen_joker.joker_key = "j_UTDR_chara"
 		
 		--if netskie chooses itself to disguise as, it gets Very Very Confused. it thinks it isnt disguised, so it will disguise itself again. and then it will think it isnt disguised again, so it will disguise itself again. and Again. and AGAIN. until balatro crashes.
 		--so we fix that by making it disguise itself as... Close To Itself! manually. its textbox is very slightly different :D
@@ -1005,18 +1016,15 @@ SMODS.Joker {
 			if center.original_mod then
 				vars = center:loc_vars({}, card)["vars"]
 			else
-				print("hello")
-				--card.ability.name == 
 				vars = dummy:generate_UIBox_ability_table(true)
-				print(vars)
 			end
 		end
 		dummy:remove()
-		
 		return vars
 	end,
 	loc_vars = function(self, info_queue, card)
-		if not (card.ability.in_build or (card.area and card.area.config.collection)) then
+		if not (card.ability.in_build or (card and card.area and card.area.config.collection)) then
+			print("loc vars call")
 			return {
 				vars = self:disguise(card),
 				key = "j_UTDR_netskie_disguise",
@@ -1037,7 +1045,10 @@ SMODS.Joker {
 		card.ability.in_build = false
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
-		if not (card and card.area and card.area.config.collection) then
+		if not card and card.area and card.area.config.collection then
+			return
+		end
+		if G.jokers then
 			self:disguise(card)
 			if not card.ability.in_build then
 				card:set_cost(card.config.center.config.chosen_joker.joker_key)
