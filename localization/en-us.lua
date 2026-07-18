@@ -153,6 +153,13 @@ return {
 					"{f:UTDR_ComicSansUT}hand is a {f:UTDR_ComicSansUT,C:attention}#2#{f:UTDR_ComicSansUT}",
 				},
 			},
+			["j_UTDR_sans_title"] = {
+				["name"] = "{f:UTDR_ComicSansUT}sans.",
+				["text"] = {
+					"{X:mult,C:white,f:UTDR_ComicSansUT} x#1# {f:UTDR_ComicSansUT} mult if played",
+					"{f:UTDR_ComicSansUT}hand is a {f:UTDR_ComicSansUT,C:attention}#2#{f:UTDR_ComicSansUT}",
+				},
+			},
 			["j_UTDR_shelter_code"] = {
 				["name"] = "Shelter Code",
 				["text"] = {
@@ -685,6 +692,16 @@ return {
 					"{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)",
 				},
 			},
+			["j_UTDR_tv_world_title"] = {
+				["name"] = "TV World",
+				["text"] = {
+					"This Joker gains {C:mult}+#1#{} Mult",
+					"per {C:attention}consecutive hand",
+					"played with a {V:1}#2#{} card",
+					"{s:0.8}suit changes at end of round",
+					"{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)",
+				},
+			},
 			["j_UTDR_lanino_elnina"] = {
 				["name"] = "Lanino & Elnina",
 				["text"] = {
@@ -1139,6 +1156,68 @@ return {
 				["text"] = {
 					"Gives a random {C:attention}Bonus{}",
 					"when Blind is selected",
+				},
+			},
+			["j_UTDR_alphys_one"] = {
+				["name"] = "Alphys",
+				["text"] = {
+					"{C:blue}+#1#{} Hands",
+					"{C:inactive}(Effect changes",
+					"{C:inactive}at end of round)",
+				},
+			},
+			["j_UTDR_alphys_two"] = {
+				["name"] = "Alphys",
+				["text"] = {
+					"{C:red}+#1#{} Discards",
+					"{C:inactive}(Effect changes",
+					"{C:inactive}at end of round)",
+				},
+			},
+			["j_UTDR_alphys_three"] = {
+				["name"] = "Alphys",
+				["text"] = {
+					"{C:attention}+#1#{} hand size",
+					"{C:inactive}(Effect changes",
+					"{C:inactive}at end of round)",
+				},
+			},
+			["j_UTDR_alphys_four"] = {
+				["name"] = "Alphys",
+				["text"] = {
+					"{C:chips}+#1#{} Chips",
+					"{C:inactive}(Effect changes",
+					"{C:inactive}at end of round)",
+				},
+			},
+			["j_UTDR_alphys_five"] = {
+				["name"] = "Alphys",
+				["text"] = {
+					"{C:mult}+#1#{} Mult",
+					"{C:inactive}(Effect changes",
+					"{C:inactive}at end of round)"
+				},
+			},
+			["j_UTDR_alphys_six"] = {
+				["name"] = "Alphys",
+				["text"] = {
+					"{X:mult,C:white}X#1#{} Mult",
+					"{C:inactive}(Effect changes",
+					"{C:inactive}at end of round)",
+				},
+			},
+			["j_UTDR_alphys_seven"] = {
+				["name"] = "Alphys",
+				["text"] = {
+					"{C:attention}Retrigger{} all scoring cards",
+					"{C:inactive}(Effect changes at end of round)",
+				},
+			},
+			["j_UTDR_alphys_eight"] = {
+				["name"] = "Alphys",
+				["text"] = {
+					"Disables effect of {C:attention}Boss Blind",
+					"{C:inactive}(Effect changes at end of round)",
 				},
 			},
 			["j_UTDR_undyne"] = {
@@ -1719,7 +1798,7 @@ return {
 			["j_UTDR_lacquer_triangle"] = {
 				["name"] = "Lacquer Triangle",
 				["text"] = {
-					"{C:ballgame}-#1#{} hands",
+					"{C:ballgame}-#1#{} Hand",
 					"{C:gold}Gold{} capsule prizes",
 					"begin at {C:green}300 POINTs"
 				},

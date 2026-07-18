@@ -922,13 +922,14 @@ SMODS.Joker {
 	cost = 4,
 	disguise = function(base_card)
 		local keys = {}
-		for key, value in pairs(G.localization.descriptions.Joker) do
+		--used to use G.localization.descriptions.Joker, but not all entries in here are actual jokers. so if netskie picked a key that wasnt a real card, the game would crash :()
+		for key, value in pairs(G.P_CENTERS) do
 			keys[#keys + 1] = key
 		end
-
+		
 		local j = 1
 		for i = 1, #keys do
-			if keys[i]:find("UTDR", 1, true) then
+			if keys[i]:sub(1, 2) == "j_" then
 				keys[j] = keys[i]
 				j = j + 1
 			end
@@ -936,6 +937,8 @@ SMODS.Joker {
 		for i = j, #keys do
 			keys[i] = nil
 		end
+		
+		print(keys)
 
 		--make sure it sticks to 1 joker!!
 		if not base_card.config.disguised then
@@ -1024,7 +1027,6 @@ SMODS.Joker {
 	end,
 	loc_vars = function(self, info_queue, card)
 		if not (card.ability.in_build or (card and card.area and card.area.config.collection)) then
-			print("loc vars call")
 			return {
 				vars = self:disguise(card),
 				key = "j_UTDR_netskie_disguise",
@@ -1038,6 +1040,7 @@ SMODS.Joker {
 		card:juice_up(1, 1)
 		card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
 		card.children.center:set_sprite_pos({ x = 7, y = 10 })
+		card.children.floating_sprite.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
 		card.children.floating_sprite:set_sprite_pos({ x = 1, y = 12 })
 		card:set_cost()
 	end,
@@ -1045,7 +1048,7 @@ SMODS.Joker {
 		card.ability.in_build = false
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
-		if not card and card.area and card.area.config.collection then
+		if not (card and card.area and card.area.config.collection) then
 			return
 		end
 		if G.jokers then

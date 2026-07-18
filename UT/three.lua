@@ -551,84 +551,131 @@ SMODS.Joker {
 	pos = { x = 1, y = 6 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return {
-			vars = {
-				card.ability.values.hand_count,
-				card.ability.values.discard_count,
-				card.ability.values.hand_size_count,
-				card.ability.values.chips_count,
-				card.ability.values.mult_count,
-				card.ability.values.xmult_count,
+		if card.ability.states.hand then
+			return {
+				vars = {
+					card.ability.values.hand_count,
+				},
+				key = "j_UTDR_alphys_one"
 			}
-		}
+		elseif card.ability.states.discard then
+			return {
+				vars = {
+					card.ability.values.discard_count,
+				},
+				key = "j_UTDR_alphys_two"
+			}
+		elseif card.ability.states.hand_size then
+			return {
+				vars = {
+					card.ability.values.hand_size_count,
+				},
+				key = "j_UTDR_alphys_three"
+			}
+		elseif card.ability.states.chips then
+			return {
+				vars = {
+					card.ability.values.chips_count,
+				},
+				key = "j_UTDR_alphys_four"
+			}
+		elseif card.ability.states.mult then
+			return {
+				vars = {
+					card.ability.values.mult_count,
+				},
+				key = "j_UTDR_alphys_five"
+			}
+		elseif card.ability.states.xmult then
+			return {
+				vars = {
+					card.ability.values.xmult_count,
+				},
+				key = "j_UTDR_alphys_six"
+			}
+		elseif card.ability.states.retrigger then
+			return {
+				key = "j_UTDR_alphys_seven"
+			}
+		elseif card.ability.states.chicot then
+			return {
+				key = "j_UTDR_alphys_eight"
+			}
+		end
+	end,
+	pick_bonus = function(self, card)
+		local rand = pseudorandom("alphys_effect")
+		play_sound("UTDR_alphys", 1.0, 0.7)
+		card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Called in!" })
+	
+		if G.GAME.blind.name == "Big Blind" then
+			local zeroth = 0
+			local first = 1 / 8
+			local second = 2 / 8
+			local third = 3 / 8
+			local fourth = 4 / 8
+			local fifth = 5 / 8
+			local sixth = 6 / 8
+			local seventh = 7 / 8
+			local eighth = 1
+
+			if zeroth < rand and rand < first then
+				card.ability.states.hand = true
+			elseif first < rand and rand < second then
+				card.ability.states.discard = true
+			elseif second < rand and rand < third then
+				card.ability.states.hand_size = true
+			elseif third < rand and rand < fourth then
+				card.ability.states.chips = true
+			elseif fourth < rand and rand < fifth then
+				card.ability.states.mult = true
+			elseif fifth < rand and rand < sixth then
+				card.ability.states.xmult = true
+			elseif sixth < rand and rand < seventh then
+				card.ability.states.retrigger = true
+			elseif seventh < rand and rand < eighth then
+				card.ability.states.chicot = true
+			end
+		else
+			local zeroth = 0
+			local first = 1 / 7
+			local second = 2 / 7
+			local third = 3 / 7
+			local fourth = 4 / 7
+			local fifth = 5 / 7
+			local sixth = 6 / 7
+			local seventh = 1
+
+			if zeroth < rand and rand < first then
+				card.ability.states.hand = true
+			elseif first < rand and rand < second then
+				card.ability.states.discard = true
+			elseif second < rand and rand < third then
+				card.ability.states.hand_size = true
+			elseif third < rand and rand < fourth then
+				card.ability.states.chips = true
+			elseif fourth < rand and rand < fifth then
+				card.ability.states.mult = true
+			elseif fifth < rand and rand < sixth then
+				card.ability.states.xmult = true
+			elseif sixth < rand and rand < seventh then
+				card.ability.states.retrigger = true
+			end
+		end
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		if not from_debuff then
+			self:pick_bonus(card)
+		end
 	end,
 	calculate = function(self, card, context)
 		if context.setting_blind and not card.getting_sliced then
-			local rand = pseudorandom("alphys")
-			play_sound("UTDR_alphys", 1.0, 0.7)
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Called in!" })
-
-			if G.GAME.blind.boss then
-				local zeroth = 0
-				local first = 1 / 8
-				local second = 2 / 8
-				local third = 3 / 8
-				local fourth = 4 / 8
-				local fifth = 5 / 8
-				local sixth = 6 / 8
-				local seventh = 7 / 8
-				local eighth = 1
-
-				if zeroth < rand and rand < first then
-					card.ability.states.hand = true
-				elseif first < rand and rand < second then
-					card.ability.states.discard = true
-				elseif second < rand and rand < third then
-					card.ability.states.hand_size = true
-				elseif third < rand and rand < fourth then
-					card.ability.states.chips = true
-				elseif fourth < rand and rand < fifth then
-					card.ability.states.mult = true
-				elseif fifth < rand and rand < sixth then
-					card.ability.states.xmult = true
-				elseif sixth < rand and rand < seventh then
-					card.ability.states.retrigger = true
-				elseif seventh < rand and rand < eighth then
-					card.ability.states.chicot = true
-				end
-			else
-				local zeroth = 0
-				local first = 1 / 7
-				local second = 2 / 7
-				local third = 3 / 7
-				local fourth = 4 / 7
-				local fifth = 5 / 7
-				local sixth = 6 / 7
-				local seventh = 1
-
-				if zeroth < rand and rand < first then
-					card.ability.states.hand = true
-				elseif first < rand and rand < second then
-					card.ability.states.discard = true
-				elseif second < rand and rand < third then
-					card.ability.states.hand_size = true
-				elseif third < rand and rand < fourth then
-					card.ability.states.chips = true
-				elseif fourth < rand and rand < fifth then
-					card.ability.states.mult = true
-				elseif fifth < rand and rand < sixth then
-					card.ability.states.xmult = true
-				elseif sixth < rand and rand < seventh then
-					card.ability.states.retrigger = true
-				end
-			end
-
 			if card.ability.states.hand then
 				G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.values.hand_count
 				ease_hands_played(card.ability.values.hand_count)
 			elseif card.ability.states.discard then
-				G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.values.discard_count
-				ease_hands_played(card.ability.values.discard_count)
+				G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.values.discard_count
+				ease_discard(card.ability.values.discard_count)
 			elseif card.ability.states.hand_size then
 				G.hand:change_size(card.ability.values.hand_size_count)
 			elseif card.ability.states.chicot then
@@ -665,15 +712,15 @@ SMODS.Joker {
 			return {
 				repetitions = 1,
 			}
-		elseif context.end_of_round and context.cardarea == G.jokers then
+		elseif context.end_of_round and context.main_eval then
 			if card.ability.states.hand then
 				G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.values.hand_count
 				ease_hands_played(-card.ability.values.hand_count)
 
 				card.ability.states.hand = false
 			elseif card.ability.states.discard then
-				G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.values.discard_count
-				ease_hands_played(-card.ability.values.discard_count)
+				G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.values.discard_count
+				ease_discard(-card.ability.values.discard_count)
 
 				card.ability.states.discard = false
 			elseif card.ability.states.hand_size then
@@ -691,6 +738,8 @@ SMODS.Joker {
 			elseif card.ability.states.chicot then
 				card.ability.states.chicot = false
 			end
+			
+			self:pick_bonus(card)
 		end
 	end
 }
