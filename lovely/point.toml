@@ -22,3 +22,11 @@ dollars = 0,
 position = 'after'
 payload = 'points_ante = 0,'
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = 'SMODS.calculate_context({ante_change = mod, ante_end = SMODS.ante_end})'
+position = 'before'
+payload = 'G.GAME.ante_points = 0'
+match_indent = true

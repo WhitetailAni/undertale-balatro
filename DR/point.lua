@@ -1,3 +1,7 @@
+--ante_points is never shown to the player, its just for internal tracking. if it ever hits 700, no more point gain. end of story!
+--it goes up every time points does
+--every ante, it resets to 0 to allow more point gain.
+
 function ease_points(mod, instant)
     local function _mod(mod)
     	if G.GAME.ante_points >= 700 then return end
@@ -13,6 +17,7 @@ function ease_points(mod, instant)
         end
         --Ease from current chips to the new number of chips
         G.GAME.ante_points = G.GAME.ante_points + mod
+        G.GAME.points = G.GAME.points + mod
         --check_and_set_high_score('most_money', G.GAME.dollars)
        -- check_for_unlock({type = 'money'})
         dollar_UI.config.object:update() --CHANGE
