@@ -1,29 +1,82 @@
 SMODS.Joker {
-	key = "flower_castle",
+	key = "the_lake",
+	rarity = 1,
 	config = {
-		chips = 0,
-		chip_gain = 2
+		rank_increase = 1,
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chip_gain, localize("Clubs", 'suits_singular'), card.ability.chips } }
+		if math.fmod(os.time(), 1024) == 0 then
+			return {
+				vars = { card.ability.rank_increase },
+				key = "j_UTDR_xaviers_lake",
+			}
+		end
+		return { vars = { card.ability.rank_increase } }
 	end,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 4, y = 10 },
+	cost = 6,
+	calculate = function(self, card, context)
+		if context.before then
+			local scoring_hand = {}
+			for i = 1, #context.scoring_hand do
+				scoring_hand[context.scoring_hand[i]] = true
+			end
+
+			local unscoring_hand_indexes = {}
+			for i = 1, #context.full_hand do
+				if not scoring_hand[context.full_hand[i]] then
+					table.insert(unscoring_hand_indexes, i)
+				end
+			end
+
+			for i = 1, #unscoring_hand_indexes do
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						SMODS.modify_rank(context.full_hand[unscoring_hand_indexes[i]], card.ability.rank_increase)
+						context.full_hand[unscoring_hand_indexes[i]]:juice_up()
+						return true
+					end
+				}))
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "aqua",
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
-	pos = { x = 2, y = 10 },
+	pos = { x = 6, y = 9 },
 	cost = 3,
+	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+		return {
+			vars = {
+				elements = { element }
+			}
+		}
+	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) then
-			SMODS.scale_card(card, {
-				ref_table = card.ability,
-				ref_value = "chips",
-				scalar_value = "chip_gain",
-				message_colour = G.C.CHIPS
-			})
-		elseif context.joker_main then
+		if context.individual and context.cardarea == G.play then
 			return {
-				chips = card.ability.chips
+				mult = (math.floor(pseudorandom("aqua") * 6) + 1),
+				card = context.blueprint_card or card
 			}
 		end
 	end
@@ -63,43 +116,6 @@ SMODS.Joker {
 
 			return {
 				replace_poker_hands = t
-			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "aqua",
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 6, y = 9 },
-	cost = 3,
-	loc_vars = function(self, info_queue, card)
-		if self.icon and self.icon.remove then
-			self.icon:remove()
-			self.icon = nil
-		end
-		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 0, y = 0 })
-		local element = {
-			n = G.UIT.C,
-			config = { align = "cm", padding = 0.1 },
-			nodes = {
-				{ n = G.UIT.O, config = { object = self.icon } },
-			}
-		}
-		return {
-			vars = {
-				elements = { element }
-			}
-		}
-	end,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
-			return {
-				mult = (math.floor(pseudorandom("aqua") * 6) + 1),
-				card = context.blueprint_card or card
 			}
 		end
 	end
@@ -157,6 +173,151 @@ SMODS.Joker {
 				level_up = 1,
 				level_up_hand = most_played,
 				message = localize("k_upgrade_ex")
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "festival",
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.booster_mod } }
+	end,
+	blueprint_compat = false,
+	perishable_compat = true,
+	eternal_compat = true,
+	attributes = {
+		"passive",
+	},
+	rarity = 1,
+	cost = 5,
+	atlas = "DR_jokers",
+	pos = { x = 1, y = 10 },
+	config = {
+		booster_mod = 1
+	},
+	add_to_deck = function(self, card, from_debuff)
+		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) + card.ability.booster_mod
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) - card.ability.booster_mod
+	end
+}
+
+SMODS.Joker {
+	key = "yellow",
+	config = {
+		required_suit_num = 2,
+		xmult = 2,
+		all_punishments_worse_than_burying = false
+	},
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = false,
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 9 },
+	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 5, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+	
+		return { vars = {
+			card.ability.xmult,
+			card.ability.required_suit_num,
+			elements = { element }
+		} }
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main then
+			local suits = {}
+			local suit_count = 0
+			for i = 1, #context.scoring_hand do
+				if not context.scoring_hand[i].debuff then
+					suits[context.scoring_hand[i].base.suit] = (suits[context.scoring_hand[i].base.suit] or 0) + 1
+					if (suits[context.scoring_hand[i].base.suit] == 1) then
+						suit_count = suit_count + 1
+					end
+				end
+			end
+			if suit_count == card.ability.required_suit_num then
+				if not context.blueprint then
+					card.ability.all_punishments_worse_than_burying = true
+				end
+				return {
+					xmult = card.ability.xmult
+				}
+			end
+		end
+		if context.ante_change and not context.blueprint then
+			if card.ability.all_punishments_worse_than_burying then
+				card.ability.all_punishments_worse_than_burying = false
+			else
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound('tarot1')
+						card.T.r = -0.2
+						card:juice_up(0.3, 0.4)
+						card.states.drag.is = true
+						card.children.center.pinch.x = true
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
+							func = function()
+								G.jokers:remove_card(card)
+								card:remove()
+								card = nil
+								return true;
+							end
+						}))
+						return true
+					end
+				}))
+				return {
+					message = localize("k_UTDR_yellow_thanks"),
+					message_colour = G.C.YELLOW,
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "flower_castle",
+	config = {
+		chips = 0,
+		chip_gain = 2
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.chip_gain, localize("Clubs", 'suits_singular'), card.ability.chips } }
+	end,
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 10 },
+	cost = 3,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) then
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "chips",
+				scalar_value = "chip_gain",
+				message_colour = G.C.CHIPS
+			})
+		elseif context.joker_main then
+			return {
+				chips = card.ability.chips
 			}
 		end
 	end
@@ -484,257 +645,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "green",
-	atlas = "DR_jokers",
-	pos = { x = 7, y = 9 },
-	blueprint_compat = true,
-	perishable_compat = true,
-	cost = 5,
-	rarity = 1,
-	config = {
-		extra = {
-			card_type = "Tarot",
-			booster_counter = 0,
-			booster_requirement = 2,
-		}
-	},
-	loc_vars = function(self, info_queue, card)
-		if self.icon and self.icon.remove then
-			self.icon:remove()
-			self.icon = nil
-		end
-		self.icon = Sprite(0, 0, 0.45, 0.45, G.ASSET_ATLAS["UTDR_flowers"], { x = 2, y = 0 })
-		local element = {
-			n = G.UIT.C,
-			config = { align = "cm", padding = 0.1 },
-			nodes = {
-				{ n = G.UIT.O, config = { object = self.icon } },
-			}
-		}
-	
-		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
-		return {
-			vars = {
-				card.ability.extra.booster_counter,
-				card.ability.extra.booster_requirement,
-				localize("k_" .. string.lower(card.ability.extra.card_type)),
-				localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
-				colours = {
-					G.C.SUITS[card.ability.extra.suit],
-					G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER
-				},
-				elements = { element },
-			},
-		}
-	end,
-	calculate = function(self, card, context)
-		if context.open_booster then
-			local do_create = false
-			if not context.blueprint then
-				card.ability.extra.booster_counter = card.ability.extra.booster_counter + 1
-				if card.ability.extra.booster_counter >= card.ability.extra.booster_requirement then
-					card.ability.extra.booster_counter = 0
-					do_create = true
-				end
-			end
-			if do_create then
-				-- check if should add consumable
-				local do_message = false
-				if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-					do_message = true
-				end
-				-- create tarot
-				if do_message then
-					G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-					return {
-						extra = {
-							message = localize('k_plus_' .. string.lower(card.ability.extra.card_type)),
-							colour = G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER,
-							message_card = card,
-							func = function() -- This is for timing purposes, everything here runs after the message
-								G.E_MANAGER:add_event(Event({
-									func = (function()
-										SMODS.add_card {
-											set = card.ability.extra.card_type,
-											edition = "e_negative",
-											key_append = 'UTDR_green' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
-										}
-										G.GAME.consumeable_buffer = 0
-										return true
-									end)
-								}))
-							end
-						},
-					}
-				end
-			end
-		end
-	end
-
-}
-
-SMODS.Joker {
-	key = "orange",
-	config = {
-		mult = 40,
-		card_was_sold = false,
-		all_flowers = false
-	},
-	loc_vars = function(self, info_queue, card)
-		if self.icon and self.icon.remove then
-			self.icon:remove()
-			self.icon = nil
-		end
-		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 3, y = 0 })
-		local element = {
-			n = G.UIT.C,
-			config = { align = "cm", padding = 0.1 },
-			nodes = {
-				{ n = G.UIT.O, config = { object = self.icon } },
-			}
-		}
-	
-		return {
-			vars = {
-				card.ability.mult,
-				elements = { element },
-			},
-		}
-	end,
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 8, y = 9 },
-	cost = 5,
-	calculate = function(self, card, context)
-		if context.selling_card and not card.ability.card_was_sold then
-			card.ability.card_was_sold = true
-			local eval = function(card)
-				return not card.ability.card_was_sold
-			end
-			juice_card_until(card, eval, true)
-			return {
-				message = localize('k_active_ex'),
-				colour = G.C.FILTER
-			}
-		elseif context.selling_self then
-			local flowerys = SMODS.find_card("j_UTDR_flowery", true)
-			for i = 1, #flowerys do
-				flowerys[i].config.center.config.orange_active = false
-			end
-		elseif context.joker_main and card.ability.card_was_sold and not card.ability.all_flowers then
-			if #SMODS.find_card("j_UTDR_flowery") > 0 and G.GAME.current_round.hands_left > 0 then
-				local which_sfx = pseudorandom("ja_orange")
-				if which_sfx > 0.8 then
-					play_flowery_sound("ja_orange_1")
-				elseif which_sfx > 0.6 then
-					play_flowery_sound("ja_orange_2")
-				else
-					play_flowery_sound_grabbag()
-				end
-			end
-			return {
-				mult = card.ability.mult
-			}
-		elseif context.end_of_round and context.main_eval and card.ability.card_was_sold then
-			card.ability.card_was_sold = false
-			return {
-				message = localize('k_reset')
-			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "yellow",
-	config = {
-		required_suit_num = 2,
-		xmult = 2,
-		all_punishments_worse_than_burying = false
-	},
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = false,
-	atlas = "DR_jokers",
-	pos = { x = 3, y = 9 },
-	cost = 6,
-	loc_vars = function(self, info_queue, card)
-		if self.icon and self.icon.remove then
-			self.icon:remove()
-			self.icon = nil
-		end
-		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 5, y = 0 })
-		local element = {
-			n = G.UIT.C,
-			config = { align = "cm", padding = 0.1 },
-			nodes = {
-				{ n = G.UIT.O, config = { object = self.icon } },
-			}
-		}
-	
-		return { vars = {
-			card.ability.xmult,
-			card.ability.required_suit_num,
-			elements = { element }
-		} }
-	end,
-	calculate = function(self, card, context)
-		if context.joker_main then
-			local suits = {}
-			local suit_count = 0
-			for i = 1, #context.scoring_hand do
-				if not context.scoring_hand[i].debuff then
-					suits[context.scoring_hand[i].base.suit] = (suits[context.scoring_hand[i].base.suit] or 0) + 1
-					if (suits[context.scoring_hand[i].base.suit] == 1) then
-						suit_count = suit_count + 1
-					end
-				end
-			end
-			if suit_count == card.ability.required_suit_num then
-				if not context.blueprint then
-					card.ability.all_punishments_worse_than_burying = true
-				end
-				return {
-					xmult = card.ability.xmult
-				}
-			end
-		end
-		if context.ante_change and not context.blueprint then
-			if card.ability.all_punishments_worse_than_burying then
-				card.ability.all_punishments_worse_than_burying = false
-			else
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
-				return {
-					message = localize("k_UTDR_yellow_thanks"),
-					message_colour = G.C.YELLOW,
-				}
-			end
-		end
-	end
-}
-
-SMODS.Joker {
 	key = "blue",
 	config = {
 		required_chips = 75,
@@ -822,85 +732,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "pink",
-	config = {
-		odds = 4,
-		suit = "Hearts",
-		card_type = "Tarot"
-	},
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 0, y = 10 },
-	cost = 8,
-	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
-		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.odds, 'pink')
-		if #SMODS.find_card("j_UTDR_you") > 0 then
-		vars = {
-			numerator,
-			denominator,
-			localize("k_" .. string.lower(card.ability.card_type)),
-			localize(card.ability.suit, 'suits_singular') or "Heart",
-			localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
-			colours = {
-				G.C.SUITS[card.ability.suit],
-				G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
-			},
-			key = "j_UTDR_pink_you",
-		}
-		end
-		return {
-			vars = {
-				numerator,
-				denominator,
-				localize("k_" .. string.lower(card.ability.card_type)),
-				localize(card.ability.suit, 'suits_singular') or "Heart",
-				localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
-				colours = {
-					G.C.SUITS[card.ability.suit],
-					G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
-				}
-			}
-		}
-	end,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and (context.other_card:is_suit(card.ability.suit) or SMODS.has_any_suit(context.other_card)) and SMODS.pseudorandom_probability(card, 'j_UTDR_pink', 1, card.ability.odds) then
-			-- check if should add consumable
-			local do_message = false
-			if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-				do_message = true
-			end
-			-- create tarot
-			if do_message then
-				G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-				return {
-					extra = {
-						message = localize('k_plus_' .. string.lower(card.ability.card_type)),
-						colour = G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER,
-						message_card = card,
-						func = function() -- This is for timing purposes, everything here runs after the message
-							G.E_MANAGER:add_event(Event({
-								func = (function()
-									SMODS.add_card {
-										set = card.ability.card_type,
-										edition = "e_negative",
-										key_append = 'UTDR_pink' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
-									}
-									G.GAME.consumeable_buffer = 0
-									return true
-								end)
-							}))
-						end
-					},
-				}
-			end
-		end
-	end,
-}
-
-SMODS.Joker {
 	key = "netskie",
 	config = {
 		mult = 8,
@@ -937,8 +768,6 @@ SMODS.Joker {
 		for i = j, #keys do
 			keys[i] = nil
 		end
-		
-		print(keys)
 
 		--make sure it sticks to 1 joker!!
 		if not base_card.config.disguised then
@@ -1090,3 +919,305 @@ function prepend_to_table(tabble, new_items)
 	table.insert(tabbble, tabble[1])
 	return tabbble
 end
+
+SMODS.Joker {
+	key = "orange",
+	config = {
+		mult = 40,
+		card_was_sold = false,
+		all_flowers = false
+	},
+	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_flowers"], { x = 3, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+	
+		return {
+			vars = {
+				card.ability.mult,
+				elements = { element },
+			},
+		}
+	end,
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 8, y = 9 },
+	cost = 5,
+	calculate = function(self, card, context)
+		if context.selling_card and not card.ability.card_was_sold then
+			card.ability.card_was_sold = true
+			local eval = function(card)
+				return not card.ability.card_was_sold
+			end
+			juice_card_until(card, eval, true)
+			return {
+				message = localize('k_active_ex'),
+				colour = G.C.FILTER
+			}
+		elseif context.selling_self then
+			local flowerys = SMODS.find_card("j_UTDR_flowery", true)
+			for i = 1, #flowerys do
+				flowerys[i].config.center.config.orange_active = false
+			end
+		elseif context.joker_main and card.ability.card_was_sold and not card.ability.all_flowers then
+			if #SMODS.find_card("j_UTDR_flowery") > 0 and G.GAME.current_round.hands_left > 0 then
+				local which_sfx = pseudorandom("ja_orange")
+				if which_sfx > 0.8 then
+					play_flowery_sound("ja_orange_1")
+				elseif which_sfx > 0.6 then
+					play_flowery_sound("ja_orange_2")
+				else
+					play_flowery_sound_grabbag()
+				end
+			end
+			return {
+				mult = card.ability.mult
+			}
+		elseif context.end_of_round and context.main_eval and card.ability.card_was_sold then
+			card.ability.card_was_sold = false
+			return {
+				message = localize('k_reset')
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "pink",
+	config = {
+		odds = 4,
+		suit = "Hearts",
+		card_type = "Tarot"
+	},
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 0, y = 10 },
+	cost = 8,
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.odds, 'pink')
+		if #SMODS.find_card("j_UTDR_you") > 0 then
+		vars = {
+			numerator,
+			denominator,
+			localize("k_" .. string.lower(card.ability.card_type)),
+			localize(card.ability.suit, 'suits_singular') or "Heart",
+			localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
+			colours = {
+				G.C.SUITS[card.ability.suit],
+				G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
+			},
+			key = "j_UTDR_pink_you",
+		}
+		end
+		return {
+			vars = {
+				numerator,
+				denominator,
+				localize("k_" .. string.lower(card.ability.card_type)),
+				localize(card.ability.suit, 'suits_singular') or "Heart",
+				localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
+				colours = {
+					G.C.SUITS[card.ability.suit],
+					G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
+				}
+			}
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and (context.other_card:is_suit(card.ability.suit) or SMODS.has_any_suit(context.other_card)) and SMODS.pseudorandom_probability(card, 'j_UTDR_pink', 1, card.ability.odds) then
+			-- check if should add consumable
+			local do_message = false
+			if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+				do_message = true
+			end
+			-- create tarot
+			if do_message then
+				G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+				return {
+					extra = {
+						message = localize('k_plus_' .. string.lower(card.ability.card_type)),
+						colour = G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER,
+						message_card = card,
+						func = function() -- This is for timing purposes, everything here runs after the message
+							G.E_MANAGER:add_event(Event({
+								func = (function()
+									SMODS.add_card {
+										set = card.ability.card_type,
+										edition = "e_negative",
+										key_append = 'UTDR_pink' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
+									}
+									G.GAME.consumeable_buffer = 0
+									return true
+								end)
+							}))
+						end
+					},
+				}
+			end
+		end
+	end,
+}
+
+SMODS.Joker {
+	key = "green",
+	atlas = "DR_jokers",
+	pos = { x = 7, y = 9 },
+	blueprint_compat = true,
+	perishable_compat = true,
+	cost = 5,
+	rarity = 1,
+	config = {
+		extra = {
+			card_type = "Tarot",
+			booster_counter = 0,
+			booster_requirement = 2,
+		}
+	},
+	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.45, 0.45, G.ASSET_ATLAS["UTDR_flowers"], { x = 2, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+	
+		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
+		return {
+			vars = {
+				card.ability.extra.booster_counter,
+				card.ability.extra.booster_requirement,
+				localize("k_" .. string.lower(card.ability.extra.card_type)),
+				localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
+				colours = {
+					G.C.SUITS[card.ability.extra.suit],
+					G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER
+				},
+				elements = { element },
+			},
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.open_booster then
+			local do_create = false
+			if not context.blueprint then
+				card.ability.extra.booster_counter = card.ability.extra.booster_counter + 1
+				if card.ability.extra.booster_counter >= card.ability.extra.booster_requirement then
+					card.ability.extra.booster_counter = 0
+					do_create = true
+				end
+			end
+			if do_create then
+				-- check if should add consumable
+				local do_message = false
+				if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+					do_message = true
+				end
+				-- create tarot
+				if do_message then
+					G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+					return {
+						extra = {
+							message = localize('k_plus_' .. string.lower(card.ability.extra.card_type)),
+							colour = G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER,
+							message_card = card,
+							func = function() -- This is for timing purposes, everything here runs after the message
+								G.E_MANAGER:add_event(Event({
+									func = (function()
+										SMODS.add_card {
+											set = card.ability.extra.card_type,
+											edition = "e_negative",
+											key_append = 'UTDR_green' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
+										}
+										G.GAME.consumeable_buffer = 0
+										return true
+									end)
+								}))
+							end
+						},
+					}
+				end
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "susies_idea",
+	blueprint_compat = true,
+	rarity = 2,
+	cost = 5,
+	pos = { x = 1, y = 9 },
+	atlas = "DR_jokers",
+	loc_vars = function(self, info_queue, card)
+		if self.susie and self.susie.remove then
+			self.susie:remove()
+			self.susie = nil
+		end
+		self.susie = Sprite(0, 0, 0.5,
+			0.5 * (G.ASSET_ATLAS["UTDR_susies_idea"].py / G.ASSET_ATLAS["UTDR_susies_idea"].px),
+			G.ASSET_ATLAS["UTDR_susies_idea"], { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.susie } },
+			}
+		}
+		return {
+			vars = {
+				elements = { element }
+			}
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.first_hand_drawn then
+			local new_card = SMODS.create_card {
+				set = "Enhanced",
+				enhancement = SMODS.poll_enhancement { key = "UTDR_susies_idea", guaranteed = true },
+				area = G.discard,
+				key_append = "UTDR_susies_idea" }
+			G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+			new_card.playing_card = G.playing_card
+			table.insert(G.playing_cards, new_card)
+
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					G.hand:emplace(new_card)
+					new_card:start_materialize()
+					G.GAME.blind:debuff_card(new_card)
+					G.hand:sort()
+					if context.blueprint_card then
+						context.blueprint_card:juice_up()
+					else
+						card:juice_up()
+					end
+					SMODS.calculate_context({ playing_card_added = true, cards = { new_card } })
+					save_run()
+					return true
+				end
+			}))
+
+			return nil, true -- This is for Joker retrigger purposes
+		end
+	end,
+}

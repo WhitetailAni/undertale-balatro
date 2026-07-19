@@ -34,78 +34,9 @@ SMODS.Joker {
 
 -- is it stealing from another mod when the mod developer is working on this one
 --its not i promise
-SMODS.Joker {
-	key = "festival",
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.booster_mod } }
-	end,
-	blueprint_compat = false,
-	perishable_compat = true,
-	eternal_compat = true,
-	attributes = {
-		"passive",
-	},
-	rarity = 1,
-	cost = 5,
-	atlas = "DR_jokers",
-	pos = { x = 1, y = 10 },
-	config = {
-		booster_mod = 1
-	},
-	add_to_deck = function(self, card, from_debuff)
-		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) + card.ability.booster_mod
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		G.GAME.modifiers.booster_size_mod = (G.GAME.modifiers.booster_size_mod or 0) - card.ability.booster_mod
-	end
-}
 
-SMODS.Joker {
-	key = "the_lake",
-	rarity = 1,
-	config = {
-		rank_increase = 1,
-	},
-	loc_vars = function(self, info_queue, card)
-		if math.fmod(os.time(), 1024) == 0 then
-			return {
-				vars = { card.ability.rank_increase },
-				key = "j_UTDR_xaviers_lake",
-			}
-		end
-		return { vars = { card.ability.rank_increase } }
-	end,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 4, y = 10 },
-	cost = 6,
-	calculate = function(self, card, context)
-		if context.before then
-			local scoring_hand = {}
-			for i = 1, #context.scoring_hand do
-				scoring_hand[context.scoring_hand[i]] = true
-			end
 
-			local unscoring_hand_indexes = {}
-			for i = 1, #context.full_hand do
-				if not scoring_hand[context.full_hand[i]] then
-					table.insert(unscoring_hand_indexes, i)
-				end
-			end
 
-			for i = 1, #unscoring_hand_indexes do
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						SMODS.modify_rank(context.full_hand[unscoring_hand_indexes[i]], card.ability.rank_increase)
-						context.full_hand[unscoring_hand_indexes[i]]:juice_up()
-						return true
-					end
-				}))
-			end
-		end
-	end
-}
 
 SMODS.Joker {
 	key = "lord_of_hammer",
@@ -385,67 +316,6 @@ SMODS.Joker {
 			end
 		end
 	end
-}
-
-SMODS.Joker {
-	key = "susies_idea",
-	blueprint_compat = true,
-	rarity = 2,
-	cost = 5,
-	pos = { x = 1, y = 9 },
-	atlas = "DR_jokers",
-	loc_vars = function(self, info_queue, card)
-		if self.susie and self.susie.remove then
-			self.susie:remove()
-			self.susie = nil
-		end
-		self.susie = Sprite(0, 0, 0.5,
-			0.5 * (G.ASSET_ATLAS["UTDR_susies_idea"].py / G.ASSET_ATLAS["UTDR_susies_idea"].px),
-			G.ASSET_ATLAS["UTDR_susies_idea"], { x = 0, y = 0 })
-		local element = {
-			n = G.UIT.C,
-			config = { align = "cm", padding = 0.1 },
-			nodes = {
-				{ n = G.UIT.O, config = { object = self.susie } },
-			}
-		}
-		return {
-			vars = {
-				elements = { element }
-			}
-		}
-	end,
-	calculate = function(self, card, context)
-		if context.first_hand_drawn then
-			local new_card = SMODS.create_card {
-				set = "Enhanced",
-				enhancement = SMODS.poll_enhancement { key = "UTDR_susies_idea", guaranteed = true },
-				area = G.discard,
-				key_append = "UTDR_susies_idea" }
-			G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-			new_card.playing_card = G.playing_card
-			table.insert(G.playing_cards, new_card)
-
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					G.hand:emplace(new_card)
-					new_card:start_materialize()
-					G.GAME.blind:debuff_card(new_card)
-					G.hand:sort()
-					if context.blueprint_card then
-						context.blueprint_card:juice_up()
-					else
-						card:juice_up()
-					end
-					SMODS.calculate_context({ playing_card_added = true, cards = { new_card } })
-					save_run()
-					return true
-				end
-			}))
-
-			return nil, true -- This is for Joker retrigger purposes
-		end
-	end,
 }
 
 SMODS.Joker {

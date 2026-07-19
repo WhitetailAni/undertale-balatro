@@ -177,7 +177,7 @@ if UTDR.config_file['undertale'] then
 	assert(SMODS.load_file('UT/four.lua'))()
 	assert(SMODS.load_file('UT/five.lua'))()
 	assert(SMODS.load_file('UT/six.lua'))()
-	assert(SMODS.load_file('UT/seven.lua'))()
+	
 
 	SMODS.Font {
 		key = "ComicSansUT",
@@ -231,7 +231,9 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/two.lua'))()
 	assert(SMODS.load_file('DR/three.lua'))()
 	assert(SMODS.load_file('DR/four.lua'))()
-
+	
+	
+	assert(SMODS.load_file('UT/seven.lua'))()
 	assert(SMODS.load_file('DR/five_A.lua'))()
 	assert(SMODS.load_file('DR/five_B.lua'))()
 	assert(SMODS.load_file('DR/flowery.lua'))()
