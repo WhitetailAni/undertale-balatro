@@ -1925,6 +1925,37 @@ return {
 				["text"] = {
 				},
 			},
+			["tag_UTDR_annoying"] = {
+				["name"] = "Annoying Tag",
+				["text"] = {
+					"Gives a free",
+					"{C:gaster}Dog{} Joker",
+				},
+			},
+			["tag_UTDR_glamorous"] = {
+				["name"] = "Glamorous Tag",
+				["text"] = {
+					"Gives {C:attention}1{} free",
+					"trade with {C:bratty}Bratty",
+					"and {C:catty}Catty"
+				},
+			},
+			["tag_UTDR_t_rank"] = {
+				["name"] = "Capsule Tag",
+				["text"] = {
+					"After defeating",
+					"the Boss Blind,",
+					"gain {C:green}#1# POINTs"
+				},
+			},
+			["tag_UTDR_capsule"] = {
+				["name"] = "Capsule Tag",
+				["text"] = {
+					"{C:gold}Gold{} chance",
+					"is {C:attention}100%{} on",
+					"next roll"
+				},
+			},
 		},
 		["Spectral"] = {
 			["c_UTDR_jorkington"] = {

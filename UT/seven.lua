@@ -15,7 +15,7 @@ SMODS.Joker {
 			money = false,
 		}
 	},
-	rarity = 1,
+	rarity = "UTDR_dog",
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -120,7 +120,7 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dog_shrine",
-	rarity = 1,
+	rarity = "UTDR_dog",
 	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "DR_jokers",

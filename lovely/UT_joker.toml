@@ -46,6 +46,7 @@ position = "before"
 payload = '''
 joker_grey = G.C.JOKER_GREY,
 gaster = G.C.GASTER,
+ballgame = G.C.BALLGAME,
 steel = G.C.STEEL,
 FRIEND = G.C.FRIEND,
 FRIEND_PINK = G.C.FRIEND_PINK,
@@ -59,7 +60,9 @@ flower_orange = G.C.FLOWER_ORANGE,
 flower_green = G.C.FLOWER_GREEN,
 flower_blue = G.C.FLOWER_BLUE,
 flower_yellow = G.C.FLOWER_YELLOW,
-ballgame = G.C.BALLGAME,
+
+catty = G.C.CATTY,
+bratty = G.C.BRATTY,
 '''
 match_indent = true
 
@@ -79,6 +82,10 @@ FRIEND_YELLOW = HEX('ffdd45'),
 WATERCOOLER = HEX('2d9bd7'),
 STEEL = HEX('afb4be'),
 NETSKIE = HEX('ff00d6'),
+
+BRATTY = HEX('e7b1c5'),
+CATTY = HEX('cbafed'),
+DOG = HEX('dddddd'),
 
 FLOWER_AQUA = HEX('46e3ff'),
 FLOWER_SETH = HEX('eb63eb'),

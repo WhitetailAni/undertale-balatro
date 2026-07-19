@@ -135,7 +135,7 @@ SMODS.Joker {
 		xmult = 3,
 		slots = 2,
 	},
-	rarity = 3,
+	rarity = "UTDR_dog",
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",

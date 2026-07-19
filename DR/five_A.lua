@@ -145,7 +145,7 @@ SMODS.Joker {
 		totem_chance = 6,
 	},
 	--unlocked = false
-	rarity = 1,
+	rarity = "UTDR_dog",
 	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "DR_jokers",

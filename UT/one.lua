@@ -522,14 +522,20 @@ SMODS.Joker {
 			G.GAME.joker_buffer = G.GAME.joker_buffer +
 				math.min(1, G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
 				
-			local uncommon_or_rare pseudorandom_element({
+			local uncommon_or_rare = pseudorandom_element({
 				{ color = G.C.GREEN, rarity = 1 },
 				{ color = G.C.GREEN, rarity = 1 },
 				{ color = G.C.GREEN, rarity = 1 },
 				{ color = G.C.RED, rarity = 0.75 }
 			}, "toriel_rarity")
+			
+			SMODS.add_card({
+				set = "Joker",
+				rarity = uncommon_or_rare.rarity,
+				key_append = "toriel_joker",
+			})
 
-			G.E_MANAGER:add_event(Event({
+			--[[G.E_MANAGER:add_event(Event({
 				func = function()
 					local card = create_card('Joker', G.jokers, nil, uncommon_or_rare.rarity, nil, nil, nil, 'toriel_joker')
 					if card.label == 'j_UTDR_asgore' then
@@ -543,7 +549,7 @@ SMODS.Joker {
 					G.GAME.joker_buffer = 0
 					return true
 				end
-			}))
+			}))]]
 
 			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
 				{ message = localize('k_plus_joker'), colour = uncommon_or_rare.color })

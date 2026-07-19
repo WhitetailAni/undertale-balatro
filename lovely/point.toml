@@ -1,0 +1,24 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+[vars]
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'dollars = 0,'
+position = 'after'
+payload = 'points = 0,'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''
+voucher_text = '',
+dollars = 0,
+'''
+position = 'after'
+payload = 'points_ante = 0,'
+match_indent = true

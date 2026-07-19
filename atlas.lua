@@ -12,13 +12,12 @@ SMODS.Atlas {
     py = 95
 }
 
---[[SMODS.Atlas {
-    key = "lesser_dog",
-    path = "lesser_dog.png",
-    px = 71,
-    py = 95,
-    atlas_table = "ANIMATION_ATLAS"
-}]]
+SMODS.Atlas {
+    key = "tag",
+    path = "tag.png",
+    px = 34,
+    py = 34,
+}
 
 SMODS.Atlas {
     key = "susies_idea",

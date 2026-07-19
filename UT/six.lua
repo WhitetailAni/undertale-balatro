@@ -153,7 +153,7 @@ SMODS.Joker {
 	},
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
-	rarity = 1,
+	rarity = "UTDR_dog",
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",

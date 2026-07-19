@@ -225,6 +225,8 @@ if UTDR.config_file['undertale'] then
 	}
 end
 
+assert(SMODS.load_file('tag.lua'))()
+
 -- load DR
 if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/one.lua'))()
@@ -239,6 +241,8 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/flowery.lua'))()
 
 	assert(SMODS.load_file('DR/99.lua'))()
+
+	assert(SMODS.load_file('DR/point.lua'))()
 
 	assert(SMODS.load_file('DR/deck.lua'))()
 	assert(SMODS.load_file('DR/booster.lua'))()
@@ -387,3 +391,11 @@ end
 		end
 	end
 }]]
+
+SMODS.Rarity {
+	key = "dog",
+	loc_txt = "Dog",
+	badge_colour = HEX('000000'),
+	text_colour = HEX('ffffff'),
+	default_weight = 0.5,
+}

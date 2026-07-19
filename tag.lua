@@ -1,0 +1,59 @@
+SMODS.Tag {
+	key = "annoying",
+	atlas = "tag",
+	pos = { x = 0, y = 0 },
+	apply = function(self, tag, context)
+		tag:yep("+", G.C.DOG)
+		local card = SMODS.add_card({
+			set = "Joker",
+			rarity = "UTDR_dog",
+			key_append = "tag_annoying",
+		})
+		card:juice_up()
+		play_sound("UTDR_bark", 1.0, 0.7)
+		tag.triggered = true
+	end
+}
+
+SMODS.Tag {
+	key = "glamorous",
+	atlas = "tag",
+	pos = { x = 1, y = 0 },
+	apply = function(self, tag, context)
+		local color = pseudorandom_element({
+			G.C.BRATTY,
+			G.C.CATTY
+		})
+		tag:yep("+", color)
+		print("we applyin out here")
+		tag.triggered = true
+	end
+}
+
+SMODS.Tag {
+	key = "capsule",
+	atlas = "tag",
+	pos = { x = 2, y = 0 },
+	apply = function(self, tag, context)
+		tag:yep("+", G.C.GOLD)
+		print("we applyin out here")
+		tag.triggered = true
+	end
+}
+
+SMODS.Tag {
+	key = "t_rank",
+	config = {
+		points = 400,
+	},
+	atlas = "tag",
+	pos = { x = 3, y = 0 },
+	loc_vars = function(self, info_queue, tag)
+		return { vars = { tag.config.points } }
+	end,
+	apply = function(self, tag, context)
+		tag:yep("+", G.C.GREEN)
+		print("we applyin out here")
+		tag.triggered = true
+	end
+}

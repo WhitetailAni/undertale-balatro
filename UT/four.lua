@@ -37,7 +37,7 @@ SMODS.Joker {
 	config = {
 		in_build = false
 	},
-	rarity = 1,
+	rarity = "UTDR_dog",
 	blueprint_compat = false,
 	eternal_compat = false,
 	atlas = "UT_jokers",
@@ -212,7 +212,7 @@ SMODS.Joker {
 	in_pool = function()
 		return false
 	end,
-	rarity = 1,
+	rarity = "UTDR_dog",
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
