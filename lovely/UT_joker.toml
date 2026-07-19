@@ -63,6 +63,7 @@ flower_yellow = G.C.FLOWER_YELLOW,
 
 catty = G.C.CATTY,
 bratty = G.C.BRATTY,
+points = G.C.POINTS,
 '''
 match_indent = true
 
@@ -82,6 +83,7 @@ FRIEND_YELLOW = HEX('ffdd45'),
 WATERCOOLER = HEX('2d9bd7'),
 STEEL = HEX('afb4be'),
 NETSKIE = HEX('ff00d6'),
+POINTS = HEX('339e72'),
 
 BRATTY = HEX('e7b1c5'),
 CATTY = HEX('cbafed'),

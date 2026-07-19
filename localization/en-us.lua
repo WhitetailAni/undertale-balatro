@@ -1800,7 +1800,7 @@ return {
 				["text"] = {
 					"{C:ballgame}-#1#{} Hand",
 					"{C:gold}Gold{} capsule prizes",
-					"begin at {C:green}300 POINTs"
+					"begin at {C:points}300 POINTs"
 				},
 				["unlock"] = {
 					"Try our discount code:",
@@ -1945,7 +1945,7 @@ return {
 				["text"] = {
 					"After defeating",
 					"the Boss Blind,",
-					"gain {C:green}#1# POINTs"
+					"gain {C:points}#1# POINTs"
 				},
 			},
 			["tag_UTDR_capsule"] = {

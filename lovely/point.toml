@@ -30,3 +30,64 @@ pattern = 'SMODS.calculate_context({ante_change = mod, ante_end = SMODS.ante_end
 position = 'before'
 payload = 'G.GAME.ante_points = 0'
 match_indent = true
+
+
+#ui patches
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+{n=G.UIT.R, config={align = "cm"}, nodes={
+	{n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 1.45*2 + spacing, minh = 1.15, colour = temp_col, emboss = 0.05, r = 0.1}, nodes={
+	  {n=G.UIT.R, config={align = "cm"}, nodes={
+		{n=G.UIT.C, config={align = "cm", r = 0.1, minw = 1.28*2+spacing, minh = 1, colour = temp_col2}, nodes={
+		  {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'dollars', prefix = localize('$')}},
+				scale_function = function ()
+					return scale_number(G.GAME.dollars, 2.2 * scale, 99999, 1000000)
+				end, maxw = 1.35, colours = {G.C.MONEY}, font = G.LANGUAGES['en-us'].font, shadow = true,spacing = 2, bump = true, scale = 2.2*scale}), id = 'dollar_text_UI'}}
+	  }},
+	  }},
+	}},
+}},
+'''
+position = 'after'
+payload = '''
+{n=G.UIT.R, config={minh = spacing},nodes={}},
+{n=G.UIT.R, config={align = "cm"}, nodes={
+	{n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 1.45*2 + spacing, minh = 1.15, colour = temp_col, emboss = 0.05, r = 0.1}, nodes={
+	  {n=G.UIT.R, config={align = "cm"}, nodes={
+		{n=G.UIT.C, config={align = "cm", r = 0.1, minw = 1.28*2+spacing, minh = 1, colour = temp_col2}, nodes={
+		  {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'points', prefix = "", suffix = "PTs"}},
+                            scale_function = function ()
+                                return scale_number(G.GAME.points, 2.2 * scale, 99999, 1000000)
+                            end, maxw = 1.35, colours = {G.C.POINTS}, font = G.LANGUAGES['en-us'].font, shadow = true,spacing = 1, bump = true, scale = 2.2*scale}), id = 'points_text_UI'}}
+	  }},
+	  }},
+	}},
+}},
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+{n=G.UIT.R, config={align = "cm", minh = 1.75, minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.ORANGE, button = "options", shadow = true}, nodes={
+'''
+position = 'at'
+payload = '''
+{n=G.UIT.R, config={align = "cm", minh = 2.5, minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.ORANGE, button = "options", shadow = true}, nodes={
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+{n=G.UIT.R, config={id = 'run_info_button', align = "cm", minh = 1.75, minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.RED, button = "run_info", shadow = true}, nodes={
+'''
+position = 'at'
+payload = '''
+{n=G.UIT.R, config={id = 'run_info_button', align = "cm", minh = 2.5, minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.RED, button = "run_info", shadow = true}, nodes={
+'''
+match_indent = true

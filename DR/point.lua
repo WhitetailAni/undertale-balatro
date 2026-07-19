@@ -4,35 +4,43 @@
 
 function ease_points(mod, instant)
     local function _mod(mod)
-    	if G.GAME.ante_points >= 700 then return end
-        local dollar_UI = G.HUD:get_UIE_by_ID('dollar_text_UI') --CHANGE
-        mod = mod or 0
-        local text = '+'
-        local col = G.C.GREEN
+    	mod = mod or 0
+    	--ensure 700 per-ante cap
+    	local potential_man = G.GAME.points_ante + mod
+    	if potential_man >= 700 then
+    		mod = mod - (potential_man - 700)
+    	end
+    	
+        local points_UI = G.HUD:get_UIE_by_ID('points_text_UI') --CHANGE
+        
+        local prefix = '+'
+        local suffix = " PTs"
+        local col = G.C.POINTS
         if mod < 0 then
-            text = '-'
+            prefix = '-'
             col = G.C.RED              
         else
           --inc_career_stat('c_dollars_earned', mod)
         end
         --Ease from current chips to the new number of chips
-        G.GAME.ante_points = G.GAME.ante_points + mod
+        G.GAME.points_ante = G.GAME.points_ante + mod
         G.GAME.points = G.GAME.points + mod
-        --check_and_set_high_score('most_money', G.GAME.dollars)
-       -- check_for_unlock({type = 'money'})
-        dollar_UI.config.object:update() --CHANGE
+        --check_and_set_high_score('most_points', G.GAME.points)
+       	--check_for_unlock({type = 'points'})
+        points_UI.config.object:update() --CHANGE
         G.HUD:recalculate()
-        --Popup text next to the chips in UI showing number of chips gained/lost
         attention_text({
-          text = text..tostring(math.abs(mod)),
+          text = prefix..tostring(math.abs(mod))..suffix,
           scale = 0.8, 
           hold = 0.7,
-          cover = dollar_UI.parent, --CHANGE
+          cover = points_UI.parent,
           cover_colour = col,
           align = 'cm',
           })
         --Play a chip sound
-        play_sound('coin1') --SWITCH TO POINTS SOUND (SOUNDS?)
+       	
+        --play_sound('coin1') --SWITCH TO POINTS SOUND (SOUNDS?)
+        
     end
     if instant then
         _mod(mod)
@@ -45,4 +53,15 @@ function ease_points(mod, instant)
         end
         }))
     end
+    --point_gain_sfx(mod)
+    --cant get this to work without lagging game UI..
+end
+
+function point_gain_sfx(point_gain)
+	for i = 1, (point_gain / 15) do
+		play_sound("UTDR_points", 1.0, 0.5)
+		local clock = os.clock
+		local t0 = clock()
+		while clock() - t0 <= 0.022 do end
+	end
 end

@@ -277,3 +277,10 @@ SMODS.Sound {
 	pitch = 1.0,
 	volume = 0.7
 }
+
+SMODS.Sound {
+	key = "points",
+	path = "points.wav",
+	pitch = 1.0,
+	volume = 0.7
+}

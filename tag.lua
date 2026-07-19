@@ -52,8 +52,11 @@ SMODS.Tag {
 		return { vars = { tag.config.points } }
 	end,
 	apply = function(self, tag, context)
-		tag:yep("+", G.C.GREEN)
-		print("we applyin out here")
-		tag.triggered = true
+		if context.type == "eval" and G.GAME.last_blind and G.GAME.last_blind.boss then
+			tag:yep("+", G.C.POINTS)
+			--probably switch to a "give POINTs on blind cashout screen? but this works for now"
+			ease_points(tag.config.points)
+			tag.triggered = true
+		end
 	end
 }
