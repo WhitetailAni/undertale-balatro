@@ -118,12 +118,12 @@ SMODS.Joker {
 	pos = { x = 3, y = 8 },
 	cost = 5,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.main_eval and #G.hand.cards>0 then
+		if context.end_of_round and context.main_eval and #G.hand.cards > 0 then
 			for i = 1, #G.hand.cards do
 				-- Randomize Suit & Rank
 				local suit = pseudorandom_element(SMODS.Suits, 'amalgam_suit')
 				local rank = pseudorandom_element(SMODS.Ranks, 'amalgam_rank')
-				
+
 				-- Change them
 				G.E_MANAGER:add_event(Event({
 					func = function()
@@ -138,7 +138,7 @@ SMODS.Joker {
 			return {
 				message = localize("k_UTDR_upgrade_qu"),
 				sound = "UTDR_amalgam",
-				pitch = pseudorandom('amalgam_sound')*.5+.5
+				pitch = pseudorandom('amalgam_sound') * .5 + .5
 			}
 		end
 	end
@@ -177,7 +177,8 @@ SMODS.Joker {
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					self:set_sprites(card)
-					card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT })
+					card_eval_status_text(card, 'extra', nil, nil, nil,
+						{ message = localize('k_upgrade_ex'), colour = G.C.MULT })
 					return true
 				end,
 			}))
@@ -196,7 +197,7 @@ SMODS.Joker {
 		if card.ability and card.ability.mult and card.ability.mult_gain then
 			card.children.center:set_sprite_pos({
 				x = 3 + math.min(6, math.floor(card.ability.mult / 8)), --you can pet lesser dog 55 times in UT, dividing that by the 7 different sprites available, the neck should extend every ~8 mult gains!
-				y = 3
+				y = 12
 			})
 		end
 	end
@@ -336,7 +337,8 @@ SMODS.Joker {
 		return { vars = { probabilities_normal, odds, card.ability.xmult } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.unlock_chance, 'DR_fun_value_locked')
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.unlock_chance,
+			'DR_fun_value_locked')
 		return { vars = { probabilities_normal, odds } }
 	end,
 	rarity = 2,
