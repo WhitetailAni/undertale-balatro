@@ -1696,6 +1696,13 @@ return {
 					"{C:inactive,s:0.75}it hasn't triggered this Ante)"
 				}
 			},
+			["j_UTDR_yellow_gay"] = {
+				["name"] = "{C:flower_yellow,element:1}Yellow ",
+				["text"] = {
+					"{X:mult,C:white} X#1# {} Mult if scoring hand",
+					"contains exactly {C:attention}#2# suits",
+				}
+			},
 			["j_UTDR_toby_temmie"] = {
 				["name"] = "Toby and Temmie",
 				["text"] = {

@@ -230,7 +230,13 @@ SMODS.Joker {
 				{ n = G.UIT.O, config = { object = self.icon } },
 			}
 		}
-	
+		if #SMODS.find_card("j_UTDR_blue") > 0 then
+			return { vars = {
+				card.ability.xmult,
+				card.ability.required_suit_num,
+				elements = { element }
+			}, key = "j_UTDR_yellow_gay" }
+		end
 		return { vars = {
 			card.ability.xmult,
 			card.ability.required_suit_num,
@@ -258,7 +264,7 @@ SMODS.Joker {
 				}
 			end
 		end
-		if context.ante_change and not context.blueprint then
+		if context.ante_change and not context.blueprint and #SMODS.find_card("j_UTDR_blue") == 0 then
 			if card.ability.all_punishments_worse_than_burying then
 				card.ability.all_punishments_worse_than_burying = false
 			else
