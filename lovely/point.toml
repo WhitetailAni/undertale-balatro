@@ -57,10 +57,10 @@ payload = '''
 	{n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 1.45*2 + spacing, minh = 1.15, colour = temp_col, emboss = 0.05, r = 0.1}, nodes={
 	  {n=G.UIT.R, config={align = "cm"}, nodes={
 		{n=G.UIT.C, config={align = "cm", r = 0.1, minw = 1.28*2+spacing, minh = 1, colour = temp_col2}, nodes={
-		  {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'points', prefix = "", suffix = "PTs"}},
+		  {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'points', prefix = "", suffix = " PTs"}},
                             scale_function = function ()
-                                return scale_number(G.GAME.points, 2.2 * scale, 99999, 1000000)
-                            end, maxw = 1.35, colours = {G.C.POINTS}, font = G.LANGUAGES['en-us'].font, shadow = true,spacing = 1, bump = true, scale = 2.2*scale}), id = 'points_text_UI'}}
+                                return scale_number(G.GAME.points, 1.4 * scale, 99999, 1000000)
+                            end, maxw = 1.35, colours = {G.C.POINTS}, font = G.LANGUAGES['en-us'].font, shadow = true,spacing = 1, bump = true, scale = 1.4*scale}), id = 'points_text_UI'}}
 	  }},
 	  }},
 	}},

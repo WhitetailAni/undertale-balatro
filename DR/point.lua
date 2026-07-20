@@ -1,15 +1,6 @@
---ante_points is never shown to the player, its just for internal tracking. if it ever hits 700, no more point gain. end of story!
---it goes up every time points does
---every ante, it resets to 0 to allow more point gain.
-
 function ease_points(mod, instant)
     local function _mod(mod)
     	mod = mod or 0
-    	--ensure 700 per-ante cap
-    	local potential_man = G.GAME.points_ante + mod
-    	if potential_man >= 700 then
-    		mod = mod - (potential_man - 700)
-    	end
     	
         local points_UI = G.HUD:get_UIE_by_ID('points_text_UI') --CHANGE
         
