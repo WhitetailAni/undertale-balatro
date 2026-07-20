@@ -535,22 +535,6 @@ SMODS.Joker {
 				key_append = "toriel_joker",
 			})
 
-			--[[G.E_MANAGER:add_event(Event({
-				func = function()
-					local card = create_card('Joker', G.jokers, nil, uncommon_or_rare.rarity, nil, nil, nil, 'toriel_joker')
-					if card.label == 'j_UTDR_asgore' then
-						card:remove()
-						card = nil
-						card = create_card('Joker', G.jokers, nil, uncommon_or_rare.rarity, nil, nil, nil, 'toriel_joker')
-					end
-					card:add_to_deck()
-					G.jokers:emplace(card)
-					card:start_materialize()
-					G.GAME.joker_buffer = 0
-					return true
-				end
-			}))]]
-
 			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
 				{ message = localize('k_plus_joker'), colour = uncommon_or_rare.color })
 		end

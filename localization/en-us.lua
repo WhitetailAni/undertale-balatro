@@ -124,6 +124,12 @@ return {
 					"{s:0.8}rank and suit change at end of round",
 				},
 			},
+			["j_UTDR_ralseis"] = {
+				["name"] = "Ralsei",
+				["text"] = {
+					""
+				},
+			},
 			["j_UTDR_tough_glove"] = {
 				["name"] = "Tough Glove",
 				["text"] = {
@@ -408,8 +414,8 @@ return {
 				["name"] = "Mettaton",
 				["text"] = {
 					"If {C:attention}first hand{} of round is",
-					"a single card of {C:clubs}#2#{} suit",
-					"destroy it and earn {C:money}$#1#{}",
+					"a single card of {C:clubs}#2#{} suit,",
+					"{C:red}destroy{} it and earn {C:money}$#1#{}",
 				},
 			},
 			["j_UTDR_empty_gun"] = {
@@ -550,14 +556,6 @@ return {
 				["name"] = "Temmie Flakes",
 				["text"] = {
 					"{C:blue}pLaY twO!!!1!!{}",
-				},
-			},
-			["j_UTDR_tension_slop"] = {
-				["name"] = "Tension Slop",
-				["text"] = {
-					"Sell this card to",
-					"create {C:attention}#1#{}",
-					"{C:tarot}#2#s",
 				},
 			},
 			["j_ring_master"] = {
@@ -838,11 +836,19 @@ return {
 					"{C:attention}#2# #1#{} times",
 				},
 			},
+			["j_UTDR_tension_slop"] = {
+				["name"] = "Tension Slop",
+				["text"] = {
+					"Sell this card to",
+					"create {C:attention}#1#{}",
+					"{C:tarot}#2#s",
+				},
+			},
 			["j_UTDR_tension_gem"] = {
 				["name"] = "Tension Gem",
 				["text"] = {
 					"Sell this card to",
-					"create {C:attention}#1#{} random",
+					"create {C:attention}#1#{}",
 					"{C:tarot}#2#s",
 				},
 			},
@@ -1817,7 +1823,7 @@ return {
 			["j_UTDR_festival"] = {
 				["name"] = "Festival",
 				["text"] = {
-					"{C:attention}+#1#{} cards per",
+					"{C:attention}+#1#{} card per",
 					"Booster Pack"
 				},
 			},

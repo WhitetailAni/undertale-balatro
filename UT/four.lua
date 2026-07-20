@@ -295,7 +295,7 @@ SMODS.Joker {
 	end,
 	update = function(self, card, dt)
 		if card.ability.in_build then
-			if to_number(G.GAME.dollars) >= card.ability.dollars then
+			if G.GAME.dollars >= card.ability.dollars then
 				if not size_increased then
 					G.hand:change_size(card.ability.hand_size)
 					size_increased = true
@@ -495,11 +495,11 @@ SMODS.Joker {
 		return { vars = { card.ability.xmult_per, card.ability.money, (1 + card.ability.xmult_per * math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money)) } }
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main and to_number(math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money)) >= 1 then
+		if context.joker_main and math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money) >= 1 then
 			return {
 				xmult = 1 +
-					to_number(card.ability.xmult_per *
-						math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money))
+					card.ability.xmult_per *
+						math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money)
 			}
 		end
 	end

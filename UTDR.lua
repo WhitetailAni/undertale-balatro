@@ -105,7 +105,7 @@ UTDR.config_tab = function()
 					ref_table = UTDR.config_file,
 					ref_value = "voiceclips",
 					callback = function(_set_toggle)
-						UTDR.config_file.deltarune = _set_toggle
+						UTDR.config_file.voiceclips = _set_toggle
 						NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
 					end
 				}

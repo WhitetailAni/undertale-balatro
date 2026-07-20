@@ -412,6 +412,9 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "echo_flower",
+	config = {
+		other_card = false
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -523,7 +526,6 @@ SMODS.Joker {
 					return {
 						message = localize('k_debuffed'),
 						colour = G.C.MONEY,
-						card = context.blueprint_card or card,
 					}
 				else
 					return {
