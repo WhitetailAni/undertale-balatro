@@ -384,14 +384,26 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		local left_joker = nil
 		local right_joker = nil
+		local left_joker_results, right_joker_results
 		for i = 1, #G.jokers.cards do
 			if G.jokers.cards[i] == card then
-				left_joker = G.jokers.cards[i - 1]
-				right_joker = G.jokers.cards[i + 1]
+				-- copy left joker
+                -- also check for if we're trying to copy context.blueprint_card; if so, don't copy it
+				if left_joker and left_joker ~= context.blueprint_copier then
+                    left_joker_results = SMODS.blueprint_effect(card, left_joker, context)
+                end
+
+                -- copy right joker
+                -- again, check for if we're trying to copy context.blueprint_card
+                if right_joker and right_joker ~= context.blueprint_copier then
+                    right_joker_results = SMODS.blueprint_effect(card, right_joker, context)
+                end
+
+				-- stop the loop; we've found what we need
+                break
 			end
 		end
-		local left_joker_results = SMODS.blueprint_effect(card, left_joker, context)
-		local right_joker_results = SMODS.blueprint_effect(card, right_joker, context)
+		
 		local results = SMODS.merge_effects({ left_joker_results or {}, right_joker_results or {} })
 		return results
 	end
