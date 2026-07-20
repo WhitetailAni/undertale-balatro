@@ -1,26 +1,30 @@
 --beginning
 SMODS.Joker {
-	key = "glowshard",
+	key = "hometown",
 	config = {
-		sell_value_gain = 1,
-		extra_value = 0
+		xmult_gain = 0.02,
+		xmult = 1,
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.sell_value_gain } }
+		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
-	rarity = 1,
-	blueprint_compat = false,
+	rarity = 2,
+	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
-	pos = { x = 1, y = 0 },
-	cost = 3,
+	pos = { x = 3, y = 2 },
+	cost = 6,
 	calculate = function(self, card, context)
-		if context.selling_card and context.card ~= card and not context.blueprint then
-			card.ability.extra_value = card.ability.extra_value + card.ability.sell_value_gain
-			card:set_cost()
+		if context.individual and context.cardarea == G.play and not context.blueprint then
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "xmult",
+				scalar_value = "xmult_gain",
+				message_colour = G.C.MULT
+			})
+		elseif context.joker_main then
 			return {
-				message = localize('k_val_up'),
-				colour = G.C.MONEY
+				xmult = card.ability.xmult
 			}
 		end
 	end
@@ -57,35 +61,55 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "save",
+	key = "newsletter",
 	config = {
-		turn_cap = 3,
-		turns = 0,
-		ante_loss = 1
+		money = 6,
+		boss_type = ""
 	},
-	pixel_size = { w = 70, h = 71 },
-	rarity = 2,
-	blueprint_compat = false,
-	eternal_compat = false,
-	atlas = "DR_jokers",
-	pos = { x = 2, y = 4 },
-	cost = 10,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.turn_cap, card.ability.turns, card.ability.ante_loss } }
+		return { vars = { card.ability.money } }
+	end,
+	rarity = 3,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 10 },
+	cost = 5,
+	calc_dollar_bonus = function(self, card)
+		return card.ability.money
 	end,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			card.ability.turns = card.ability.turns + 1
-			if card.ability.turns >= card.ability.turn_cap then
-				local eval = function(card)
-					return card.ability.turns >= card.ability.turn_cap
-				end
-				juice_card_until(card, eval, true)
+		if context.joker_main then
+			if G.GAME.blind.boss then
+				boss_type = "boss"
+			else
+				boss_type = G.GAME.blind.name
 			end
-		elseif context.selling_self and card.ability.turns >= card.ability.turn_cap and not context.blueprint then
-			ease_ante(-card.ability.ante_loss)
-			G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
-			G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - card.ability.ante_loss
+		elseif context.end_of_round then
+			if not context.beat_boss then
+				local card_type = "Planet"
+				if boss_type == "Big Blind" then
+					card_type = "Tarot"
+				end
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.4,
+					func = function()
+						if G.consumeables.config.card_limit > #G.consumeables.cards then
+							play_sound('timpani')
+							local new_card = create_card(card_type, G.consumeables, nil, nil, nil, nil, nil, 'newsletter')
+							new_card:add_to_deck()
+							G.consumeables:emplace(new_card)
+							if context.blueprint then
+								context.blueprint_card:juice_up(0.3, 0.5)
+							else
+								card:juice_up(0.3, 0.5)
+							end
+						end
+						return true
+					end
+				}))
+			end
 		end
 	end
 }
@@ -167,81 +191,70 @@ function glass_xmult(xmult)
 end
 
 SMODS.Joker {
-	key = "thornring",
+	key = "save",
+	config = {
+		turn_cap = 3,
+		turns = 0,
+		ante_loss = 1
+	},
+	pixel_size = { w = 70, h = 71 },
 	rarity = 2,
 	blueprint_compat = false,
-	eternal_compat = true,
+	eternal_compat = false,
 	atlas = "DR_jokers",
-	pos = { x = 1, y = 1 },
-	cost = 6,
-	config = {
-		xmult_first = 2,
-		xmult_too_long = 0.5,
-		glasses_are_older = false,
-		in_build = false
-	},
+	pos = { x = 2, y = 4 },
+	cost = 10,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
-		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) } }
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		card.ability.in_build = true
-		if not from_debuff then
-			if #SMODS.find_card("j_UTDR_glasses") > 0 then
-				card.ability.glasses_are_older = true
-			end
-			local noelles = SMODS.find_card("j_UTDR_noelle")
-			if #noelles > 0 then
-				card:set_eternal(true)
-				for i = 1, #noelles do
-					noelles[i]:set_eternal(true)
-				end
-				play_sound("UTDR_thornring_equip", 1.0, 0.7)
-			else
-				play_sound("UTDR_ominous", 1.0, 0.9)
-			end
-		end
-	end,
-	update = function(self, card, dt)
-		if card.ability.in_build then
-			G.PITCH_MOD = 0.5
-		end
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		card.ability.in_build = true
-		if not from_debuff then
-			play_sound("UTDR_ominous_cancel", 1.0, 0.9)
-		end
+		return { vars = { card.ability.turn_cap, card.ability.turns, card.ability.ante_loss } }
 	end,
 	calculate = function(self, card, context)
-		if context.mod_probability and not context.blueprint and context.identifier == "glass" and not card.ability.glasses_are_older then
-			return {
-				numerator = context.denominator
-			}
-		elseif context.selling_card and context.card.label == "j_UTDR_glasses" and #SMODS.find_card("j_UTDR_glasses") == 1 and not context.blueprint then
-			card.ability.glasses_are_older = false
+		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+			card.ability.turns = card.ability.turns + 1
+			if card.ability.turns >= card.ability.turn_cap then
+				local eval = function(card)
+					return card.ability.turns >= card.ability.turn_cap
+				end
+				juice_card_until(card, eval, true)
+			end
+		elseif context.selling_self and card.ability.turns >= card.ability.turn_cap and not context.blueprint then
+			ease_ante(-card.ability.ante_loss)
+			G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
+			G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - card.ability.ante_loss
 		end
 	end
 }
 
 --cyber world
 SMODS.Joker {
-	key = "man",
+	key = "tension_gem",
+	config = {
+		tag_count = 3,
+		slotted = false,
+		in_build = false
+	},
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = { key = 'tag_charm', set = 'Tag' }
+		if math.fmod(os.time(), 16) == 0 then
+			return {
+				key = "j_UTDR_tension_slop",
+				vars = { card.ability.tag_count, localize { type = 'name_text', set = 'Tag', key = 'tag_charm' } }
+			}
+		end
+		return { vars = { card.ability.tag_count, localize { type = 'name_text', set = 'Tag', key = 'tag_charm' } } }
+	end,
 	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
+	blueprint_compat = false,
+	eternal_compat = false,
 	atlas = "DR_jokers",
-	pos = { x = 4, y = 1 },
-	cost = 5,
+	pos = { x = 1, y = 11 },
+	cost = 6,
 	calculate = function(self, card, context)
-		if context.setting_blind and context.cardarea == G.jokers and #G.jokers.cards < G.jokers.config.card_limit then
-			SMODS.add_card({
-				set = "Joker",
-				area = G.jokers,
-				key = "j_egg"
-			})
-			card:juice_up(0.3, 0.4)
-			play_sound("UTDR_egg", 1.0, 1.0)
+		if context.selling_self then
+			for i = 1, card.ability.tag_count do
+				card:juice_up(0.3, 0.5)
+				local tag = Tag("tag_charm")
+				add_tag(tag)
+			end
 		end
 	end
 }
@@ -466,29 +479,21 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "hometown",
+	key = "lord_of_hammer",
 	config = {
-		xmult_gain = 0.02,
-		xmult = 1,
+		xmult = 2,
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
+		return { vars = { card.ability.xmult } }
 	end,
-	rarity = 2,
+	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
-	pos = { x = 3, y = 2 },
+	pos = { x = 2, y = 11 },
 	cost = 6,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and not context.blueprint then
-			SMODS.scale_card(card, {
-				ref_table = card.ability,
-				ref_value = "xmult",
-				scalar_value = "xmult_gain",
-				message_colour = G.C.MULT
-			})
-		elseif context.joker_main then
+		if context.joker_main and G.jokers.config.card_limit == #G.jokers.cards then
 			return {
 				xmult = card.ability.xmult
 			}
@@ -548,47 +553,32 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "FRIEND",
+	key = "castle_town",
 	config = {
-		cards_destroyed = 2,
-		deer_kidnapped = 0
+		mult_per = 5
 	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.cards_destroyed, card.ability.deer_kidnapped, localize("k_spectral") } }
-	end,
-	rarity = 3,
+	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
-	pos = { x = 5, y = 6 },
-	cost = 10,
-	calculate = function(self, card, context)
-		if context.remove_playing_cards then
-			for i = 1, #context.removed do
-				card.ability.deer_kidnapped = card.ability.deer_kidnapped + 1
-
-				if card.ability.deer_kidnapped == 2 then
-					card.ability.deer_kidnapped = 0
-					play_sound("UTDR__", 1.0, 1.0)
-					if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-						G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-						G.E_MANAGER:add_event(Event({
-							trigger = "before",
-							delay = 0.0,
-							func = (function()
-								local carb = create_card("Spectral", G.consumeables, nil, nil, nil, nil, nil, "_")
-								carb:add_to_deck()
-								G.consumeables:emplace(carb)
-								G.GAME.consumeable_buffer = 0
-								return true
-							end)
-						}))
-						card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-							{ message = "__", colour = G.C.SECONDARY_SET.Spectral })
-						card:juice_up(0.3, 0.4)
-					end
-				end
+	pos = { x = 1, y = 2 },
+	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		if G.playing_cards then
+			if #G.playing_cards > G.GAME.starting_deck_size then
+				return { vars = { card.ability.mult_per, G.GAME.starting_deck_size, (card.ability.mult_per * (#G.playing_cards - G.GAME.starting_deck_size)), string.lower(localize("b_full_deck")) } }
+			else
+				return { vars = { card.ability.mult_per, 52, 0, string.lower(localize("b_full_deck")) } }
 			end
+		else
+			return { vars = { card.ability.mult_per, G.GAME.starting_deck_size, (card.ability.mult_per * (52 - G.GAME.starting_deck_size)), string.lower(localize("b_full_deck")) } }
+		end
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main then
+			return {
+				mult = (card.ability.mult_per * (G.playing_cards and (#G.playing_cards - G.GAME.starting_deck_size) or 0))
+			}
 		end
 	end
 }
@@ -642,74 +632,51 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "shadow_crystal",
+	key = "dark_fountain",
 	config = {
-		joker_slots = 1,
-		old_ouija = "",
-		old_ectoplasm = "",
-		old_familiar = "",
-		old_grim = "",
-		old_incantation = "",
-		old_wraith = "",
-		old_ankh = "",
-		old_hex = "",
-		old_immolate = "",
+		turn_cap = 3,
+		turns = 0
 	},
 	rarity = 3,
 	blueprint_compat = false,
-	eternal_compat = true,
+	eternal_compat = false,
 	atlas = "DR_jokers",
-	pos = { x = 3, y = 1 },
-	soul_pos = { x = 5, y = 7 },
+	pos = { x = 2, y = 2 },
+	soul_pos = { x = 6, y = 7 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { localize("k_spectral") } }
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
+		return { vars = { card.ability.turn_cap, card.ability.turns, G.localization.descriptions.Edition.e_negative.name } }
 	end,
-	add_to_deck = function(self, card, from_debuff)
-		card.ability.old_ouija = G.localization.descriptions.Spectral.c_ouija.text
-		G.localization.descriptions.Spectral.c_ouija.text = { "Converts all cards", "in hand to a single",
-			"random {C:attention}rank" }
-
-		card.ability.old_ectoplasm = G.localization.descriptions.Spectral.c_ectoplasm.text
-		G.localization.descriptions.Spectral.c_ectoplasm.text = { "Add {C:dark_edition}Negative{} to",
-			"a random {C:attention}Joker" }
-
-		card.ability.old_familiar = G.localization.descriptions.Spectral.c_familiar.text
-		G.localization.descriptions.Spectral.c_familiar.text = { "Add {C:attention}#1#{} random {C:attention}Enhanced",
-			"{C:attention}face cards{} to your hand" }
-
-		card.ability.old_grim = G.localization.descriptions.Spectral.c_grim.text
-		G.localization.descriptions.Spectral.c_grim.text = { "Add {C:attention}#1#{} random {C:attention}Enhanced",
-			"{C:attention}Aces{} to your hand" }
-
-		card.ability.old_incantation = G.localization.descriptions.Spectral.c_incantation.text
-		G.localization.descriptions.Spectral.c_incantation.text = { "Add {C:attention}#1# random",
-			"{C:attention}Enhanced numbered", "{C:attention}cards{} to your hand" }
-
-		card.ability.old_wraith = G.localization.descriptions.Spectral.c_wraith.text
-		G.localization.descriptions.Spectral.c_wraith.text = { "Creates a random", "{C:red}Rare{C:attention} Joker{}" }
-
-		card.ability.old_ankh = G.localization.descriptions.Spectral.c_ankh.text
-		G.localization.descriptions.Spectral.c_ankh.text = { "Create a copy of a", "random {C:attention}Joker{}" }
-
-		card.ability.old_hex = G.localization.descriptions.Spectral.c_hex.text
-		G.localization.descriptions.Spectral.c_hex.text = { "Add {C:dark_edition}Polychrome{} to",
-			"a random {C:attention}Joker{}" }
-
-		card.ability.old_immolate = G.localization.descriptions.Spectral.c_immolate.text
-		G.localization.descriptions.Spectral.c_immolate.text = { "Gain {C:money}$#2#" }
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		G.localization.descriptions.Spectral.c_ouija.text = card.ability.old_ouija
-		G.localization.descriptions.Spectral.c_ectoplasm.text = card.ability.old_ectoplasm
-		G.localization.descriptions.Spectral.c_familiar.text = card.ability.old_familiar
-		G.localization.descriptions.Spectral.c_grim.text = card.ability.old_grim
-		G.localization.descriptions.Spectral.c_incantation.text = card.ability.old_incantation
-		G.localization.descriptions.Spectral.c_wraith.text = card.ability.old_wraith
-		G.localization.descriptions.Spectral.c_ankh.text = card.ability.old_ankh
-		G.localization.descriptions.Spectral.c_hex.text = card.ability.old_hex
-		G.localization.descriptions.Spectral.c_immolate.text = card.ability.old_immolate
-	end,
+	calculate = function(self, card, context)
+		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+			card.ability.turns = card.ability.turns + 1
+			card:juice_up(0.3, 0.4)
+			if card.ability.turns >= card.ability.turn_cap then
+				local eval = function(card)
+					return card.ability.turns >= card.ability.turn_cap
+				end
+				juice_card_until(card, eval, true)
+			end
+		elseif context.selling_self and #G.jokers.cards > 1 and card.ability.turns >= card.ability.turn_cap and not context.blueprint then
+			local joker = nil
+			for i = 1, #G.jokers.cards do
+				if G.jokers.cards[i] == card then
+					joker = G.jokers.cards[i + 1]
+				end
+			end
+			if joker then
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.4,
+					func = function()
+						joker:set_edition("e_negative", true)
+						return true
+					end
+				}))
+			end
+		end
+	end
 }
 
 SMODS.Joker {

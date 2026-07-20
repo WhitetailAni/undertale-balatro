@@ -1,5 +1,62 @@
 --desert board
 SMODS.Joker {
+	key = "gingerguard",
+	config = {
+		chips = 50
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 4, y = 5 },
+	cost = 4,
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+		return { vars = { card.ability.chips, localize({ type = 'name_text', set = "Enhanced", key = "m_steel" }) or "Steel Card" } }
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_steel") then
+			return {
+				chips = card.ability.chips
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "ramb",
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 5, y = 4 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_tarot"), localize("k_planet") } }
+	end,
+	calculate = function(self, card, context)
+		if context.end_of_round and context.cardarea == G.jokers then
+			G.E_MANAGER:add_event(Event({
+				trigger = 'after',
+				delay = 0.4,
+				func = function()
+					if G.consumeables.config.card_limit > #G.consumeables.cards then
+						play_sound('timpani')
+						local new_card = create_card(pseudorandom_element({ 'Tarot', 'Planet' }, "ramb"), G.consumeables,
+							nil, nil, nil, nil, nil, 'ramb')
+						new_card:add_to_deck()
+						G.consumeables:emplace(new_card)
+						card:juice_up(0.3, 0.5)
+						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Nice, luv." })
+					end
+					return true
+				end
+			}))
+		end
+	end
+}
+
+SMODS.Joker {
 	key = "lanino_elnina",
 	rarity = 1,
 	config = {
@@ -36,71 +93,46 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "gingerguard",
+	key = "watercooler",
 	config = {
-		chips = 50
+		bigbucks = 2,
+		said_buble = false
 	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
-	pos = { x = 4, y = 5 },
-	cost = 4,
+	pos = { x = 5, y = 5 },
+	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
-		return { vars = { card.ability.chips, localize({ type = 'name_text', set = "Enhanced", key = "m_steel" }) or "Steel Card" } }
-	end,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_steel") then
-			return {
-				chips = card.ability.chips
-			}
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+		local quote = pseudorandom_element({
+			"Bable",
+			"Beble",
+			"Bible",
+			"Boble",
+			"Buble",
+			"Buble",
+			"Booble",
+			"Babie",
+			"Bebie",
+			"Bibie",
+			"Bobie",
+			"Bubie",
+			"Bubie",
+			"Boobie"
+		}, "watercooler")
+		if not card.ability.said_buble then
+			quote = "Buble"
+			card.ability.said_buble = true
 		end
-	end
-}
-
-SMODS.Joker {
-	key = "tenna",
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 4, y = 4 },
-	cost = 6,
-	config = {
-		selected_hand = "High Card"
-	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { G.localization.misc.poker_hands[card.ability.selected_hand], localize("k_tarot") } }
-	end,
-	set_ability = function(self, card, initial, delay_sprites)
-		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
+		return { vars = { card.ability.bigbucks, quote, localize({ type = 'name_text', set = "Enhanced", key = "m_wild" }) or "Wild Card" } }
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers and context.scoring_name == card.ability.selected_hand then
-			G.E_MANAGER:add_event(Event({
-				trigger = 'after',
-				delay = 0.4,
-				func = function()
-					if G.consumeables.config.card_limit > #G.consumeables.cards then
-						play_sound('timpani')
-						local new_card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'tenna')
-						new_card:add_to_deck()
-						G.consumeables:emplace(new_card)
-						card:juice_up(0.3, 0.5)
-						local number = pseudorandom_element({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" },
-							"tenna_blip")
-						play_sound('UTDR_tenna_blip_' .. number, 1.0, 0.7)
-						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Amazing!" })
-					end
-					return true
-				end
-			}))
-		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
-			while not G.GAME.hands[card.ability.selected_hand].visible do
-				card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
-			end
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_wild") then
+			return {
+				dollars = card.ability.bigbucks
+			}
 		end
 	end
 }
@@ -166,46 +198,97 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "watercooler",
+	key = "oddcontroller",
+	rarity = 2,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 0, y = 7 },
+	cost = 8,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_uncommon"), localize("k_rare") } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				for k, v in pairs(G.I.CARD) do
+					if v.set_cost then v:set_cost() end
+				end
+				return true
+			end
+		}))
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				for k, v in pairs(G.I.CARD) do
+					if v.set_cost then v:set_cost() end
+				end
+				return true
+			end
+		}))
+	end
+}
+
+SMODS.Joker {
+	key = "shadowguy",
 	config = {
-		bigbucks = 2,
-		said_buble = false
+		chip_gain = 5,
+		mult_gain = 2
 	},
 	rarity = 1,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 7 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.chip_gain, card.ability.mult_gain } }
+	end,
+}
+
+SMODS.Joker {
+	key = "tenna",
+	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
-	pos = { x = 5, y = 5 },
-	cost = 5,
+	pos = { x = 4, y = 4 },
+	cost = 6,
+	config = {
+		selected_hand = "High Card"
+	},
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
-		local quote = pseudorandom_element({
-			"Bable",
-			"Beble",
-			"Bible",
-			"Boble",
-			"Buble",
-			"Buble",
-			"Booble",
-			"Babie",
-			"Bebie",
-			"Bibie",
-			"Bobie",
-			"Bubie",
-			"Bubie",
-			"Boobie"
-		}, "watercooler")
-		if not card.ability.said_buble then
-			quote = "Buble"
-			card.ability.said_buble = true
-		end
-		return { vars = { card.ability.bigbucks, quote, localize({ type = 'name_text', set = "Enhanced", key = "m_wild" }) or "Wild Card" } }
+		return { vars = { G.localization.misc.poker_hands[card.ability.selected_hand], localize("k_tarot") } }
+	end,
+	set_ability = function(self, card, initial, delay_sprites)
+		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_wild") then
-			return {
-				dollars = card.ability.bigbucks
-			}
+		if context.before and context.cardarea == G.jokers and context.scoring_name == card.ability.selected_hand then
+			G.E_MANAGER:add_event(Event({
+				trigger = 'after',
+				delay = 0.4,
+				func = function()
+					if G.consumeables.config.card_limit > #G.consumeables.cards then
+						play_sound('timpani')
+						local new_card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'tenna')
+						new_card:add_to_deck()
+						G.consumeables:emplace(new_card)
+						card:juice_up(0.3, 0.5)
+						local number = pseudorandom_element({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" },
+							"tenna_blip")
+						play_sound('UTDR_tenna_blip_' .. number, 1.0, 0.7)
+						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Amazing!" })
+					end
+					return true
+				end
+			}))
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+			card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
+			while not G.GAME.hands[card.ability.selected_hand].visible do
+				card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
+			end
 		end
 	end
 }
@@ -235,6 +318,132 @@ SMODS.Joker {
 			return {
 				dollars = card.ability.bigbucks
 			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "lightners_live",
+	config = {
+		ranks = {
+			"7",
+			"4"
+		},
+		mult_inc = 2,
+		mult = 0
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	atlas = "DR_jokers",
+	pos = { x = 8, y = 11 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		local vars = { card.ability.mult_inc, card.ability.mult }
+		for _, rank in ipairs(card.ability.ranks) do
+			table.insert(vars, localize(rank, "ranks"))
+		end
+		return { vars = vars }
+	end,
+	calculate = function(self, card, context)
+		if context.before and not context.blueprint then
+			local found_rank = false
+			for _, playing_card in ipairs(context.scoring_hand) do
+				for i, rank in ipairs(card.ability.ranks) do
+					if playing_card.base.value == rank and not playing_card.debuff then
+						found_rank = true
+						break
+					end
+				end
+				if found_rank then
+					break
+				end
+			end
+			if found_rank then
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "mult",
+					scalar_value = "mult_inc",
+					scaling_message = {
+						message = localize("k_upgrade_ex"),
+						colour = G.C.MULT
+					}
+				})
+			else
+				card.ability.mult = 0
+				return {
+					message = localize("k_reset"),
+					colour = G.C.MULT
+				}
+			end
+		end
+		if context.joker_main then
+			return {
+				mult = card.ability.mult
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "ERAM",
+	config = {
+		odds = 15
+	},
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 5 },
+	soul_pos = { x = 1, y = 8 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, 'DR_ERAM')
+		return { vars = { probabilities_normal, odds } }
+	end,
+	calculate = function(self, card, context)
+		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
+			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
+			play_sound("UTDR_ERAM", 1.0, 0.7)
+			return {
+				remove = true,
+				removed = context.other_card
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "hero_sword",
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 1, y = 7 },
+	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_tarot") } }
+	end,
+	calculate = function(self, card, context)
+		if context.remove_playing_cards and not context.blueprint then
+			for i = 1, #context.removed do
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.4,
+					func = function()
+						if G.consumeables.config.card_limit > #G.consumeables.cards then
+							play_sound('timpani')
+							local new_card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'HERO_SWORD')
+							new_card:add_to_deck()
+							G.consumeables:emplace(new_card)
+							card:juice_up(0.3, 0.5)
+							card_eval_status_text(card, 'extra', nil, nil, nil, { message = "GOT STRONGER" })
+						end
+						return true
+					end
+				}))
+			end
 		end
 	end
 }
@@ -306,37 +515,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "shelter",
-	config = {
-		in_build = false,
-		old_volume = 0
-	},
-	rarity = 3,
-	blueprint_compat = false,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 3, y = 7 },
-	cost = 9,
-	add_to_deck = function(self, card, from_debuff)
-		card.ability.in_build = true
-		if not from_debuff then
-			card.ability.old_volume = G.SETTINGS.SOUND.music_volume
-		end
-	end,
-	update = function(self, card, dt)
-		if card.ability.in_build then
-			G.SETTINGS.SOUND.music_volume = 0
-		end
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		card.ability.in_build = false
-		if not from_debuff then
-			G.SETTINGS.SOUND.music_volume = card.ability.old_volume
-		end
-	end
-}
-
-SMODS.Joker {
 	key = "blackshard",
 	config = {
 		xmult = 2
@@ -358,153 +536,6 @@ SMODS.Joker {
 		elseif context.repetition and context.cardarea == G.play and G.GAME.blind.boss then
 			return {
 				repetitions = 1,
-			}
-		end
-	end
-}
-
-
-SMODS.Joker {
-	key = "shadowguy",
-	config = {
-		chip_gain = 5,
-		mult_gain = 2
-	},
-	rarity = 1,
-	blueprint_compat = false,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 2, y = 7 },
-	cost = 5,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chip_gain, card.ability.mult_gain } }
-	end,
-}
-
---big city board
-SMODS.Joker {
-	key = "oddcontroller",
-	rarity = 2,
-	blueprint_compat = false,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 0, y = 7 },
-	cost = 8,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { localize("k_uncommon"), localize("k_rare") } }
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		G.E_MANAGER:add_event(Event({
-			func = function()
-				for k, v in pairs(G.I.CARD) do
-					if v.set_cost then v:set_cost() end
-				end
-				return true
-			end
-		}))
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		G.E_MANAGER:add_event(Event({
-			func = function()
-				for k, v in pairs(G.I.CARD) do
-					if v.set_cost then v:set_cost() end
-				end
-				return true
-			end
-		}))
-	end
-}
-
-SMODS.Joker {
-	key = "hero_sword",
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 1, y = 7 },
-	cost = 6,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { localize("k_tarot") } }
-	end,
-	calculate = function(self, card, context)
-		if context.remove_playing_cards and not context.blueprint then
-			for i = 1, #context.removed do
-				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.4,
-					func = function()
-						if G.consumeables.config.card_limit > #G.consumeables.cards then
-							play_sound('timpani')
-							local new_card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'HERO_SWORD')
-							new_card:add_to_deck()
-							G.consumeables:emplace(new_card)
-							card:juice_up(0.3, 0.5)
-							card_eval_status_text(card, 'extra', nil, nil, nil, { message = "GOT STRONGER" })
-						end
-						return true
-					end
-				}))
-			end
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "ramb",
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 5, y = 4 },
-	cost = 5,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { localize("k_tarot"), localize("k_planet") } }
-	end,
-	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers then
-			G.E_MANAGER:add_event(Event({
-				trigger = 'after',
-				delay = 0.4,
-				func = function()
-					if G.consumeables.config.card_limit > #G.consumeables.cards then
-						play_sound('timpani')
-						local new_card = create_card(pseudorandom_element({ 'Tarot', 'Planet' }, "ramb"), G.consumeables,
-							nil, nil, nil, nil, nil, 'ramb')
-						new_card:add_to_deck()
-						G.consumeables:emplace(new_card)
-						card:juice_up(0.3, 0.5)
-						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Nice, luv." })
-					end
-					return true
-				end
-			}))
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "ERAM",
-	config = {
-		odds = 15
-	},
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 3, y = 5 },
-	soul_pos = { x = 1, y = 8 },
-	cost = 5,
-	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, 'DR_ERAM')
-		return { vars = { probabilities_normal, odds } }
-	end,
-	calculate = function(self, card, context)
-		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
-			play_sound("UTDR_ERAM", 1.0, 0.7)
-			return {
-				remove = true,
-				removed = context.other_card
 			}
 		end
 	end

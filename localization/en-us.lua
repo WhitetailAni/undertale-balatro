@@ -188,6 +188,13 @@ return {
 					"{C:red}-#2#{} hand size",
 				},
 			},
+			["j_UTDR_flowey_yaoi"] = {
+				["name"] = "Yaoi",
+				["text"] = {
+					"{C:mult}+#1#{} Mult",
+					"{C:red}-#2#{} hand size",
+				},
+			},
 			["j_UTDR_motherfucking_gerson_boom"] = {
 				["name"] = "Hammer of Justice",
 				["text"] = {
@@ -611,6 +618,12 @@ return {
 			},
 			["j_UTDR_shelter"] = {
 				["name"] = "Shelter",
+				["text"] = {
+					"{C:gaster}. . .{}",
+				},
+			},
+			["j_UTDR_sjelter"] = {
+				["name"] = "Sjelter",
 				["text"] = {
 					"{C:gaster}. . .{}",
 				},

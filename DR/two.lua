@@ -359,6 +359,62 @@ SMODS.Joker {
 
 --mansion
 SMODS.Joker {
+	key = "revivemint",
+	config = {
+		odds = 6
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 0 },
+	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_revivemint")
+		return { vars = { G.localization.descriptions.Tarot.c_judgement.name, probabilities_normal, odds } }
+	end,
+	calculate = function(self, card, context)
+		if context.setting_blind and context.cardarea == G.jokers then
+			SMODS.add_card({
+				set = "Tarot",
+				area = G.consumeables,
+				key = "c_judgement"
+			})
+			card:juice_up(0.3, 0.4)
+			play_sound("UTDR_revivemint", 1.0, 0.7)
+			if not context.blueprint then
+				if SMODS.pseudorandom_probability(card, "revivemint", 1, card.ability.odds, "DR_revivemint") then
+					G.E_MANAGER:add_event(Event({
+						func = function()
+							play_sound('tarot1')
+							card.T.r = -0.2
+							card:juice_up(0.3, 0.4)
+							card.states.drag.is = true
+							card.children.center.pinch.x = true
+							G.E_MANAGER:add_event(Event({
+								trigger = 'after',
+								delay = 0.3,
+								blockable = false,
+								func = function()
+									G.jokers:remove_card(card)
+									card:remove()
+									card = nil
+									return true;
+								end
+							}))
+							return true
+						end
+					}))
+					return {
+						message = "DOWN"
+					}
+				end
+			end
+		end
+	end
+}
+
+SMODS.Joker {
 	key = "spamton",
 	config = {
 		odds = 2,
@@ -380,6 +436,50 @@ SMODS.Joker {
 			if rank == "Ace" or rank == "9" or rank == "7" and SMODS.pseudorandom_probability(card, "spamton", 1, card.ability.odds, "DR_spamton") then
 				return {
 					dollars = card.ability.bigbucks
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "dealmaker",
+	config = {
+		bigbucks = 1,
+		discards_remaining = 0
+	},
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 2, y = 1 },
+	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.bigbucks, card.ability.discards_remaining } }
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and G.GAME.current_round.discards_left == card.ability.discards_remaining then
+			return {
+				dollars = card.ability.bigbucks
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "spamton_neo",
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 9, y = 3 },
+	cost = 7,
+	calculate = function(self, card, context)
+		if context.repetition and context.cardarea == G.play then
+			local rank = context.other_card.base.value
+			if rank == "Ace" or rank == "9" or rank == "7" then
+				return {
+					repetitions = 1,
 				}
 			end
 		end
@@ -446,106 +546,6 @@ SMODS.Joker {
 				message = "["..pseudorandom('pipis_liked_that', 1173, 8824).." liked that]",
 				colour = G.C.BLUE
 			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "spamton_neo",
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 9, y = 3 },
-	cost = 7,
-	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play then
-			local rank = context.other_card.base.value
-			if rank == "Ace" or rank == "9" or rank == "7" then
-				return {
-					repetitions = 1,
-				}
-			end
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "dealmaker",
-	config = {
-		bigbucks = 1,
-		discards_remaining = 0
-	},
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 2, y = 1 },
-	cost = 6,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.bigbucks, card.ability.discards_remaining } }
-	end,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and G.GAME.current_round.discards_left == card.ability.discards_remaining then
-			return {
-				dollars = card.ability.bigbucks
-			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "revivemint",
-	config = {
-		odds = 6
-	},
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 2, y = 0 },
-	cost = 6,
-	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_revivemint")
-		return { vars = { G.localization.descriptions.Tarot.c_judgement.name, probabilities_normal, odds } }
-	end,
-	calculate = function(self, card, context)
-		if context.setting_blind and context.cardarea == G.jokers then
-			SMODS.add_card({
-				set = "Tarot",
-				area = G.consumeables,
-				key = "c_judgement"
-			})
-			card:juice_up(0.3, 0.4)
-			play_sound("UTDR_revivemint", 1.0, 0.7)
-			if not context.blueprint then
-				if SMODS.pseudorandom_probability(card, "revivemint", 1, card.ability.odds, "DR_revivemint") then
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							play_sound('tarot1')
-							card.T.r = -0.2
-							card:juice_up(0.3, 0.4)
-							card.states.drag.is = true
-							card.children.center.pinch.x = true
-							G.E_MANAGER:add_event(Event({
-								trigger = 'after',
-								delay = 0.3,
-								blockable = false,
-								func = function()
-									G.jokers:remove_card(card)
-									card:remove()
-									card = nil
-									return true;
-								end
-							}))
-							return true
-						end
-					}))
-					return {
-						message = "DOWN"
-					}
-				end
-			end
 		end
 	end
 }

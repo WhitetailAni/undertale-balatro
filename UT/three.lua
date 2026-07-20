@@ -1,246 +1,5 @@
 --uno
 SMODS.Joker {
-	key = "punch_card",
-	config = {
-		extra = {
-			xmult = 2,
-			cycled = 3,
-			hands_remaining = 3,
-			secret_chance = 3,
-			super_secret_chance = 9
-		},
-		spared = false,
-		old_bones = ""
-	},
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 6, y = 1 },
-	cost = 5,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.xmult, card.ability.extra.cycled, card.ability.extra.hands_remaining } }
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		if not from_debuff then
-			card.ability.old_bones = G.localization.misc.dictionary.ph_mr_bones
-		end
-	end,
-	calculate = function(self, card, context)
-		if context.joker_main then
-			if card.ability.extra.hands_remaining == 0 then
-				card.ability.extra.hands_remaining = card.ability.extra.cycled
-				return {
-					xmult = card.ability.extra.xmult
-				}
-			end
-		elseif context.after and not context.blueprint then
-			if card.ability.extra.hands_remaining == 0 then
-				local eval = function(card)
-					return card.ability.extra.hands_remaining == 0
-				end
-				juice_card_until(card, eval, true)
-			else
-				card.ability.extra.hands_remaining = card.ability.extra.hands_remaining - 1
-			end
-		elseif context.selling_self and G.GAME.blind.in_blind and not G.GAME.blind.boss and not context.blueprint and SMODS.pseudorandom_probability(card, "punch_card_secret", 1, card.ability.extra.secret_chance, "UT_punch_card_secret") then
-			card.ability.spared = true
-			G.STATE = G.STATES.HAND_PLAYED
-			G.STATE_COMPLETE = true
-			end_round()
-		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = "Redeemed the Punch Card"
-			return {
-				message = "Punched!",
-				saved = true,
-				colour = G.C.RED
-			}
-		elseif context.ending_shop and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
-		elseif context.end_of_round and context.cardarea == G.jokers and card.ability.extra.hands_remaining == 0 then
-			if SMODS.pseudorandom_probability(card, "punch_card_super_secret", 1, card.ability.extra.super_secret_chance, "UT_punch_card_secret") then
-				SMODS.add_card({ key = "j_UTDR_nice_cream" })
-				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Punched!", colour = G.C.ATTENTION })
-			end
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "temmie_flakes",
-	config = {
-		chip_min = 5,
-		chip_max = 30,
-		mult_min = 1,
-		mult_max = 8,
-		xmult_min = 1.1,
-		xmult_max = 1.5,
-		money_min = 1,
-		money_max = 4
-	},
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 3, y = 2 },
-	cost = 2,
-	loc_vars = function(self, info_queue, card)
-		return {
-			vars = {
-				card.ability.chip_min,
-				card.ability.chip_max,
-				card.ability.mult_min,
-				card.ability.mult_max,
-				card.ability.xmult_min,
-				card.ability.xmult_max,
-				card.ability.money_min,
-				card.ability.money_max
-			}
-		}
-	end,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card.base.value == "2" then
-			local rand = pseudorandom("temmie_flakes")
-
-			local zeroth = 0
-			local first = 1 / 4
-			local second = 2 / 4
-			local third = 3 / 4
-			local fourth = 1
-
-			if zeroth < rand and rand < first then
-				return {
-					chips = math.floor(pseudorandom("temmie_flakes_chips") * 25) + 5
-				}
-			elseif first < rand and rand < second then
-				return {
-					mult = math.floor(pseudorandom("temmie_flakes_mult") * 8)
-				}
-			elseif second < rand and rand < third then
-				return {
-					xmult = 1 + (math.floor(pseudorandom("temmie_flakes_xmult") * 4) / 10)
-				}
-			elseif third < rand and rand < fourth then
-				return {
-					dollars = math.floor(pseudorandom("temmie_flakes_money") * 4)
-				}
-			end
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "annoying_dog",
-	config = {
-		xmult = 3,
-		slots = 2,
-	},
-	rarity = "UTDR_dog",
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 5, y = 2 },
-	cost = 7,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult, card.ability.slots } }
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.slots
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.slots
-	end,
-	calculate = function(self, card, context)
-		if context.joker_main then
-			return {
-				xmult = card.ability.xmult
-			}
-		elseif context.setting_blind and context.cardarea == G.jokers and not context.blueprint and #G.jokers.cards < G.jokers.config.card_limit then
-			local count = math.floor(pseudorandom("annoying_dog_count") * 10)
-			play_sound("UTDR_bark", 1.0, 0.7)
-			for i = 1, count do
-				SMODS.add_card({ key = "j_UTDR_dog_residue" })
-				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Bark!", colour = G.C.ATTENTION })
-			end
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "temmie_armor",
-	config = {
-		xmult = 2
-	},
-	rarity = 3,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 4, y = 2 },
-	cost = 8,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult, localize("2", 'ranks') or "2" } }
-	end,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and context.other_card.base.value == "2" and context.other_card.config.center_key ~= "c_base" then
-			return {
-				x_mult = card.ability.xmult,
-				colour = G.C.MULT,
-				card = context.blueprint_card or card
-			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "mystery_key",
-	config = {
-		spectral_gen = false
-	},
-	rarity = 2,
-	blueprint_compat = false,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 6, y = 3 },
-	cost = 6,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { localize("Ace", 'ranks') or "Ace", localize("k_spectral") } }
-	end,
-	calculate = function(self, card, context)
-		if context.setting_blind and not context.blueprint then
-			card.ability.spectral_gen = false
-		elseif context.destroying_card and not context.blueprint then
-			if #context.full_hand == 2 and G.GAME.current_round.hands_played == 0 and not card.ability.spectral_gen then
-				for i = 1, #context.full_hand do
-					if context.full_hand[i].base.value ~= "Ace" then
-						return nil
-					end
-				end
-				if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-					G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-					G.E_MANAGER:add_event(Event({
-						trigger = 'before',
-						delay = 0.0,
-						func = (function()
-							local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil, 'myst_key')
-							card:add_to_deck()
-							G.consumeables:emplace(card)
-							G.GAME.consumeable_buffer = 0
-							return true
-						end)
-					}))
-					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-						{ message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
-					card.ability.spectral_gen = true
-				end
-				return true
-			end
-			return nil
-		end
-	end
-}
-
---dos
-SMODS.Joker {
 	key = "sea_tea",
 	config = {
 		chips = 125,
@@ -395,42 +154,201 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "undyne_the_undying",
+	key = "abandoned_quiche",
 	config = {
-		mult_per_card = 3,
-		mult = 0
+		odds = 5,
+		tag_count = 3
 	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult_per_card, card.ability.mult } }
-	end,
 	rarity = 2,
+	blueprint_compat = false,
+	eternal_compat = false,
+	atlas = "UT_jokers",
+	pos = { x = 7, y = 1 },
+	cost = 4,
+	loc_vars = function(self, info_queue, card)
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "UT_quiche")
+		return { vars = { probabilities_normal, odds, card.ability.tag_count } }
+	end,
+	calculate = function(self, card, context)
+		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+			if SMODS.pseudorandom_probability(card, "quiche", 1, card.ability.odds, "UT_quiche") then
+				for i = 1, card.ability.tag_count do
+					local tag = Tag(get_next_tag_key("ut_abandoned_quiche"))
+					if tag.name == "Orbital Tag" then
+						local _poker_hands = {}
+						for k, v in pairs(G.GAME.hands) do
+							if v.visible then
+								_poker_hands[#_poker_hands + 1] = k
+							end
+						end
+						tag.ability.orbital_hand = pseudorandom_element(_poker_hands, pseudoseed("quiche_orbital"))
+					end
+					if tag.name == "Boss Tag" then
+						i = i - 1 --reroll tags can break if a booster pack tag is generated
+					else
+						add_tag(tag)
+					end
+				end
+
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound('tarot1')
+						card.T.r = -0.2
+						card:juice_up(0.3, 0.4)
+						card.states.drag.is = true
+						card.children.center.pinch.x = true
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
+							func = function()
+								G.jokers:remove_card(card)
+								card:remove()
+								card = nil
+								return true;
+							end
+						}))
+						return true
+					end
+				}))
+				return {
+					message = "Abandoned!"
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "punch_card",
+	config = {
+		extra = {
+			xmult = 2,
+			cycled = 3,
+			hands_remaining = 3,
+			secret_chance = 3,
+			super_secret_chance = 9
+		},
+		spared = false,
+		old_bones = ""
+	},
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
-	pos = { x = 3, y = 7 },
-	cost = 7, calculate = function(self, card, context)
-	if context.joker_main then
-		return {
-			mult = card.ability.mult
-		}
-	elseif context.discard and not context.other_card.debuff and not context.blueprint then
-		SMODS.scale_card(card, {
-			ref_table = card.ability,
-			ref_value = "mult",
-			scalar_value = "mult_per_card",
-			message_colour = G.C.MULT
-		})
-	elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-		card.ability.mult = 0
-		return {
-			message = localize('k_reset'),
-			colour = G.C.RED
-		}
+	pos = { x = 6, y = 1 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.xmult, card.ability.extra.cycled, card.ability.extra.hands_remaining } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		if not from_debuff then
+			card.ability.old_bones = G.localization.misc.dictionary.ph_mr_bones
+		end
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main then
+			if card.ability.extra.hands_remaining == 0 then
+				card.ability.extra.hands_remaining = card.ability.extra.cycled
+				return {
+					xmult = card.ability.extra.xmult
+				}
+			end
+		elseif context.after and not context.blueprint then
+			if card.ability.extra.hands_remaining == 0 then
+				local eval = function(card)
+					return card.ability.extra.hands_remaining == 0
+				end
+				juice_card_until(card, eval, true)
+			else
+				card.ability.extra.hands_remaining = card.ability.extra.hands_remaining - 1
+			end
+		elseif context.selling_self and G.GAME.blind.in_blind and not G.GAME.blind.boss and not context.blueprint and SMODS.pseudorandom_probability(card, "punch_card_secret", 1, card.ability.extra.secret_chance, "UT_punch_card_secret") then
+			card.ability.spared = true
+			G.STATE = G.STATES.HAND_PLAYED
+			G.STATE_COMPLETE = true
+			end_round()
+		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared and not context.blueprint then
+			G.localization.misc.dictionary.ph_mr_bones = "Redeemed the Punch Card"
+			return {
+				message = "Punched!",
+				saved = true,
+				colour = G.C.RED
+			}
+		elseif context.ending_shop and not context.blueprint then
+			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
+		elseif context.end_of_round and context.cardarea == G.jokers and card.ability.extra.hands_remaining == 0 then
+			if SMODS.pseudorandom_probability(card, "punch_card_super_secret", 1, card.ability.extra.super_secret_chance, "UT_punch_card_secret") then
+				SMODS.add_card({ key = "j_UTDR_nice_cream" })
+				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Punched!", colour = G.C.ATTENTION })
+			end
+		end
 	end
-end
 }
 
---tres
+SMODS.Joker {
+	key = "temmie_flakes",
+	config = {
+		chip_min = 5,
+		chip_max = 30,
+		mult_min = 1,
+		mult_max = 8,
+		xmult_min = 1.1,
+		xmult_max = 1.5,
+		money_min = 1,
+		money_max = 4
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 3, y = 2 },
+	cost = 2,
+	loc_vars = function(self, info_queue, card)
+		return {
+			vars = {
+				card.ability.chip_min,
+				card.ability.chip_max,
+				card.ability.mult_min,
+				card.ability.mult_max,
+				card.ability.xmult_min,
+				card.ability.xmult_max,
+				card.ability.money_min,
+				card.ability.money_max
+			}
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and context.other_card.base.value == "2" then
+			local rand = pseudorandom("temmie_flakes")
+
+			local zeroth = 0
+			local first = 1 / 4
+			local second = 2 / 4
+			local third = 3 / 4
+			local fourth = 1
+
+			if zeroth < rand and rand < first then
+				return {
+					chips = math.floor(pseudorandom("temmie_flakes_chips") * 25) + 5
+				}
+			elseif first < rand and rand < second then
+				return {
+					mult = math.floor(pseudorandom("temmie_flakes_mult") * 8)
+				}
+			elseif second < rand and rand < third then
+				return {
+					xmult = 1 + (math.floor(pseudorandom("temmie_flakes_xmult") * 4) / 10)
+				}
+			elseif third < rand and rand < fourth then
+				return {
+					dollars = math.floor(pseudorandom("temmie_flakes_money") * 4)
+				}
+			end
+		end
+	end
+}
+
 SMODS.Joker {
 	key = "mad_dummy",
 	config = {
@@ -481,6 +399,79 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+	key = "temmie_armor",
+	config = {
+		xmult = 2
+	},
+	rarity = 3,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 4, y = 2 },
+	cost = 8,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.xmult, localize("2", 'ranks') or "2" } }
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play and context.other_card.base.value == "2" and context.other_card.config.center_key ~= "c_base" then
+			return {
+				x_mult = card.ability.xmult,
+				colour = G.C.MULT,
+				card = context.blueprint_card or card
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "mystery_key",
+	config = {
+		spectral_gen = false
+	},
+	rarity = 2,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 6, y = 3 },
+	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("Ace", 'ranks') or "Ace", localize("k_spectral") } }
+	end,
+	calculate = function(self, card, context)
+		if context.setting_blind and not context.blueprint then
+			card.ability.spectral_gen = false
+		elseif context.destroying_card and not context.blueprint then
+			if #context.full_hand == 2 and G.GAME.current_round.hands_played == 0 and not card.ability.spectral_gen then
+				for i = 1, #context.full_hand do
+					if context.full_hand[i].base.value ~= "Ace" then
+						return nil
+					end
+				end
+				if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+					G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+					G.E_MANAGER:add_event(Event({
+						trigger = 'before',
+						delay = 0.0,
+						func = (function()
+							local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil, 'myst_key')
+							card:add_to_deck()
+							G.consumeables:emplace(card)
+							G.GAME.consumeable_buffer = 0
+							return true
+						end)
+					}))
+					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+						{ message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
+					card.ability.spectral_gen = true
+				end
+				return true
+			end
+			return nil
+		end
+	end
+}
+
+SMODS.Joker {
 	key = "hotland",
 	rarity = 2,
 	blueprint_compat = false,
@@ -521,6 +512,91 @@ SMODS.Joker {
 	end
 }
 
+SMODS.Joker {
+	key = "instant_noodles",
+	config = {
+		xmult = 3
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = false,
+	atlas = "UT_jokers",
+	pos = { x = 0, y = 3 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.xmult } }
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main then
+			return {
+				xmult = card.ability.xmult
+			}
+		elseif context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					play_sound('tarot1')
+					card.T.r = -0.2
+					card:juice_up(0.3, 0.4)
+					card.states.drag.is = true
+					card.children.center.pinch.x = true
+					G.E_MANAGER:add_event(Event({
+						trigger = 'after',
+						delay = 0.3,
+						blockable = false,
+						func = function()
+							G.jokers:remove_card(card)
+							card:remove()
+							card = nil
+							return true;
+						end
+					}))
+					return true
+				end
+			}))
+			return {
+				message = "Cooked!"
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "undyne_the_undying",
+	config = {
+		mult_per_card = 3,
+		mult = 0
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.mult_per_card, card.ability.mult } }
+	end,
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 3, y = 7 },
+	cost = 7, calculate = function(self, card, context)
+	if context.joker_main then
+		return {
+			mult = card.ability.mult
+		}
+	elseif context.discard and not context.other_card.debuff and not context.blueprint then
+		SMODS.scale_card(card, {
+			ref_table = card.ability,
+			ref_value = "mult",
+			scalar_value = "mult_per_card",
+			message_colour = G.C.MULT
+		})
+	elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+		card.ability.mult = 0
+		return {
+			message = localize('k_reset'),
+			colour = G.C.RED
+		}
+	end
+end
+}
+
+--tres
 SMODS.Joker {
 	key = "alphys",
 	config = {
@@ -745,80 +821,26 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "instant_noodles",
+	key = "mettaton",
 	config = {
-		xmult = 3
+		money = 2
 	},
 	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = false,
-	atlas = "UT_jokers",
-	pos = { x = 0, y = 3 },
-	cost = 5,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult } }
-	end,
-	calculate = function(self, card, context)
-		if context.joker_main then
-			return {
-				xmult = card.ability.xmult
-			}
-		elseif context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					play_sound('tarot1')
-					card.T.r = -0.2
-					card:juice_up(0.3, 0.4)
-					card.states.drag.is = true
-					card.children.center.pinch.x = true
-					G.E_MANAGER:add_event(Event({
-						trigger = 'after',
-						delay = 0.3,
-						blockable = false,
-						func = function()
-							G.jokers:remove_card(card)
-							card:remove()
-							card = nil
-							return true;
-						end
-					}))
-					return true
-				end
-			}))
-			return {
-				message = "Cooked!"
-			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "true_lab",
-	config = {
-		mult = 0,
-		mult_gain = 10,
-	},
-	rarity = 2,
-	blueprint_compat = true,
+	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "UT_jokers",
-	pos = { x = 0, y = 7 },
-	cost = 6,
+	pos = { x = 2, y = 6 },
+	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult_gain, card.ability.mult } }
+		return { vars = { card.ability.money, localize("Clubs", 'suits_singular') or "Club" } }
 	end,
 	calculate = function(self, card, context)
-		if context.copied_card and not context.blueprint then
-			SMODS.scale_card(card, {
-				ref_table = card.ability,
-				ref_value = "mult",
-				scalar_value = "mult_gain",
-				message_colour = G.C.MULT
-			})
-		elseif context.joker_main then
-			return {
-				mult = card.ability.mult
-			}
+		if context.destroying_card and not context.blueprint then
+			if #context.full_hand == 1 and context.full_hand[1]:is_suit("Clubs") and G.GAME.current_round.hands_played == 0 then
+				SMODS.calculate_effect({ dollars = card.ability.money }, card)
+				return true
+			end
+			return nil
 		end
 	end
 }

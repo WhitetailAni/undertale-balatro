@@ -75,32 +75,76 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "castle_town",
+	key = "top_cake",
 	config = {
-		mult_per = 5
+		xmult_gain = 0.2,
+		xmult = 1,
+		hands = 0,
+		hand_limit = 15,
 	},
-	rarity = 2,
+	rarity = 3,
 	blueprint_compat = true,
-	eternal_compat = true,
+	eternal_compat = false,
 	atlas = "DR_jokers",
-	pos = { x = 1, y = 2 },
-	cost = 6,
+	pos = { x = 0, y = 0 },
+	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		if G.playing_cards then
-			if #G.playing_cards > G.GAME.starting_deck_size then
-				return { vars = { card.ability.mult_per, G.GAME.starting_deck_size, (card.ability.mult_per * (#G.playing_cards - G.GAME.starting_deck_size)), string.lower(localize("b_full_deck")) } }
-			else
-				return { vars = { card.ability.mult_per, 52, 0, string.lower(localize("b_full_deck")) } }
-			end
-		else
-			return { vars = { card.ability.mult_per, G.GAME.starting_deck_size, (card.ability.mult_per * (52 - G.GAME.starting_deck_size)), string.lower(localize("b_full_deck")) } }
-		end
+		return {
+			vars = {
+				card.ability.xmult_gain,
+				card.ability.hand_limit,
+				card.ability.hands,
+				card.ability.xmult
+			}
+		}
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main then
+		if context.before and context.cardarea == G.jokers then
+			card.ability.hands = card.ability.hands + 1
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "xmult",
+				scalar_value = "xmult_gain",
+				message_colour = G.C.MULT
+			})
+		elseif context.joker_main then
 			return {
-				mult = (card.ability.mult_per * (G.playing_cards and (#G.playing_cards - G.GAME.starting_deck_size) or 0))
+				xmult = card.ability.xmult
 			}
+		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+			if card.ability.hands >= card.ability.hand_limit then
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound('tarot1')
+						card.T.r = -0.2
+						card:juice_up(0.3, 0.4)
+						card.states.drag.is = true
+						card.children.center.pinch.x = true
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
+							func = function()
+								G.jokers:remove_card(card)
+								card:remove()
+								card = nil
+								return true;
+							end
+						}))
+						return true
+					end
+				}))
+				if #SMODS.find_card("j_UTDR_susie") > 0 then
+					susie:juice_up(0.3, 0.3);
+					return {
+						message = "Consumed by the Dragon"
+					}
+				else
+					return {
+						message = "Mama miba!"
+					}
+				end
+			end
 		end
 	end
 }
@@ -331,76 +375,28 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "top_cake",
+	key = "glowshard",
 	config = {
-		xmult_gain = 0.2,
-		xmult = 1,
-		hands = 0,
-		hand_limit = 15,
+		sell_value_gain = 1,
+		extra_value = 0
 	},
-	rarity = 3,
-	blueprint_compat = true,
-	eternal_compat = false,
-	atlas = "DR_jokers",
-	pos = { x = 0, y = 0 },
-	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return {
-			vars = {
-				card.ability.xmult_gain,
-				card.ability.hand_limit,
-				card.ability.hands,
-				card.ability.xmult
-			}
-		}
+		return { vars = { card.ability.sell_value_gain } }
 	end,
+	rarity = 1,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 1, y = 0 },
+	cost = 3,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers then
-			card.ability.hands = card.ability.hands + 1
-			SMODS.scale_card(card, {
-				ref_table = card.ability,
-				ref_value = "xmult",
-				scalar_value = "xmult_gain",
-				message_colour = G.C.MULT
-			})
-		elseif context.joker_main then
+		if context.selling_card and context.card ~= card and not context.blueprint then
+			card.ability.extra_value = card.ability.extra_value + card.ability.sell_value_gain
+			card:set_cost()
 			return {
-				xmult = card.ability.xmult
+				message = localize('k_val_up'),
+				colour = G.C.MONEY
 			}
-		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			if card.ability.hands >= card.ability.hand_limit then
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
-				if #SMODS.find_card("j_UTDR_susie") > 0 then
-					susie:juice_up(0.3, 0.3);
-					return {
-						message = "Consumed by the Dragon"
-					}
-				else
-					return {
-						message = "Mama miba!"
-					}
-				end
-			end
 		end
 	end
 }
