@@ -742,7 +742,6 @@ SMODS.Joker {
 	config = {
 		mult = 8,
 		in_build = false,
-		disguised = false,
 		chosen_joker = {
 			joker_key = "",
 			atlas_key = "Joker",
