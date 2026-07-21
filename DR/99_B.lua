@@ -367,11 +367,12 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		local left_joker = nil
-		local right_joker = nil
 		local left_joker_results, right_joker_results
 		for i = 1, #G.jokers.cards do
 			if G.jokers.cards[i] == card then
+				local left_joker = G.jokers.cards[i-1]
+                local right_joker = G.jokers.cards[i+1]
+
 				-- copy left joker
                 -- also check for if we're trying to copy context.blueprint_card; if so, don't copy it
 				if left_joker and left_joker ~= context.blueprint_copier then
