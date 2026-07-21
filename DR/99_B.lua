@@ -261,10 +261,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "kris",
-	config = {
-		in_build = false,
-		krisprint_compat_string = "incompatible",
-	},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -272,29 +268,7 @@ SMODS.Joker {
 	pos = { x = 6, y = 1 },
 	cost = 10,
 	loc_vars = function(self, info_queue, card)
-		if card.ability.in_build then
-			local main_end = {
-				{
-					n = G.UIT.C,
-					config = { align = "bm", minh = 0.4 },
-					nodes = {
-						{
-							n = G.UIT.C,
-							config = { ref_table = card, align = "m", colour = G.C.JOKER_GREY, r = 0.05, padding = 0.075, func = 'krisprint_compat' },
-							nodes = {
-								{ n = G.UIT.T, config = { ref_table = card.ability, ref_value = 'krisprint_compat_string', colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.8 } },
-							}
-						}
-					}
-				}
-			}
-			return {
-				main_end = main_end
-			}
-		end
-
 		if card.area and card.area == G.jokers then
-            local nodes = {}
             local other_joker
 
 			-- find kris
@@ -309,7 +283,7 @@ SMODS.Joker {
 			local compatible = other_joker and other_joker.config.center.blueprint_compat
 			return {
 				main_end = {{n=G.UIT.C, config={align = "bm", mh = 0.4}, nodes={
-					n=G.UIT.C, config={
+					{n=G.UIT.C, config={
 						ref_table = card,
 						align = "m",
 						colour = mix_colours(compatible and G.C.GREEN or G.C.RED, G.C.JOKER_GREY, 0.8),
@@ -322,27 +296,9 @@ SMODS.Joker {
 							scale = 0.32*0.8
 						}},
 					}}
-				}}
+				}}}
 			}
 		end
-	end,
-	krisprint_compat_check = function(card)
-		for i = 1, #G.jokers.cards do
-			if G.jokers.cards[i] == card then
-				local other_joker = G.jokers.cards[i - 1]
-				if other_joker and other_joker ~= self and other_joker.config.center.blueprint_compat then
-					return true
-				else
-					return false
-				end
-			end
-		end
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		card.ability.in_build = true
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		card.ability.in_build = false
 	end,
 	calculate = function(self, card, context)
 		if G.GAME.current_round.hands_played < 1 then
@@ -350,23 +306,13 @@ SMODS.Joker {
 			for i = 1, #G.jokers.cards do
 				if G.jokers.cards[i] == card then
 					other_joker = G.jokers.cards[i - 1]
+					break
 				end
 			end
 			return SMODS.blueprint_effect(card, other_joker, context)
 		end
 	end
 }
-
-G.FUNCS.krisprint_compat = function(e)
-	local results = e.config.ref_table.config.center.krisprint_compat_check(e.config.ref_table)
-	if results then
-		e.config.ref_table.ability.krisprint_compat_string = localize("k_compatible")
-		e.config.colour = mix_colours(G.C.GREEN, G.C.JOKER_GREY, 0.8)
-	else
-		e.config.ref_table.ability.krisprint_compat_string = localize("k_incompatible")
-		e.config.colour = mix_colours(G.C.RED, G.C.JOKER_GREY, 0.8)
-	end
-end
 
 SMODS.Joker {
 	key = "you",
