@@ -1760,8 +1760,7 @@ return {
 			["j_UTDR_netskie_bad_disguise"] = {
 				["name"] = "Netskie",
 				["text"] = {
-					"{C:attention}Enhanced{} cards give",
-					"{C:mult}+#1#{} Mult when scored",
+					"{C:attention}I'M{} the original!",
 					"{E:1,C:netskie}Kon, kon, kee kee!",
 				},
 			},

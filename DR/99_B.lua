@@ -358,7 +358,7 @@ SMODS.Joker {
 				}}
 
 				-- create a spacer node if we aren't on the last node
-                if i ~= 2 then nodes[#nodes+1] = {n=G.UIT.B, config={align = "m", h = 0.4, w = 0.5}} end
+                if i ~= 2 then nodes[#nodes+1] = {n=G.UIT.B, config={align = "m", h = 0.4, w = 0.12}} end
             end
 
 			return {
