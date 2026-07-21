@@ -1760,7 +1760,7 @@ return {
 			["j_UTDR_netskie_bad_disguise"] = {
 				["name"] = "Netskie",
 				["text"] = {
-					"{C:attention}I'M{} the original!",
+					"{C:attention}I'M{} the Original!",
 					"{E:1,C:netskie}Kon, kon, kee kee!",
 				},
 			},

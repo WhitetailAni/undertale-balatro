@@ -743,9 +743,10 @@ SMODS.Joker {
 		mult = 8,
 		in_build = false,
 		chosen_joker = {
-			joker_key = "",
+			joker_key = "j_UTDR_netskie", --have a default in case some Really Weird state stuff happens
 			atlas_key = "Joker",
 			center_pos = { x = 7, y = 10 },
+			should_floating = false,
 			floating_pos = { x = 1, y = 12 }
 		},
 	},
@@ -777,7 +778,6 @@ SMODS.Joker {
 		--set key
 		card.config.chosen_joker.joker_key = pseudorandom_element(keys, "netskie_joker")
 		
-		
 		--set atlases
 		local center = G.P_CENTERS[card.config.chosen_joker.joker_key]
 		if center.original_mod then
@@ -787,6 +787,7 @@ SMODS.Joker {
 		--set sprite pos
 		card.config.chosen_joker.center_pos = center.pos
 		if center.soul_pos then
+			card.config.chosen_joker.should_floating = true
 			card.config.chosen_joker.floating_pos = center.soul_pos
 		end
 	end,
@@ -891,17 +892,25 @@ SMODS.Joker {
 		card.ability.in_build = false
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
-		if not (card.ability.in_build or (card and card.area and card.area.config.collection)) then
-			self:choose_disguise(card)
-			
-			card:set_cost(card.config.center.config.chosen_joker.joker_key)
-		
-			card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
-			card.children.center:set_sprite_pos(card.config.center.config.chosen_joker.center_pos)
-			
-			card.children.floating_sprite.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
-			card.children.floating_sprite:set_sprite_pos(card.config.center.config.chosen_joker.floating_pos)
-		end
+		--have to put this in an event, otherwise it doesnt work in collection tab
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				if not (card and card.area and card.area.config.collection) then
+					self:choose_disguise(card)
+					
+					card:set_cost_value(card.config.center.config.chosen_joker.joker_key)
+				
+					card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
+					card.children.center:set_sprite_pos(card.config.center.config.chosen_joker.center_pos)
+					
+					if card.config.center.config.chosen_joker.should_floating then
+						card.children.floating_sprite.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
+						card.children.floating_sprite:set_sprite_pos(card.config.center.config.chosen_joker.floating_pos)
+					end
+				end
+				return true
+			end
+		}))
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
