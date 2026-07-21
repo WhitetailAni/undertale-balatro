@@ -905,9 +905,7 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.reroll_shop then
-			card.ability.disguised = false
-		elseif context.individual and context.cardarea == G.play then
+		if context.individual and context.cardarea == G.play then
 			keys = {}
 			for key, value in pairs(SMODS.get_enhancements(context.other_card)) do
 				keys[#keys + 1] = key
