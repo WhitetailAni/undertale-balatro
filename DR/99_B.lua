@@ -292,6 +292,39 @@ SMODS.Joker {
 				main_end = main_end
 			}
 		end
+
+		if card.area and card.area == G.jokers then
+            local nodes = {}
+            local other_joker
+
+			-- find kris
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then
+                    other_joker = G.jokers.cards[i-1]
+                    break
+                end
+            end
+
+			-- create the ui as needed
+			local compatible = other_joker and other_joker.config.center.blueprint_compat
+			return {
+				main_end = {{n=G.UIT.C, config={align = "bm", mh = 0.4}, nodes={
+					n=G.UIT.C, config={
+						ref_table = card,
+						align = "m",
+						colour = mix_colours(compatible and G.C.GREEN or G.C.RED, G.C.JOKER_GREY, 0.8),
+						r = 0.05,
+						padding = 0.06,
+					}, nodes={
+						{n=G.UIT.T, config={
+							text = compatible and localize("k_compatible") or localize("k_incompatible"),
+							colour = G.C.UI.TEXT_LIGHT,
+							scale = 0.32*0.8
+						}},
+					}}
+				}}
+			}
+		end
 	end,
 	krisprint_compat_check = function(card)
 		for i = 1, #G.jokers.cards do
@@ -337,10 +370,6 @@ end
 
 SMODS.Joker {
 	key = "you",
-	config = {
-		in_build = false,
-		redprint_compat_string = "incompatible"
-	},
 	unlocked = false,
 	unlock_condition = { type = '', extra = '', hidden = true },
 	rarity = 4,
@@ -351,48 +380,45 @@ SMODS.Joker {
 	soul_pos = { x = 3, y = 8 },
 	cost = 20,
 	loc_vars = function(self, info_queue, card)
-		if card.ability.in_build then
-			local main_end = {
-				{
-					n = G.UIT.C,
-					config = { align = "bm", minh = 0.4 },
-					nodes = {
-						{
-							n = G.UIT.C,
-							config = { ref_table = card, align = "m", colour = G.C.JOKER_GREY, r = 0.05, padding = 0.075, func = 'redprint_compat' },
-							nodes = {
-								{ n = G.UIT.T, config = { ref_table = card.ability, ref_value = 'redprint_compat_string', colour = G.C.UI.TEXT_LIGHT, scale = 0.32 * 0.8 } },
-							}
-						}
-					}
-				}
-			}
+		if card.area and card.area == G.jokers then
+            local nodes = {}
+            local jokers = {}
+
+			-- find you
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then
+                    jokers[1] = G.jokers.cards[i-1]
+                    jokers[2] = G.jokers.cards[i+1]
+                    break
+                end
+            end
+
+			-- create the ui
+            for i = 1, 2 do
+                local other_joker = jokers[i]
+                local compatible = other_joker and other_joker.config.center.blueprint_compat
+                nodes[#nodes+1] = {n=G.UIT.C, config={
+					ref_table = card,
+					align = "m",
+					colour = mix_colours(compatible and G.C.GREEN or G.C.RED, G.C.JOKER_GREY, 0.8),
+					r = 0.05,
+					padding = 0.06,
+				}, nodes={
+					{n=G.UIT.T, config={
+						text = compatible and localize("k_compatible") or localize("k_incompatible"),
+						colour = G.C.UI.TEXT_LIGHT,
+						scale = 0.32*0.8
+					}},
+				}}
+
+				-- create a spacer node if we aren't on the last node
+                if i ~= 2 then nodes[#nodes+1] = {n=G.UIT.B, config={align = "m", h = 0.4, w = 0.5}} end
+            end
+
 			return {
-				main_end = main_end
+				main_end = {{n=G.UIT.C, config={align = "bm", mh = 0.4}, nodes=nodes}}
 			}
 		end
-	end,
-	redprint_compat_check = function(card)
-		local left_joker = nil
-		local right_joker = nil
-		for i = 1, #G.jokers.cards do
-			if G.jokers.cards[i] == card then
-				left_joker = G.jokers.cards[i - 1]
-				right_joker = G.jokers.cards[i + 1]
-			end
-		end
-		local left_compat = left_joker and left_joker.config.center.blueprint_compat
-		local right_compat = right_joker and right_joker.config.center.blueprint_compat
-		return {
-			left = left_compat,
-			right = right_compat
-		}
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		card.ability.in_build = true
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		card.ability.in_build = false
 	end,
 	calculate = function(self, card, context)
 		local left_joker = nil
@@ -421,23 +447,6 @@ SMODS.Joker {
 		return results
 	end
 }
-
-G.FUNCS.redprint_compat = function(e)
-	local results = e.config.ref_table.config.center.redprint_compat_check(e.config.ref_table)
-	if results["left"] and not results["right"] then
-		e.config.ref_table.ability.redprint_compat_string = "left " .. localize("k_compatible")
-		e.config.colour = mix_colours(G.C.GOLD, G.C.JOKER_GREY, 0.8)
-	elseif results["right"] and not results["left"] then
-		e.config.ref_table.ability.redprint_compat_string = "right " .. localize("k_compatible")
-		e.config.colour = mix_colours(G.C.GOLD, G.C.JOKER_GREY, 0.8)
-	elseif results["right"] and results["left"] then
-		e.config.ref_table.ability.redprint_compat_string = localize("k_compatible")
-		e.config.colour = mix_colours(G.C.GREEN, G.C.JOKER_GREY, 0.8)
-	else
-		e.config.ref_table.ability.redprint_compat_string = localize("k_incompatible")
-		e.config.colour = mix_colours(G.C.RED, G.C.JOKER_GREY, 0.8)
-	end
-end
 
 SMODS.Joker {
 	key = "susie",
