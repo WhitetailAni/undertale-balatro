@@ -277,7 +277,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "shelter",
+	key = "sjelter",
 	config = {
 		in_build = false,
 		old_volume = 0
