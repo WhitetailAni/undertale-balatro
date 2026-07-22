@@ -619,7 +619,7 @@ return {
 				},
 			},
 			j_UTDR_sjelter = {
-				name = "Sjelter",
+				name = "Shelter",
 				text = {
 					"{C:gaster}. . .{}",
 				},
@@ -2115,8 +2115,10 @@ return {
 			c_UTDR_flowers = "Seven Colored Flowers",
 		},
 		quips = {
-			wq_tenna ={
-				"It's T! V! TIME!",
+			utdr_quiz_test ={
+				"The sensation of your screen",
+				"The show that makes you scream",
+				"Say it with him, folks!"
 			}
 		},
 		dictionary = {

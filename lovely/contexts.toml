@@ -78,3 +78,16 @@ payload = '''
 G.GAME.money_spent = G.GAME.money_spent + self.cost
 '''
 match_indent = true
+
+# Add Tenna sound blips
+[[patches]]
+[patches.pattern]
+target = "card_character.lua"
+position = "before"
+pattern = "elseif quip.extra and quip.extra.sound then"
+payload = '''
+elseif self.config.args.tenna then
+	play_sound('UTDR_tenna_blip_'..math.random(1, 10), 1, 0.5)
+'''
+
+match_indent = true
