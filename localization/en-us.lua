@@ -1764,7 +1764,7 @@ return {
 					"{E:1,C:netskie}Kon, kon, kee kee!",
 				},
 			},
-			["j_UTDR_gaster"] = {
+			["j_UTDR_weird_deard_gaster"] = {
 				["unlock"] = {
 					"{C:gaster}AT THAT TIME,",
 					"{C:gaster}I WILL ASK YOU",
@@ -2116,7 +2116,12 @@ return {
 	},
 	["misc"] = {
 		["challenge_names"] = {
-			["c_UTDR_flowers"] = "Seven Colored Flowers"
+			["c_UTDR_flowers"] = "Seven Colored Flowers",
+		},
+		["quips"] = {
+			["wq_tenna"] ={
+				"It's T! V! TIME!",
+			}
 		},
 		["dictionary"] = {
 			["totem_UTDR_omegaflowey"] = "HAHAHAHAHAHAHAHAHAHAHA!!",

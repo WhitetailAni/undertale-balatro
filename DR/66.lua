@@ -124,6 +124,43 @@ SMODS.Joker {
 	remove_from_deck = function(self, card, from_debuff)
 		ease_hands_played(card.ability.hands_lost)
 	end,
+	calculate = function(self, card, context)
+		if context.before then
+			print("jimball")
+			local Jimbo = nil
+			--adds the quiz overlay to the overlay_menu. actual function located in tenna-lua
+			G.FUNCS.overlay_menu{
+				  definition = create_UIBox_quiz(),
+				  config = {no_esc = true}
+			  }
+			--this event creates a tenna to display, and gives him a quip to display. in en-us.lua, look under misc/quips, put 'em in there.
+			--i'd use "qq_1, qq_2, qq_2 etc", since balatro by default uses 'wq' for winning quip, 'lq' for using quip, thus 'qq' for quiz quip!
+			--i dont know why his speech sounds are so fast. you can probably modify Card_Character:say_stuff, OR!
+			--create a new Card_Character function to use tenna voice blips etc
+			--anyway hopefully this helps muchly :D
+			G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 2.5,
+                blocking = false,
+                func = (function()
+                    if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('jimbo_spot') then 
+                        Tenna = Card_Character({
+                        	x = 0,
+                        	y = 5,
+                        	center = "j_UTDR_tenna"
+                        })
+                        local spot = G.OVERLAY_MENU:get_UIE_by_ID('jimbo_spot')
+                        spot.config.object:remove()
+                        spot.config.object = Tenna
+                        Tenna.ui_object_updated = true
+                        Tenna:add_speech_bubble('wq_tenna', nil, {quip = true})
+                        Tenna:say_stuff(5)
+                        end
+                    return true
+                end)
+            }))
+        end
+	end
 }
 
 SMODS.Joker {
@@ -499,7 +536,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "gaster",
+	key = "weird_deard_gaster",
 	--unlocked = false
 	unlock_condition = { type = 'win_custom' },
 	rarity = 3,
