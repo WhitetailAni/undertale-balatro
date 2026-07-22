@@ -190,6 +190,13 @@ return {
 					"{C:red}-#2#{} hand size",
 				},
 			},
+			j_UTDR_flowey_yaoi = {
+				name = "Yaoi",
+				text = {
+					"{C:mult}+#1#{} Mult",
+					"{C:red}-#2#{} hand size",
+				},
+			},
 			j_UTDR_motherfucking_gerson_boom = {
 				name = "Hammer of Justice",
 				text = {
@@ -611,8 +618,8 @@ return {
 					"gives {C:chips}+#1#{} Chips",
 				},
 			},
-			j_UTDR_shelter = {
-				name = "Shelter",
+			j_UTDR_sjelter = {
+				name = "Sjelter",
 				text = {
 					"{C:gaster}. . .{}",
 				},
@@ -1749,12 +1756,11 @@ return {
 			j_UTDR_netskie_bad_disguise = {
 				name = "Netskie",
 				text = {
-					"{C:attention}Enhanced{} cards give",
-					"{C:mult}+#1#{} Mult when scored",
+					"{C:attention}I'M{} the Original!",
 					"{E:1,C:netskie}Kon, kon, kee kee!",
 				},
 			},
-			j_UTDR_gaster = {
+			j_UTDR_weird_deard_gaster = {
 				unlock = {
 					"{C:gaster}AT THAT TIME,",
 					"{C:gaster}I WILL ASK YOU",
@@ -2106,7 +2112,12 @@ return {
 	},
 	misc = {
 		challenge_names = {
-			c_UTDR_flowers = "Seven Colored Flowers"
+			c_UTDR_flowers = "Seven Colored Flowers",
+		},
+		quips = {
+			wq_tenna ={
+				"It's T! V! TIME!",
+			}
 		},
 		dictionary = {
 			totem_UTDR_omegaflowey = "HAHAHAHAHAHAHAHAHAHAHA!!",
