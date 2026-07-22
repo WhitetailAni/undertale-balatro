@@ -232,14 +232,13 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/one.lua'))()
 	assert(SMODS.load_file('DR/two.lua'))()
 	assert(SMODS.load_file('DR/three.lua'))()
+	assert(SMODS.load_file('DR/tenna.lua'))()
+	
 	assert(SMODS.load_file('DR/four.lua'))()
-	
-	
-	assert(SMODS.load_file('UT/seven.lua'))()
-	assert(SMODS.load_file('DR/five_A.lua'))()
-	assert(SMODS.load_file('DR/five_B.lua'))()
+	assert(SMODS.load_file('DR/five.lua'))()
 	assert(SMODS.load_file('DR/flowery.lua'))()
-
+	
+	assert(SMODS.load_file('DR/66.lua'))()
 	assert(SMODS.load_file('DR/99.lua'))()
 
 	assert(SMODS.load_file('DR/point.lua'))()

@@ -1,37 +1,30 @@
 --row one
 SMODS.Joker {
-	key = "tough_glove",
+	key = "monster_kid",
 	config = {
-		mult_gain = 2,
-		mult = 0
+		odds = 2,
+		mult = 20,
+		chips = 10,
 	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
-	pos = { x = 2, y = 1 },
+	pos = { x = 4, y = 5 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return {
-			vars = {
-				card.ability.mult_gain,
-				G.localization.misc.poker_hands['Flush'],
-				card.ability.mult
-			}
-		}
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "UT_monster_kid")
+		return { vars = { probabilities_normal, odds, card.ability.mult, card.ability.chips } }
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Flush']) and not context.blueprint then
-			SMODS.scale_card(card, {
-				ref_table = card.ability,
-				ref_value = "mult",
-				scalar_value = "mult_gain",
-				message_colour = G.C.MULT
-			})
-		elseif context.joker_main then
-			return {
-				mult = card.ability.mult
-			}
+		if context.joker_main then
+			if SMODS.pseudorandom_probability(card, "monster_kid_mult", 1, card.ability.odds, "UT_monster_kid_mult") then
+				SMODS.calculate_effect({ mult = card.ability.mult }, card)
+			end
+
+			if SMODS.pseudorandom_probability(card, "monster_kid_chips", 1, card.ability.odds, "UT_monster_kid_chips") then
+				SMODS.calculate_effect({ chips = -card.ability.chips }, card)
+			end
 		end
 	end
 }
@@ -123,6 +116,43 @@ SMODS.Joker {
 				})
 				card.ability.rounds = card.ability.rounds + 1
 			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "tough_glove",
+	config = {
+		mult_gain = 2,
+		mult = 0
+	},
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 2, y = 1 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		return {
+			vars = {
+				card.ability.mult_gain,
+				G.localization.misc.poker_hands['Flush'],
+				card.ability.mult
+			}
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.before and context.cardarea == G.jokers and next(context.poker_hands['Flush']) and not context.blueprint then
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "mult",
+				scalar_value = "mult_gain",
+				message_colour = G.C.MULT
+			})
+		elseif context.joker_main then
+			return {
+				mult = card.ability.mult
+			}
 		end
 	end
 }
@@ -258,27 +288,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "papyrus",
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 3, y = 5 },
-	cost = 6,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { G.localization.misc.poker_hands['Straight'].upper(G.localization.misc.poker_hands['Straight']) } }
-	end,
-	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play and next(context.poker_hands['Straight']) then
-			play_sound("UTDR_papyrus", 1.0, 0.7)
-			return {
-				repetitions = 1,
-			}
-		end
-	end
-}
-
-SMODS.Joker {
 	key = "snowdin",
 	rarity = 1,
 	blueprint_compat = true,
@@ -312,31 +321,100 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "monster_kid",
+	key = "papyrus",
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 3, y = 5 },
+	cost = 6,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { G.localization.misc.poker_hands['Straight'].upper(G.localization.misc.poker_hands['Straight']) } }
+	end,
+	calculate = function(self, card, context)
+		if context.repetition and context.cardarea == G.play and next(context.poker_hands['Straight']) then
+			play_sound("UTDR_papyrus", 1.0, 0.7)
+			return {
+				repetitions = 1,
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "mad_mew_mew",
 	config = {
-		odds = 2,
-		mult = 20,
-		chips = 10,
+		money = 5,
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.money, localize("King", 'ranks') or "King", localize("Jack", 'ranks') or "Jack" } }
+	end,
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 7, y = 8 },
+	cost = 6,
+	calculate = function(self, card, context)
+		if context.remove_playing_cards then
+			local count = 0
+			for i = 1, #context.removed do
+				local rank = context.removed[i].base.value
+				if rank == "King" or rank == "Jack" then
+					count = count + 1
+				end
+			end
+			if count > 0 then
+				return {
+					dollars = card.ability.money * count
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "echo_flower",
+	config = {
+		other_card = false
 	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
-	pos = { x = 4, y = 5 },
-	cost = 5,
+	pos = { x = 5, y = 5 },
+	cost = 4,
+	calculate = function(self, card, context)
+		if context.repetition and context.cardarea == G.play then
+			if card.ability.other_card then
+				card.ability.other_card = false
+			else
+				card.ability.other_card = true
+				return {
+					repetitions = 1,
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "old_tutu",
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 8, y = 1 },
+	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "UT_monster_kid")
-		return { vars = { probabilities_normal, odds, card.ability.mult, card.ability.chips } }
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
+		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_bonus" }) } }
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main then
-			if SMODS.pseudorandom_probability(card, "monster_kid_mult", 1, card.ability.odds, "UT_monster_kid_mult") then
-				SMODS.calculate_effect({ mult = card.ability.mult }, card)
-			end
-
-			if SMODS.pseudorandom_probability(card, "monster_kid_chips", 1, card.ability.odds, "UT_monster_kid_chips") then
-				SMODS.calculate_effect({ chips = -card.ability.chips }, card)
-			end
+		if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
+			return {
+				repetitions = 1,
+			}
 		end
 	end
 }
@@ -377,7 +455,6 @@ SMODS.Joker {
 	end
 }
 
---row three
 SMODS.Joker {
 	key = "ballet_shoes",
 	rarity = 1,
@@ -406,97 +483,6 @@ SMODS.Joker {
 			return {
 				chips = card.ability.chips
 			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "echo_flower",
-	config = {
-		other_card = false
-	},
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 5, y = 5 },
-	cost = 4,
-	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play then
-			if card.ability.other_card then
-				card.ability.other_card = false
-			else
-				card.ability.other_card = true
-				return {
-					repetitions = 1,
-				}
-			end
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "abandoned_quiche",
-	config = {
-		odds = 5,
-		tag_count = 3
-	},
-	rarity = 2,
-	blueprint_compat = false,
-	eternal_compat = false,
-	atlas = "UT_jokers",
-	pos = { x = 7, y = 1 },
-	cost = 4,
-	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "UT_quiche")
-		return { vars = { probabilities_normal, odds, card.ability.tag_count } }
-	end,
-	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			if SMODS.pseudorandom_probability(card, "quiche", 1, card.ability.odds, "UT_quiche") then
-				for i = 1, card.ability.tag_count do
-					local tag = Tag(get_next_tag_key("ut_abandoned_quiche"))
-					if tag.name == "Orbital Tag" then
-						local _poker_hands = {}
-						for k, v in pairs(G.GAME.hands) do
-							if v.visible then
-								_poker_hands[#_poker_hands + 1] = k
-							end
-						end
-						tag.ability.orbital_hand = pseudorandom_element(_poker_hands, pseudoseed("quiche_orbital"))
-					end
-					if tag.name == "Boss Tag" then
-						i = i - 1 --reroll tags can break if a booster pack tag is generated
-					else
-						add_tag(tag)
-					end
-				end
-
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
-				return {
-					message = "Abandoned!"
-				}
-			end
 		end
 	end
 }
@@ -535,27 +521,6 @@ SMODS.Joker {
 			end
 		elseif context.after and context.cardarea == G.jokers then
 			card.ability.has_scored = true
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "old_tutu",
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 8, y = 1 },
-	cost = 7,
-	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
-		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_bonus" }) } }
-	end,
-	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
-			return {
-				repetitions = 1,
-			}
 		end
 	end
 }

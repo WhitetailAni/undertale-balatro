@@ -1,33 +1,5 @@
 --first sanctuary
 SMODS.Joker {
-	key = "sanctuary",
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 7, y = 4 },
-	soul_pos = { x = 9, y = 7 },
-	cost = 5,
-	config = {
-		mult_per = 0.5
-	},
-	loc_vars = function(self, info_queue, card)
-		if G.deck then
-			return { vars = { card.ability.mult_per, card.ability.mult_per * #G.deck.cards } }
-		else
-			return { vars = { card.ability.mult_per, card.ability.mult_per * 52 } }
-		end
-	end,
-	calculate = function(self, card, context)
-		if context.joker_main then
-			return {
-				mult = card.ability.mult_per * #G.deck.cards
-			}
-		end
-	end
-}
-
-SMODS.Joker {
 	key = "cupwalker",
 	config = {
 		chip_gain = 4,
@@ -60,6 +32,57 @@ SMODS.Joker {
 			return {
 				chips = card.ability.chips
 			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "bittertear",
+	config = {
+		bigbucks = 1,
+		card_count = 30
+	},
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 6, y = 5 },
+	cost = 7,
+	loc_vars = function(self, info_queue, card)
+		return {
+			vars = { card.ability.card_count, card.ability.bigbucks }
+		}
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play then
+			card.ability.card_count = card.ability.card_count - 1
+			SMODS.calculate_effect({ dollars = card.ability.bigbucks }, context.other_card)
+			if card.ability.card_count == 0 then
+				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Drank!" })
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.4,
+					func = function()
+						play_sound('tarot1')
+						card.T.r = -0.2
+						card:juice_up(0.3, 0.4)
+						card.states.drag.is = true
+						card.children.center.pinch.x = true
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
+							func = function()
+								G.jokers:remove_card(card)
+								card:remove()
+								card = nil
+								return true;
+							end
+						}))
+						return true
+					end
+				}))
+			end
 		end
 	end
 }
@@ -121,20 +144,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "philosopher",
-	rarity = 1,
-	blueprint_compat = false,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 6, y = 6 },
-	cost = 5,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { localize("k_planet"), localize({ type = 'name_text', key = "p_arcana_normal", set = 'Other' }) } }
-	end,
-}
-
---second sanctuary
-SMODS.Joker {
 	key = "jackenstein",
 	rarity = 2,
 	blueprint_compat = true,
@@ -174,6 +183,169 @@ SMODS.Joker {
 			end
 		end
 	end
+}
+
+SMODS.Joker {
+	key = "axe_of_justice",
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 8, y = 5 },
+	cost = 6,
+	config = {
+		xmult = 1.25,
+		money_spent = 0
+	},
+	in_pool = function(self, args)
+		local money_spent = G.GAME.money_spent or 0
+		return money_spent >= 150
+	end,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.xmult } }
+	end,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play then
+			return {
+				xmult = card.ability.xmult
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "sanctuary",
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 7, y = 4 },
+	soul_pos = { x = 9, y = 7 },
+	cost = 5,
+	config = {
+		mult_per = 0.5
+	},
+	loc_vars = function(self, info_queue, card)
+		if G.deck then
+			return { vars = { card.ability.mult_per, card.ability.mult_per * #G.deck.cards } }
+		else
+			return { vars = { card.ability.mult_per, card.ability.mult_per * 52 } }
+		end
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main then
+			return {
+				mult = card.ability.mult_per * #G.deck.cards
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "motherfucking_gerson_boom",
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 9, y = 4 },
+	cost = 6,
+	config = {
+		xmult_gain = 0.25,
+		xmult = 1
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.xmult_gain, card.ability.xmult, localize("k_voucher") } }
+	end,
+	set_ability = function(self, card, initial, delay_sprites)
+		card.ability.xmult = card.ability.xmult + card.ability.xmult_gain * #get_keys(G.GAME.used_vouchers)
+	end,
+	calculate = function(self, card, context)
+		if context.voucher_redeem and not context.blueprint then
+			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
+			return {
+				card = card,
+				message = localize('k_upgrade_ex'),
+				colour = G.C.MULT
+			}
+		elseif context.joker_main then
+			return {
+				xmult = card.ability.xmult
+			}
+		end
+	end
+}
+
+--no, THIS is the second sanctuary. dumbass
+SMODS.Joker {
+	key = "second_sanctuary",
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 8, y = 4 },
+	soul_pos = { x = 0, y = 8 },
+	cost = 6,
+	config = {
+		xmult_per = 0.05,
+		xmult = 1,
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.xmult_per, card.ability.xmult } }
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main then
+			return {
+				xmult = card.ability.xmult
+			}
+		elseif context.remove_playing_cards and not context.blueprint then
+			local xmult_gain = #context.removed * card.ability.xmult_per
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					G.E_MANAGER:add_event(Event({
+						func = function()
+							card.ability.xmult = card.ability.xmult + xmult_gain
+							return true
+						end
+					}))
+					card_eval_status_text(card, 'extra', nil, nil, nil,
+						{
+							message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult + xmult_gain } },
+							colour =
+								G.C.MULT
+						})
+					return true
+				end
+			}))
+			return
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "sound_of_justice",
+	config = {
+		retrigger_chance = 4,
+	},
+	--unlocked = false
+	rarity = 3,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 0, y = 9 },
+	cost = 7,
+	loc_vars = function(self, info_queue, card)
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 3, card.ability.retrigger_chance, 'DR_sound_of_justice')
+		return { vars = { probabilities_normal, odds } }
+	end,
+	calculate = function(self, card, context)
+		if context.repetition and context.cardarea == G.play and SMODS.pseudorandom_probability(card, "sound_of_justice", 3, card.ability.retrigger_chance, "DR_sound_of_justice") then
+			return {
+				repetitions = 1,
+			}
+		elseif context.selling_self then
+			G.GAME.blind:set_text(true)
+		end
+	end,
 }
 
 SMODS.Joker {
@@ -238,139 +410,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "motherfucking_gerson_boom",
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 9, y = 4 },
-	cost = 6,
-	config = {
-		xmult_gain = 0.25,
-		xmult = 1
-	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_gain, card.ability.xmult, localize("k_voucher") } }
-	end,
-	set_ability = function(self, card, initial, delay_sprites)
-		card.ability.xmult = card.ability.xmult + card.ability.xmult_gain * #get_keys(G.GAME.used_vouchers)
-	end,
-	calculate = function(self, card, context)
-		if context.voucher_redeem and not context.blueprint then
-			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
-			return {
-				card = card,
-				message = localize('k_upgrade_ex'),
-				colour = G.C.MULT
-			}
-		elseif context.joker_main then
-			return {
-				xmult = card.ability.xmult
-			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "axe_of_justice",
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 8, y = 5 },
-	cost = 6,
-	config = {
-		xmult = 1.25,
-		money_spent = 0
-	},
-	in_pool = function(self, args)
-		local money_spent = G.GAME.money_spent or 0
-		return money_spent >= 150
-	end,
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult } }
-	end,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
-			return {
-				xmult = card.ability.xmult
-			}
-		end
-	end
-}
-
---no, THIS is the second sanctuary. dumbass
-SMODS.Joker {
-	key = "second_sanctuary",
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 8, y = 4 },
-	soul_pos = { x = 0, y = 8 },
-	cost = 6,
-	config = {
-		xmult_per = 0.05,
-		xmult = 1,
-	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_per, card.ability.xmult } }
-	end,
-	calculate = function(self, card, context)
-		if context.joker_main then
-			return {
-				xmult = card.ability.xmult
-			}
-		elseif context.remove_playing_cards and not context.blueprint then
-			local xmult_gain = #context.removed * card.ability.xmult_per
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							card.ability.xmult = card.ability.xmult + xmult_gain
-							return true
-						end
-					}))
-					card_eval_status_text(card, 'extra', nil, nil, nil,
-						{
-							message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult + xmult_gain } },
-							colour =
-								G.C.MULT
-						})
-					return true
-				end
-			}))
-			return
-		end
-	end
-}
-
---third sanctuary
-SMODS.Joker {
-	key = "princess_ribbon",
-	config = {
-		chips = 50
-	},
-	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
-		return { vars = { card.ability.chips, localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' } }
-	end,
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 4, y = 6 },
-	cost = 5,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_glass") then
-			return {
-				chips = card.ability.chips
-			}
-		end
-	end
-}
-
-SMODS.Joker {
 	key = "spawn",
 	config = {
 		mult_gain = 2,
@@ -394,54 +433,6 @@ SMODS.Joker {
 			return {
 				mult = card.ability.mult
 			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "dark_fountain",
-	config = {
-		turn_cap = 3,
-		turns = 0
-	},
-	rarity = 3,
-	blueprint_compat = false,
-	eternal_compat = false,
-	atlas = "DR_jokers",
-	pos = { x = 2, y = 2 },
-	soul_pos = { x = 6, y = 7 },
-	cost = 8,
-	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
-		return { vars = { card.ability.turn_cap, card.ability.turns, G.localization.descriptions.Edition.e_negative.name } }
-	end,
-	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			card.ability.turns = card.ability.turns + 1
-			card:juice_up(0.3, 0.4)
-			if card.ability.turns >= card.ability.turn_cap then
-				local eval = function(card)
-					return card.ability.turns >= card.ability.turn_cap
-				end
-				juice_card_until(card, eval, true)
-			end
-		elseif context.selling_self and #G.jokers.cards > 1 and card.ability.turns >= card.ability.turn_cap and not context.blueprint then
-			local joker = nil
-			for i = 1, #G.jokers.cards do
-				if G.jokers.cards[i] == card then
-					joker = G.jokers.cards[i + 1]
-				end
-			end
-			if joker then
-				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.4,
-					func = function()
-						joker:set_edition("e_negative", true)
-						return true
-					end
-				}))
-			end
 		end
 	end
 }
@@ -472,52 +463,38 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "bittertear",
+	key = "princess_ribbon",
 	config = {
-		bigbucks = 1,
-		card_count = 30
+		chips = 50
 	},
-	rarity = 2,
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+		return { vars = { card.ability.chips, localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' } }
+	end,
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
-	pos = { x = 6, y = 5 },
-	cost = 7,
-	loc_vars = function(self, info_queue, card)
-		return {
-			vars = { card.ability.card_count, card.ability.bigbucks }
-		}
-	end,
+	pos = { x = 4, y = 6 },
+	cost = 5,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
-			card.ability.card_count = card.ability.card_count - 1
-			SMODS.calculate_effect({ dollars = card.ability.bigbucks }, context.other_card)
-			if card.ability.card_count == 0 then
-				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Drank!" })
-				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.4,
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
-			end
+		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_glass") then
+			return {
+				chips = card.ability.chips
+			}
 		end
 	end
+}
+
+SMODS.Joker {
+	key = "philosopher",
+	rarity = 1,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 6, y = 6 },
+	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { localize("k_planet"), localize({ type = 'name_text', key = "p_arcana_normal", set = 'Other' }) } }
+	end,
 }

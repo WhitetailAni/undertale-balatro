@@ -1,5 +1,120 @@
 --unum
 SMODS.Joker {
+	key = "new_home",
+	config = {
+		chips = 300
+	},
+	rarity = 2,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 7, y = 6 },
+	cost = 7,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.chips } }
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main and G.GAME.current_round.hands_left == 0 then
+			return {
+				chips = card.ability.chips
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "barrier",
+	config = {
+		money = 2,
+	},
+	--unlocked = false
+	unlock_condition = {
+		type = 'chip_score',
+		chips = 100000000000
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.money, localize("k_debuffed") } }
+	end,
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 9, y = 7 },
+	cost = 7,
+	calculate = function(self, card, context)
+		if context.debuffed_individual then
+			return {
+				dollars = card.ability.money
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = "the_end",
+	config = {
+		money = 12,
+		was_boss = false,
+	},
+	--unlocked = false
+	unlock_condition = { type = 'win_stake', stake = 4 },
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.money } }
+	end,
+	locked_loc_vars = function(self, info_queue, card)
+		return { vars = { localize { type = 'name_text', set = 'Stake', key = G.P_CENTER_POOLS.Stake[4].key }, colours = { get_stake_col(4) } } }
+	end,
+	rarity = 2,
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 1, y = 8 },
+	cost = 6,
+	calculate = function(self, card, context)
+		if context.setting_blind and not context.blueprint then
+			card.ability.was_boss = G.GAME.blind.boss
+		end
+	end,
+	calc_dollar_bonus = function(self, card)
+		if card.ability.was_boss then
+			return card.ability.money
+		end
+	end,
+}
+
+SMODS.Joker {
+	key = "surface",
+	config = {
+		mult = 5,
+	},
+	--unlocked = false
+	unlock_condition = { type = 'modify_deck', extra = { count = 5, enhancement = 'Stone Card', e_key = 'm_stone' } },
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+		return { vars = { card.ability.mult, localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) } }
+	end,
+	locked_loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) } }
+	end,
+	rarity = 1,
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 0, y = 8 },
+	cost = 7,
+	calculate = function(self, card, context)
+		if context.individual and context.cardarea == G.play then
+			if SMODS.has_enhancement(context.other_card, 'm_stone') then
+				return {
+					mult = card.ability.mult
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker {
 	key = "dummy",
 	config = {
 		chips = 20,
@@ -21,31 +136,6 @@ SMODS.Joker {
 		if context.joker_main then
 			return {
 				chips = card.ability.chips * #G.jokers.cards
-			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "froggit",
-	config = {
-		chips = 5,
-		mult = 2
-	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chips, card.ability.mult } }
-	end,
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 5, y = 8 },
-	cost = 3,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
-			return {
-				chips = card.ability.chips,
-				mult = card.ability.mult
 			}
 		end
 	end
@@ -78,67 +168,107 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "mad_mew_mew",
+	key = "annoying_dog",
 	config = {
-		money = 5,
+		xmult = 3,
+		slots = 2,
 	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.money, localize("King", 'ranks') or "King", localize("Jack", 'ranks') or "Jack" } }
-	end,
-	rarity = 1,
+	rarity = "UTDR_dog",
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
-	pos = { x = 7, y = 8 },
-	cost = 6,
+	pos = { x = 5, y = 2 },
+	cost = 7,
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.xmult, card.ability.slots } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.slots
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.slots
+	end,
 	calculate = function(self, card, context)
-		if context.remove_playing_cards then
-			local count = 0
-			for i = 1, #context.removed do
-				local rank = context.removed[i].base.value
-				if rank == "King" or rank == "Jack" then
-					count = count + 1
-				end
-			end
-			if count > 0 then
-				return {
-					dollars = card.ability.money * count
-				}
+		if context.joker_main then
+			return {
+				xmult = card.ability.xmult
+			}
+		elseif context.setting_blind and context.cardarea == G.jokers and not context.blueprint and #G.jokers.cards < G.jokers.config.card_limit then
+			local count = math.floor(pseudorandom("annoying_dog_count") * 10)
+			play_sound("UTDR_bark", 1.0, 0.7)
+			for i = 1, count do
+				SMODS.add_card({ key = "j_UTDR_dog_residue" })
+				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Bark!", colour = G.C.ATTENTION })
 			end
 		end
 	end
 }
 
 SMODS.Joker {
-	key = "amalgam",
-	rarity = 1,
+	key = "mt_ebott",
+	config = {
+		hand_size = 5
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.hand_size } }
+	end,
+	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "UT_jokers",
-	pos = { x = 3, y = 8 },
-	cost = 5,
+	pos = { x = 2, y = 7 },
+	cost = 7,
+	add_to_deck = function(self, card, from_debuff)
+		G.hand:change_size(card.ability.hand_size)
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.hand:change_size(-card.ability.hand_size)
+	end,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.main_eval and #G.hand.cards > 0 then
-			for i = 1, #G.hand.cards do
-				-- Randomize Suit & Rank
-				local suit = pseudorandom_element(SMODS.Suits, 'amalgam_suit')
-				local rank = pseudorandom_element(SMODS.Ranks, 'amalgam_rank')
+		if context.setting_blind and not card.getting_sliced and not context.blueprint then
+			ease_discard(-G.GAME.current_round.discards_left, nil, true)
+		end
+	end
+}
 
-				-- Change them
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						local c = G.hand.cards[i]
-						c:juice_up()
-						SMODS.change_base(c, suit.key, rank.key)
-						return true
-					end
-				}))
-			end
-
+--[[
+if you're looking at the code and you've used this mod, you may be wondering:
+"how does dog residue give another joker slot?"
+well, i don't know either. i left it in cause it's funny.
+because then, the dog residue is double negative
+]]
+SMODS.Joker {
+	key = "dog_residue",
+	config = {
+		mult = 1
+	},
+	in_pool = function()
+		return false
+	end,
+	rarity = "UTDR_dog",
+	blueprint_compat = true,
+	eternal_compat = true,
+	atlas = "UT_jokers",
+	pos = { x = 6, y = 2 },
+	cost = 1,
+	add_to_deck = function(self, card, from_debuff)
+		if not from_debuff and pseudorandom("double_negative") < 1 / 1000 then
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					card:set_edition({ negative = true }, true)
+				end
+			}))
+		end
+	end,
+	--comment out this function and then start a blind with annoying dog! it's fun!!
+	--oooops did i reenable it with a really slim chance..... oops!!! oooops!!!!!!!!
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.mult } }
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main then
 			return {
-				message = localize("k_UTDR_upgrade_qu"),
-				sound = "UTDR_amalgam",
-				pitch = pseudorandom('amalgam_sound') * .5 + .5
+				mult = card.ability.mult
 			}
 		end
 	end
@@ -204,162 +334,110 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "CORE",
-	--unlocked = false
-	unlock_condition = { type = 'discard_custom' },
-	rarity = 2,
-	blueprint_compat = false,
+	key = "doghole",
+	config = {
+		values = {
+			chips_count = 90,
+			mult_count = 15,
+			xmult_count = 1.5,
+			dollars_count = 2,
+		},
+
+		states = {
+			chips = false,
+			mult = false,
+			xmult = false,
+			money = false,
+		}
+	},
+	rarity = "UTDR_dog",
+	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 8, y = 7 },
+	atlas = "DR_jokers",
+	pos = { x = 4, y = 11 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { G.localization.misc.poker_hands['Straight'], G.localization.misc.poker_hands['Straight Flush'] } }
-	end,
-	locked_loc_vars = function(self, info_queue, card)
-		return { vars = { G.localization.misc.poker_hands['Straight'] } }
-	end,
-	calculate = function(self, card, context)
-		if context.evaluate_poker_hand and context.scoring_name == "Straight" and not context.blueprint then
-			context.poker_hands["Flush"] = context.poker_hands["Straight"]
-			return {
-				replace_scoring_name = "Straight Flush"
+		return {
+			vars = {
+				card.ability.values.chips_count,
+				card.ability.values.mult_count,
+				card.ability.values.xmult_count,
+				card.ability.values.dollars_count
 			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "barrier",
-	config = {
-		money = 2,
-	},
-	--unlocked = false
-	unlock_condition = {
-		type = 'chip_score',
-		chips = 100000000000
-	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.money, localize("k_debuffed") } }
+		}
 	end,
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 9, y = 7 },
-	cost = 7,
 	calculate = function(self, card, context)
-		if context.debuffed_individual then
-			return {
-				dollars = card.ability.money
-			}
-		end
-	end
-}
+		if context.setting_blind and not card.getting_sliced then
+			local rand = pseudorandom("doghole")
 
-SMODS.Joker {
-	key = "surface",
-	config = {
-		mult = 5,
-	},
-	--unlocked = false
-	unlock_condition = { type = 'modify_deck', extra = { count = 5, enhancement = 'Stone Card', e_key = 'm_stone' } },
-	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
-		return { vars = { card.ability.mult, localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) } }
-	end,
-	locked_loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
-		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) } }
-	end,
-	rarity = 1,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 0, y = 8 },
-	cost = 7,
-	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play then
-			if SMODS.has_enhancement(context.other_card, 'm_stone') then
+			local zeroth = 0
+			local first = 1 / 4
+			local second = 2 / 4
+			local third = 3 / 4
+			local fourth = 4 / 4
+
+			if zeroth < rand and rand < first then
+				card.ability.states.chips = true
+			elseif first < rand and rand < second then
+				card.ability.states.mult = true
+			elseif second < rand and rand < third then
+				card.ability.states.xmult = true
+			elseif third < rand and rand < fourth then
+				card.ability.states.money = true
+			end
+		elseif context.joker_main then
+			if card.ability.states.chips then
 				return {
-					mult = card.ability.mult
+					chips = card.ability.values.chips_count
 				}
+			elseif card.ability.states.mult then
+				return {
+					mult = card.ability.values.mult_count
+				}
+			elseif card.ability.states.xmult then
+				return {
+					xmult = card.ability.values.xmult_count
+				}
+			end
+		elseif context.individual and context.cardarea == G.play then
+			return {
+				dollars = card.ability.dollars_count
+			}
+		elseif context.end_of_round and context.cardarea == G.jokers then
+			if card.ability.states.chips then
+				card.ability.states.chips = false
+			elseif card.ability.states.mult then
+				card.ability.states.mult = false
+			elseif card.ability.states.xmult then
+				card.ability.states.xmult = false
 			end
 		end
 	end
 }
 
 SMODS.Joker {
-	key = "the_end",
+	key = "dog_shrine",
+	rarity = "UTDR_dog",
+	blueprint_compat = false,
+	eternal_compat = true,
+	atlas = "DR_jokers",
+	pos = { x = 3, y = 11 },
 	config = {
-		money = 12,
-		was_boss = false,
+		money = 1,
+		extra_boosters = 1
 	},
-	--unlocked = false
-	unlock_condition = { type = 'win_stake', stake = 4 },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.money } }
 	end,
-	locked_loc_vars = function(self, info_queue, card)
-		return { vars = { localize { type = 'name_text', set = 'Stake', key = G.P_CENTER_POOLS.Stake[4].key }, colours = { get_stake_col(4) } } }
-	end,
-	rarity = 2,
-	blueprint_compat = false,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 1, y = 8 },
-	cost = 6,
-	calculate = function(self, card, context)
-		if context.setting_blind and not context.blueprint then
-			card.ability.was_boss = G.GAME.blind.boss
-		end
-	end,
 	calc_dollar_bonus = function(self, card)
-		if card.ability.was_boss then
-			return card.ability.money
-		end
+		return -card.ability.money
 	end,
-}
-
---tres
-
-SMODS.Joker {
-	key = "fun_value",
-	config = {
-		xmult = 1.5,
-		odds = 3,
-		unlock_chance = 10
-	},
-	--unlocked = false
-	unlock_condition = { type = 'win_custom' },
-	loc_vars = function(card, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, 'DR_fun_value')
-		return { vars = { probabilities_normal, odds, card.ability.xmult } }
+	add_to_deck = function(self, card, from_debuff)
+		SMODS.change_booster_limit(card.ability.extra_boosters)
 	end,
-	locked_loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.unlock_chance,
-			'DR_fun_value_locked')
-		return { vars = { probabilities_normal, odds } }
-	end,
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 9, y = 8 },
-	cost = 8,
-	calculate = function(self, card, context)
-		if context.other_joker and pseudorandom("fun_value") < G.GAME.probabilities.normal / card.ability.odds then
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					context.other_joker:juice_up(0.5, 0.5)
-					return true
-				end,
-			}))
-			return {
-				xmult = card.ability.xmult
-			}
-		end
-	end,
+	remove_from_deck = function(self, card, from_debuff)
+		SMODS.change_booster_limit(-card.ability.extra_boosters)
+	end
 }
 
 SMODS.Joker {
@@ -409,123 +487,101 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "gaster",
-	--unlocked = false
-	unlock_condition = { type = 'win_custom' },
+	key = "mysterious_artifact",
 	rarity = 3,
 	blueprint_compat = false,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 2, y = 9 },
-	soul_pos = { x = 3, y = 9 },
+	eternal_compat = false,
+	atlas = "DR_jokers",
+	pos = { x = 5, y = 11 },
 	cost = 12,
 	add_to_deck = function(self, card, from_debuff)
-		joker_rarity(0.666, 0.666, 0.666, 0.006)
-		play_sound("UTDR_gaster", 1.0, 0.7)
-		card.ability.in_build = true
-	end,
-	update = function(self, card, dt)
-		if card.ability.in_build then
-			joker_rarity(0.666, 0.666, 0.666, 0.006)
-		end
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		card.ability.in_build = false
+		play_sound("UTDR_badexplosion", 1.0, 0.7)
 
-		joker_rarity(0.7, 0.25, 0.05, 0)
-	end,
-	calculate = function(self, card, context)
-		if context.game_over and not context.blueprint then
-			card.ability.in_build = false
-
-			joker_rarity(0.7, 0.25, 0.05, 0)
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "SURVEY_PROGRAM",
-	config = {
-		xmult_gain = 0.5,
-		xmult = 1
-	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_gain, card.ability.xmult, localize("k_spectral") } }
-	end,
-	locked_loc_vars = function(self, info_queue, card)
-		return { vars = { G.PROFILES[G.SETTINGS.profile].career_stats.c_wins } }
-	end,
-	--unlocked = false
-	unlock_condition = { type = 'win_custom', count = 5 },
-	rarity = 2,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 0, y = 9 },
-	pixel_size = { w = 71, h = 77 },
-	cost = 7,
-	calculate = function(self, card, context)
-		if context.using_consumeable and not context.blueprint and (context.consumeable.ability.set == "Spectral") then
-			card.ability.xmult = card.ability.xmult + card.ability.xmult_gain
-			G.E_MANAGER:add_event(
-				Event({
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				play_sound('tarot1')
+				card.T.r = -0.2
+				card:juice_up(0.3, 0.4)
+				card.states.drag.is = true
+				card.children.center.pinch.x = true
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.3,
+					blockable = false,
 					func = function()
-						card_eval_status_text(card, 'extra', nil, nil, nil,
-							{
-								message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult } },
-								colour =
-									G.C.MULT
-							});
-						return true
+						G.jokers:remove_card(card)
+						card:remove()
+						card = nil
+						SMODS.add_card({ key = "j_UTDR_annoying_dog" })
+						return true;
 					end
-				})
-			)
-			return
-		elseif context.joker_main then
-			return {
-				xmult = card.ability.xmult
-			}
-		end
-	end
-}
-
-SMODS.Joker {
-	key = "vessel",
-	config = {
-		xmult_gain = 0.15,
-		xmult = 1
-	},
-	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
-	end,
-	--unlocked = false
-	unlock_condition = { type = 'money' },
-	check_for_unlock = function(self, args)
-		if args.type == 'money' then
-			if G.PROFILES[G.SETTINGS.profile].career_stats.c_jokers_sold >= 30 then
+				}))
 				return true
 			end
-		end
-	end,
-	--unlock_condition = {type = 'win_custom'},
-	rarity = 2,
+		}))
+	end
+}
+
+SMODS.Joker {
+	key = "check_it_out_im_in_the_house_like_carpet",
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
-	atlas = "UT_jokers",
-	pos = { x = 1, y = 9 },
-	cost = 6,
+	atlas = "DR_jokers",
+	cost = 3,
+	pos = { x = 6, y = 11 },
+	config = { extra = { hands = 0, hands_required = 3, consumable_type = "Planet" } },
+	loc_vars = function(self, info_queue, card)
+		return { vars = {
+			card.ability.extra.hands,
+			card.ability.extra.hands_required,
+			localize("k_" .. string.lower(card.ability.extra.consumable_type)),
+		} }
+	end,
 	calculate = function(self, card, context)
-		if context.selling_card and context.card ~= card and context.card.ability.set == "Joker" and not context.blueprint then
-			SMODS.scale_card(card, {
-				ref_table = card.ability,
-				ref_value = "xmult",
-				scalar_value = "xmult_gain",
-				message_colour = G.C.MULT
-			})
-		elseif context.joker_main then
-			return {
-				xmult = card.ability.xmult
-			}
+		if context.after then
+			local create_new_card = false
+			if not context.blueprint then
+				card.ability.extra.hands = card.ability.extra.hands + 1
+				if card.ability.extra.hands >= card.ability.extra.hands_required then
+					create_new_card = true
+					card.ability.extra.hands = 0
+				end
+			end
+			if create_new_card then
+				if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+					G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+					return {
+						extra = {
+							message = localize('k_plus_' .. string.lower(card.ability.extra.consumable_type)),
+							colour = G.C.SECONDARY_SET[card.ability.extra.consumable_type] or G.C.FILTER,
+							message_card = card,
+							func = function() -- This is for timing purposes, everything here runs after the message
+								G.E_MANAGER:add_event(Event({
+									func = (function()
+										SMODS.add_card {
+											set = card.ability.extra.consumable_type,
+											key_append = 'UTDR_roast_chicken'
+										}
+										G.GAME.consumeable_buffer = 0
+										return true
+									end)
+								}))
+							end
+						},
+					}
+				else
+					-- no room
+				end
+			else
+				if not context.blueprint then
+					return {
+						message = tostring(card.ability.extra.hands) ..
+							"/" .. tostring(card.ability.extra.hands_required),
+						colour = G.C.SECONDARY_SET[card.ability.extra.consumable_type] or G.C.FILTER
+					}
+				end
+			end
 		end
 	end
 }
