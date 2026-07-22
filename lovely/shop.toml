@@ -96,3 +96,35 @@ payload = '''
     for k, v in ipairs(booster_pool) do
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = "self.STATES = {    "
+position = 'after'
+payload = '''
+    UTDR_SHOP_CAPSULE =		12.25,
+    UTDR_SHOP_CATTYBRATTY =	159.2015,
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+if self.STATE == self.STATES.GAME_OVER then
+    self:update_game_over(dt)
+end
+'''
+position = 'before'
+payload = '''
+if self.STATE == self.STATES.UTDR_SHOP_CAPSULE then
+    self:update_utdr_shop_capsule(dt)
+end
+if self.STATE == self.STATES.UTDR_SHOP_CATTYBRATTY then
+    self:update_utdr_shop_cattybratty(dt)
+end
+
+'''
+match_indent = true

@@ -244,13 +244,15 @@ if UTDR.config_file.deltarune then
 
 	assert(SMODS.load_file('DR/point.lua'))()
 
+	
 	assert(SMODS.load_file('DR/deck.lua'))()
 	assert(SMODS.load_file('DR/booster.lua'))()
 	assert(SMODS.load_file('DR/prophecy.lua'))()
 	assert(SMODS.load_file('DR/tarot.lua'))()
 	assert(SMODS.load_file('DR/spectral.lua'))()
 	assert(SMODS.load_file('DR/spectral_crystal.lua'))()
-	become_prophecy()
+	assert(SMODS.load_file('DR/shop.lua'))()
+	--become_prophecy()
 end
 
 function played_secret_hand(played_hands)

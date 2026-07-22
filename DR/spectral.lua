@@ -585,14 +585,14 @@ SMODS.Consumable:take_ownership('soul',
 	true
 )
 
-function become_prophecy()
+--[[function become_prophecy()
 	G.localization.misc.achievement_descriptions.clairvoyance = "Discover every Prophecy card"
 	G.localization.misc.dictionary.b_spectral_cards = "Prophecy Cards"
 	G.localization.misc.dictionary.b_stat_spectrals = "Prophecies"
 	G.localization.misc.dictionary.k_plus_spectral = "+1 Prophecy"
 	G.localization.misc.dictionary.k_spectral = "Prophecy"
     G.localization.misc.dictionary.k_spectral_pack = "Prophecy Pack"
-end
+end]]
 
 function juice_flip_DR(used_tarot)
 	G.E_MANAGER:add_event(Event({
