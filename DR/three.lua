@@ -265,7 +265,8 @@ SMODS.Joker {
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 	end,
 	calculate = function(self, card, context)
-		if context.before and context.cardarea == G.jokers and context.scoring_name == card.ability.selected_hand then
+		-- Old behaviour :p
+		--[[if context.before and context.cardarea == G.jokers and context.scoring_name == card.ability.selected_hand then
 			G.E_MANAGER:add_event(Event({
 				trigger = 'after',
 				delay = 0.4,
@@ -289,6 +290,16 @@ SMODS.Joker {
 			while not G.GAME.hands[card.ability.selected_hand].visible do
 				card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 			end
+		end]]
+
+		if context.UTDR_on_play_press then
+			UTDR_Tenna.start_quiz()
+		end
+
+		if context.joker_main then
+			return {
+				message = UTDR_Tenna.won and "Winner!" or "Fail!"
+			}
 		end
 	end
 }

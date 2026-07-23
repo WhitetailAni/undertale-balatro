@@ -4,60 +4,334 @@ UTDR_Tenna = {
 		
 		local quiz_table = UTDR_Tenna.quizzes[quiz]
 
+		UTDR_Tenna.timer = 10
+		UTDR_Tenna.won = false
+
+		print(quiz)
+		if quiz_table.init then quiz_table:init() end
+
 		-- Make Quiz UI
 		G.FUNCS.overlay_menu{
-			definition = UTDR_Tenna.create_UIBox_quiz(),
+			definition = UTDR_Tenna.create_UIBox_quiz(quiz_table),
 			config = {no_esc = true}
 		}
 		G.E_MANAGER:add_event(Event({
 			trigger = 'after',
-			delay = .5,
 			blocking = false,
 			func = (function()
-				if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('jimbo_spot') then 
+				if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('tenna_spot') then 
 					local tenna = Card_Character({
 						x = 0,
 						y = 5,
 						center = "j_UTDR_tenna",
 						tenna = true
 					})
-					local spot = G.OVERLAY_MENU:get_UIE_by_ID('jimbo_spot')
+					local spot = G.OVERLAY_MENU:get_UIE_by_ID('tenna_spot')
 					spot.config.object:remove()
 					spot.config.object = tenna
 					tenna.ui_object_updated = true
-					tenna:add_speech_bubble('utdr_quiz_'..quiz, nil, {quip = true})
+					tenna:add_speech_bubble('tennaquiz_'..quiz, nil, {quip = true})
 					tenna:say_stuff(10)
 					end
+
+					-- Start Events
+					G.E_MANAGER:add_event(Event({func = function()
+						return UTDR_Tenna.timer <= 0 or UTDR_Tenna.won
+					end}))
+
+					G.E_MANAGER:add_event(Event({func = function()
+						play_sound(UTDR_Tenna.won and "UTDR_moss" or "UTDR_badexplosion") -- Temporary sounds, pls replace
+						G.FUNCS.exit_overlay_menu()
+					return true end}))
 				return true
 			end)
 		}))
+
 	end,
-	create_UIBox_quiz = function()
-		local t = create_UIBox_generic_options({ padding = 0, colour = G.C.BLACK, outline_colour = G.C.RED, no_back = true, --[[no_esc = true,]] contents = {
+	create_UIBox_quiz = function(quiz)
+		local area = CardArea(
+			0,
+			0,
+			3.6*G.CARD_W,
+			1.05*G.CARD_H, 
+			{card_limit = 4, type = 'title', highlight_limit = 0}
+		)
+
+		local cards = type(quiz.cards) == "function" and quiz:cards() or quiz.cards or {}
+
+		for _, v in ipairs(cards) do
+			local c = SMODS.create_card(type(v) == "table" and v or {key=v, area = area, no_edition = true})
+			area:emplace(c)
+		end
+
+		if quiz.card_post then quiz:card_post(area) end
+
+		for _, v in ipairs(area.cards) do
+			v.no_ui = true -- No hover description
+			v.states.drag.can = false -- No dragging
+		end
+
+		local a = #area.cards == 0
+		if a then
+			area:remove()
+		end
+
+		local question_nodes = {}
+
+		local questions = quiz.questions and quiz:questions(area) or {{"ERROR",true}} -- No questions means no winning, so add a fallback question
+
+		for _, v in ipairs(questions) do
+			local n = { n=G.UIT.R, config={align = "cm", minw = 3.4*G.CARD_W, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLUE, button = "utdr_tenna_button", shadow = true, question = v}, nodes={
+				{ n=G.UIT.R, config={align = "cm", padding = 0.1, no_fill = true}, nodes={
+					{ n=G.UIT.T, config={text = v[1], scale = 0.5, colour = G.C.UI.TEXT_LIGHT}}}}}}
 			
+			question_nodes[#question_nodes+1] = n
+		end
+
+		local slider = create_slider({w = 3*G.CARD_W, max = 10, ref_table = UTDR_Tenna, ref_value = "timer"})
+		slider.nodes[1].config.func = "utdr_tenna_timer"
+
+		local t = create_UIBox_generic_options({ padding = 0, colour = G.C.BLACK, outline_colour = G.C.RED, no_back = true, no_esc = true, contents = {
+			not a and {n=G.UIT.R, nodes={{n=G.UIT.O, config={padding = -1, object = area}}}} or nil,
+			{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes=question_nodes},
+			{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={slider}}
 		}})
 		t.nodes[1] = {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
 				{n=G.UIT.C, config={align = "cm", padding = 2}, nodes={
-					{n=G.UIT.O, config={padding = 0, id = 'jimbo_spot', object = Moveable(0,0,G.CARD_W*1.1, G.CARD_H*1.1)}},
+					{n=G.UIT.O, config={padding = 0, id = 'tenna_spot', object = Moveable(0,0,G.CARD_W*1.1, G.CARD_H*1.1)}},
 				}},
 				{n=G.UIT.C, config={align = "cm", padding = 0.1}, nodes={t.nodes[1]}
-			}}
-		}
+		}}}
 		--t.nodes[1].config.mid = true
-		t.config.id = 'UTDR_tenna_quiz_UI'
+		--t.config.id = 'UTDR_tenna_quiz_UI'
 		return t
 	end,
 	quizzes = {},
-	quiz_pool = {
-		"test"
-	}
-}
-
-UTDR_Tenna.quizzes.test = {
-	init = function(self) -- Optional
-		
-	end,
-	cards = function(self) -- Return table of card keys, could also just be table (eg: j_joker)
-		
+	quiz_pool = {},
+	timer = 0,
+	won = false,
+	Quiz = function(t)
+		local key = SMODS.current_mod.prefix.."_"..t.key
+		t.key = nil
+		UTDR_Tenna.quiz_pool[#UTDR_Tenna.quiz_pool+1] = key
+		UTDR_Tenna.quizzes[key] = t
+		return t
 	end
 }
+
+-- Modified version of slider to act as a timer instead
+function G.FUNCS.utdr_tenna_timer(e)
+	local c = e.children[1]
+	
+	local rt = c.config.ref_table
+	rt.text = string.format("%."..tostring(rt.decimal_places).."f", rt.ref_table[rt.ref_value])
+	c.T.w = (rt.ref_table[rt.ref_value] - rt.min)/(rt.max - rt.min)*rt.w
+	c.config.w = c.T.w
+	if G.CONTROLLER and G.CONTROLLER.dragging.target and
+		(G.CONTROLLER.dragging.target == e or
+		G.CONTROLLER.dragging.target == c) then
+			local rt = c.config.ref_table
+			rt.ref_table[rt.ref_value] = math.min(rt.max,math.max(rt.min, rt.min + (rt.max - rt.min)*(G.CURSOR.T.x - e.parent.T.x - G.ROOM.T.x)/e.T.w))
+			rt.text = string.format("%."..tostring(rt.decimal_places).."f", rt.ref_table[rt.ref_value])
+			c.T.w = (rt.ref_table[rt.ref_value] - rt.min)/(rt.max - rt.min)*rt.w
+			c.config.w = c.T.w
+			if rt.callback then G.FUNCS[rt.callback](rt) end
+	end
+end
+
+function G.FUNCS.utdr_tenna_button(e)
+	UTDR_Tenna.won = e.config.question[2]
+	UTDR_Tenna.timer = 0
+end
+
+-- Hooking base love functions acts weird sometimes lol
+if not love.update then function love.update(dt) end end
+local oldgameupdate = love.update
+function love.update(dt)
+    local g = oldgameupdate(dt)
+    if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('tenna_spot') then
+		UTDR_Tenna.timer = UTDR_Tenna.timer - dt
+	end
+end
+
+local hook = G.FUNCS.play_cards_from_highlighted
+G.FUNCS.play_cards_from_highlighted = function(e)
+	SMODS.calculate_context { UTDR_on_play_press = true }
+	
+	hook(e)
+end
+
+
+--[[
+UTDR_Tenna.Quiz{
+	key = "example",
+	init = function(self) end, -- Add behaviour at start of quiz load
+	cards = function(self) -- Return table of card keys or SMODS.create_card tables, could also just be table (eg: j_joker)
+		return {"j_joker"}
+	end,
+	card_post = function(self, area) end, -- Stuff to do after adding the cards, can be used for more control over created cards
+	questions = function(self, area) -- Return table of questions to be answered with format {text(string), correct(bool)}
+		return {
+			{"A", true},
+			{"B", false},
+			{"C", false},
+			{"D", false}
+		}
+	end
+}
+]]
+
+UTDR_Tenna.Quiz{
+	key = "tvtime",
+	questions = function(self, area)
+		return {
+			{"TV-Thirty!", true},
+			{"TV Time!!!", true},
+			{"Past Midnight", true},
+			{os.date("%A",os.time()+86430), false} -- Adds 24h+30s to the date to get tomorrow after timer up (similar to in Deltarune)
+		}
+	end
+}
+
+UTDR_Tenna.Quiz{
+	key = "ralsei",
+	cards = function(self) return {"j_UTDR_ralsei"} end,
+	questions = function(self, area)
+		return {
+			{"Higher", true},
+			{"Lower", false},
+			{"Priceless", false},
+			{"$"..G.P_CENTERS.j_UTDR_ralsei.cost..".00 MSRP", true} -- Use Ralsei's actual price, even if rebalanced later
+		}
+	end
+}
+
+UTDR_Tenna.Quiz{
+	key = "tennaname",
+	questions = function(self, area)
+		return {
+			{"Mr. TV Guy", false},
+			{"Mr. Tenna", true},
+			{"Mr. Lil' Nose", false},
+			{"Mr. Email", false}
+		}
+	end
+}
+
+UTDR_Tenna.Quiz{
+	key = "lancer",
+	cards = function(self) return {"j_UTDR_lancer"} end,
+	questions = function(self, area)
+		return {
+			{"Lancer", true},
+			{"Dancer", false},
+			{"Prancer", false},
+			{"Mr. Generosity", false}
+		}
+	end
+}
+
+-- These need more effort to make
+--[[UTDR_Tenna.Quiz{
+	key = "jokers"
+}
+UTDR_Tenna.Quiz{
+	key = "tarot"
+}
+UTDR_Tenna.Quiz{
+	key = "spectral"
+}]]
+
+UTDR_Tenna.Quiz{
+	key = "satellite",
+	cards = function(self) return {
+		"j_supernova",
+		"j_satellite",
+		"j_constellation",
+		"j_astronomer",
+	} end,
+	questions = function(self, area)
+		return {
+			{"Supernova", false},
+			{"Satellite", true},
+			{"Constellation", false},
+			{"Astronomer", false}
+		}
+	end
+}
+
+UTDR_Tenna.Quiz{
+	key = "jimbo",
+	cards = function(self) return { "j_joker" } end,
+	questions = function(self, area)
+		return {
+			{"+4 Chips", false},
+			{"$4 at End of Round", false},
+			{"+4 Mult", true},
+			{"X4 Mult", false}
+		}
+	end
+}
+
+UTDR_Tenna.Quiz{
+	key = "balala",
+	questions = function(self, area)
+		return {
+			{"Joker Poker", false},
+			{"Fool's Gambit", false},
+			{"Rogue Poker", false},
+			{"Balatro", true}
+		}
+	end
+}
+
+UTDR_Tenna.Quiz{
+	key = "dev",
+	card_post = function(self, area)
+		-- I don't wanna add 4 new hidden Jokers for this. The descriptions are hidden anyways
+		for i = 0, 3 do
+			local c = SMODS.create_card({key="j_square", area = area, no_edition = true})
+			c.children.center.atlas = G.ASSET_ATLAS.UTDR_devs
+			c.children.center:set_sprite_pos({x=i%2,y=math.floor(i/2)})
+			area:emplace(c)
+		end
+	end,
+	questions = function(self, area)
+		return {
+			{"Vio Marks", true},
+			{"WhitetailAni", false},
+			{"J8-Bit", false},
+			{"slimestuff.", false}
+		}
+	end
+}
+
+UTDR_Tenna.Quiz{
+	key = "jokercount",
+	questions = function(self, area)
+		local count = 0 -- Keep Joker count correct even when more are added
+		for i, v in ipairs(G.P_CENTER_POOLS.Joker) do
+			local a = v.mod and v.mod.id == "UTDR" and not v.no_collection
+			count = a and count + 1 or count
+		end
+
+		return {
+			{"At least 4", true},
+			{"90", false},
+			{"165", false},
+			{tostring(count), true}
+		}
+	end
+}
+
+UTDR_Tenna.Quiz{
+	key = "reskins",
+	questions = function(self, area)
+		return {
+			{"Planet Cards", true},
+			{"Tarot Cards", false},
+			{"Spectral Cards", false}
+		}
+	end
+}
+

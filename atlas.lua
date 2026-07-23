@@ -45,7 +45,6 @@ SMODS.Atlas {
     path = "consumable.png",
     px = 71,
     py = 95,
-    atlas_table = "ASSET_ATLAS"
 }
 
 SMODS.Atlas {
@@ -74,5 +73,11 @@ SMODS.Atlas {
     path = "splash.png",
     px = 312,
     py = 169,
-    atlas_table = "ASSET_ATLAS"
+}
+
+SMODS.Atlas {
+    key = "devs",
+    path = "devs.png",
+    px = 71,
+    py = 71,
 }

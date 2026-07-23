@@ -2115,10 +2115,56 @@ return {
 			c_UTDR_flowers = "Seven Colored Flowers",
 		},
 		quips = {
-			utdr_quiz_test ={
-				"The sensation of your screen",
-				"The show that makes you scream",
-				"Say it with him, folks!"
+			tennaquiz_UTDR_tvtime ={
+				"What time is it right now?"
+			},
+			tennaquiz_UTDR_ralsei ={
+				"The Shop values this {C:attention}Joker{} at {C:money}$6{}.",
+				"What's the true value?"
+			},
+			tennaquiz_UTDR_tennaname ={
+				"What's the name of this show's host?"
+			},
+			tennaquiz_UTDR_lancer ={
+				"What's the name of this {C:attention}Joker{}?",
+				"Seriously, I don't remember."
+			},
+			tennaquiz_UTDR_jokers ={
+				"Apparently base game {C:attention}Jokers",
+				"look like this.",
+				"Except for... What?"
+			},
+			tennaquiz_UTDR_tarot ={
+				"Apparently base game {C:tarot}Tarot Cards",
+				"look like this.",
+				"Except for... What?"
+			},
+			tennaquiz_UTDR_spectral ={
+				"Apparently base game {C:tarot}Spectral Cards",
+				"look like this.",
+				"Except for... What?"
+			},
+			tennaquiz_UTDR_satellite ={
+				"Which one of these stellar",
+				"{C:attention}Jokers{} generates money?"
+			},
+			tennaquiz_UTDR_jimbo ={
+				"What's the ability of this unpleasant card?"
+			},
+			tennaquiz_UTDR_balala ={
+				"What's the name of the game you're playing?"
+			},
+			tennaquiz_UTDR_dev ={
+				"Who was this Mod's Director again?"
+			},
+			tennaquiz_UTDR_jokercount ={
+				"How many {C:attention}Jokers{} does this",
+				"wonderful Mod add?"
+			},
+			tennaquiz_UTDR_reskins ={
+				"This Mod retextures all",
+				"Vanilla Consumable types.",
+				"Except for... what?"
 			}
 		},
 		dictionary = {

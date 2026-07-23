@@ -125,9 +125,6 @@ SMODS.Joker {
 		ease_hands_played(card.ability.hands_lost)
 	end,
 	calculate = function(self, card, context)
-		if context.before then
-			UTDR_Tenna.start_quiz()
-        end
 	end
 }
 
