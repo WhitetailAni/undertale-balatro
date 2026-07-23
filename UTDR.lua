@@ -521,7 +521,7 @@ function UTDR.calculate(self, context)
 				"hey",
 				"hey_boys",
 			})
-		elseif (context.selling_card and (is_card_flower(context.card, true, true) or context.card == card) or (context.joker_type_destroyed and context.card.config.center.key == "j_UTDR_flowery")) then
+		elseif ((context.selling_card and (is_card_flower(context.card, true, true) or context.card == card)) or (context.joker_type_destroyed and context.card.config.center.key == "j_UTDR_flowery")) then
 			play_flowery_sound("goodbye")
 		end
 	end
