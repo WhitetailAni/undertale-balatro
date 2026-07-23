@@ -549,6 +549,8 @@ SMODS.Joker {
 				})
 			elseif (context.selling_card and is_card_flower(context.card, true, true)) or context.selling_self then
 				play_flowery_sound("goodbye")
+			elseif (context.joker_type_destroyed and context.card == card) then
+				play_flowery_sound("theyre_eating_my_flesh")
 			end
 		end
 	end
