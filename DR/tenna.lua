@@ -1,20 +1,17 @@
 UTDR_Tenna = {
-	start_quiz = function(quiz)
+	start_quiz = function(quiz, card)
+		if UTDR_Tenna.playing then return end
 		quiz = quiz or pseudorandom_element(UTDR_Tenna.quiz_pool)
 		
+		UTDR_Tenna.playing = true
 		local quiz_table = UTDR_Tenna.quizzes[quiz]
-
-		UTDR_Tenna.timer = 10
-		UTDR_Tenna.won = false
-
-		print(quiz)
-		if quiz_table.init then quiz_table:init() end
 
 		-- Make Quiz UI
 		G.FUNCS.overlay_menu{
 			definition = UTDR_Tenna.create_UIBox_quiz(quiz_table),
 			config = {no_esc = true}
 		}
+		if quiz_table.init then quiz_table:init() end
 		G.E_MANAGER:add_event(Event({
 			trigger = 'after',
 			blocking = false,
@@ -32,21 +29,22 @@ UTDR_Tenna = {
 					tenna.ui_object_updated = true
 					tenna:add_speech_bubble('tennaquiz_'..quiz, nil, {quip = true})
 					tenna:say_stuff(10)
-					end
+				end
 
-					-- Start Events
-					G.E_MANAGER:add_event(Event({func = function()
-						return UTDR_Tenna.timer <= 0 or UTDR_Tenna.won
-					end}))
+				UTDR_Tenna.timer = 10
+				UTDR_Tenna.won = false
 
-					G.E_MANAGER:add_event(Event({func = function()
-						play_sound(UTDR_Tenna.won and "UTDR_moss" or "UTDR_badexplosion") -- Temporary sounds, pls replace
-						G.FUNCS.exit_overlay_menu()
-					return true end}))
-				return true
-			end)
-		}))
+				-- Start Events
+				G.E_MANAGER:add_event(Event({func = function()
+					return UTDR_Tenna.timer <= 0 or UTDR_Tenna.won
+				end}))
 
+				G.E_MANAGER:add_event(Event({func = function()
+					G.FUNCS.exit_overlay_menu()
+					UTDR_Tenna.playing = false
+					play_sound(UTDR_Tenna.won and "UTDR_win" or "UTDR_lose") -- Temporary sounds, pls replace
+				return true end}))
+		return true end)}))
 	end,
 	create_UIBox_quiz = function(quiz)
 		local area = CardArea(
@@ -122,7 +120,6 @@ UTDR_Tenna = {
 			local cards = {}
 			local fakeable_count = 0
 
-			--print(t.pool)
 			for i = 1, t.count do
 				cards[#cards+1] = pseudorandom_element(G.P_CENTER_POOLS[t.pool], "UTDR_quiz_fakes", {in_pool = function(v, args)
 					if t.in_pool and not t:in_pool(v,args) then return false end -- Force fakers in if not enough have appeared
@@ -152,13 +149,10 @@ UTDR_Tenna = {
 
 			-- Set Faker
 			for i = 1, t.faker_count do
-				print("Setting card to faker")
 				if t.fake then
 					local c = pseudorandom_element(area.cards,"UTDR_quiz_set_fakes", {in_pool = function(v,args)
-						--print(v.config.center_key)
 						return t.fake.cards[v.config.center_key] and not v.fake
 					end})
-					print(c.config.center_key)
 					
 					c.children.center.atlas = G.ASSET_ATLAS[t.fake.atlas]
 					c.children.center:set_sprite_pos(t.fake.cards[c.config.center_key])

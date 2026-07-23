@@ -2131,18 +2131,21 @@ return {
 			},
 			tennaquiz_UTDR_jokers ={
 				"Apparently base game",
-				"{C:attention}Jokers{} look like this.",
-				"Except for... What?"
+				"{C:attention}Joker{} art",
+				"looks like this.",
+				"Except for...?"
 			},
 			tennaquiz_UTDR_tarot ={
 				"Apparently base game",
-				"{C:tarot}Tarot Cards{} look like this.",
-				"Except for... What?"
+				"{C:tarot}Tarot Cards{} art",
+				"looks like this.",
+				"Except for...?"
 			},
 			tennaquiz_UTDR_spectral ={
 				"Apparently base game",
-				"{C:spectral}Spectral Cards{} look like this.",
-				"Except for... What?"
+				"{C:spectral}Spectral Cards{} art",
+				"looks like this.",
+				"Except for...?"
 			},
 			tennaquiz_UTDR_satellite ={
 				"Which one of these stellar",
@@ -2152,7 +2155,8 @@ return {
 				"What's the ability of this unpleasant card?"
 			},
 			tennaquiz_UTDR_balala ={
-				"What's the name of the game you're playing?"
+				"What's the name of",
+				"the game you're playing?"
 			},
 			tennaquiz_UTDR_dev ={
 				"Who was this Mod's Director again?"
@@ -2164,7 +2168,7 @@ return {
 			tennaquiz_UTDR_reskins ={
 				"This Mod retextures all",
 				"Vanilla {C:attention}Consumable{} types.",
-				"Except for... what?"
+				"Except for...?"
 			}
 		},
 		dictionary = {

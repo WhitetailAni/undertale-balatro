@@ -256,7 +256,10 @@ SMODS.Joker {
 	pos = { x = 4, y = 4 },
 	cost = 6,
 	config = {
-		selected_hand = "High Card"
+		extra = {
+			xmult = 3,
+			won = false
+		}
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { G.localization.misc.poker_hands[card.ability.selected_hand], localize("k_tarot") } }
@@ -293,12 +296,12 @@ SMODS.Joker {
 		end]]
 
 		if context.UTDR_on_play_press then
-			UTDR_Tenna.start_quiz()
+			UTDR_Tenna.start_quiz(nil, card)
 		end
 
 		if context.joker_main then
 			return {
-				message = UTDR_Tenna.won and "Winner!" or "Fail!"
+				xmult = UTDR_Tenna.won and card.ability.extra.xmult or nil
 			}
 		end
 	end

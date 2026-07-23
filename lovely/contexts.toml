@@ -92,9 +92,10 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "card_character.lua"
-position = "at"
+position = "after"
 pattern = "delay = quip.extra and quip.extra.delay or 0.13,"
 payload = '''
-delay = self.config.args.tenna and 0.16 or quip.extra and quip.extra.delay or 0.13,'''
+timer = self.config.args.tenna and "REAL" or nil,
+'''
 
 match_indent = true
