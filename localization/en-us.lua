@@ -1978,7 +1978,7 @@ return {
 				},
 			},
 		},
-		Spectral = {
+		Spectral = dr and { -- Don't do this if Deltarune is disabled
 			c_UTDR_jorkington = {
 				name = "Jorkington",
 				text = {
@@ -2108,7 +2108,7 @@ return {
 					"{C:red}Rare{C:attention} Joker{}",
 				},
 			},
-		},
+		} or nil,
 	},
 	misc = {
 		challenge_names = {
@@ -2130,18 +2130,18 @@ return {
 				"Seriously, I don't remember."
 			},
 			tennaquiz_UTDR_jokers ={
-				"Apparently base game {C:attention}Jokers",
-				"look like this.",
+				"Apparently base game",
+				"{C:attention}Jokers{} look like this.",
 				"Except for... What?"
 			},
 			tennaquiz_UTDR_tarot ={
-				"Apparently base game {C:tarot}Tarot Cards",
-				"look like this.",
+				"Apparently base game",
+				"{C:tarot}Tarot Cards{} look like this.",
 				"Except for... What?"
 			},
 			tennaquiz_UTDR_spectral ={
-				"Apparently base game {C:tarot}Spectral Cards",
-				"look like this.",
+				"Apparently base game",
+				"{C:spectral}Spectral Cards{} look like this.",
 				"Except for... What?"
 			},
 			tennaquiz_UTDR_satellite ={
@@ -2163,7 +2163,7 @@ return {
 			},
 			tennaquiz_UTDR_reskins ={
 				"This Mod retextures all",
-				"Vanilla Consumable types.",
+				"Vanilla {C:attention}Consumable{} types.",
 				"Except for... what?"
 			}
 		},

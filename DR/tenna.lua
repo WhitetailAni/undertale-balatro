@@ -60,7 +60,7 @@ UTDR_Tenna = {
 		local cards = type(quiz.cards) == "function" and quiz:cards() or quiz.cards or {}
 
 		for _, v in ipairs(cards) do
-			local c = SMODS.create_card(type(v) == "table" and v or {key=v, area = area, no_edition = true})
+			local c = SMODS.create_card(type(v) == "table" and v or {key=v, area = area, no_edition = true, soulable = false})
 			area:emplace(c)
 		end
 
@@ -116,7 +116,199 @@ UTDR_Tenna = {
 		UTDR_Tenna.quiz_pool[#UTDR_Tenna.quiz_pool+1] = key
 		UTDR_Tenna.quizzes[key] = t
 		return t
-	end
+	end,
+	FakerQuiz = function(t)
+		function t:cards()
+			local cards = {}
+			local fakeable_count = 0
+
+			--print(t.pool)
+			for i = 1, t.count do
+				cards[#cards+1] = pseudorandom_element(G.P_CENTER_POOLS[t.pool], "UTDR_quiz_fakes", {in_pool = function(v, args)
+					if t.in_pool and not t:in_pool(v,args) then return false end -- Force fakers in if not enough have appeared
+					for _, v2 in ipairs(cards) do if v.key == v2 then return false end end
+					if t.count-i < t.faker_count-fakeable_count then return t.fake.cards[v.key] or false end -- Force fakers in if not enough have appeared
+					return true
+				end}).key
+				
+				fakeable_count = fakeable_count + (t.fake.cards[cards[#cards] ] and 1 or 0)
+			end
+			return cards
+		end
+
+		local old_post = t.card_post or function() end
+		function t:card_post(area)
+			area:shuffle("UTDR_quizarea")
+
+			-- Set Non-Faker sprites
+			if t.not_fake then
+				for i, v in ipairs(area.cards) do
+					if t.not_fake.cards[v.config.center_key] then
+					v.children.center.atlas = G.ASSET_ATLAS[t.not_fake.atlas]
+					v.children.center:set_sprite_pos(t.not_fake.cards[v.config.center_key])
+					end
+				end
+			end
+
+			-- Set Faker
+			for i = 1, t.faker_count do
+				print("Setting card to faker")
+				if t.fake then
+					local c = pseudorandom_element(area.cards,"UTDR_quiz_set_fakes", {in_pool = function(v,args)
+						--print(v.config.center_key)
+						return t.fake.cards[v.config.center_key] and not v.fake
+					end})
+					print(c.config.center_key)
+					
+					c.children.center.atlas = G.ASSET_ATLAS[t.fake.atlas]
+					c.children.center:set_sprite_pos(t.fake.cards[c.config.center_key])
+					
+					c.fake = true
+				end
+			end
+
+			old_post(area)
+		end
+
+		local old_q = t.questions
+		function t:questions(area)
+			if old_q then return old_q(area) end
+			
+			local qu = {}
+			for i, v in ipairs(area.cards) do
+				qu[#qu+1] = {localize({type = 'name_text', key = v.config.center_key, set = v.config.center.set}),v.fake or false}
+			end
+			return qu
+		end
+
+		return UTDR_Tenna.Quiz(t)
+	end,
+
+	fakers = {
+		jokers = {
+			atlas = "UTDR_fakers",
+			cards = {
+				j_wrathful_joker = {x=4,y=2},
+				j_selzer = {x=5,y=2},
+				j_sock_and_buskin = {x=0,y=3},
+				j_blueprint = {x=1,y=3},
+				j_lucky_cat = {x=2,y=3},
+				j_madness = {x=3,y=3},
+				j_drunkard = {x=4,y=3},
+				j_hit_the_road = {x=5,y=3},
+				j_flash = {x=0,y=4},
+				j_oops = {x=1,y=4},
+				j_half = {x=2,y=4},
+				j_swashbuckler = {x=3,y=4},
+				j_order = {x=4,y=4},
+				j_gift = {x=5,y=4},
+				j_sixth_sense = {x=0,y=5},
+				j_credit_card = {x=1,y=5},
+				j_mr_bones = {x=2,y=5},
+				j_pareidolia = {x=3,y=5},
+				j_hanging_chad = {x=4,y=5},
+				j_loyalty_card = {x=5,y=5},
+				j_scholar = {x=0,y=6},
+				j_8_ball = {x=1,y=6},
+				j_castle = {x=2,y=6},
+				j_abstract = {x=3,y=6},
+				j_runner = {x=4,y=6},
+				j_acrobat = {x=5,y=6},
+			}
+		},
+		tarot = {
+			atlas = "UTDR_fakers",
+			cards = {
+				c_justice = {x=0,y=0},
+				c_wheel_of_fortune = {x=1,y=0},
+				c_hermit = {x=2,y=0},
+				c_high_priestess = {x=3,y=0},
+				c_death = {x=4,y=0},
+				c_emperor = {x=5,y=0},
+				c_devil = {x=0,y=1},
+				c_magician = {x=1,y=1},
+				c_tower = {x=2,y=1},
+			}
+		},
+		spectral = {
+			atlas = "UTDR_fakers",
+			cards = {
+				c_anch = {x=3,y=1},
+				c_ouija = {x=4,y=1},
+				c_aura = {x=5,y=1},
+				c_medium = {x=0,y=2},
+				c_familiar = {x=1,y=2},
+				c_sigil = {x=2,y=2},
+				c_talisman = {x=3,y=2},
+			}
+		},
+		tarot_vanilla = { -- For using Vanilla Tarot sprites
+			atlas = "Tarot",
+			cards = {
+				c_fool = {x=0,y=0},
+				c_magician = {x=1,y=0},
+				c_high_priestess = {x=2,y=0},
+				c_empress = {x=3,y=0},
+				c_emperor = {x=4,y=0},
+				c_heirophant = {x=5,y=0},
+				c_lovers = {x=6,y=0},
+				c_chariot = {x=7,y=0},
+				c_justice = {x=8,y=0},
+				c_hermit = {x=9,y=0},
+				c_wheel_of_fortune = {x=0,y=1},
+				c_strength = {x=1,y=1},
+				c_hanged_man = {x=2,y=1},
+				c_death = {x=3,y=1},
+				c_temperance = {x=4,y=1},
+				c_devil = {x=5,y=1},
+				c_tower = {x=6,y=1},
+				c_star = {x=7,y=1},
+				c_moon = {x=8,y=1},
+				c_sun = {x=9,y=1},
+				c_judgement = {x=0,y=2},
+				c_world = {x=1,y=2},
+			}
+		},
+		spectral_vanilla = { -- For using Vanilla Tarot sprites
+			atlas = "Spectral",
+			cards = {
+				c_familiar = {x=0,y=4},
+				c_grim = {x=1,y=4},
+				c_incantation = {x=2,y=4},
+				c_talisman = {x=3,y=4},
+				c_aura = {x=4,y=4},
+				c_wraith = {x=5,y=4},
+				c_sigil = {x=6,y=4},
+				c_ouija = {x=7,y=4},
+				c_ectoplasm = {x=8,y=4},
+				c_immolate = {x=9,y=4},
+				c_ankh = {x=0,y=5},
+				c_deja_vu = {x=1,y=5},
+				c_hex = {x=2,y=5},
+				c_trance = {x=3,y=5},
+				c_medium = {x=4,y=5},
+				c_cryptid = {x=5,y=5},
+			}
+		},
+		spectral_names = {
+			c_familiar = "Familiar",
+			c_grim = "Grim",
+			c_incantation = "Incantation",
+			c_talisman = "Talisman",
+			c_aura = "Aura",
+			c_wraith = "Wraith",
+			c_sigil = "Sigil",
+			c_ouija = "Ouija",
+			c_ectoplasm = "Ectoplasm",
+			c_immolate = "Immolate",
+			c_ankh = "Ankh",
+			c_deja_vu = "Deja Vu",
+			c_hex = "Hex",
+			c_trance = "Trance",
+			c_medium = "Medium",
+			c_cryptid = "Cryptid",
+		}
+	}
 }
 
 -- Modified version of slider to act as a timer instead
@@ -232,9 +424,43 @@ UTDR_Tenna.Quiz{
 }
 
 -- These need more effort to make
---[[UTDR_Tenna.Quiz{
-	key = "jokers"
+UTDR_Tenna.FakerQuiz{
+	key = "jokers",
+	fake = UTDR_Tenna.fakers.jokers,
+	count = 4,
+	faker_count = 1,
+	pool = "Joker",
+	in_pool = function(self,v,args) return not v.mod end -- Vanilla Jokers Only
 }
+
+UTDR_Tenna.FakerQuiz{
+	key = "tarot",
+	fake = UTDR_Tenna.fakers.tarot,
+	not_fake = UTDR_Tenna.fakers.tarot_vanilla,
+	count = 4,
+	faker_count = 1,
+	pool = "Tarot",
+	in_pool = function(self,v,args) return not v.mod end -- Vanilla Tarots Only
+}
+
+UTDR_Tenna.FakerQuiz{
+	key = "spectral",
+	fake = UTDR_Tenna.fakers.spectral,
+	not_fake = UTDR_Tenna.fakers.spectral_vanilla,
+	count = 4,
+	faker_count = 1,
+	pool = "Spectral",
+	in_pool = function(self,v,args) return not (v.mod or v.key == "c_soul" or v.key == "c_black_hole") end, -- Vanilla Spectrals Only, no rares
+	questions = function(area)
+		local qu = {}
+		for i, v in ipairs(area.cards) do
+			qu[#qu+1] = {UTDR_Tenna.fakers.spectral_names[v.config.center_key] or localize({type = 'name_text', key = v.config.center_key, set = v.config.center.set}),v.fake or false}
+		end
+		return qu
+	end
+}
+
+--[[
 UTDR_Tenna.Quiz{
 	key = "tarot"
 }
@@ -287,6 +513,7 @@ UTDR_Tenna.Quiz{
 
 UTDR_Tenna.Quiz{
 	key = "dev",
+	pool = "Joker",
 	card_post = function(self, area)
 		-- I don't wanna add 4 new hidden Jokers for this. The descriptions are hidden anyways
 		for i = 0, 3 do

@@ -81,3 +81,10 @@ SMODS.Atlas {
     px = 71,
     py = 71,
 }
+
+SMODS.Atlas {
+    key = "fakers",
+    path = "fakers.png",
+    px = 71,
+    py = 95,
+}
