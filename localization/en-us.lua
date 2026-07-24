@@ -2137,13 +2137,13 @@ return {
 			},
 			tennaquiz_UTDR_tarot ={
 				"Apparently base game",
-				"{C:tarot}Tarot Cards{} art",
+				"{C:tarot}Tarot{} card art",
 				"looks like this.",
 				"Except for...?"
 			},
 			tennaquiz_UTDR_spectral ={
 				"Apparently base game",
-				"{C:spectral}Spectral Cards{} art",
+				"{C:spectral}Spectral{} cardart",
 				"looks like this.",
 				"Except for...?"
 			},
@@ -2159,14 +2159,14 @@ return {
 				"the game you're playing?"
 			},
 			tennaquiz_UTDR_dev ={
-				"Who was this Mod's Director again?"
+				"Who was this mod's Director again?"
 			},
 			tennaquiz_UTDR_jokercount ={
 				"How many {C:attention}Jokers{} does this",
-				"wonderful Mod add?"
+				"wonderful mod add?"
 			},
 			tennaquiz_UTDR_reskins ={
-				"This Mod retextures all",
+				"This nod retextures all",
 				"Vanilla {C:attention}Consumable{} types.",
 				"Except for...?"
 			}

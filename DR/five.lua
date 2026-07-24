@@ -5,7 +5,7 @@ SMODS.Joker {
 		rank_increase = 1,
 	},
 	loc_vars = function(self, info_queue, card)
-		if math.fmod(os.time(), 1024) == 0 then
+		if math.fmod(os.time(), 512) == 0 then
 			return {
 				vars = { card.ability.rank_increase },
 				key = "j_UTDR_xaviers_lake",
@@ -336,7 +336,7 @@ SMODS.Joker {
 		all_flowers = false,
 		orange_active = false,
 		final_hand = false,
-		cannot_speak = false,
+		udid = 0,
 	},
 	loc_vars = function(self, info_queue, card)
 		if not card.debuff then
@@ -355,6 +355,13 @@ SMODS.Joker {
 		return { vars = { card.ability.xmult, localize("9", "ranks") or "9" } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
+		if not from_debuff then
+			card.ability.udid = pseudorandom("flowery_udid")
+			if #SMODS.find_card("j_UTDR_flowery") == 0 then
+				G.GAME.flowery_udid = card.ability.udid
+			end
+		end
+	
 		self:last_jarona(card)
 	end,
 	rarity = 3,
@@ -425,8 +432,130 @@ SMODS.Joker {
 			if context.other_card:get_id() == 9 then
 				return {
 					xmult = card.ability.xmult,
-					card = context.blueprint_card or card
 				}
+			end
+		elseif (context.selling_card and is_card_flower(context.card, true, false)) or context.selling_self or (context.joker_type_destroyed and context.card.config.center.key == "j_UTDR_flowery") then
+			if card.ability.udid == G.GAME.flowery_udid then
+				local floweries = SMODS.find_card("j_UTDR_flowery")
+				G.GAME.flowery_udid = floweries[#floweries].ability.udid
+			end
+			play_flowery_sound("goodbye")
+		elseif card.ability.udid == G.GAME.flowery_udid and not context.blueprint then
+			if context.showdown_blind_effect then
+				play_flowery_sound("nonono")
+			elseif context.after then
+				card.ability.orange_active = false
+			elseif context.before then
+				self:last_jarona(card)
+			elseif context.joker_main then
+				local oranges = SMODS.find_card("j_UTDR_orange")
+				for i = 1, #oranges do
+					if oranges[i].ability.card_was_sold then
+						card.ability.orange_active = true
+					end
+				end
+				if G.GAME.current_round.hands_left == 0 then
+					play_flowery_sound("last_jarona")
+					card.ability.final_hand = true
+				elseif card.ability.all_flowers then
+					play_flowery_sound_random({
+						"last_jarona",
+						"lend_me_your_power",
+						"omega_flowery"
+					})
+				elseif not card.ability.orange_active then
+					play_flowery_sound_grabbag()
+				end
+			elseif context.blind_defeated then
+				if card.ability.final_hand and pseudorandom("its_my_jarona") > 0.67 then
+					play_flowery_sound("heh_its_my_jarona")
+					card.ability.final_hand = false
+				else
+					play_flowery_sound_random({
+						"heh_one_more_for_the_fans",
+						"heh_its_my_jarona",
+						"according_to_plant",
+						"wow",
+						"thatsgreat",
+						"leaf_it_to_me",
+						"give_it_to_you",
+					})
+				end
+			elseif context.game_over or context.skipping_booster then
+				play_flowery_sound_random({
+					"sustingus",
+					"nonono",
+					"goodbye",
+					"go_home",
+					"get_a_chance_1",
+					"get_a_chance_2",
+					"forget_it"
+				})
+			elseif context.card_added then
+				if context.card.config.center.key == "j_UTDR_ralsei" then
+					play_flowery_sound("hey_raly")
+				elseif context.card.config.center.key == "j_UTDR_susie" then
+					if #SMODS.find_card("j_UTDR_kris") > 0 then
+						play_flowery_sound("my_favorite_two")
+					else
+						play_flowery_sound("susie")
+					end
+				elseif context.card.config.center.key == "j_UTDR_kris" then
+					if #SMODS.find_card("j_UTDR_susie") > 0 then
+						play_flowery_sound("my_favorite_two")
+					else
+						play_flowery_sound_random({
+							"kris",
+							"grown_like_a_turnip",
+						})
+					end
+				elseif context.card.config.center.key == "j_UTDR_asgore" then
+					if #SMODS.find_card("j_UTDR_kris") > 0 then
+						play_flowery_sound("your_dad")
+					else
+						play_flowery_sound("my_king")
+					end
+				elseif context.card.config.center.key == "j_UTDR_flowery" then
+					play_flowery_sound_random({
+						"flowery",
+						"itsme",
+						"leaf_it_to_me",
+						"flowery",
+						"flowery2",
+					})
+				elseif is_card_flower(context.card, true, false) then
+					play_flowery_sound_random({
+						"its_so_human",
+						"my_human",
+					})
+					if context.card.config.center.key == "j_UTDR_pink" and card.ability.all_flowers then
+						context.card:set_eternal(true)
+						context.card:set_edition({ negative = true }, true)
+					end
+				elseif (not context.buying_self or context.open_booster) and context.card.config.center.set == "Joker" then
+					play_flowery_sound_random({
+						"calling_for_help",
+						"heytherelittleguy",
+						"heyguysithinkifoundaglue",
+					})
+				else
+					play_flowery_sound_random({
+						"sorrytokeepyouwaiting1",
+						"sorrytokeepyouwaiting2",
+						"sorrytokeepyouladies",
+						"sorrytokeepaladyinwaiting",
+						"imsorryonceagainikeptaladyinwaiting",
+						"hereicomesanfrandisco",
+						"glue",
+					})
+				end
+			elseif context.modify_shop_card and context.card == card and not context.blueprint then
+				play_flowery_sound_random({
+					"heytherelittleguy",
+					"heyguys",
+					"hey",
+					"hey_boys",
+				})
 			end
 		end
 	end
@@ -862,7 +991,7 @@ SMODS.Joker {
 		elseif context.selling_self then
 			local flowerys = SMODS.find_card("j_UTDR_flowery", true)
 			for i = 1, #flowerys do
-				flowerys[i].config.center.config.orange_active = false
+				flowerys[i].ability.orange_active = false
 			end
 		elseif context.joker_main and card.ability.card_was_sold and not card.ability.all_flowers then
 			if #SMODS.find_card("j_UTDR_flowery") > 0 and G.GAME.current_round.hands_left > 0 then

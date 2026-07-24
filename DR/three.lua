@@ -268,33 +268,6 @@ SMODS.Joker {
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 	end,
 	calculate = function(self, card, context)
-		-- Old behaviour :p
-		--[[if context.before and context.cardarea == G.jokers and context.scoring_name == card.ability.selected_hand then
-			G.E_MANAGER:add_event(Event({
-				trigger = 'after',
-				delay = 0.4,
-				func = function()
-					if G.consumeables.config.card_limit > #G.consumeables.cards then
-						play_sound('timpani')
-						local new_card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'tenna')
-						new_card:add_to_deck()
-						G.consumeables:emplace(new_card)
-						card:juice_up(0.3, 0.5)
-						local number = pseudorandom_element({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" },
-							"tenna_blip")
-						play_sound('UTDR_tenna_blip_' .. number, 1.0, 0.7)
-						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Amazing!" })
-					end
-					return true
-				end
-			}))
-		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
-			while not G.GAME.hands[card.ability.selected_hand].visible do
-				card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
-			end
-		end]]
-
 		if context.UTDR_on_play_press then
 			UTDR_Tenna.start_quiz(nil, card)
 		end
