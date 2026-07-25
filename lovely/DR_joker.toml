@@ -306,7 +306,7 @@ end
 if #jokers == 0 then jokers = fallback_jokers end 
 local _card = pseudorandom_element(jokers, pseudoseed('crimson_heart'))
 if _card.config.center.key == "j_UTDR_flowery" then
-	play_flowery_sound("nonono")
+	SMODS.play_sound("UTDR_flowery_nonono", 1.0, 0.7)
 	--[[table.remove(jokers, flowery_index)
 	_card = pseudorandom_element(jokers, pseudoseed('crimson_heart'))]]
 end

@@ -200,7 +200,6 @@ if UTDR.config_file.deltarune then
 	
 	assert(SMODS.load_file('DR/four.lua'))()
 	assert(SMODS.load_file('DR/five.lua'))()
-	assert(SMODS.load_file('DR/flowery.lua'))()
 	
 	assert(SMODS.load_file('DR/66.lua'))()
 	assert(SMODS.load_file('DR/99.lua'))()
