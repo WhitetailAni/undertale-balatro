@@ -1742,7 +1742,7 @@ return {
 				},
 			},
 			j_UTDR_netskie_disguise = {
-				name = "Default",
+				name = "Netskie",
 				text = {
 					"{E:1,C:netskie}Kee kee~"
 				},

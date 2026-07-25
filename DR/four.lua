@@ -333,6 +333,65 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 0, y = 9 },
 	cost = 7,
+	add_to_deck = function(self, card, from_debuff)
+		self:change_blind_text()
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		self:change_blind_text()
+	end,
+	change_blind_text = function(self)
+		G.FUNCS.blind_chip_UI_scale(G.hand_text_area.blind_chips) --set the blind text during/after a round back
+		
+		--set the blind text on selection screen back
+		if G.blind_select_opts then --make sure the game wont attempt to get a nonexistent UI element
+			--we have to do it 1 for each blind. if you add more than the standard small, big, boss blinds, tough luck!
+			--i tried to do it programatic by looping over G.blind_select_opts, but wasn't able to get it working reliably.
+			local small_baby = G.blind_select_opts.small.parent
+			G.blind_select_opts.small = nil
+			G.blind_select_opts.small = UIBox{
+			  T = {small_baby.T.x, 0, 0, 0, },
+			  definition =
+				{n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={
+				  UIBox_dyn_container({create_UIBox_blind_choice('Small')},false,get_blind_main_colour('Small'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
+				}},
+			  config = {align="bmi",
+						offset = {x=0,y=G.ROOM.T.y + 9},
+						major = small_baby,
+						xy_bond = 'Weak'
+					  }
+			}
+			
+			local big_baby = G.blind_select_opts.big.parent
+			G.blind_select_opts.big = nil
+			G.blind_select_opts.big = UIBox{
+			  T = {big_baby.T.x, 0, 0, 0, },
+			  definition =
+				{n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={
+				  UIBox_dyn_container({create_UIBox_blind_choice('Big')},false,get_blind_main_colour('Big'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
+				}},
+			  config = {align="bmi",
+						offset = {x=0,y=G.ROOM.T.y + 9},
+						major = big_baby,
+						xy_bond = 'Weak'
+					  }
+			}
+			
+			local boss_baby = G.blind_select_opts.boss.parent
+			G.blind_select_opts.boss = nil
+			G.blind_select_opts.boss = UIBox{
+			  T = {boss_baby.T.x, 0, 0, 0, },
+			  definition =
+				{n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={
+				  UIBox_dyn_container({create_UIBox_blind_choice('Boss')},false,get_blind_main_colour('Boss'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
+				}},
+			  config = {align="bmi",
+						offset = {x=0,y=G.ROOM.T.y + 9},
+						major = boss_baby,
+						xy_bond = 'Weak'
+					  }
+			}
+        end
+	end,
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 3, card.ability.retrigger_chance, 'DR_sound_of_justice')
 		return { vars = { probabilities_normal, odds } }
