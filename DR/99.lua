@@ -547,6 +547,19 @@ SMODS.Joker {
 		repetitions = 2
 	},
 	loc_vars = function(self, info_queue, card)
+		local ralseis = true
+		if not ralseis then
+			return {
+				key = "j_UTDR_ralseis",
+				vars = {
+					card.ability.selected_rank,
+					card.ability.selected_suit,
+					card.ability.repetitions,
+					colours = {
+						G.C.SUITS[card.ability.selected_suit] }
+				}
+			}
+		end
 		return {
 			vars = {
 				card.ability.selected_rank,
@@ -576,8 +589,15 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and (context.other_card:is_suit(card.ability.selected_suit) or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == card.ability.selected_rank then
+			local ralseis = true
+			if not ralseis then
+				return {
+					message = "",
+					repetitions = card.ability.repetitions
+				}
+			end
 			return {
-				repetitions = card.ability.repetitions,
+				repetitions = card.ability.repetitions
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			local selected_card = pseudorandom_element(G.playing_cards, "ralsei")

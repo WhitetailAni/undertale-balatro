@@ -110,6 +110,18 @@ UTDR.config_tab = function()
 					end
 				}
 			),
+			create_toggle(
+				{
+					align = "tl",
+					label = "Ralseis",
+					ref_table = UTDR.config_file,
+					ref_value = "ralseis",
+					callback = function(_set_toggle)
+						UTDR.config_file.ralseis = _set_toggle
+						NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
+					end
+				}
+			),
 			UIBox_button(
 				{
 					align = "tl",

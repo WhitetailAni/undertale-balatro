@@ -1,1 +1,1 @@
-return {["deltarune"]=true,["undertale"]=true,["voiceclips"]=true,}
+return {["deltarune"]=true,["undertale"]=true,["voiceclips"]=true,["ralseis"]=false}
