@@ -1617,7 +1617,7 @@ return {
 					"scored are at least",
 					"{C:attention}#1#%{} of required chips,",
 					"gains {X:mult,C:white}X#2#{} Mult when",
-					"Death is prevented",
+					"{C:attention}Death is prevented{}",
 					"{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)",
 				},
 				name = "Omega Flowey",

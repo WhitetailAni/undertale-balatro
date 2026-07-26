@@ -515,10 +515,12 @@ SMODS.Joker {
 		joker_rarity(0.666, 0.666, 0.666, 0.006)
 		play_sound("UTDR_gaster", 1.0, 0.7)
 		card.ability.in_build = true
+		ease_background_colour{new_colour = G.C.GASTER, contrast = 1}
 	end,
 	update = function(self, card, dt)
 		if card.ability.in_build then
 			joker_rarity(0.666, 0.666, 0.666, 0.006)
+			ease_background_colour{new_colour = G.C.GASTER, contrast = 1}
 		end
 	end,
 	remove_from_deck = function(self, card, from_debuff)

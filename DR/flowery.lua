@@ -869,19 +869,12 @@ SMODS.Joker {
                     else
                         self:play_flowery_sound("my_king")
                     end
-				elseif context.card.config.center.key == "j_UTDR_asgore" then
-					if #SMODS.find_card("j_UTDR_kris") > 0 then
-						self:play_flowery_sound("your_dad")
-					else
-						self:play_flowery_sound("my_king")
-					end
 				elseif context.card.config.center.key == "j_UTDR_flowery" then
 					self:play_flowery_sound_random({
 						"flowery",
+						"flowery2",
 						"itsme",
 						"leaf_it_to_me",
-						"flowery",
-						"flowery2",
 					})
 				elseif self:is_card_flower(context.card, true, false) then
 					self:play_flowery_sound_random({
