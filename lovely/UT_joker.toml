@@ -90,11 +90,16 @@ CATTY = HEX('cbafed'),
 DOG = HEX('dddddd'),
 
 FLOWER_AQUA = HEX('46e3ff'),
-FLOWER_SETH = HEX('eb63eb'),
+FLOWER_SETH = HEX('bd39bd'),
 FLOWER_ORANGE = HEX('ffa040'),
 FLOWER_GREEN = HEX('00a651'),
 FLOWER_BLUE = HEX('00aef0'),
 FLOWER_YELLOW = HEX('fff200'),
+
+FLOWER_AQUA_BG = HEX('3ab1c6'),
+FLOWER_SETH_BG = HEX('b141b1'),
+FLOWER_YELLOW_BG = HEX('b1a906'),
+
 '''
 match_indent = true
 

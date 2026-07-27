@@ -32,22 +32,23 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
-target = "functions/common_events.lua"
-pattern = "elseif _c.set == 'Planet' then"
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = '''
+context.old_parameters = {}
+context.new_parameters = {}
+'''
 position = "after"
 payload = '''
-local shadowguys = SMODS.find_card("j_UTDR_shadowguy")
-local shadowguys_chips_factor = 0
-local shadowguys_mult_factor = 0
-if #shadowguys then
-	for i = 1, #shadowguys do
-		shadowguys_chips_factor = shadowguys_chips_factor + shadowguys[i].ability.chip_gain
-		shadowguys_mult_factor = shadowguys_mult_factor + shadowguys[i].ability.mult_gain
-	end
+if args.from and args.from.config.center.key == "j_UTDR_shadowguy" then
+	G.E_MANAGER:add_event(Event({
+		func = function()
+			play_sound(pseudorandom_element({"UTDR_shadowguy_1", "UTDR_shadowguy_2", "UTDR_shadowguy_3"}, "shadowguy_sfx"), 1.0, 0.7)
+			return true
+		end
+	}))
 end
 '''
 match_indent = true
-
 
 #mizzle stuffs
 [[patches]]

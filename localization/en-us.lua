@@ -2173,8 +2173,8 @@ return {
 		},
 		dictionary = {
 			totem_UTDR_omegaflowey = "HAHAHAHAHAHAHAHAHAHAHA!!",
-			totem_UTDR_dogcheck = "Placeholder text i Dont Know what should go here okay.",
-			totem_UTDR_blue = "Still Dont !!",
+			totem_UTDR_dogcheck = "Checked!",
+			totem_UTDR_blue = "This is a comedy, not a tragedy!",
 			totem_UTDR_buttspie = "Spared by Buttspie",
 			k_UTDR_upgrade_qu = "Upgrade?",
 

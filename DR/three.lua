@@ -233,8 +233,8 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "shadowguy",
 	config = {
-		chip_gain = 5,
-		mult_gain = 2
+		chips = 5,
+		mult = 2
 	},
 	rarity = 1,
 	blueprint_compat = false,
@@ -243,8 +243,20 @@ SMODS.Joker {
 	pos = { x = 2, y = 7 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chip_gain, card.ability.mult_gain } }
+		return { vars = { card.ability.chips, card.ability.mult } }
 	end,
+	calculate = function(self, card, context)
+		if context.poker_hand_changed and context.card.config.center.key ~= "j_UTDR_shadowguy" then --shadowguys cannot feed off each other under ANY CIRCUMSTANCES (it crashes the game instantly)
+			SMODS.upgrade_poker_hands({
+				hands = context.scoring_name,
+				func = function(base, hand, parameter, level_up)
+					return base + card.ability[parameter]
+				end,
+				level_up = 0,
+				from = card,
+			})
+		end
+	end
 }
 
 SMODS.Joker {

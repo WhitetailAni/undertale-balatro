@@ -74,6 +74,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					ease_background_colour{new_colour = G.C.FLOWER_AQUA_BG, contrast = 1}
+					return true
+				end
+			}))
 			return {
 				mult = (math.floor(pseudorandom("aqua") * 6) + 1),
 				card = context.blueprint_card or card
@@ -169,6 +175,13 @@ SMODS.Joker {
 				end
 			end
 			
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					ease_background_colour{new_colour = G.C.FLOWER_SETH_BG, contrast = 1}
+					return true
+				end
+			}))
+			
 			return {
 				level_up = 1,
 				level_up_hand = most_played,
@@ -259,6 +272,12 @@ SMODS.Joker {
 				if not context.blueprint then
 					card.ability.all_punishments_worse_than_burying = true
 				end
+				G.E_MANAGER:add_event(Event({
+				func = function()
+					ease_background_colour{new_colour = G.C.FLOWER_YELLOW_BG, contrast = 1}
+					return true
+				end
+			}))
 				return {
 					xmult = card.ability.xmult
 				}
@@ -463,6 +482,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and G.GAME.chips / G.GAME.blind.chips >= card.ability.required_chips / 100 and not context.blueprint then
+			ease_background_colour{new_colour = G.C.FLOWER_BLUE, contrast = 1}
 			G.E_MANAGER:add_event(Event({
 				trigger = 'after',
 				delay = 0.4,
@@ -760,6 +780,12 @@ SMODS.Joker {
 				colour = G.C.FILTER
 			}
 		elseif context.joker_main and card.ability.card_was_sold and not card.ability.all_flowers then
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					ease_background_colour{new_colour = G.C.FLOWER_ORANGE, contrast = 1}
+					return true
+				end
+			}))
 			return {
 				mult = card.ability.mult
 			}
@@ -896,7 +922,7 @@ SMODS.Joker {
 		}
 	end,
 	calculate = function(self, card, context)
-		if context.open_booster then
+		if context.ending_booster then
 			local do_create = false
 			if not context.blueprint then
 				card.ability.extra.booster_counter = card.ability.extra.booster_counter + 1
@@ -922,12 +948,21 @@ SMODS.Joker {
 							func = function() -- This is for timing purposes, everything here runs after the message
 								G.E_MANAGER:add_event(Event({
 									func = (function()
+										ease_background_colour{new_colour = G.C.FLOWER_GREEN, contrast = 1}
 										SMODS.add_card {
 											set = card.ability.extra.card_type,
 											edition = "e_negative",
 											key_append = 'UTDR_green' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
 										}
 										G.GAME.consumeable_buffer = 0
+										G.E_MANAGER:add_event(Event({
+											trigger = 'after',
+											delay = 0.7,
+											func = function()
+												ease_background_colour_blind(G.STATES.SHOP)
+												return true
+											end
+										}))
 										return true
 									end)
 								}))
