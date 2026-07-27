@@ -205,12 +205,15 @@ SMODS.Joker {
 		totem_chance = 6,
 	},
 	--unlocked = false
-	rarity = "UTDR_dog",
+	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "DR_jokers",
 	pos = { x = 9, y = 11 },
 	cost = 6,
+	set_badges = function(self, card, badges)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+	end,
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.totem_chance, 'DR_dogcheck')
 		return { vars = { probabilities_normal, odds } }

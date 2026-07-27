@@ -173,12 +173,15 @@ SMODS.Joker {
 		xmult = 3,
 		slots = 2,
 	},
-	rarity = "UTDR_dog",
+	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
 	pos = { x = 5, y = 2 },
 	cost = 7,
+	set_badges = function(self, card, badges)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult, card.ability.slots } }
 	end,
@@ -245,7 +248,7 @@ SMODS.Joker {
 	in_pool = function()
 		return false
 	end,
-	rarity = "UTDR_dog",
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
@@ -262,6 +265,9 @@ SMODS.Joker {
 	end,
 	--comment out this function and then start a blind with annoying dog! it's fun!!
 	--oooops did i reenable it with a really slim chance..... oops!!! oooops!!!!!!!!
+	set_badges = function(self, card, badges)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.mult } }
 	end,
@@ -283,7 +289,7 @@ SMODS.Joker {
 	},
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
-	rarity = "UTDR_dog",
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -300,6 +306,9 @@ SMODS.Joker {
 		end
 	end,
 	--unlocked = false
+	set_badges = function(self, card, badges)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+	end,
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
 	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
 		if other_card.config.center.key ~= "j_UTDR_lesser_dog" then
@@ -350,12 +359,15 @@ SMODS.Joker {
 			money = false,
 		}
 	},
-	rarity = "UTDR_dog",
+	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
 	pos = { x = 4, y = 11 },
 	cost = 8,
+	set_badges = function(self, card, badges)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+	end,
 	loc_vars = function(self, info_queue, card)
 		return {
 			vars = {
@@ -417,15 +429,19 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dog_shrine",
-	rarity = "UTDR_dog",
+	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
 	atlas = "DR_jokers",
 	pos = { x = 3, y = 11 },
+	pixel_size = { h = 77 },
 	config = {
 		money = 1,
 		extra_boosters = 1
 	},
+	set_badges = function(self, card, badges)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.money } }
 	end,

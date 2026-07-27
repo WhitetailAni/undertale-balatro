@@ -678,16 +678,24 @@ SMODS.Joker {
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.in_build = true
-		play_sound("UTDR_netskie", 1.0, 0.7)
-		card:juice_up(1, 1)
-		card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
-		card.children.center:set_sprite_pos({ x = 7, y = 10 })
-		card.children.floating_sprite.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
-		card.children.floating_sprite:set_sprite_pos({ x = 1, y = 12 })
-		card:set_cost()
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				play_sound("UTDR_netskie", 1.0, 0.7)
+				card:juice_up(1, 1)
+				card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
+				card.children.center:set_sprite_pos({ x = 7, y = 10 })
+				card.children.floating_sprite.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
+				card.children.floating_sprite:set_sprite_pos({ x = 1, y = 12 })
+				card:set_cost()
+				return true
+			end
+		}))
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
+	end,
+	set_badges = function(self, card, badges)
+		badges[#badges] = create_badge("Kee kee~", G.C.GASTER, G.C.NETSKIE, 1.2)
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
 		--have to put this in an event, otherwise it doesnt work in collection tab

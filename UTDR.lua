@@ -368,10 +368,29 @@ end
 	end
 }]]
 
-SMODS.Rarity {
-	key = "dog",
-	loc_txt = "Dog",
-	badge_colour = HEX('000000'),
-	text_colour = HEX('ffffff'),
-	default_weight = 0.5,
+SMODS.PokerHand {
+    key = "him",
+    mult = 66666,
+    chips = 66666,
+    l_mult = 6666,
+    l_chips = 6666,
+    example = {
+        { 'H_6', true },
+        { 'H_6', true },
+        { 'S_6', true },
+        { 'S_6', true },
+        { 'C_6', true },
+        { 'C_6', true },
+    },
+    visible = false,
+    evaluate = function(parts, hand)
+    	--it's like it's some king of unused content....
+   		if #hand < 6 or #hand > 6 then return false end
+    	for i = 1, #hand do
+    		if hand[i].base.value ~= "6" then
+    			return { }
+    		end
+    	end
+    	return { hand }
+    end,
 }

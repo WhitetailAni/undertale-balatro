@@ -1063,7 +1063,7 @@ return {
 			j_UTDR_shadowguy = {
 				name = "Shadowguy",
 				text = {
-					"{C:attention}Poker hands{} gain an",
+					"{C:attention}Poker Hands{} gain an",
 					"additional {C:chips}+#1#{} Chips and",
 					"{C:mult}+#2#{} Mult on level up",
 				},
@@ -2171,6 +2171,14 @@ return {
 				"Except for...?"
 			}
 		},
+		poker_hands = {
+            ["UTDR_him"] = "Him",
+        },
+		poker_hand_descriptions = {
+            ["UTDR_him"] = {
+                "",
+            },
+        },
 		dictionary = {
 			totem_UTDR_omegaflowey = "HAHAHAHAHAHAHAHAHAHAHA!!",
 			totem_UTDR_dogcheck = "Checked!",
@@ -2185,6 +2193,8 @@ return {
 			k_UTDR_robot = "Roboticized!",
 			k_UTDR_yellow_thanks = "Thanks, y'all!",
 			k_upgrade_qm = "Upgrade?",
+			
+			k_dog = "Dog",
 
 			-- Deltarune Prophecy stuff
 			b_spectral_cards = dr and "Prophecy Cards" or nil,
