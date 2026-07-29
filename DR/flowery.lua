@@ -756,6 +756,7 @@ SMODS.Joker {
 			elseif context.before then
 				self:last_jarona(card)
 			elseif context.joker_main then
+				card:juice_up()
 				local oranges = SMODS.find_card("j_UTDR_orange")
 				local should_orange = false
 				for i = 1, #oranges do

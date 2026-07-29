@@ -73,8 +73,8 @@ return {
 			j_UTDR_second_sanctuary = {
 				name = "Second Sanctuary",
 				text = {
-					"{X:mult,C:white}X#1#{} Mult for each card",
-					"{C:attention}removed{} from your deck",
+					"Gains {X:mult,C:white}X#1#{} Mult for each",
+					"card {C:attention}drawn{} from your deck",
 					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
 				},
 			},
@@ -888,9 +888,23 @@ return {
 			j_UTDR_noelle = {
 				name = "Noelle",
 				text = {
-					"{C:attention}#4#s{} give {X:mult,C:white}X#1#{} Mult,",
-					"but have a {C:green}#2# in #3#{}",
+					"{C:attention}#1#s{} give {X:mult,C:white}X#2#{} Mult,",
+					"but have a {C:green}#3# in #4#{}",
 					"chance to break",
+				},
+			},
+			j_UTDR_suselle = {
+				name = "Noelle",
+				text = {
+					"{C:attention}#1#s{} give {X:mult,C:white}X#2#{} Mult,",
+					"and can {C:flower_pink}no longer break"
+				},
+			},
+			j_UTDR_noelle_side_b = {
+				name = "Noelle",
+				text = {
+					"{C:attention}#1#s{} give {X:mult,C:white}X#2#{} Mult,",
+					"and {S:1.1,C:ballgame,E:2}always{} break",
 				},
 			},
 			j_UTDR_temmie_armor = {
@@ -1090,8 +1104,8 @@ return {
 					"{C:chips}+#1#{} Chips when scored",
 				},
 			},
-			j_UTDR_human_soul = {
-				name = "Human Soul",
+			j_UTDR_fallen_human = {
+				name = "Fallen Human",
 				text = {
 					"{C:attention}+#1#{} hand size for",
 					"each {C:attention}Joker{} card",
@@ -1151,6 +1165,14 @@ return {
 					"{C:FRIEND}Creates a {C:FRIEND_PINK}#3#{C:FRIEND} card",
 					"{C:FRIEND}after {C:FRIEND_YELLOW}#1# {C:FRIEND_PINK}[#2#]{C:FRIEND} cards",
 					"{C:FRIEND}are {C:FRIEND_YELLOW}destroyed{}",
+					"{C:FRIEND}(Must have room)",
+				},
+			},
+			j_UTDR_VESSEL_FRIEND = {
+				name = "_FRIEND",
+				text = {
+					"{C:FRIEND}Creates a {C:FRIEND_PINK}#3#{C:FRIEND} card",
+					"{C:FRIEND}after any card is {C:FRIEND_YELLOW}destroyed",
 					"{C:FRIEND}(Must have room)",
 				},
 			},
@@ -1358,9 +1380,16 @@ return {
 					"containing only {E:1,C:attention}#4#s{}",
 				},
 				text = {
-					"Each played {C:attention}#4#{} gives",
-					"{X:mult,C:white}X#1#{} Mult when scored",
-					"{C:inactive}Activates after {C:attention}#2# {C:inactive}[#3#] rounds",
+					"Each played {C:attention}#1#{} gives",
+					"{X:mult,C:white}X#2#{} Mult when scored",
+					"{C:inactive}Activates after {C:attention}#3# {C:inactive}[#4#] rounds",
+				},
+				name = "{E:UTDR_asriel}ASRIEL DREEMURR",
+			},
+			j_UTDR_asriel_active = {
+				text = {
+					"Each played {C:attention}#1#{} gives",
+					"{X:mult,C:white}X#2#{} Mult when scored",
 				},
 				name = "{E:UTDR_asriel}ASRIEL DREEMURR",
 			},
@@ -1642,7 +1671,7 @@ return {
 				name = "Cloudy Glasses",
 				text = {
 					"{C:attention}#1#s{} can",
-					"{C:attention}no longer{} break",
+					"{C:attention}no longer break",
 				},
 			},
 			j_UTDR_hot_cat = {
@@ -1797,7 +1826,7 @@ return {
 				name = "Lord of the Hammer",
 			},
 			j_UTDR_pink = {
-				name = "Pink",
+				name = "{C:flower_pink}Pink",
 				text = {
 					"{C:green}#1# in #2#{} chance for",
 					"each scoring card of",
@@ -2179,6 +2208,9 @@ return {
                 "",
             },
         },
+        labels = {
+        	UTDR_friend = "Rare"
+        },
 		dictionary = {
 			totem_UTDR_omegaflowey = "HAHAHAHAHAHAHAHAHAHAHA!!",
 			totem_UTDR_dogcheck = "Checked!",
@@ -2195,6 +2227,7 @@ return {
 			k_upgrade_qm = "Upgrade?",
 			
 			k_dog = "Dog",
+			k_swoon = "SWOON",
 
 			-- Deltarune Prophecy stuff
 			b_spectral_cards = dr and "Prophecy Cards" or nil,

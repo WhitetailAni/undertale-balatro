@@ -281,22 +281,46 @@ SMODS.Joker {
 	soul_pos = { x = 6, y = 7 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult, card.ability.threshold, card.ability.turns_elapsed, localize("Ace", 'ranks') or "Ace" } }
+		local vars = {
+			(localize("Ace", 'ranks') or "Ace"),
+			card.ability.xmult,
+			card.ability.threshold,
+			card.ability.turns_elapsed,
+		} 
+		if card.ability.turns_elapsed >= card.ability.threshold then
+			return {
+				key = "j_UTDR_asriel_active",
+				vars = vars
+			}
+		end
+		return { vars = vars }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		return { vars = { localize("Ace", 'ranks') or "Ace" } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		if #SMODS.find_card("j_UTDR_fallen_human") > 0 then
+			card.ability.turns_elapsed = 6
+			play_sound("UTDR_asriel", 1.0, 0.7)
+			card:juice_up(0.3, 0.5)
+		end
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card.base.value == "Ace" and card.ability.turns_elapsed >= card.ability.threshold then
 			return {
 				xmult = card.ability.xmult
 			}
+		elseif context.card_added and context.card.config.center.key == "j_UTDR_fallen_human" then
+			card.ability.turns_elapsed = 6
+			play_sound("UTDR_asriel", 1.0, 0.7)
+			card:juice_up(0.3, 0.5)
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.turns_elapsed = card.ability.turns_elapsed + 1
-			card:juice_up(0.3, 0.4)
 			if card.ability.turns_elapsed == card.ability.threshold then
 				play_sound("UTDR_asriel", 1.0, 0.7)
 				card:juice_up(0.3, 0.5)
+			else
+				card:juice_up(0.3, 0.4)
 			end
 		end
 	end

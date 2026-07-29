@@ -15,7 +15,7 @@ SMODS.Tag {
 		}, "annoying_tag")
 		local card = SMODS.add_card({
 			set = "Joker",
-			rarity = "UTDR_dog",
+			key = key,
 			key_append = "tag_annoying",
 		})
 		card:juice_up()

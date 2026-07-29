@@ -379,9 +379,15 @@ SMODS.Joker {
 		deer_kidnapped = 0
 	},
 	loc_vars = function(self, info_queue, card)
+		if #SMODS.find_card("j_UTDR_vessel") > 0 then
+			return {
+				key = "j_UTDR_VESSEL_FRIEND",
+				vars = { card.ability.cards_destroyed, card.ability.deer_kidnapped, localize("k_spectral")
+			} }
+		end
 		return { vars = { card.ability.cards_destroyed, card.ability.deer_kidnapped, localize("k_spectral") } }
 	end,
-	rarity = 3,
+	rarity = "UTDR_FRIEND",
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -392,7 +398,7 @@ SMODS.Joker {
 			for i = 1, #context.removed do
 				card.ability.deer_kidnapped = card.ability.deer_kidnapped + 1
 
-				if card.ability.deer_kidnapped == 2 then
+				if card.ability.deer_kidnapped == 2 or #SMODS.find_card("j_UTDR_vessel") then
 					card.ability.deer_kidnapped = 0
 					play_sound("UTDR__", 1.0, 1.0)
 					if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then

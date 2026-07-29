@@ -134,9 +134,27 @@ SMODS.Joker {
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_noelle")
 		if #SMODS.find_card("j_UTDR_thornring") > 0 then
-			return { vars = { card.ability.thorn_ring_xmult, odds, odds, localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' } }
+			return {
+			key = "j_UTDR_noelle_side_b",
+			vars = {
+				localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
+				card.ability.thorn_ring_xmult,
+			} }
+		elseif #SMODS.find_card("j_UTDR_susie") > 0 then
+			return {
+			key = "j_UTDR_suselle",
+			vars = {
+				localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
+				card.ability.xmult,
+				odds,
+			} }
 		else
-			return { vars = { card.ability.xmult, probabilities_normal, odds, localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' } }
+			return { vars = {
+				localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
+				card.ability.thorn_ring_xmult,
+				probabilities_normal,
+				odds,
+			} }
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
@@ -169,6 +187,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.mod_probability and not context.blueprint and context.identifier == "glass" and not card.ability.ribbon_is_older and not context.blueprint then
+			if #SMODS.find_card("j_UTDR_susie") > 0 and #SMODS.find_card("j_UTDR_thornring") == 0 then
+				return {
+					numerator = 0,
+					denominator = card.ability.odds
+				}
+			end
 			return {
 				denominator = card.ability.odds
 			}

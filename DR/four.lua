@@ -286,37 +286,27 @@ SMODS.Joker {
 	soul_pos = { x = 0, y = 8 },
 	cost = 6,
 	config = {
-		xmult_per = 0.05,
+		xmult_gain = 0.05,
 		xmult = 1,
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_per, card.ability.xmult } }
+		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main then
+		if context.drawing_cards then
+			for i = 1, context.amount do
+				SMODS.scale_card(card, {
+					ref_table = card.ability,
+					ref_value = "xmult",
+					scalar_value = "xmult_gain",
+					no_message = true
+				})
+			end
+			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT, blocking = false })
+		elseif context.joker_main then
 			return {
 				xmult = card.ability.xmult
 			}
-		elseif context.remove_playing_cards and not context.blueprint then
-			local xmult_gain = #context.removed * card.ability.xmult_per
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							card.ability.xmult = card.ability.xmult + xmult_gain
-							return true
-						end
-					}))
-					card_eval_status_text(card, 'extra', nil, nil, nil,
-						{
-							message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.xmult + xmult_gain } },
-							colour =
-								G.C.MULT
-						})
-					return true
-				end
-			}))
-			return
 		end
 	end
 }
@@ -486,8 +476,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_stone") and not context.blueprint then
-			card.ability.mult = card.ability.mult + card.ability.mult_gain
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT })
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "mult",
+				scalar_value = "mult_gain",
+				message_colour = G.C.MULT
+			})
 		elseif context.joker_main then
 			return {
 				mult = card.ability.mult

@@ -463,6 +463,18 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
+	merge_table = function(self, regular, subs)
+		local emm = {}
+		for _, value in ipairs(regular) do
+			table.insert(emm, value)
+		end
+		for _, t6 in ipairs(subs) do
+			for _, value in ipairs(t6) do
+				table.insert(emm, value)
+			end
+		end
+		return emm
+	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
@@ -470,33 +482,51 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			local cards_destroyed = G.hand.cards
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "SWOON", colour = G.C.RED })
+			
+			local cards_to_destroy = G.hand.cards
+			
+			--wanna destroy more jokers? add an SMODS.find_card("j_jokerkey") to that array! all will be taken care of for you
+			cards_to_destroy = self:merge_table(cards_to_destroy, {
+				SMODS.find_card("j_UTDR_kris"),
+				SMODS.find_card("j_UTDR_susie"),
+				SMODS.find_card("j_UTDR_ralsei"),
+				SMODS.find_card("j_UTDR_tenna"),
+				SMODS.find_card("j_UTDR_undyne"),
+				SMODS.find_card("j_UTDR_asgore"),
+				SMODS.find_card("j_UTDR_flowery"),
+			})
+			
+			--trigger swoon graphic HERE. make sure main thread halts so cards dont get destroyed off screen
+			
 			G.E_MANAGER:add_event(Event({
-				trigger = 'after',
-				delay = 0.1,
 				func = function()
 					play_sound("UTDR_swoon", 1.0, 1.0)
 					return true
 				end
 			}))
-			for i = 1, #G.hand.cards do
-				local knife = G.hand.cards[i]
+			for i = 1, #cards_to_destroy do
+				local heart_as_my_mark = cards_to_destroy[i]
+				local is_joker = heart_as_my_mark.ability.set == "Joker"
+				local message_color = G.C.RED
+				if is_joker then
+					message_color = G.C.BALLGAME
+				end
+				card_eval_status_text(heart_as_my_mark, 'extra', nil, nil, nil, { message = localize('k_swoon'), colour = message_color, blocking = false })
 				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.1,
 					func = function()
-						card:juice_up(0.3, 0.5)
-						return true
-					end
-				}))
-				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.1,
-					func = function()
-						if SMODS.has_enhancement(knife, "m_glass") then
-							knife:shatter()
+						card:juice_up(1.2, 0.5)
+						if is_joker then
+							SMODS.scale_card(card, {
+								ref_table = card.ability,
+								ref_value = "xmult",
+								scalar_value = "xmult_gain",
+								no_message = true
+							})
+						end
+						if SMODS.has_enhancement(heart_as_my_mark, "m_glass") then
+							heart_as_my_mark:shatter()
 						else
-							knife:start_dissolve(nil, false)
+							heart_as_my_mark:start_dissolve(nil, false)
 						end
 						return true
 					end

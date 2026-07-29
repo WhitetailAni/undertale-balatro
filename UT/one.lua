@@ -261,7 +261,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "human_soul",
+	key = "fallen_human",
 	config = {
 		hand_size_gain = 1,
 		joker_count = 0,
@@ -285,18 +285,17 @@ SMODS.Joker {
 		G.hand:change_size((#G.jokers.cards * card.ability.hand_size_gain))
 		card.ability.joker_count = #G.jokers.cards
 	end,
-	update = function(self, card, dt)
-		if card.ability.in_build then
-			if card.ability.joker_count ~= #G.jokers.cards then
-				G.hand:change_size(#G.jokers.cards - card.ability.joker_count)
-				card.ability.joker_count = #G.jokers.cards
-			end
-		end
-	end,
 	remove_from_deck = function(self, card, from_debuff)
 		G.hand:change_size(-(#G.jokers.cards * card.ability.hand_size_gain))
 		card.ability.in_build = false
 	end,
+	calculate = function(self, card, context)
+		if context.card_added then
+			G.hand:change_size((#G.jokers.cards * card.ability.hand_size_gain))
+		elseif context.joker_type_destroyed then
+			G.hand:change_size(-(#G.jokers.cards * card.ability.hand_size_gain))
+		end
+	end
 }
 
 SMODS.Joker {
