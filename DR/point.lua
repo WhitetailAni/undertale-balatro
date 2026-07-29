@@ -1,3 +1,18 @@
+function points_from_rank(rank, max, decrease)
+	if rank == "T" then
+		return max
+	elseif rank == "S" then
+		return max - decrease
+	elseif rank == "A" then
+		return max - (decrease * 2)
+	elseif rank == "B" then
+		return max - (decrease * 3)
+	elseif rank == "C" then
+		return max - (decrease * 4)
+	end
+	return 0
+end
+
 function ease_points(mod, instant)
     local function _mod(mod)
     	mod = mod or 0

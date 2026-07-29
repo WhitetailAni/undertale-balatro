@@ -40,7 +40,6 @@ local sounds = {
 	"netskie",
 	"points",
 	"pipis_laugh",
-	"moss",
 	"win",
 	"lose"
 }

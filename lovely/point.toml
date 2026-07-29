@@ -15,12 +15,16 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = 'game.lua'
-pattern = '''
-voucher_text = '',
-dollars = 0,
-'''
+pattern = 'used_vouchers = {},'
 position = 'after'
-payload = 'points_ante = 0,'
+payload = '''
+ante = {
+	total_chips_required = 0,
+	chips_scored = 0,
+	hands_played = 0,
+	interest_earned = 0,
+},
+'''
 match_indent = true
 
 [[patches]]
@@ -28,7 +32,122 @@ match_indent = true
 target = '''=[SMODS _ "src/overrides.lua"]'''
 pattern = 'SMODS.calculate_context({ante_change = mod, ante_end = SMODS.ante_end})'
 position = 'before'
-payload = 'G.GAME.ante_points = 0'
+payload = '''
+--probably not use
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+add_round_eval_row({bonus = true, name='interest', pitch = pitch, dollars = G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)})
+'''
+position = 'before'
+payload = '''
+print(G.GAME.ante.interest_earned)
+print(G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5))
+G.GAME.ante.interest_earned = G.GAME.ante.interest_earned + G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'blind'
+pattern = 'self.chips = get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling'
+position = 'after'
+payload = 'G.GAME.ante.total_chips_required = G.GAME.ante.total_chips_required + self.chips'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+G.GAME.hands_played = G.GAME.hands_played + 1
+G.GAME.current_round.hands_played = G.GAME.current_round.hands_played + 1
+'''
+position = 'after'
+payload = '''
+G.GAME.ante.hands_played = G.GAME.ante.hands_played + 1
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+	dollars = dollars + G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)
+end
+'''
+position = 'after'
+payload = '''
+if G.GAME.blind.boss then
+	--set up a bunch of local equivalents to G.GAME.ante.* so i dont have to type them as much
+	local total_chips = 0 --G.GAME.ante.total_chips_required
+	local chips_scored = 0 --G.GAME.ante.chips_earned
+	local hands_played = G.GAME.ante.hands_played
+	local interest_earned = G.GAME.ante.interest_earned
+	
+	local chips_rank = "Z"
+	local hand_rank = "Z"
+	local interest_rank = "Z"
+	
+	print(G.GAME.ante)
+	
+	--add_round_eval_row({dollars = 300, bonus = true, name='custom_points'..i, pitch = pitch + 0.06, text_colour = G.C.POINTS, text = "KING OF ROLYPOLY", text_scale = 0.6})
+	
+	if chips_scored / total_chips >= 10 then
+		hand_rank = "T"
+	elseif chips_scored / total_chips >= 3 then
+		hand_rank = "S"
+	elseif chips_scored / total_chips >= 1.75 then
+		hand_rank = "A"
+	elseif chips_scored / total_chips >= 1.25 then
+		hand_rank = "B"
+	elseif chips_scored / total_chips >= 1 then --'uuuuhh but how are you gonna get less than the total ante's chip requirements' the elegant and beautiful BLUE???????????????????
+		hand_rank = "C"
+	end
+	
+	if hands_played <= 3 then
+		hand_rank = "T"
+	elseif hands_played <= 5 then
+		hand_rank = "S"
+	elseif hands_played <= 7 then
+		hand_rank = "A"
+	elseif hands_played <= 9 then
+		hand_rank = "B"
+	elseif hands_played <= 11 then
+		hand_rank = "C"
+	end
+	
+	if interest_earned >= 15 then
+		hand_rank = "T"
+	elseif interest_earned >= 12 then
+		hand_rank = "S"
+	elseif interest_earned >= 8 then
+		hand_rank = "A"
+	elseif interest_earned >= 4 then
+		hand_rank = "B"
+	elseif interest_earned >= 1 then
+		hand_rank = "C"
+	end
+	
+	print("chips_rank: "..chips_rank)
+	print("hand_rank: "..hand_rank)
+	print("interest_rank: "..interest_rank)
+	
+	print(points_from_rank(chips_rank, 250, 50))
+	print(points_from_rank(hand_rank, 250, 50))
+	print(points_from_rank(interest_rank, 200, 40))
+
+
+	--reset to 0 AFTER all calculations are complete
+	G.GAME.ante.total_chips_required = 0
+	G.GAME.ante.chips_scored = 0
+	G.GAME.ante.hands_played = 0
+	G.GAME.ante.interest_earned = 0
+end
+'''
 match_indent = true
 
 
