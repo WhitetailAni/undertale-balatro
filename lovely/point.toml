@@ -23,6 +23,7 @@ ante = {
 	chips_scored = 0,
 	hands_played = 0,
 	interest_earned = 0,
+	points_to_be_gained = 0,
 },
 '''
 match_indent = true
@@ -45,15 +46,13 @@ add_round_eval_row({bonus = true, name='interest', pitch = pitch, dollars = G.GA
 '''
 position = 'before'
 payload = '''
-print(G.GAME.ante.interest_earned)
-print(G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5))
 G.GAME.ante.interest_earned = G.GAME.ante.interest_earned + G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)
 '''
 match_indent = true
 
 [[patches]]
 [patches.pattern]
-target = 'blind'
+target = 'blind.lua'
 pattern = 'self.chips = get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling'
 position = 'after'
 payload = 'G.GAME.ante.total_chips_required = G.GAME.ante.total_chips_required + self.chips'
@@ -75,6 +74,44 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
+pattern = 'SMODS.last_hand_score = SMODS.calculate_round_score()'
+position = 'after'
+payload = 'G.GAME.ante.chips_scored = G.GAME.ante.chips_scored + SMODS.calculate_round_score()'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'ease_dollars(G.GAME.current_round.dollars)'
+position = 'after'
+payload = '''
+if G.GAME.ante.points_to_be_gained > 0 then
+	ease_points(G.GAME.ante.points_to_be_gained)
+	if G.GAME.ante.points_to_be_gained > 1000 then
+		play_sound('UTDR_points20', 1.0, 0.6)
+	else
+		play_sound('UTDR_points10', 1.0, 0.6)
+	end
+	G.GAME.ante.points_to_be_gained = 0
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "local blind_sprite = SMODS.create_sprite(0, 0, 0.7,0.7, 'tags', copy_table(config.pos))"
+position = 'after'
+payload = '''
+if config.tag.key == "tag_UTDR_t_rank" then
+	local blind_sprite = SMODS.create_sprite(0, 0, 0.7,0.7, 'UTDR_tag', copy_table(config.pos))
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
 pattern = '''
 	dollars = dollars + G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)
 end
@@ -82,9 +119,9 @@ end
 position = 'after'
 payload = '''
 if G.GAME.blind.boss then
-	--set up a bunch of local equivalents to G.GAME.ante.* so i dont have to type them as much
-	local total_chips = 0 --G.GAME.ante.total_chips_required
-	local chips_scored = 0 --G.GAME.ante.chips_earned
+	--set up local equivalents to G.GAME.ante.* so i dont have to type them as much
+	local total_chips = G.GAME.ante.total_chips_required
+	local chips_scored = G.GAME.ante.chips_scored
 	local hands_played = G.GAME.ante.hands_played
 	local interest_earned = G.GAME.ante.interest_earned
 	
@@ -92,20 +129,16 @@ if G.GAME.blind.boss then
 	local hand_rank = "Z"
 	local interest_rank = "Z"
 	
-	print(G.GAME.ante)
-	
-	--add_round_eval_row({dollars = 300, bonus = true, name='custom_points'..i, pitch = pitch + 0.06, text_colour = G.C.POINTS, text = "KING OF ROLYPOLY", text_scale = 0.6})
-	
 	if chips_scored / total_chips >= 10 then
-		hand_rank = "T"
+		chips_rank = "T"
 	elseif chips_scored / total_chips >= 3 then
-		hand_rank = "S"
+		chips_rank = "S"
 	elseif chips_scored / total_chips >= 1.75 then
-		hand_rank = "A"
+		chips_rank = "A"
 	elseif chips_scored / total_chips >= 1.25 then
-		hand_rank = "B"
-	elseif chips_scored / total_chips >= 1 then --'uuuuhh but how are you gonna get less than the total ante's chip requirements' the elegant and beautiful BLUE???????????????????
-		hand_rank = "C"
+		chips_rank = "B"
+	elseif chips_scored / total_chips >= 1 then --"uuuuhh but how are you gonna get less than the total ante chip requirements" the elegant and beautiful BLUE???????????????????
+		chips_rank = "C"
 	end
 	
 	if hands_played <= 3 then
@@ -121,35 +154,276 @@ if G.GAME.blind.boss then
 	end
 	
 	if interest_earned >= 15 then
-		hand_rank = "T"
+		interest_rank = "T"
 	elseif interest_earned >= 12 then
-		hand_rank = "S"
+		interest_rank = "S"
 	elseif interest_earned >= 8 then
-		hand_rank = "A"
+		interest_rank = "A"
 	elseif interest_earned >= 4 then
-		hand_rank = "B"
+		interest_rank = "B"
 	elseif interest_earned >= 1 then
-		hand_rank = "C"
+		interest_rank = "C"
 	end
 	
-	print("chips_rank: "..chips_rank)
-	print("hand_rank: "..hand_rank)
-	print("interest_rank: "..interest_rank)
+	local chips_points = points_from_rank(chips_rank, 250, 50)
+	local hand_points = points_from_rank(hand_rank, 250, 50)
+	local interest_points = points_from_rank(interest_rank, 200, 40)
 	
-	print(points_from_rank(chips_rank, 250, 50))
-	print(points_from_rank(hand_rank, 250, 50))
-	print(points_from_rank(interest_rank, 200, 40))
+	local total_points = 0
+	
+	total_points = total_points + chips_points
+	total_points = total_points + hand_points
+	total_points = total_points + interest_points
+	
+	add_round_points_row({points = chips_points, bonus = true, name='chips_points'..i, pitch = pitch, text_colour = color_for_rank(chips_rank), rank = chips_rank, string = " Chips scored", text_scale = 0.6})
+	pitch = pitch + 0.06
+	add_round_points_row({points = hand_points, bonus = true, name='hand_points'..i, pitch = pitch, text_colour = color_for_rank(hand_rank), rank = hand_rank, string = " Hands played", text_scale = 0.6})
+	pitch = pitch + 0.06
+	add_round_points_row({points = interest_points, bonus = true, name='interest_points'..i, pitch = pitch, text_colour = color_for_rank(interest_rank), rank = interest_rank, string = " Interest earned", text_scale = 0.6})
+	pitch = pitch + 0.06
+	
+	for i = 1, #G.GAME.tags do
+		local tag = G.GAME.tags[i]
+		if tag.key == "tag_UTDR_t_rank" then
+			total_points = total_points + tag.config.points
+			tag:yep('+', G.C.POINTS, function()
+				return true
+			end)
+			eval_t_rank_tag({points = tag.config.points, bonus = true, name='tag'..i, pitch = pitch, condition = localize('ph_defeat_the_boss'), pos = tag.pos, tag = tag})
+			pitch = pitch + 0.06
+			tag.triggered = true
+		end
+	end
 
-
-	--reset to 0 AFTER all calculations are complete
+	--reset trackers to 0 after all calculation is done
 	G.GAME.ante.total_chips_required = 0
 	G.GAME.ante.chips_scored = 0
 	G.GAME.ante.hands_played = 0
 	G.GAME.ante.interest_earned = 0
+	
+	G.GAME.ante.points_to_be_gained = total_points --(so you can cash-out properly)
 end
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+else
+	delay(0.4)
+	G.E_MANAGER:add_event(Event({
+		trigger = 'before',delay = 0.5,
+		func = function()
+			UIBox{
+				definition = {n=G.UIT.ROOT, config={align = 'cm', colour = G.C.CLEAR}, nodes={
+					{n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 7, r = 0.15, colour = G.C.ORANGE, shadow = true, hover = true, one_press = true, button = 'cash_out', focus_args = {snap_to = true}}, nodes={
+						{n=G.UIT.T, config={text = localize('b_cash_out')..": ", scale = 1, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+						{n=G.UIT.T, config={text = localize('$')..format_ui_value(config.dollars), scale = 1.2*scale, colour = G.C.WHITE, shadow = true, juice = true}}
+				}},}},
+				config = {
+				  align = 'tmi',
+				  offset ={x=0,y=0.4},
+				  major = G.round_eval}
+			}
+
+			--local left_text = {n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 2, r = 0.15, colour = G.C.ORANGE, shadow = true, hover = true, one_press = true, button = 'cash_out', focus_args = {snap_to = true}}, nodes={
+			--    {n=G.UIT.T, config={text = localize('b_cash_out')..": ", scale = 1, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+			--    {n=G.UIT.T, config={text = localize('$')..format_ui_value(config.dollars), scale = 1.3*scale, colour = G.C.WHITE, shadow = true, juice = true}}
+			--}}
+			--G.round_eval:add_child(left_text,G.round_eval:get_UIE_by_ID('eval_bottom'))
+
+			G.GAME.current_round.dollars = config.dollars
+			
+			play_sound('coin6', config.pitch or 1)
+			G.VIBRATION = G.VIBRATION + 1
+			return true
+		end
+	}))
+end
+'''
+position = 'at'
+payload = '''
+else
+	if G.GAME.blind.boss then
+		delay(0.4)
+		G.E_MANAGER:add_event(Event({
+			trigger = 'before',delay = 0.5,
+			func = function()
+				UIBox{
+					definition = {n=G.UIT.ROOT, config={align = 'cm', colour = G.C.CLEAR}, nodes={
+						{n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 7, r = 0.15, colour = G.C.ORANGE, shadow = true, hover = true, one_press = true, button = 'cash_out', focus_args = {snap_to = true}}, nodes={
+							{n=G.UIT.T, config={text = localize('b_cash_out')..": ", scale = 0.9, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+							{n=G.UIT.T, config={text = "", scale = 1, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+							{n=G.UIT.T, config={text = localize('$')..format_ui_value(config.dollars)..", +"..format_ui_value(G.GAME.ante.points_to_be_gained), scale = 0.9, colour = G.C.WHITE, shadow = true, juice = true}}
+					}},}},
+					config = {
+					  align = 'tmi',
+					  offset ={x=0,y=0.4},
+					  major = G.round_eval}
+				}
+	
+				G.GAME.current_round.dollars = config.dollars
+				
+				play_sound('coin6', config.pitch or 1)
+				G.VIBRATION = G.VIBRATION + 1
+				return true
+			end
+		}))
+	else
+		delay(0.4)
+		G.E_MANAGER:add_event(Event({
+			trigger = 'before',delay = 0.5,
+			func = function()
+				UIBox{
+					definition = {n=G.UIT.ROOT, config={align = 'cm', colour = G.C.CLEAR}, nodes={
+						{n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 7, r = 0.15, colour = G.C.ORANGE, shadow = true, hover = true, one_press = true, button = 'cash_out', focus_args = {snap_to = true}}, nodes={
+							{n=G.UIT.T, config={text = localize('b_cash_out')..": ", scale = 1, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+							{n=G.UIT.T, config={text = localize('$')..format_ui_value(config.dollars), scale = 1.2*scale, colour = G.C.WHITE, shadow = true, juice = true}}
+					}},}},
+					config = {
+					  align = 'tmi',
+					  offset ={x=0,y=0.4},
+					  major = G.round_eval}
+				}
+	
+				G.GAME.current_round.dollars = config.dollars
+				
+				play_sound('coin6', config.pitch or 1)
+				G.VIBRATION = G.VIBRATION + 1
+				return true
+			end
+		}))
+	end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+end
+
+function change_shop_size(mod)
+'''
+position = 'at'
+payload = '''
+end
+
+function add_round_points_row(config)
+    local config = config or {}
+    local width = G.round_eval.T.w - 0.51
+    local points_amt = config.points or 1
+    local scale = 0.9
+    
+    local rank = config.rank or "Z"
+    local string = config.string or "" 
+
+	total_cashout_rows = (total_cashout_rows or 0) + 1
+	if total_cashout_rows > 7 then
+		return
+	end
+	delay(0.4)
+
+	G.E_MANAGER:add_event(Event({
+		trigger = 'before',delay = 0.5,
+		func = function()
+			--Add the far left text and context first:
+			local left_text = {}
+			
+			--rank
+			table.insert(left_text, {n=G.UIT.T, config={text = rank, scale = 0.8*scale, colour = config.text_colour, shadow = true, juice = true}})
+			
+			--description
+			table.insert(left_text, {n=G.UIT.O,config={object = DynaText({string = { string }, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, pop_in = 0, scale = 0.4*scale, silent = true})}})
+			local full_row = {n=G.UIT.R, config={align = "cm", minw = 5}, nodes={
+				{n=G.UIT.C, config={padding = 0.05, minw = width*0.55, minh = 0.61, align = "cl"}, nodes=left_text},
+				{n=G.UIT.C, config={padding = 0.05,minw = width*0.45, align = "cr"}, nodes={{n=G.UIT.C, config={align = "cm", id = 'dollar_'..config.name},nodes={}}}}
+			}}
+			
+			G.round_eval:add_child(full_row,G.round_eval:get_UIE_by_ID(config.bonus and 'bonus_round_eval' or 'base_round_eval'))
+			play_sound('cancel', config.pitch or 1)
+			play_sound('highlight1',( 1.5*config.pitch) or 1, 0.2)
+			if config.card then config.card:juice_up(0.7, 0.46) end
+			return true
+		end
+	}))
+	local points_row = 0
+	G.E_MANAGER:add_event(Event({
+		trigger = 'before',delay = 0.38,
+		func = function()
+			G.round_eval:add_child(
+					{n=G.UIT.R, config={align = "cm", id = 'dollar_row_'..(points_row+1)..'_'..config.name}, nodes={
+						{n=G.UIT.O, config={object = DynaText({string = {format_ui_value(points_amt).." PTs"}, colours = {G.C.POINTS}, shadow = true, pop_in = 0, scale = 0.6, float = true})}}
+					}},
+					G.round_eval:get_UIE_by_ID('dollar_'..config.name))
+
+			sfx_for_rank(rank)
+			return true
+		end
+	}))
+end
+
+function eval_t_rank_tag(config)
+    local config = config or {}
+    local width = G.round_eval.T.w - 0.51
+    local points_amt = config.points or 1
+    local scale = 0.9
+
+	total_cashout_rows = (total_cashout_rows or 0) + 1
+	if total_cashout_rows > 7 then
+		return
+	end
+
+	delay(0.4)
+
+	G.E_MANAGER:add_event(Event({
+		trigger = 'before',delay = 0.5,
+		func = function()
+			--Add the far left text and context first:
+			local left_text = {}
+			local blind_sprite = SMODS.create_sprite(0, 0, 0.7,0.7, 'UTDR_tag', copy_table(config.pos))
+			blind_sprite:define_draw_steps({
+				{shader = 'dissolve', shadow_height = 0.05},
+				{shader = 'dissolve'}
+			})
+			blind_sprite:juice_up()
+			table.insert(left_text, {n=G.UIT.O, config={w=0.7,h=0.7 , object = blind_sprite, hover = true, can_collide = false}})
+			table.insert(left_text, {n=G.UIT.O, config={object = DynaText({string = {config.condition}, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, pop_in = 0, scale = 0.4*scale, silent = true})}})                   
+			
+			local full_row = {n=G.UIT.R, config={align = "cm", minw = 5}, nodes={
+				{n=G.UIT.C, config={padding = 0.05, minw = width*0.55, minh = 0.61, align = "cl"}, nodes=left_text},
+				{n=G.UIT.C, config={padding = 0.05,minw = width*0.45, align = "cr"}, nodes={{n=G.UIT.C, config={align = "cm", id = 'dollar_'..config.name},nodes={}}}}
+			}}
+			
+			G.round_eval:add_child(full_row,G.round_eval:get_UIE_by_ID(config.bonus and 'bonus_round_eval' or 'base_round_eval'))
+			play_sound('cancel', config.pitch or 1)
+			play_sound('highlight1',( 1.5*config.pitch) or 1, 0.2)
+			if config.card then config.card:juice_up(0.7, 0.46) end
+			return true
+		end
+	}))
+	
+	local points_row = 0
+	G.E_MANAGER:add_event(Event({
+		trigger = 'before',delay = 0.38,
+		func = function()
+			G.round_eval:add_child(
+					{n=G.UIT.R, config={align = "cm", id = 'dollar_row_'..(points_row+1)..'_'..config.name}, nodes={
+						{n=G.UIT.O, config={object = DynaText({string = {format_ui_value(points_amt).." PTs"}, colours = {G.C.POINTS}, shadow = true, pop_in = 0, scale = 0.65, float = true})}}
+					}},
+					G.round_eval:get_UIE_by_ID('dollar_'..config.name))
+
+			play_sound("UTDR_points6", 1.0, 0.5)
+			return true
+		end
+	}))
+end
+
+function change_shop_size(mod)
+'''
+match_indent = true
 
 #ui patches
 [[patches]]

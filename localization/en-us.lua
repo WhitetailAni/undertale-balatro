@@ -1991,7 +1991,7 @@ return {
 				},
 			},
 			tag_UTDR_t_rank = {
-				name = "Capsule Tag",
+				name = "T-Rank Tag",
 				text = {
 					"After defeating",
 					"the Boss Blind,",

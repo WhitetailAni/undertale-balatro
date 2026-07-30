@@ -13,6 +13,36 @@ function points_from_rank(rank, max, decrease)
 	return 0
 end
 
+function color_for_rank(rank)
+	if rank == "T" then
+		return G.C.TRANK
+	elseif rank == "S" then
+		return G.C.SRANK
+	elseif rank == "A" then
+		return G.C.ARANK
+	elseif rank == "B" then
+		return G.C.BRANK
+	elseif rank == "C" then
+		return G.C.CRANK
+	end
+	return G.C.ZRANK
+end
+
+function sfx_for_rank(rank)
+	if rank == "T" then
+		play_sound("UTDR_points8", 1.0, 0.6)
+	elseif rank == "S" then
+		play_sound("UTDR_points6", 1.0, 0.6)
+	elseif rank == "A" then
+		play_sound("UTDR_points4", 1.0, 0.6)
+	elseif rank == "B" then
+		play_sound("UTDR_points4", 1.0, 0.6)
+	elseif rank == "C" then
+		play_sound("UTDR_points2", 1.0, 0.6)
+	end
+	play_sound("UTDR_points1", 1.0, 0.6)
+end
+
 function ease_points(mod, instant)
     local function _mod(mod)
     	mod = mod or 0
@@ -20,23 +50,21 @@ function ease_points(mod, instant)
         local points_UI = G.HUD:get_UIE_by_ID('points_text_UI') --CHANGE
         
         local prefix = '+'
-        local suffix = " PTs"
         local col = G.C.POINTS
         if mod < 0 then
             prefix = '-'
-            col = G.C.RED              
+            col = G.C.BALLGAME
         else
           --inc_career_stat('c_dollars_earned', mod)
         end
         --Ease from current chips to the new number of chips
-        G.GAME.points_ante = G.GAME.points_ante + mod
         G.GAME.points = G.GAME.points + mod
         --check_and_set_high_score('most_points', G.GAME.points)
        	--check_for_unlock({type = 'points'})
         points_UI.config.object:update() --CHANGE
         G.HUD:recalculate()
         attention_text({
-          text = prefix..tostring(math.abs(mod))..suffix,
+          text = prefix..tostring(math.abs(mod)),
           scale = 0.8, 
           hold = 0.7,
           cover = points_UI.parent,
@@ -63,7 +91,7 @@ function ease_points(mod, instant)
     --cant get this to work without lagging game UI..
 end
 
-function point_gain_sfx(point_gain)
+function point_gain_sfx(point_gain, max)
 	for i = 1, (point_gain / 15) do
 		play_sound("UTDR_points", 1.0, 0.5)
 		local clock = os.clock

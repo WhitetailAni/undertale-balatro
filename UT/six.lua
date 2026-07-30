@@ -54,7 +54,6 @@ SMODS.Joker {
 	key = "the_end",
 	config = {
 		money = 12,
-		was_boss = false,
 	},
 	--unlocked = false
 	unlock_condition = { type = 'win_stake', stake = 4 },
@@ -70,13 +69,8 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 1, y = 8 },
 	cost = 6,
-	calculate = function(self, card, context)
-		if context.setting_blind and not context.blueprint then
-			card.ability.was_boss = G.GAME.blind.boss
-		end
-	end,
 	calc_dollar_bonus = function(self, card)
-		if card.ability.was_boss then
+		if G.GAME.last_blind.boss then
 			return card.ability.money
 		end
 	end,
