@@ -95,16 +95,6 @@ elseif G.GAME.used_vouchers.v_omen_globe and pseudorandom('omen_globe') > 0.8 th
 '''
 match_indent = true
 
-# thanks to @nightshademagia for this patch
-# disallows rerolling blinds that have been prescribed
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'G.GAME.perscribed_bosses[G.GAME.round_resets.ante] = nil'
-position = 'at'
-payload = ''
-match_indent = true
-
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
@@ -349,7 +339,3 @@ if #SMODS.find_card("j_UTDR_sound_of_justice") > 0 then
 end
 '''
 match_indent = true
-
-
-
-
