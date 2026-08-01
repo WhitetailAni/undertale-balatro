@@ -286,14 +286,18 @@ SMODS.Joker {
 		card.ability.joker_count = #G.jokers.cards
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.hand:change_size(-(#G.jokers.cards * card.ability.hand_size_gain))
+		G.hand:change_size(-G.hand.config.card_limits.mod)
+		for i = 1, #SMODS.find_card("j_UTDR_fallen_human") do
+			G.hand:change_size(#G.jokers.cards * card.ability.hand_size_gain)
+		end
 		card.ability.in_build = false
 	end,
 	calculate = function(self, card, context)
-		if context.card_added then
-			G.hand:change_size((#G.jokers.cards * card.ability.hand_size_gain))
-		elseif context.joker_type_destroyed then
-			G.hand:change_size(-(#G.jokers.cards * card.ability.hand_size_gain))
+		--these 2 contexts can only ever trigger on 1 joker at a time, so we can assume to change hand size by 1 joker's worth. or just hand_size_gain
+		if context.card_added and context.card.ability.set == "Joker" then
+			G.hand:change_size(card.ability.hand_size_gain)
+		elseif context.joker_type_destroyed or (context.selling_card and context.card.ability.set == "Joker") and not context.card.config.center.key == "j_UTDR_fallen_human" then
+			G.hand:change_size(-card.ability.hand_size_gain)
 		end
 	end
 }

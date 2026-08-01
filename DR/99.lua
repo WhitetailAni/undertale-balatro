@@ -500,7 +500,7 @@ SMODS.Joker {
 				vars = {
 					card.ability.mult_per,
 					card.ability.mult,
-					localize({ type = 'name_text', set = "Joker", key = "j_UTDR_ralsei_dummy" }) or "Ralsei's Dummy"
+					localize({ type = 'name_text', set = "Joker", key = "j_UTDR_ralsei_dummy" })
 				}
 			}
 		else
@@ -508,7 +508,7 @@ SMODS.Joker {
 				vars = {
 					card.ability.mult_per,
 					card.ability.mult_per,
-					localize({ type = 'name_text', set = "Joker", key = "j_UTDR_ralsei_dummy" }) or "Ralsei's Dummy"
+					localize({ type = 'name_text', set = "Joker", key = "j_UTDR_ralsei_dummy" })
 				}
 			}
 		end
@@ -566,8 +566,6 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "ralsei",
 	config = {
-		selected_rank = 'Jack',
-		selected_suit = 'Hearts',
 		repetitions = 2
 	},
 	loc_vars = function(self, info_queue, card)
@@ -576,21 +574,21 @@ SMODS.Joker {
 			return {
 				key = "j_UTDR_ralseis",
 				vars = {
-					card.ability.selected_rank,
-					card.ability.selected_suit,
+					G.GAME.current_round.ralsei_card.selected_rank or "Queen",
+					G.GAME.current_round.ralsei_card.selected_suit or "Hearts",
 					card.ability.repetitions,
 					colours = {
-						G.C.SUITS[card.ability.selected_suit] }
+						G.C.SUITS[G.GAME.current_round.ralsei_card.selected_suit or "Hearts"] }
 				}
 			}
 		end
 		return {
 			vars = {
-				card.ability.selected_rank,
-				card.ability.selected_suit,
+				G.GAME.current_round.ralsei_card.selected_rank or "Queen",
+				G.GAME.current_round.ralsei_card.selected_suit or "Hearts",
 				card.ability.repetitions,
 				colours = {
-					G.C.SUITS[card.ability.selected_suit] }
+					G.C.SUITS[G.GAME.current_round.ralsei_card.selected_suit or "Hearts"] }
 			}
 		}
 	end,
@@ -601,18 +599,21 @@ SMODS.Joker {
 	pos = { x = 8, y = 1 },
 	cost = 9,
 	set_ability = function(self, card, initial, delay_sprites)
-		card.ability.selected_suit = "Spades"
-		card.ability.selected_rank = "Queen"
-		if G.playing_cards then
-			local selected_card = pseudorandom_element(G.playing_cards, "ralsei")
-			if selected_card and selected_card.base and selected_card.base.suit and selected_card.base.value then
-				card.ability.selected_suit = selected_card.base.suit
-				card.ability.selected_rank = selected_card.base.value
+		if G.GAME.current_round and #SMODS.find_card("j_UTDR_ralsei") == 0 then --check to ensure a duplicated ralsei will not change the ralsei card
+			G.GAME.current_round.ralsei_card = { }
+			G.GAME.current_round.ralsei_card.selected_suit = "Hearts"
+			G.GAME.current_round.ralsei_card.selected_rank = "Queen"
+			if G.playing_cards then
+				local selected_card = pseudorandom_element(G.playing_cards, "ralsei")
+				if selected_card and selected_card.base and selected_card.base.suit and selected_card.base.value then
+					G.GAME.current_round.ralsei_card.selected_suit = selected_card.base.suit
+					G.GAME.current_round.ralsei_card.selected_rank = selected_card.base.value
+				end
 			end
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play and (context.other_card:is_suit(card.ability.selected_suit) or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == card.ability.selected_rank then
+		if context.repetition and context.cardarea == G.play and (context.other_card:is_suit(G.GAME.current_round.ralsei_card.selected_suit) or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == G.GAME.current_round.ralsei_card.selected_rank then
 			local ralseis = true
 			if not ralseis then
 				return {
@@ -625,8 +626,8 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			local selected_card = pseudorandom_element(G.playing_cards, "ralsei")
-			card.ability.selected_suit = selected_card.base.suit
-			card.ability.selected_rank = selected_card.base.value
+			G.GAME.current_round.ralsei_card.selected_suit = selected_card.base.suit
+			G.GAME.current_round.ralsei_card.selected_rank = selected_card.base.value
 		end
 	end
 }
