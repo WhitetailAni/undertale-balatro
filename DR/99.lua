@@ -293,7 +293,25 @@ SMODS.Joker {
 	cost = 10,
 	loc_vars = function(self, info_queue, card)
 		if card.area and card.area == G.jokers then
-            local other_joker
+			local key = "j_UTDR_kris"
+			local element = nil
+			if #SMODS.find_card("j_UTDR_you") > 0 then
+				if self.icon and self.icon.remove then
+					self.icon:remove()
+					self.icon = nil
+				end
+				self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 8, y = 0 })
+				element = {
+					n = G.UIT.C,
+					config = { align = "cm", padding = 0.1 },
+					nodes = {
+						{ n = G.UIT.O, config = { object = self.icon } },
+					}
+				}
+				key = "j_UTDR_kris_split"
+			end
+		
+            local other_joker = nil
 
 			-- find kris
             for i = 1, #G.jokers.cards do
@@ -306,6 +324,8 @@ SMODS.Joker {
 			-- create the ui as needed
 			local compatible = other_joker and other_joker.config.center.blueprint_compat
 			return {
+				key = key,
+				vars = { elements = { element } },
 				main_end = {{n=G.UIT.C, config={align = "bm", mh = 0.4}, nodes={
 					{n=G.UIT.C, config={
 						ref_table = card,

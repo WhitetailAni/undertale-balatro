@@ -820,10 +820,24 @@ SMODS.Joker {
 	pos = { x = 0, y = 10 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_doki"], { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+	
 		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
 		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.odds, 'pink')
-		if #SMODS.find_card("j_UTDR_you") > 0 then
-		vars = {
+		
+		local vars = {
+			elements = { element },
 			numerator,
 			denominator,
 			localize("k_" .. string.lower(card.ability.card_type)),
@@ -833,21 +847,16 @@ SMODS.Joker {
 				G.C.SUITS[card.ability.suit],
 				G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
 			},
-			key = "j_UTDR_pink_you",
 		}
+		
+		if #SMODS.find_card("j_UTDR_you") > 0 then
+			return {
+				vars = vars,
+				key = "j_UTDR_pink_you",
+			}
 		end
 		return {
-			vars = {
-				numerator,
-				denominator,
-				localize("k_" .. string.lower(card.ability.card_type)),
-				localize(card.ability.suit, 'suits_singular') or "Heart",
-				localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
-				colours = {
-					G.C.SUITS[card.ability.suit],
-					G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
-				}
-			}
+			vars = vars
 		}
 	end,
 	calculate = function(self, card, context)

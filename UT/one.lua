@@ -274,10 +274,30 @@ SMODS.Joker {
 	pos = { x = 0, y = 0 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
 		if card.ability.in_build then
-			return { vars = { card.ability.hand_size_gain, #G.jokers.cards * card.ability.hand_size_gain } }
+			return { vars = {
+				elements = { element },
+				card.ability.hand_size_gain,
+				#G.jokers.cards * card.ability.hand_size_gain
+			} }
 		else
-			return { vars = { card.ability.hand_size_gain, card.ability.hand_size_gain } }
+			return { vars = {
+				elements = { element },
+				card.ability.hand_size_gain,
+				card.ability.hand_size_gain
+			} }
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)

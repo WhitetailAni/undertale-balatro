@@ -152,7 +152,7 @@ return {
 					"{C:attention}without buying anything{}",
 					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
 				},
-				name = "Bravery",
+				name = "{element:1}Bravery",
 			},
 			j_UTDR_sans = {
 				name = "{f:UTDR_ComicSansUT}sans.",
@@ -213,6 +213,14 @@ return {
 					"{C:attention}first hand of round",
 				},
 			},
+			j_UTDR_kris_split = {
+				name = "{element:1}Kris",
+				text = {
+					"Copies ability of {C:attention}Joker{}",
+					"to the left for",
+					"{C:attention}first hand of round",
+				},
+			},
 			j_UTDR_spamton_neo = {
 				name = "SPAMTON NEO",
 				text = {
@@ -261,7 +269,8 @@ return {
 					"{C:attention}Boss Blind{} is defeated",
 				},
 			},
-			j_UTDR_boss_monster_soul = {
+			j_UTDR_boss_monster_soul = {	
+				name = "{element:1}Boss Monster Soul",
 				unlock = {
 					"Discard a",
 					"{E:1,C:attention}#1#{}",
@@ -272,7 +281,6 @@ return {
 					"or {C:attention}added{} to your deck",
 					"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
 				},
-				name = "Boss Monster Soul",
 			},
 			j_UTDR_SURVEY_PROGRAM = {
 				unlock = {
@@ -312,7 +320,7 @@ return {
 					"cards in your #4#",
 					"{C:inactive}(Currently {C:attention}#3#{C:inactive})",
 				},
-				name = "Perseverance",
+				name = "{element:1}Perseverance",
 			},
 			j_UTDR_twin_ribbon = {
 				name = "Twin Ribbon",
@@ -401,7 +409,7 @@ return {
 					"{C:money}Blind payout{} if round",
 					"was won on {C:attention}final hand{}",
 				},
-				name = "Patience",
+				name = "{element:1}Patience",
 			},
 			j_UTDR_snowdin = {
 				name = "Snowdin",
@@ -780,7 +788,7 @@ return {
 					"all played cards have",
 					"the {C:attention}same{} Enhancement",
 				},
-				name = "Integrity",
+				name = "{element:1}Integrity",
 			},
 			j_UTDR_shadow_mantle = {
 				name = "Shadow Mantle",
@@ -925,7 +933,7 @@ return {
 					"end of round",
 					"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
 				},
-				name = "Justice",
+				name = "{element:1}Justice",
 			},
 			j_UTDR_pin = {
 				name = "Royal Pin",
@@ -1105,7 +1113,7 @@ return {
 				},
 			},
 			j_UTDR_fallen_human = {
-				name = "Fallen Human",
+				name = "{element:1}Fallen Human",
 				text = {
 					"{C:attention}+#1#{} hand size for",
 					"each {C:attention}Joker{} card",
@@ -1372,7 +1380,7 @@ return {
 					"{C:dark_edition}#3#{} Cards grant {C:mult}+#4#{} Mult",
 					"{C:dark_edition}#5#{} Cards grant {X:mult,C:white}X#6#{} Mult",
 				},
-				name = "Kindness",
+				name = "{element:1}Kindness",
 			},
 			j_UTDR_asriel = {
 				unlock = {
@@ -1826,7 +1834,7 @@ return {
 				name = "Lord of the Hammer",
 			},
 			j_UTDR_pink = {
-				name = "{C:flower_pink}Pink",
+				name = "{C:flower_pink,element:1}Pink",
 				text = {
 					"{C:green}#1# in #2#{} chance for",
 					"each scoring card of",
@@ -1836,12 +1844,12 @@ return {
 				},
 			},
 			j_UTDR_pink_you = {
-				name = "Pink",
+				name = "{C:flower_pink,element:1}Pink",
 				text = {
 					"{C:green}#1# in #2#{} chance for",
 					"each scoring card of",
 					"{V:1}#4#{} suit to create",
-					"a {C:dark_edition}#5#{} consumable",
+					"a {C:dark_edition}#5#{} {C:attention}consumable",
 					"{C:inactive}(Must have room){}"
 				},
 			},
