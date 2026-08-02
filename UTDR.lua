@@ -217,7 +217,7 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/99.lua'))()
 
 	assert(SMODS.load_file('DR/point.lua'))()
-
+	assert(SMODS.load_file('DR/capsule.lua'))()
 	
 	assert(SMODS.load_file('DR/deck.lua'))()
 	assert(SMODS.load_file('DR/booster.lua'))()

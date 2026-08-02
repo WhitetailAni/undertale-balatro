@@ -747,10 +747,8 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.setting_blind and not card.getting_sliced then
 			if card.ability.states.hand then
-				G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.values.hand_count
 				ease_hands_played(card.ability.values.hand_count)
 			elseif card.ability.states.discard then
-				G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.values.discard_count
 				ease_discard(card.ability.values.discard_count)
 			elseif card.ability.states.hand_size then
 				G.hand:change_size(card.ability.values.hand_size_count)
@@ -790,13 +788,12 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.main_eval then
 			if card.ability.states.hand then
-				G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.values.hand_count
-				ease_hands_played(-card.ability.values.hand_count)
+				--ease_hands_played(-card.ability.values.hand_count)
 
 				card.ability.states.hand = false
 			elseif card.ability.states.discard then
-				G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.values.discard_count
-				ease_discard(-card.ability.values.discard_count)
+				--G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.values.discard_count
+				--ease_discard(-card.ability.values.discard_count)
 
 				card.ability.states.discard = false
 			elseif card.ability.states.hand_size then

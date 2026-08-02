@@ -125,6 +125,9 @@ SMODS.Joker {
 		ease_hands_played(card.ability.hands_lost)
 	end,
 	calculate = function(self, card, context)
+		if context.reroll_shop then
+			print(get_reward(110))
+		end
 	end
 }
 
