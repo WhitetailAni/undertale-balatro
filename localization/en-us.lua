@@ -2220,6 +2220,7 @@ return {
         	UTDR_friend = "Rare"
         },
 		dictionary = {
+			totem_UTDR_punch_card = "Redeemed the Punch Card"
 			totem_UTDR_omegaflowey = "HAHAHAHAHAHAHAHAHAHAHA!!",
 			totem_UTDR_dogcheck = "Checked!",
 			totem_UTDR_blue = "This is a comedy, not a tragedy!",

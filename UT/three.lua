@@ -230,7 +230,6 @@ SMODS.Joker {
 			super_secret_chance = 9
 		},
 		spared = false,
-		old_bones = ""
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -240,11 +239,6 @@ SMODS.Joker {
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult, card.ability.extra.cycled, card.ability.extra.hands_remaining } }
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		if not from_debuff then
-			card.ability.old_bones = G.localization.misc.dictionary.ph_mr_bones
-		end
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -269,14 +263,11 @@ SMODS.Joker {
 			G.STATE_COMPLETE = true
 			end_round()
 		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = "Redeemed the Punch Card"
 			return {
 				message = "Punched!",
-				saved = true,
+				saved = "totem_UTDR_punch_card",
 				colour = G.C.RED
 			}
-		elseif context.ending_shop and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
 		elseif context.end_of_round and context.cardarea == G.jokers and card.ability.extra.hands_remaining == 0 then
 			if SMODS.pseudorandom_probability(card, "punch_card_super_secret", 1, card.ability.extra.super_secret_chance, "UT_punch_card_secret") then
 				SMODS.add_card({ key = "j_UTDR_nice_cream" })
