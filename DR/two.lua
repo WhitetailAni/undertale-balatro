@@ -149,7 +149,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "pin",
+	key = "royal_pin",
 	config = {
 		chip_gain = 3,
 		chips = 0
@@ -216,7 +216,7 @@ SMODS.Joker {
 
 --city
 SMODS.Joker {
-	key = "watch",
+	key = "silver_watch",
 	config = {
 		mult = 15
 	},

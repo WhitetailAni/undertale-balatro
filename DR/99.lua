@@ -64,7 +64,6 @@ SMODS.Joker {
 	key = "newsletter",
 	config = {
 		money = 6,
-		boss_type = ""
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.money } }
@@ -76,40 +75,34 @@ SMODS.Joker {
 	pos = { x = 3, y = 10 },
 	cost = 5,
 	calc_dollar_bonus = function(self, card)
-		return card.ability.money
+		if G.GAME.blind.boss then
+			return card.ability.money
+		end
 	end,
 	calculate = function(self, card, context)
-		if context.joker_main then
-			if G.GAME.blind.boss then
-				boss_type = "boss"
-			else
-				boss_type = G.GAME.blind.name
+		if context.end_of_round and context.main_eval and not context.beat_boss then
+			local card_type = "Planet"
+			if G.GAME.last_blind.name == "Big Blind" then
+				card_type = "Tarot"
 			end
-		elseif context.end_of_round then
-			if not context.beat_boss then
-				local card_type = "Planet"
-				if boss_type == "Big Blind" then
-					card_type = "Tarot"
-				end
-				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.4,
-					func = function()
-						if G.consumeables.config.card_limit > #G.consumeables.cards then
-							play_sound('timpani')
-							local new_card = create_card(card_type, G.consumeables, nil, nil, nil, nil, nil, 'newsletter')
-							new_card:add_to_deck()
-							G.consumeables:emplace(new_card)
-							if context.blueprint then
-								context.blueprint_card:juice_up(0.3, 0.5)
-							else
-								card:juice_up(0.3, 0.5)
-							end
+			G.E_MANAGER:add_event(Event({
+				trigger = 'after',
+				delay = 0.4,
+				func = function()
+					if G.consumeables.config.card_limit > #G.consumeables.cards then
+						play_sound('timpani')
+						local new_card = create_card(card_type, G.consumeables, nil, nil, nil, nil, nil, 'newsletter')
+						new_card:add_to_deck()
+						G.consumeables:emplace(new_card)
+						if context.blueprint then
+							context.blueprint_card:juice_up(0.3, 0.5)
+						else
+							card:juice_up(0.3, 0.5)
 						end
-						return true
 					end
-				}))
-			end
+					return true
+				end
+			}))
 		end
 	end
 }

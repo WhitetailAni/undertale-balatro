@@ -61,6 +61,13 @@ SMODS.DynaTextEffect {
 	end,
 }
 
+SMODS.DynaTextEffect {
+	key = "gaster",
+	draw_letter = function(dynatext, index, letter)
+		
+	end,
+}
+
 -- config tabs
 
 UTDR.config_tab = function()
@@ -157,12 +164,12 @@ if UTDR.config_file['undertale'] then
 
 	SMODS.Font {
 		key = "ComicSansUT",
-		path = "UndertaleSans.ttf"
+		path = "sans.ttf"
 	}
 
 	SMODS.Font {
 		key = "PapyrusUT",
-		path = "UndertalePapyrus.ttf"
+		path = "papyrus.ttf"
 	}
 
 	SMODS.Back {
@@ -205,6 +212,11 @@ assert(SMODS.load_file('tag.lua'))()
 
 -- load DR
 if UTDR.config_file.deltarune then
+	SMODS.Font {
+		key = "HIM",
+		path = "gaster.ttf"
+	}
+
 	assert(SMODS.load_file('DR/one.lua'))()
 	assert(SMODS.load_file('DR/two.lua'))()
 	assert(SMODS.load_file('DR/three.lua'))()

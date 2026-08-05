@@ -314,3 +314,39 @@ if #SMODS.find_card("j_UTDR_sound_of_justice") > 0 then
 end
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+local card_type_background = 
+          (AUT.card_type == 'Locked' and G.C.BLACK) or 
+          ((AUT.card_type == 'Undiscovered') and darken(G.C.JOKER_GREY, 0.3)) or 
+          (AUT.card_type == 'Enhanced' or AUT.card_type == 'Default') and darken(G.C.BLACK, 0.1) or
+          (debuffed and darken(G.C.BLACK, 0.1)) or 
+          (card_type_colour and darken(G.C.BLACK, 0.1)) or
+          G.C.SET[AUT.card_type] or
+          {0, 1, 1, 1}
+'''
+position = 'after'
+payload = '''
+local alpha_val = 0.8
+if card.config.center.key == "j_UTDR_weird_deard_gaster" then
+	card_type_background = darken(G.C.GASTER, 10)
+	alpha_val = 1
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+{n=G.UIT.R, config={align = "cm", padding = 0.07, r = 0.1, colour = adjust_alpha(card_type_background, 0.8)}, nodes={
+'''
+position = 'at'
+payload = '''
+{n=G.UIT.R, config={align = "cm", padding = 0.07, r = 0.1, colour = adjust_alpha(card_type_background, alpha_val)}, nodes={
+'''
+match_indent = true
+

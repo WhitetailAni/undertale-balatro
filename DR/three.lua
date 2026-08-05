@@ -280,11 +280,9 @@ SMODS.Joker {
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 	end,
 	calculate = function(self, card, context)
-		if context.UTDR_on_play_press then
+		if context.press_play then
 			UTDR_Tenna.start_quiz(nil, card)
-		end
-
-		if context.joker_main then
+		elseif context.joker_main then
 			return {
 				xmult = UTDR_Tenna.won and card.ability.extra.xmult or nil
 			}
@@ -414,7 +412,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "hero_sword",
+	key = "HERO_SWORD",
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,

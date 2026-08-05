@@ -340,14 +340,6 @@ function love.update(dt)
 	end
 end
 
-local hook = G.FUNCS.play_cards_from_highlighted
-G.FUNCS.play_cards_from_highlighted = function(e)
-	SMODS.calculate_context { UTDR_on_play_press = true }
-	
-	hook(e)
-end
-
-
 --[[
 UTDR_Tenna.Quiz{
 	key = "example",

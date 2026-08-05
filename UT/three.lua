@@ -59,7 +59,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "glasses",
+	key = "cloudy_glasses",
 	config = {
 		thorning_is_older = false
 	},

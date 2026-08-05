@@ -174,7 +174,7 @@ SMODS.Joker {
 	pos = { x = 5, y = 2 },
 	cost = 7,
 	set_badges = function(self, card, badges)
-		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, G.C.ANGEL, 1.2)
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult, card.ability.slots } }
@@ -260,7 +260,7 @@ SMODS.Joker {
 	--comment out this function and then start a blind with annoying dog! it's fun!!
 	--oooops did i reenable it with a really slim chance..... oops!!! oooops!!!!!!!!
 	set_badges = function(self, card, badges)
-		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, G.C.ANGEL, 1.2)
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.mult } }
@@ -301,7 +301,7 @@ SMODS.Joker {
 	end,
 	--unlocked = false
 	set_badges = function(self, card, badges)
-		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, G.C.ANGEL, 1.2)
 	end,
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
 	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
@@ -360,7 +360,7 @@ SMODS.Joker {
 	pos = { x = 4, y = 11 },
 	cost = 8,
 	set_badges = function(self, card, badges)
-		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, G.C.ANGEL, 1.2)
 	end,
 	loc_vars = function(self, info_queue, card)
 		return {
@@ -434,7 +434,7 @@ SMODS.Joker {
 		extra_boosters = 1
 	},
 	set_badges = function(self, card, badges)
-		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, G.C.ANGEL, 1.2)
 	end,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.money } }

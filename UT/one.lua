@@ -566,5 +566,3 @@ SMODS.Joker {
 		end
 	end
 }
-
-
