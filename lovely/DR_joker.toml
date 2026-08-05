@@ -331,7 +331,7 @@ local card_type_background =
 position = 'after'
 payload = '''
 local alpha_val = 0.8
-if card.config.center.key == "j_UTDR_weird_deard_gaster" then
+if card.config and card.config.center and card.config.center.key == "j_UTDR_weird_deard_gaster" then
 	card_type_background = darken(G.C.GASTER, 10)
 	alpha_val = 1
 end

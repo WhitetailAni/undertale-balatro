@@ -245,6 +245,11 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips, card.ability.mult } }
 	end,
+	remove_from_deck = function(self, card, from_debuff)
+		if not from_debuff then
+			play_sound("UTDR_shadowguy_gone", 1.0, 0.7)
+		end
+	end,
 	calculate = function(self, card, context)
 		if context.poker_hand_changed and context.card.config.center.key ~= "j_UTDR_shadowguy" then --shadowguys cannot feed off each other under ANY CIRCUMSTANCES (it crashes the game instantly)
 			SMODS.upgrade_poker_hands({
