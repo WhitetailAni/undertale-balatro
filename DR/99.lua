@@ -94,11 +94,7 @@ SMODS.Joker {
 						local new_card = create_card(card_type, G.consumeables, nil, nil, nil, nil, nil, 'newsletter')
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
-						if context.blueprint then
-							context.blueprint_card:juice_up(0.3, 0.5)
-						else
-							card:juice_up(0.3, 0.5)
-						end
+						card:juice_up(0.3, 0.5)
 					end
 					return true
 				end

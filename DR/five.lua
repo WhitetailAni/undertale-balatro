@@ -81,8 +81,7 @@ SMODS.Joker {
 				end
 			}))
 			return {
-				mult = (math.floor(pseudorandom("aqua") * 6) + 1),
-				card = context.blueprint_card or card
+				mult = (math.floor(pseudorandom("aqua") * 6) + 1)
 			}
 		end
 	end
@@ -492,11 +491,7 @@ SMODS.Joker {
 						local new_card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'blue_tarot')
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
-						if context.blueprint then
-							context.blueprint_card:juice_up(0.3, 0.5)
-						else
-							card:juice_up(0.3, 0.5)
-						end
+						card:juice_up(0.3, 0.5)
 					end
 					return true
 				end
@@ -522,11 +517,7 @@ SMODS.Joker {
 						local new_card = create_card('Planet', G.consumeables, nil, nil, nil, nil, nil, 'blue_planet') --wow didnt know he was mormon
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
-						if context.blueprint then
-							context.blueprint_card:juice_up(0.3, 0.5)
-						else
-							card:juice_up(0.3, 0.5)
-						end
+						card:juice_up(0.3, 0.5)
 					end
 					return true
 				end
@@ -1037,11 +1028,7 @@ SMODS.Joker {
 					new_card:start_materialize()
 					G.GAME.blind:debuff_card(new_card)
 					G.hand:sort()
-					if context.blueprint_card then
-						context.blueprint_card:juice_up()
-					else
-						card:juice_up()
-					end
+					card:juice_up()
 					SMODS.calculate_context({ playing_card_added = true, cards = { new_card } })
 					save_run()
 					return true

@@ -2,6 +2,7 @@ local lovely = require("lovely")
 
 assert(SMODS.load_file('atlas.lua'))()
 assert(SMODS.load_file('sound.lua'))()
+assert(SMODS.load_file('tag.lua'))()
 
 UTDR = SMODS.current_mod
 if NFS.read(SMODS.current_mod.path .. "config.lua") then
@@ -22,6 +23,13 @@ local asriel_colors = {
 	HEX("42FCFF"),
 	HEX("003CFF"),
 	HEX("D535D9"),
+}
+
+SMODS.Gradient {
+	key = "asriel_background",
+	colours = asriel_colors,
+	cycle = 66,
+	interpolation = "linear"
 }
 
 SMODS.DynaTextEffect {
@@ -207,8 +215,6 @@ if UTDR.config_file['undertale'] then
 		end
 	}
 end
-
-assert(SMODS.load_file('tag.lua'))()
 
 -- load DR
 if UTDR.config_file.deltarune then

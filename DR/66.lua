@@ -417,7 +417,7 @@ SMODS.Joker {
 								return true
 							end)
 						}))
-						card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+						card_eval_status_text(card, 'extra', nil, nil, nil,
 							{ message = "__", colour = G.C.SECONDARY_SET.Spectral })
 						card:juice_up(0.3, 0.4)
 					end

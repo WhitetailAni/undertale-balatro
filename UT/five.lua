@@ -377,6 +377,8 @@ SMODS.Joker {
 			card:juice_up(0.3, 0.5)
 		end
 	end,
+	update = function(self, card, dt)
+	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card.base.value == "Ace" and card.ability.turns_elapsed >= card.ability.threshold then
 			return {
@@ -387,11 +389,12 @@ SMODS.Joker {
 			play_sound("UTDR_asriel", 1.0, 0.7)
 			card:juice_up(0.3, 0.5)
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+			ease_background_colour{new_colour = SMODS.Gradients["UTDR_asriel_background"]}
 			card.ability.turns_elapsed = card.ability.turns_elapsed + 1
 			if card.ability.turns_elapsed == card.ability.threshold then
 				play_sound("UTDR_asriel", 1.0, 0.7)
 				card:juice_up(0.3, 0.5)
-			else
+			elseif card.ability.turns_elapsed < card.ability.threshold then
 				card:juice_up(0.3, 0.4)
 			end
 		end

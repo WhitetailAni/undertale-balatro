@@ -25,12 +25,19 @@ G.SPLASH_LOGO = Sprite(0, 0,
 '''
 position = 'at'
 payload = '''
-G.C.UI.BACKGROUND_DARK = HEX('000000')
 G.SPLASH_LOGO = Sprite(0, 0,
 		13*SC_scale,
 		13*SC_scale*(G.ASSET_ATLAS["UTDR_splash"].py/G.ASSET_ATLAS["UTDR_splash"].px),
 		G.ASSET_ATLAS["UTDR_splash"], {x=0,y=0})
 '''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'ease_background_colour{new_colour = G.C.BLACK, contrast = 1}'
+position = 'at'
+payload = 'ease_background_colour{new_colour = G.C.GASTER, contrast = 1}'
 match_indent = true
 
 [[patches]]

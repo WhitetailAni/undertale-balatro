@@ -1694,7 +1694,7 @@ return {
 				text = {
 					""
 				},
-				name = "{f:UTDR_HIM,E:UTDR_gaster}GASTER",
+				name = "{f:UTDR_HIM}GASTER",
 			},
 			j_UTDR_vessel = {
 				unlock = {

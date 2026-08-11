@@ -139,8 +139,7 @@ SMODS.Joker {
 			if context.other_card.debuff then
 				return {
 					message = localize('k_debuffed'),
-					colour = G.C.RED,
-					card = context.blueprint_card or card,
+					colour = G.C.RED
 				}
 			else
 				return {
@@ -362,13 +361,9 @@ SMODS.Joker {
 				delay = 0.1,
 				func = function()
 					play_sound("UTDR_dummy", 1, 0.7)
-					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+					card_eval_status_text(card, 'extra', nil, nil, nil,
 						{ message = "Futile!", colour = G.C.RED })
-					if context.blueprint then
-						context.blueprint_card:juice_up(0.3, 0.5)
-					else
-						card:juice_up(0.3, 0.5)
-					end
+					card:juice_up(0.3, 0.5)
 					return true
 				end
 			}))
@@ -406,9 +401,8 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card.base.value == "2" and context.other_card.config.center_key ~= "c_base" then
 			return {
-				x_mult = card.ability.xmult,
+				xmult = card.ability.xmult,
 				colour = G.C.MULT,
-				card = context.blueprint_card or card
 			}
 		end
 	end
@@ -451,7 +445,7 @@ SMODS.Joker {
 							return true
 						end)
 					}))
-					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+					card_eval_status_text(card, 'extra', nil, nil, nil,
 						{ message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
 					card.ability.spectral_gen = true
 				end

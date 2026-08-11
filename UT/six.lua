@@ -253,6 +253,7 @@ SMODS.Joker {
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					card:set_edition({ negative = true }, true)
+					return true
 				end
 			}))
 		end
