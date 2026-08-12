@@ -95,3 +95,19 @@ else
 end
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+G:save_settings()
+G.FILE_HANDLER.force = true
+'''
+position = 'after'
+payload = '''
+local new_name = G.PROFILES[_profile].name
+if new_name.upper(new_name) == "GASTER" then
+	love.event.quit()
+end
+'''
+match_indent = true

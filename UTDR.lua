@@ -4,6 +4,11 @@ assert(SMODS.load_file('atlas.lua'))()
 assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
 
+local profile_name = G.PROFILES[G.SETTINGS.profile].name
+if profile_name.upper(profile_name) == "GASTER" then
+	G.PROFILES[G.SETTINGS.profile].name = "P" .. G.SETTINGS.profile
+end
+
 UTDR = SMODS.current_mod
 if NFS.read(SMODS.current_mod.path .. "config.lua") then
 	local file = STR_UNPACK(NFS.read(SMODS.current_mod.path .. "config.lua"))
