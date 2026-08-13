@@ -286,7 +286,7 @@ SMODS.Joker {
 		if context.before and not context.blueprint then
 			local faces = {}
 			for k, v in ipairs(context.scoring_hand) do
-				if v:is_face() then 
+				if v:is_face() and v.config.center_key ~= "m_steel" then 
 					faces[#faces+1] = v
 					v:set_ability("m_steel", nil, true)
 					G.E_MANAGER:add_event(Event({

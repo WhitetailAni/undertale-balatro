@@ -1640,7 +1640,7 @@ return {
 					"{C:gaster}. . .{}",
 				},
 			},
-			j_UTDR_roots = {
+			j_UTDR_ROOTS = {
 				name = "ROOTS",
 				text = {
 					"Only {C:red}Jokers{} appear in shop",
@@ -2145,7 +2145,16 @@ return {
 	},
 	misc = {
 		challenge_names = {
-			c_UTDR_flowers = "Seven Colored Flowers",
+			c_UTDR_flowers = "Flower Power",
+			c_UTDR_tricky_tony = "Tony's Trick",
+			c_UTDR_love = "Level of Violence",
+			c_UTDR_find_her_dot_o_g_g = "Find Her",
+			c_UTDR_t_v_time = "TV TIME!",
+			c_UTDR_shatter_dream = "Shattered Dreams",
+			c_UTDR_neutral_on_these_things = "True Pacifist",
+			c_UTDR_try_our_discount_code = "C-Rank and B-Rank",
+			c_UTDR_balatro_the_musical = "Lights, Camera, Ratings!",
+			c_UTDR_sans = "{F:ComicSansUT}sans."
 		},
 		quips = {
 			tennaquiz_UTDR_tvtime ={

@@ -215,7 +215,7 @@ SMODS.Joker {
 	pos = { x = 9, y = 11 },
 	cost = 6,
 	set_badges = function(self, card, badges)
-		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.ANGEL, G.C.ANGEL, 1.2)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, G.C.ANGEL, 1.2)
 	end,
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.totem_chance, 'DR_dogcheck')
@@ -323,7 +323,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "roots",
+	key = "ROOTS",
 	config = {
 		old_tarot_rate = 0,
 		old_planet_rate = 0,
@@ -605,6 +605,9 @@ SMODS.Joker {
 									{ string = 'I', colour = G.C.ANGEL },
 									{ string = 'I', colour = G.C.ANGEL },
 									
+									{ string = ' ', colour = G.C.ANGEL },
+									{ string = ' ', colour = G.C.ANGEL },
+									
 									{ string = 'FOR YOU', colour = G.C.ANGEL },
 									{ string = 'FOR YOU', colour = G.C.ANGEL },
 									{ string = 'FOR YOU', colour = G.C.ANGEL },
@@ -675,6 +678,9 @@ SMODS.Joker {
 									{ string = 'HAVE BEEN', colour = G.C.ANGEL },
 									{ string = 'HAVE BEEN', colour = G.C.ANGEL },
 									{ string = 'HAVE BEEN', colour = G.C.ANGEL },
+									
+									{ string = ' ', colour = G.C.ANGEL },
+									{ string = ' ', colour = G.C.ANGEL },
 									
 									{ string = ' ', colour = G.C.ANGEL },
 									{ string = ' ', colour = G.C.ANGEL },
@@ -747,6 +753,9 @@ SMODS.Joker {
 									{ string = 'LOOKING', colour = G.C.ANGEL },
 									{ string = 'LOOKING', colour = G.C.ANGEL },
 									{ string = 'LOOKING', colour = G.C.ANGEL },
+									
+									{ string = ' ', colour = G.C.ANGEL },
+									{ string = ' ', colour = G.C.ANGEL },
 									
 									{ string = ' ', colour = G.C.ANGEL },
 									{ string = ' ', colour = G.C.ANGEL },
