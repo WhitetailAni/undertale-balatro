@@ -1826,7 +1826,7 @@ return {
 			},
 			j_UTDR_lord_of_hammer = {
 				text = {
-					"{X:mult,C:white} X#1# {} Mult if{ C:attention}Joker{} slots are full",
+					"{X:mult,C:white} X#1# {} Mult if {C:attention}Joker{} slots are full",
 				},
 				name = "Lord of the Hammer",
 			},
