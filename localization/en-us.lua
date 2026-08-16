@@ -2208,7 +2208,7 @@ return {
 				"wonderful mod add?"
 			},
 			tennaquiz_UTDR_reskins ={
-				"This nod retextures all",
+				"This mod retextures all",
 				"Vanilla {C:attention}Consumable{} types.",
 				"Except for...?"
 			}
