@@ -261,7 +261,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "human_soul",
+	key = "fallen_human",
 	config = {
 		hand_size_gain = 1,
 		joker_count = 0,
@@ -274,10 +274,30 @@ SMODS.Joker {
 	pos = { x = 0, y = 0 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
 		if card.ability.in_build then
-			return { vars = { card.ability.hand_size_gain, #G.jokers.cards * card.ability.hand_size_gain } }
+			return { vars = {
+				elements = { element },
+				card.ability.hand_size_gain,
+				#G.jokers.cards * card.ability.hand_size_gain
+			} }
 		else
-			return { vars = { card.ability.hand_size_gain, card.ability.hand_size_gain } }
+			return { vars = {
+				elements = { element },
+				card.ability.hand_size_gain,
+				card.ability.hand_size_gain
+			} }
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
@@ -285,18 +305,21 @@ SMODS.Joker {
 		G.hand:change_size((#G.jokers.cards * card.ability.hand_size_gain))
 		card.ability.joker_count = #G.jokers.cards
 	end,
-	update = function(self, card, dt)
-		if card.ability.in_build then
-			if card.ability.joker_count ~= #G.jokers.cards then
-				G.hand:change_size(#G.jokers.cards - card.ability.joker_count)
-				card.ability.joker_count = #G.jokers.cards
-			end
-		end
-	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.hand:change_size(-(#G.jokers.cards * card.ability.hand_size_gain))
+		G.hand:change_size(-G.hand.config.card_limits.mod)
+		for i = 1, #SMODS.find_card("j_UTDR_fallen_human") do
+			G.hand:change_size(#G.jokers.cards * card.ability.hand_size_gain)
+		end
 		card.ability.in_build = false
 	end,
+	calculate = function(self, card, context)
+		--these 2 contexts can only ever trigger on 1 joker at a time, so we can assume to change hand size by 1 joker's worth. or just hand_size_gain
+		if context.card_added and context.card.ability.set == "Joker" then
+			G.hand:change_size(card.ability.hand_size_gain)
+		elseif context.joker_type_destroyed or (context.selling_card and context.card.ability.set == "Joker") and not context.card.config.center.key == "j_UTDR_fallen_human" then
+			G.hand:change_size(-card.ability.hand_size_gain)
+		end
+	end
 }
 
 SMODS.Joker {
@@ -543,5 +566,3 @@ SMODS.Joker {
 		end
 	end
 }
-
-

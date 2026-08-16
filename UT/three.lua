@@ -59,7 +59,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "glasses",
+	key = "cloudy_glasses",
 	config = {
 		thorning_is_older = false
 	},
@@ -139,8 +139,7 @@ SMODS.Joker {
 			if context.other_card.debuff then
 				return {
 					message = localize('k_debuffed'),
-					colour = G.C.RED,
-					card = context.blueprint_card or card,
+					colour = G.C.RED
 				}
 			else
 				return {
@@ -230,7 +229,6 @@ SMODS.Joker {
 			super_secret_chance = 9
 		},
 		spared = false,
-		old_bones = ""
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -240,11 +238,6 @@ SMODS.Joker {
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult, card.ability.extra.cycled, card.ability.extra.hands_remaining } }
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		if not from_debuff then
-			card.ability.old_bones = G.localization.misc.dictionary.ph_mr_bones
-		end
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -269,14 +262,11 @@ SMODS.Joker {
 			G.STATE_COMPLETE = true
 			end_round()
 		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = "Redeemed the Punch Card"
 			return {
 				message = "Punched!",
-				saved = true,
+				saved = "totem_UTDR_punch_card",
 				colour = G.C.RED
 			}
-		elseif context.ending_shop and not context.blueprint then
-			G.localization.misc.dictionary.ph_mr_bones = card.config.old_bones
 		elseif context.end_of_round and context.cardarea == G.jokers and card.ability.extra.hands_remaining == 0 then
 			if SMODS.pseudorandom_probability(card, "punch_card_super_secret", 1, card.ability.extra.super_secret_chance, "UT_punch_card_secret") then
 				SMODS.add_card({ key = "j_UTDR_nice_cream" })
@@ -371,13 +361,9 @@ SMODS.Joker {
 				delay = 0.1,
 				func = function()
 					play_sound("UTDR_dummy", 1, 0.7)
-					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+					card_eval_status_text(card, 'extra', nil, nil, nil,
 						{ message = "Futile!", colour = G.C.RED })
-					if context.blueprint then
-						context.blueprint_card:juice_up(0.3, 0.5)
-					else
-						card:juice_up(0.3, 0.5)
-					end
+					card:juice_up(0.3, 0.5)
 					return true
 				end
 			}))
@@ -415,9 +401,8 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card.base.value == "2" and context.other_card.config.center_key ~= "c_base" then
 			return {
-				x_mult = card.ability.xmult,
+				xmult = card.ability.xmult,
 				colour = G.C.MULT,
-				card = context.blueprint_card or card
 			}
 		end
 	end
@@ -460,7 +445,7 @@ SMODS.Joker {
 							return true
 						end)
 					}))
-					card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
+					card_eval_status_text(card, 'extra', nil, nil, nil,
 						{ message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral })
 					card.ability.spectral_gen = true
 				end
@@ -747,10 +732,8 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.setting_blind and not card.getting_sliced then
 			if card.ability.states.hand then
-				G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.values.hand_count
 				ease_hands_played(card.ability.values.hand_count)
 			elseif card.ability.states.discard then
-				G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.values.discard_count
 				ease_discard(card.ability.values.discard_count)
 			elseif card.ability.states.hand_size then
 				G.hand:change_size(card.ability.values.hand_size_count)
@@ -790,13 +773,12 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.main_eval then
 			if card.ability.states.hand then
-				G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.values.hand_count
-				ease_hands_played(-card.ability.values.hand_count)
+				--ease_hands_played(-card.ability.values.hand_count)
 
 				card.ability.states.hand = false
 			elseif card.ability.states.discard then
-				G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.values.discard_count
-				ease_discard(-card.ability.values.discard_count)
+				--G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.values.discard_count
+				--ease_discard(-card.ability.values.discard_count)
 
 				card.ability.states.discard = false
 			elseif card.ability.states.hand_size then

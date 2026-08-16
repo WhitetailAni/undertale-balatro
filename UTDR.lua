@@ -2,6 +2,13 @@ local lovely = require("lovely")
 
 assert(SMODS.load_file('atlas.lua'))()
 assert(SMODS.load_file('sound.lua'))()
+assert(SMODS.load_file('tag.lua'))()
+assert(SMODS.load_file('challenge.lua'))()
+
+local profile_name = G.PROFILES[G.SETTINGS.profile].name
+if profile_name.upper(profile_name) == "GASTER" then
+	G.PROFILES[G.SETTINGS.profile].name = "P" .. G.SETTINGS.profile
+end
 
 UTDR = SMODS.current_mod
 if NFS.read(SMODS.current_mod.path .. "config.lua") then
@@ -22,6 +29,13 @@ local asriel_colors = {
 	HEX("42FCFF"),
 	HEX("003CFF"),
 	HEX("D535D9"),
+}
+
+SMODS.Gradient {
+	key = "asriel_background",
+	colours = asriel_colors,
+	cycle = 66,
+	interpolation = "linear"
 }
 
 SMODS.DynaTextEffect {
@@ -58,6 +72,13 @@ SMODS.DynaTextEffect {
 			asriel_colors[((math.floor(t) + s + 1) % s) + 1],
 			asriel_colors[((math.floor(t) + s) % s) + 1],
 			t % 1.0)
+	end,
+}
+
+SMODS.DynaTextEffect {
+	key = "gaster",
+	draw_letter = function(dynatext, index, letter)
+		
 	end,
 }
 
@@ -110,6 +131,18 @@ UTDR.config_tab = function()
 					end
 				}
 			),
+			create_toggle(
+				{
+					align = "tl",
+					label = "Ralseis",
+					ref_table = UTDR.config_file,
+					ref_value = "ralseis",
+					callback = function(_set_toggle)
+						UTDR.config_file.ralseis = _set_toggle
+						NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
+					end
+				}
+			),
 			UIBox_button(
 				{
 					align = "tl",
@@ -121,42 +154,6 @@ UTDR.config_tab = function()
 		}
 	}
 end
-
---if the joker you display on the title screen isn't discovered it renders the "pls discover this joker" texture which is very funny
---so here's my solution!
-SMODS.Joker {
-	key = "sans_title",
-	discovered = true,
-	atlas = "UT_jokers",
-	pos = { x = 1, y = 5 },
-	no_collection = true,
-	in_pool = function(self, args)
-		return false
-	end,
-}
-
-SMODS.Joker {
-	key = "tv_world_title",
-	discovered = true,
-	atlas = "DR_jokers",
-	pos = { x = 0, y = 5 },
-	no_collection = true,
-	in_pool = function(self, args)
-		return false
-	end,
-}
-
-SMODS.Joker {
-	key = "chara_title",
-	discovered = true,
-	atlas = "UT_jokers",
-	pos = { x = 4, y = 7 },
-	soul_pos = { x = 7, y = 7 },
-	no_collection = true,
-	in_pool = function(self, args)
-		return false
-	end,
-}
 
 function joker_rarity(common, uncommon, rare, legendary)
 	SMODS.ObjectTypes["Joker"].rarities[1].weight = common
@@ -181,12 +178,12 @@ if UTDR.config_file['undertale'] then
 
 	SMODS.Font {
 		key = "ComicSansUT",
-		path = "UndertaleSans.ttf"
+		path = "sans.ttf"
 	}
 
 	SMODS.Font {
 		key = "PapyrusUT",
-		path = "UndertalePapyrus.ttf"
+		path = "papyrus.ttf"
 	}
 
 	SMODS.Back {
@@ -225,10 +222,13 @@ if UTDR.config_file['undertale'] then
 	}
 end
 
-assert(SMODS.load_file('tag.lua'))()
-
 -- load DR
 if UTDR.config_file.deltarune then
+	SMODS.Font {
+		key = "HIM",
+		path = "gaster.ttf"
+	}
+
 	assert(SMODS.load_file('DR/one.lua'))()
 	assert(SMODS.load_file('DR/two.lua'))()
 	assert(SMODS.load_file('DR/three.lua'))()
@@ -236,13 +236,12 @@ if UTDR.config_file.deltarune then
 	
 	assert(SMODS.load_file('DR/four.lua'))()
 	assert(SMODS.load_file('DR/five.lua'))()
-	assert(SMODS.load_file('DR/flowery.lua'))()
 	
 	assert(SMODS.load_file('DR/66.lua'))()
 	assert(SMODS.load_file('DR/99.lua'))()
 
 	assert(SMODS.load_file('DR/point.lua'))()
-
+	assert(SMODS.load_file('DR/capsule.lua'))()
 	
 	assert(SMODS.load_file('DR/deck.lua'))()
 	assert(SMODS.load_file('DR/booster.lua'))()
@@ -308,221 +307,52 @@ function get_keys(t)
 	return keys
 end
 
---[[SMODS.Challenge {
-	key = "flowers",
-	rules = {
-        custom = {
-            { id = "no_shop_jokers" },
-        },
-        modifiers = {
-        	{ id = "joker_slots", value = 8 },
-        }
+SMODS.PokerHand {
+    key = "him",
+    mult = 66666,
+    chips = 66666,
+    l_mult = 6666,
+    l_chips = 6666,
+    example = {
+        { 'H_6', true },
+        { 'H_6', true },
+        { 'S_6', true },
+        { 'S_6', true },
+        { 'C_6', true },
+        { 'C_6', true },
     },
-    restrictions = {
-    	banned_cards = {
-    		{ id = "c_temperance" },
-    		{ id = "c_judgement" },
-    		{ id = "c_wraith" },
-    		{ id = "c_ankh" },
-    		{ id = "c_hex" },
-    		{ id = "c_soul" },
-    		{ id = "c_ectoplasm" },
-    		{ id = "p_buffoon_normal_1" },
-    		{ id = "p_buffoon_normal_2" },
-    		{ id = "p_buffoon_jumbo_1" },
-    		{ id = "p_buffoon_mega_1" },
-    		{ id = "v_hone" },
-    		{ id = "v_glow_up" },
-    		{ id = "v_blank" },
-    		{ id = "v_antimatter" },
-    	},
-    	banned_tags = {
-    		{ id = "tag_uncommon" },
-    		{ id = "tag_rare" },
-    		{ id = "tag_negative" },
-    		{ id = "tag_foil" },
-    		{ id = "tag_holo" },
-    		{ id = "tag_polychrome" },
-    		{ id = "tag_buffoon" },
-    		{ id = "tag_top_up" },
-    	},
-    },
-	jokers = {
-		{ id = "j_UTDR_aqua" },
-	},
-	vouchers = {
-		{ id = "v_overstock_norm" },
-	},
-	apply = function(self)
-		G.GAME.interest = 1.5
-		--G.GAME.discount_percent = 25
-	end,
-	calculate = function(self, context)
-		if context.ante_change then
-			local ante = G.GAME.round_resets.ante
-			if ante == 1 then
-				SMODS.add_card({ key = "j_UTDR_seth" })
-				SMODS.find_card("j_UTDR_seth")[1]:juice_up()
-				SMODS.find_card("j_UTDR_seth")[1]:set_eternal(true)
-			elseif ante == 2 then
-				SMODS.add_card({ key = "j_UTDR_orange" })
-				SMODS.find_card("j_UTDR_orange")[1]:juice_up()
-				SMODS.find_card("j_UTDR_orange")[1]:set_eternal(true)
-			elseif ante == 3 then
-				SMODS.add_card({ key = "j_UTDR_green" })
-				SMODS.find_card("j_UTDR_green")[1]:juice_up()
-				SMODS.find_card("j_UTDR_green")[1]:set_eternal(true)
-			elseif ante == 4 then
-				SMODS.add_card({ key = "j_UTDR_blue" })
-				SMODS.find_card("j_UTDR_blue")[1]:juice_up()
-				SMODS.find_card("j_UTDR_blue")[1]:set_eternal(true)
-			elseif ante == 5 then
-				SMODS.add_card({ key = "j_UTDR_yellow" })
-				SMODS.find_card("j_UTDR_yellow")[1]:juice_up()
-				SMODS.find_card("j_UTDR_yellow")[1]:set_eternal(true)
-			elseif ante == 6 then
-				SMODS.add_card({ key = "j_UTDR_pink" })
-				SMODS.find_card("j_UTDR_pink")[1]:juice_up()
-				SMODS.find_card("j_UTDR_pink")[1]:set_eternal(true)
-			elseif ante == 7 then
-				SMODS.add_card({ key = "j_UTDR_flowery" })
-				SMODS.find_card("j_UTDR_flowery")[1]:juice_up()
-				SMODS.find_card("j_UTDR_flowery")[1]:set_eternal(true)
-			end
-		end
-	end
-}]]
-
-SMODS.Rarity {
-	key = "dog",
-	loc_txt = "Dog",
-	badge_colour = HEX('000000'),
-	text_colour = HEX('ffffff'),
-	default_weight = 0.5,
+    visible = false,
+    evaluate = function(parts, hand)
+    	--it's like it's some king of unused content....
+   		if #hand < 6 or #hand > 6 then return false end
+    	for i = 1, #hand do
+    		if hand[i].base.value ~= "6" then
+    			return { }
+    		end
+    	end
+    	return { hand }
+    end,
 }
 
-function UTDR.calculate(self, context)
-	-- flowery voicelines
-	if #SMODS.find_card("j_UTDR_flowery") > 0 then
-		local card = SMODS.find_card("j_UTDR_flowery")[1]
-		--sound effect checking
-		if context.showdown_blind_effect then
-			play_flowery_sound("nonono")
-		elseif context.after then
-			card.ability.orange_active = false
-		elseif context.before then
-			card.config.center:last_jarona(card)
-		elseif context.joker_main then
-			local oranges = SMODS.find_card("j_UTDR_orange")
-			for i = 1, #oranges do
-				if oranges[i].config.center.config.card_was_sold then
-					card.ability.orange_active = true
-				end
-			end
-			if G.GAME.current_round.hands_left == 0 then
-				play_flowery_sound("last_jarona")
-				card.ability.final_hand = true
-			elseif card.ability.all_flowers then
-				play_flowery_sound_random({
-					"last_jarona",
-					"lend_me_your_power",
-					"omega_flowery"
-				})
-			elseif not card.ability.orange_active then
-				play_flowery_sound_grabbag()
-			end
-		elseif context.blind_defeated then
-			if card.ability.final_hand and pseudorandom("its_my_jarona") > 0.67 then
-				play_flowery_sound("heh_its_my_jarona")
-				card.ability.final_hand = false
-			else
-				play_flowery_sound_random({
-					"heh_one_more_for_the_fans",
-					"heh_its_my_jarona",
-					"according_to_plant",
-					"wow",
-					"thatsgreat",
-					"leaf_it_to_me",
-					"give_it_to_you",
-				})
-			end
-		elseif context.game_over or context.skipping_booster then
-			play_flowery_sound_random({
-				"sustingus",
-				"nonono",
-				"goodbye",
-				"go_home",
-				"get_a_chance_1",
-				"get_a_chance_2",
-				"forget_it"
-			})
-		elseif context.card_added then
-			if context.card.config.center.key == "j_UTDR_ralsei" then
-				play_flowery_sound("hey_raly")
-			elseif context.card.config.center.key == "j_UTDR_susie" then
-				if #SMODS.find_card("j_UTDR_kris") > 0 then
-					play_flowery_sound("my_favorite_two")
-				else
-					play_flowery_sound("susie")
-				end
-			elseif context.card.config.center.key == "j_UTDR_kris" then
-				if #SMODS.find_card("j_UTDR_susie") > 0 then
-					play_flowery_sound("my_favorite_two")
-				else
-					play_flowery_sound_random({
-						"kris",
-						"grown_like_a_turnip",
-					})
-				end
-			elseif context.card.config.center.key == "j_UTDR_asgore" then
-				if #SMODS.find_card("j_UTDR_kris") > 0 then
-					play_flowery_sound("your_dad")
-				else
-					play_flowery_sound("my_king")
-				end
-			elseif context.card.config.center.key == "j_UTDR_flowery" then
-				play_flowery_sound_random({
-					"flowery",
-					"itsme",
-					"leaf_it_to_me",
-					"flowery",
-					"flowery2",
-				})
-			elseif is_card_flower(context.card, true, false) then
-				play_flowery_sound_random({
-					"its_so_human",
-					"my_human",
-				})
-				if context.card.config.center.key == "j_UTDR_pink" and card.ability.all_flowers then
-					context.card:set_eternal(true)
-					context.card:set_edition({ negative = true }, true)
-				end
-			elseif (not context.buying_self or context.open_booster) and context.card.config.center.set == "Joker" then
-				play_flowery_sound_random({
-					"calling_for_help",
-					"heytherelittleguy",
-					"heyguysithinkifoundaglue",
-				})
-			else
-				play_flowery_sound_random({
-					"sorrytokeepyouwaiting1",
-					"sorrytokeepyouwaiting2",
-					"sorrytokeepyouladies",
-					"sorrytokeepaladyinwaiting",
-					"imsorryonceagainikeptaladyinwaiting",
-					"hereicomesanfrandisco",
-					"glue",
-				})
-			end
-		elseif context.modify_shop_card and context.card == card then
-			play_flowery_sound_random({
-				"heytherelittleguy",
-				"heyguys",
-				"hey",
-				"hey_boys",
-			})
-		elseif ((context.selling_card and (is_card_flower(context.card, true, true) or context.card == card)) or (context.joker_type_destroyed and context.card.config.center.key == "j_UTDR_flowery")) then
-			play_flowery_sound("goodbye")
-		end
-	end
-end
+--rigging the rarity poll to make FRIEND show up quicker if youve got protein is hard, so we cheat. cause im LAZY
+SMODS.Rarity {
+    key = "UTDR_FRIEND",
+    badge_colour = HEX('fe5f55'),
+    pools = {
+    	Joker = true
+    },
+    get_weight = function(self, weight, object_type)
+    	local multiplier = 1
+    	local protein_count = #SMODS.find_card("j_egg")
+    	if protein_count == 1 then
+    		multiplier = 4
+    	elseif protein_count == 2 then
+    		multiplier = 7
+    	elseif protein_count == 3 then
+    		multiplier = 9
+    	elseif protein_count >= 4 then
+    		multiplier = 10
+    	end
+        return 0.0025 * multiplier
+    end,
+}

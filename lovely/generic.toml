@@ -1,0 +1,107 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+[vars]
+
+# thanks to @nightshademagia for this patch
+# disallows rerolling blinds that have been prescribed
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'G.GAME.perscribed_bosses[G.GAME.round_resets.ante] = nil'
+position = 'at'
+payload = ''
+match_indent = true
+
+#new colors
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''
+enhanced = G.C.SECONDARY_SET.Enhanced
+'''
+position = "before"
+payload = '''
+joker_grey = G.C.JOKER_GREY,
+gaster = G.C.GASTER,
+ballgame = G.C.BALLGAME,
+steel = G.C.STEEL,
+FRIEND = G.C.FRIEND,
+FRIEND_PINK = G.C.FRIEND_PINK,
+FRIEND_YELLOW = G.C.FRIEND_YELLOW,
+watercooler = G.C.WATERCOOLER,
+netskie = G.C.NETSKIE,
+
+flower_aqua = G.C.FLOWER_AQUA,
+flower_seth = G.C.FLOWER_SETH,
+flower_orange = G.C.FLOWER_ORANGE,
+flower_green = G.C.FLOWER_GREEN,
+flower_blue = G.C.FLOWER_BLUE,
+flower_yellow = G.C.FLOWER_YELLOW,
+flower_pink = G.C.FLOWER_PINK,
+
+catty = G.C.CATTY,
+bratty = G.C.BRATTY,
+points = G.C.POINTS,
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = '''
+RENTAL = HEX('b18f43'),
+'''
+position = "after"
+payload = '''
+GASTER = HEX('000000'),
+ANGEL = HEX('ffffff'),
+BALLGAME = HEX('ff0000'),
+FRIEND = HEX('eeeeee'),
+FRIEND_PINK = HEX('fda9c0'),
+FRIEND_YELLOW = HEX('ffdd45'),
+WATERCOOLER = HEX('2d9bd7'),
+STEEL = HEX('afb4be'),
+NETSKIE = HEX('ff00d6'),
+POINTS = HEX('fd6359'),
+
+BRATTY = HEX('e7b1c5'),
+CATTY = HEX('cbafed'),
+DOG = HEX('dddddd'),
+
+TRANK = HEX('fdd872'),
+SRANK = HEX('e6980e'),
+ARANK = HEX('e34b42'),
+BRANK = HEX('8ee2c0'),
+CRANK = HEX('50bbfd'),
+ZRANK = HEX('8ea1c0'),
+
+FLOWER_AQUA = HEX('46e3ff'),
+FLOWER_SETH = HEX('bd39bd'),
+FLOWER_ORANGE = HEX('ffa040'),
+FLOWER_GREEN = HEX('00a651'),
+FLOWER_BLUE = HEX('00aef0'),
+FLOWER_YELLOW = HEX('fff200'),
+FLOWER_PINK = HEX('ff8a91'),
+
+FLOWER_AQUA_BG = HEX('3ab1c6'),
+FLOWER_SETH_BG = HEX('b141b1'),
+FLOWER_YELLOW_BG = HEX('b1a906'),
+
+'''
+match_indent = true
+
+#7 tags per row instead of 6 on just page 1 (so we dont add a whole extra page for just 4 tags)
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = 'local cols = 6'
+position = 'after'
+payload = '''
+if page == 1 then
+	cols = 7
+end
+'''
+match_indent = true
+

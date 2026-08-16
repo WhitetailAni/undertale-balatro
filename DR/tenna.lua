@@ -340,7 +340,6 @@ function love.update(dt)
 	end
 end
 
-
 --[[
 UTDR_Tenna.Quiz{
 	key = "example",

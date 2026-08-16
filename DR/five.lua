@@ -5,7 +5,7 @@ SMODS.Joker {
 		rank_increase = 1,
 	},
 	loc_vars = function(self, info_queue, card)
-		if math.fmod(os.time(), 1024) == 0 then
+		if math.fmod(os.time(), 512) == 0 then
 			return {
 				vars = { card.ability.rank_increase },
 				key = "j_UTDR_xaviers_lake",
@@ -74,9 +74,14 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					ease_background_colour{new_colour = G.C.FLOWER_AQUA_BG, contrast = 1}
+					return true
+				end
+			}))
 			return {
-				mult = (math.floor(pseudorandom("aqua") * 6) + 1),
-				card = context.blueprint_card or card
+				mult = (math.floor(pseudorandom("aqua") * 6) + 1)
 			}
 		end
 	end
@@ -169,6 +174,13 @@ SMODS.Joker {
 				end
 			end
 			
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					ease_background_colour{new_colour = G.C.FLOWER_SETH_BG, contrast = 1}
+					return true
+				end
+			}))
+			
 			return {
 				level_up = 1,
 				level_up_hand = most_played,
@@ -259,6 +271,12 @@ SMODS.Joker {
 				if not context.blueprint then
 					card.ability.all_punishments_worse_than_burying = true
 				end
+				G.E_MANAGER:add_event(Event({
+				func = function()
+					ease_background_colour{new_colour = G.C.FLOWER_YELLOW_BG, contrast = 1}
+					return true
+				end
+			}))
 				return {
 					xmult = card.ability.xmult
 				}
@@ -329,108 +347,8 @@ SMODS.Joker {
 	end
 }
 
-SMODS.Joker {
-	key = "flowery",
-	config = {
-		xmult = 1.5,
-		all_flowers = false,
-		orange_active = false,
-		final_hand = false,
-		cannot_speak = false,
-	},
-	loc_vars = function(self, info_queue, card)
-		if not card.debuff then
-			play_flowery_sound_random({
-				"flowery",
-				"flowery2",
-				"hey",
-				"heyguys",
-				"itsme",
-				"itsmeflowery",
-				"heytherelittleguy",
-				"thisguysyourbestfriend",
-				"glue",
-			})
-		end
-		return { vars = { card.ability.xmult, localize("9", "ranks") or "9" } }
-	end,
-	add_to_deck = function(self, card, from_debuff)
-		self:last_jarona(card)
-	end,
-	rarity = 3,
-	blueprint_compat = true,
-	eternal_compat = true,
-	atlas = "DR_jokers",
-	pos = { x = 9, y = 9 },
-	soul_pos = { x = 0, y = 12 },
-	cost = 3,
-	last_jarona = function(self, card)
-		local aquas = SMODS.find_card("j_UTDR_aqua")
-		local seths = SMODS.find_card("j_UTDR_seth")
-		local yellows = SMODS.find_card("j_UTDR_yellow")
-		local blues = SMODS.find_card("j_UTDR_blue")
-		local oranges = SMODS.find_card("j_UTDR_orange")
-		local greens = SMODS.find_card("j_UTDR_green")
-		local flowerys = SMODS.find_card("j_UTDR_flowery")
-		local pinks = SMODS.find_card("j_UTDR_pink")
-
-		if #aquas > 0 and #seths > 0 and #yellows > 0 and #blues > 0 and #oranges > 0 and #greens > 0 and not card.ability.all_flowers then
-			play_flowery_sound("lend_me_your_power")
-			card.ability.all_flowers = true
-
-			for i = 1, #aquas do
-				aquas[i]:set_eternal(true)
-				aquas[i]:set_edition({ negative = true }, true)
-			end
-			for i = 1, #seths do
-				seths[i]:set_eternal(true)
-				seths[i]:set_edition({ negative = true }, true)
-			end
-			for i = 1, #yellows do
-				yellows[i]:set_eternal(true)
-				yellows[i]:set_edition({ negative = true }, true)
-			end
-			for i = 1, #blues do
-				blues[i]:set_eternal(true)
-				blues[i]:set_edition({ negative = true }, true)
-			end
-			for i = 1, #oranges do
-				oranges[i]:set_eternal(true)
-				oranges[i]:set_edition({ negative = true }, true)
-				oranges[i].config.center.config.all_flowers = true
-			end
-			for i = 1, #greens do
-				greens[i]:set_eternal(true)
-				greens[i]:set_edition({ negative = true }, true)
-			end
-			for i = 1, #flowerys do
-				flowerys[i]:set_eternal(true)
-				flowerys[i]:set_edition({ negative = true }, true)
-			end
-			--if you have her on the team, fun little bonus! not required for Last Jaronaing though
-			for i = 1, #pinks do
-				pinks[i]:set_eternal(true)
-				pinks[i]:set_edition({ negative = true }, true)
-			end
-		end
-	end,
-	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play then
-			if context.other_card:get_id() == 9 then
-				return {
-					repetitions = 1,
-				}
-			end
-		elseif context.individual and context.cardarea == G.play then
-			if context.other_card:get_id() == 9 then
-				return {
-					xmult = card.ability.xmult,
-					card = context.blueprint_card or card
-				}
-			end
-		end
-	end
-}
+--flowery has been imprisoned in his own lua file for his crimes
+assert(SMODS.load_file('DR/flowery.lua'))()
 
 G.FUNCS.get_unscored_cards = function(context)
 	local scored_map = {}
@@ -563,6 +481,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and G.GAME.chips / G.GAME.blind.chips >= card.ability.required_chips / 100 and not context.blueprint then
+			ease_background_colour{new_colour = G.C.FLOWER_BLUE, contrast = 1}
 			G.E_MANAGER:add_event(Event({
 				trigger = 'after',
 				delay = 0.4,
@@ -572,11 +491,7 @@ SMODS.Joker {
 						local new_card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'blue_tarot')
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
-						if context.blueprint then
-							context.blueprint_card:juice_up(0.3, 0.5)
-						else
-							card:juice_up(0.3, 0.5)
-						end
+						card:juice_up(0.3, 0.5)
 					end
 					return true
 				end
@@ -602,11 +517,7 @@ SMODS.Joker {
 						local new_card = create_card('Planet', G.consumeables, nil, nil, nil, nil, nil, 'blue_planet') --wow didnt know he was mormon
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
-						if context.blueprint then
-							context.blueprint_card:juice_up(0.3, 0.5)
-						else
-							card:juice_up(0.3, 0.5)
-						end
+						card:juice_up(0.3, 0.5)
 					end
 					return true
 				end
@@ -758,16 +669,24 @@ SMODS.Joker {
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.in_build = true
-		play_sound("UTDR_netskie", 1.0, 0.7)
-		card:juice_up(1, 1)
-		card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
-		card.children.center:set_sprite_pos({ x = 7, y = 10 })
-		card.children.floating_sprite.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
-		card.children.floating_sprite:set_sprite_pos({ x = 1, y = 12 })
-		card:set_cost()
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				play_sound("UTDR_netskie", 1.0, 0.7)
+				card:juice_up(1, 1)
+				card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
+				card.children.center:set_sprite_pos({ x = 7, y = 10 })
+				card.children.floating_sprite.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
+				card.children.floating_sprite:set_sprite_pos({ x = 1, y = 12 })
+				card:set_cost()
+				return true
+			end
+		}))
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
+	end,
+	set_badges = function(self, card, badges)
+		badges[#badges] = create_badge("Kee kee~", G.C.GASTER, G.C.NETSKIE, 1.2)
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
 		--have to put this in an event, otherwise it doesnt work in collection tab
@@ -859,22 +778,13 @@ SMODS.Joker {
 				message = localize('k_active_ex'),
 				colour = G.C.FILTER
 			}
-		elseif context.selling_self then
-			local flowerys = SMODS.find_card("j_UTDR_flowery", true)
-			for i = 1, #flowerys do
-				flowerys[i].config.center.config.orange_active = false
-			end
 		elseif context.joker_main and card.ability.card_was_sold and not card.ability.all_flowers then
-			if #SMODS.find_card("j_UTDR_flowery") > 0 and G.GAME.current_round.hands_left > 0 then
-				local which_sfx = pseudorandom("ja_orange")
-				if which_sfx > 0.8 then
-					play_flowery_sound("ja_orange_1")
-				elseif which_sfx > 0.6 then
-					play_flowery_sound("ja_orange_2")
-				else
-					play_flowery_sound_grabbag()
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					ease_background_colour{new_colour = G.C.FLOWER_ORANGE, contrast = 1}
+					return true
 				end
-			end
+			}))
 			return {
 				mult = card.ability.mult
 			}
@@ -901,10 +811,24 @@ SMODS.Joker {
 	pos = { x = 0, y = 10 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_doki"], { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+	
 		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
 		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.odds, 'pink')
-		if #SMODS.find_card("j_UTDR_you") > 0 then
-		vars = {
+		
+		local vars = {
+			elements = { element },
 			numerator,
 			denominator,
 			localize("k_" .. string.lower(card.ability.card_type)),
@@ -914,21 +838,16 @@ SMODS.Joker {
 				G.C.SUITS[card.ability.suit],
 				G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
 			},
-			key = "j_UTDR_pink_you",
 		}
+		
+		if #SMODS.find_card("j_UTDR_you") > 0 then
+			return {
+				vars = vars,
+				key = "j_UTDR_pink_you",
+			}
 		end
 		return {
-			vars = {
-				numerator,
-				denominator,
-				localize("k_" .. string.lower(card.ability.card_type)),
-				localize(card.ability.suit, 'suits_singular') or "Heart",
-				localize { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } },
-				colours = {
-					G.C.SUITS[card.ability.suit],
-					G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
-				}
-			}
+			vars = vars
 		}
 	end,
 	calculate = function(self, card, context)
@@ -1011,7 +930,7 @@ SMODS.Joker {
 		}
 	end,
 	calculate = function(self, card, context)
-		if context.open_booster then
+		if context.ending_booster then
 			local do_create = false
 			if not context.blueprint then
 				card.ability.extra.booster_counter = card.ability.extra.booster_counter + 1
@@ -1037,12 +956,21 @@ SMODS.Joker {
 							func = function() -- This is for timing purposes, everything here runs after the message
 								G.E_MANAGER:add_event(Event({
 									func = (function()
+										ease_background_colour{new_colour = G.C.FLOWER_GREEN, contrast = 1}
 										SMODS.add_card {
 											set = card.ability.extra.card_type,
 											edition = "e_negative",
 											key_append = 'UTDR_green' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
 										}
 										G.GAME.consumeable_buffer = 0
+										G.E_MANAGER:add_event(Event({
+											trigger = 'after',
+											delay = 0.7,
+											func = function()
+												ease_background_colour_blind(G.STATES.SHOP)
+												return true
+											end
+										}))
 										return true
 									end)
 								}))
@@ -1094,11 +1022,7 @@ SMODS.Joker {
 					new_card:start_materialize()
 					G.GAME.blind:debuff_card(new_card)
 					G.hand:sort()
-					if context.blueprint_card then
-						context.blueprint_card:juice_up()
-					else
-						card:juice_up()
-					end
+					card:juice_up()
 					SMODS.calculate_context({ playing_card_added = true, cards = { new_card } })
 					save_run()
 					return true

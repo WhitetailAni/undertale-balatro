@@ -149,7 +149,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "pin",
+	key = "royal_pin",
 	config = {
 		chip_gain = 3,
 		chips = 0
@@ -216,7 +216,7 @@ SMODS.Joker {
 
 --city
 SMODS.Joker {
-	key = "watch",
+	key = "silver_watch",
 	config = {
 		mult = 15
 	},
@@ -286,7 +286,7 @@ SMODS.Joker {
 		if context.before and not context.blueprint then
 			local faces = {}
 			for k, v in ipairs(context.scoring_hand) do
-				if v:is_face() then 
+				if v:is_face() and v.config.center_key ~= "m_steel" then 
 					faces[#faces+1] = v
 					v:set_ability("m_steel", nil, true)
 					G.E_MANAGER:add_event(Event({
@@ -434,6 +434,30 @@ SMODS.Joker {
 		if context.individual and context.cardarea == G.play then
 			local rank = context.other_card.base.value
 			if rank == "Ace" or rank == "9" or rank == "7" and SMODS.pseudorandom_probability(card, "spamton", 1, card.ability.odds, "DR_spamton") then
+				--oh my spamtenna
+				local other_card = context.other_card --cant pass context.other_card into an event or it gets sad....
+				if #SMODS.find_card("j_UTDR_tenna") > 0 and pseudorandom("spamtenna") <= 0.25 and not context.blueprint then
+					G.E_MANAGER:add_event(Event({
+						trigger = 'after',
+						delay = 0.4,
+						func = function()
+							if G.consumeables.config.card_limit > #G.consumeables.cards then
+								play_sound('timpani')
+								local set = pseudorandom_element({
+									"Tarot",
+									"Planet",
+									"Spectral"
+								}, "spamtenna_pipis")
+								local pipis = create_card(set, G.consumeables, nil, nil, nil, nil, nil, 'spamtenna_consumable')
+								pipis:add_to_deck()
+								G.consumeables:emplace(pipis)
+								other_card:juice_up(0.3, 0.5)
+							end
+							return true
+						end
+					}))
+				end
+				
 				return {
 					dollars = card.ability.bigbucks
 				}

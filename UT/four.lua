@@ -174,12 +174,15 @@ SMODS.Joker {
 	config = {
 		in_build = false
 	},
-	rarity = "UTDR_dog",
+	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = false,
 	atlas = "UT_jokers",
 	pos = { x = 1, y = 3 },
 	cost = 4,
+	set_badges = function(self, card, badges)
+		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, HEX('ffffff'), 1.2)
+	end,
 	loc_vars = function(self, info_queue, card)
 		if card.ability.in_build then
 			return { vars = { G.consumeables.config.card_limit, localize("k_tarot") } }

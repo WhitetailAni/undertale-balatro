@@ -442,7 +442,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "shackle",
+	key = "iron_shackle",
 	config = {
 		in_build = false
 	},

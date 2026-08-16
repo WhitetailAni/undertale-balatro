@@ -1,0 +1,48 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+[vars]
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = 'modifiers = {},'
+position = "after"
+payload = '''
+capsule = {
+	last_bet = 0,
+	gold_prizes = {
+		"j_UTDR_fallen_human",
+		"j_UTDR_kris",
+		"j_UTDR_asriel",
+		"j_UTDR_susie",
+		"j_UTDR_asgore",
+		"j_UTDR_dark_fountain",
+		"j_UTDR_shadow_crystal",
+		"j_UTDR_save",
+		"j_UTDR_moss",
+		"j_UTDR_toriel",
+		"j_UTDR_temmie_armor",
+		"j_blueprint",
+		"j_brainstorm",
+		"c_ectoplasm",
+		"c_soul",
+		"c_black_hole",
+	},
+	cannot_pull = {
+		"j_UTDR_thorn_ring",
+		"j_UTDR_shelter",
+		"j_UTDR_vessel",
+		"j_UTDR_weird_deard_gaster",
+		"j_UTDR_survey_program",
+		"j_UTDR_fun_value",
+		"j_UTDR_chara",
+		"j_UTDR_eram",
+		"j_UTDR_undyne_the_undying",
+		"j_UTDR_lacquer_triangle",
+		"j_UTDR_real_knife",
+	}
+},
+'''
+match_indent = true

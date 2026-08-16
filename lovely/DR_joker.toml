@@ -7,47 +7,23 @@ priority = -2
 #shadowguy chips-mult level up tampering
 [[patches]]
 [patches.pattern]
-target = "functions/common_events.lua"
+target = '''=[SMODS _ "src/utils.lua"]'''
 pattern = '''
-G.GAME.hands[hand].level = math.max(0, G.GAME.hands[hand].level + amount)
-G.GAME.hands[hand].mult = math.max(G.GAME.hands[hand].s_mult + G.GAME.hands[hand].l_mult*(G.GAME.hands[hand].level - 1), 1)
-G.GAME.hands[hand].chips = math.max(G.GAME.hands[hand].s_chips + G.GAME.hands[hand].l_chips*(G.GAME.hands[hand].level - 1), 0)
+context.old_parameters = {}
+context.new_parameters = {}
 '''
-position = "at"
-payload = '''
-local shadowguys = SMODS.find_card("j_UTDR_shadowguy")
-if #shadowguys then
-	for i = 1, #shadowguys do
-		shadowguys[i]:juice_up(0.3, 0.4)
-		play_sound(pseudorandom_element({"UTDR_shadowguy_1", "UTDR_shadowguy_2", "UTDR_shadowguy_3"}, shadowguys[i].T.x), 1.0, 0.7)
-		G.GAME.hands[hand].chips = G.GAME.hands[hand].chips + shadowguys[i].ability.chip_gain
-		G.GAME.hands[hand].mult = G.GAME.hands[hand].mult + shadowguys[i].ability.mult_gain
-	end
-end
-G.GAME.hands[hand].level = math.max(0, G.GAME.hands[hand].level + amount)
-G.GAME.hands[hand].mult = G.GAME.hands[hand].mult + G.GAME.hands[hand].l_mult*amount
-G.GAME.hands[hand].chips = G.GAME.hands[hand].chips + G.GAME.hands[hand].l_chips*amount
-'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = "elseif _c.set == 'Planet' then"
 position = "after"
 payload = '''
-local shadowguys = SMODS.find_card("j_UTDR_shadowguy")
-local shadowguys_chips_factor = 0
-local shadowguys_mult_factor = 0
-if #shadowguys then
-	for i = 1, #shadowguys do
-		shadowguys_chips_factor = shadowguys_chips_factor + shadowguys[i].ability.chip_gain
-		shadowguys_mult_factor = shadowguys_mult_factor + shadowguys[i].ability.mult_gain
-	end
+if args.from and args.from.config.center.key == "j_UTDR_shadowguy" then
+	G.E_MANAGER:add_event(Event({
+		func = function()
+			play_sound(pseudorandom_element({"UTDR_shadowguy_1", "UTDR_shadowguy_2", "UTDR_shadowguy_3"}, "shadowguy_sfx"), 1.0, 0.7)
+			return true
+		end
+	}))
 end
 '''
 match_indent = true
-
 
 #mizzle stuffs
 [[patches]]
@@ -92,16 +68,6 @@ if #SMODS.find_card('j_UTDR_philosopher') > 0 and pseudorandom('philosopher') > 
 	_card = {set = "Planet", area = G.pack_cards, skip_materialize = true, soulable = true, key_append = "ar3"}
 elseif G.GAME.used_vouchers.v_omen_globe and pseudorandom('omen_globe') > 0.8 then
 '''
-match_indent = true
-
-# thanks to @nightshademagia for this patch
-# disallows rerolling blinds that have been prescribed
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'G.GAME.perscribed_bosses[G.GAME.round_resets.ante] = nil'
-position = 'at'
-payload = ''
 match_indent = true
 
 [[patches]]
@@ -306,7 +272,7 @@ end
 if #jokers == 0 then jokers = fallback_jokers end 
 local _card = pseudorandom_element(jokers, pseudoseed('crimson_heart'))
 if _card.config.center.key == "j_UTDR_flowery" then
-	play_flowery_sound("nonono")
+	SMODS.play_sound("UTDR_flowery_nonono", 1.0, 0.7)
 	--[[table.remove(jokers, flowery_index)
 	_card = pseudorandom_element(jokers, pseudoseed('crimson_heart'))]]
 end
@@ -320,36 +286,67 @@ end
 '''
 match_indent = true
 
-#swap title screen colors
-[[patches]]
-[patches.pattern]
-target = 'game.lua'
-pattern = '''
-{name = 'colour_1', ref_table = G.C, ref_value = 'RED'},
-{name = 'colour_2', ref_table = G.C, ref_value = 'BLUE'},
-'''
-position = 'at'
-payload = '''
-{name = 'colour_1', ref_table = G.C, ref_value = 'GASTER'},
-{name = 'colour_2', ref_table = G.C, ref_value = 'BALLGAME'},
-'''
-match_indent = true
-
 #sound of justice
 [[patches]]
 [patches.pattern]
-target = 'blind.lua'
+target = '''=[SMODS _ "src/overrides.lua"]'''
 pattern = '''
-function Blind:set_text()
-    if self.config.blind then
-        if self.disabled then
+G.GAME.blind.chip_text = number_format(blind_chips)
 '''
-position = 'at'
+position = 'after'
 payload = '''
-function Blind:set_text(vengeance)
-    if self.config.blind then
-        if not vengeance and (self.disabled or #SMODS.find_card("j_UTDR_sound_of_justice")) then
+if #SMODS.find_card("j_UTDR_sound_of_justice") > 0 then
+	G.GAME.blind.chip_text = "???"
+end
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+local blind_amt = get_blind_amount(G.GAME.round_resets.blind_ante)*blind_choice.config.mult*G.GAME.starting_params.ante_scaling
+'''
+position = 'after'
+payload = '''
+if #SMODS.find_card("j_UTDR_sound_of_justice") > 0 then
+	blind_amt = "???"
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+local card_type_background = 
+          (AUT.card_type == 'Locked' and G.C.BLACK) or 
+          ((AUT.card_type == 'Undiscovered') and darken(G.C.JOKER_GREY, 0.3)) or 
+          (AUT.card_type == 'Enhanced' or AUT.card_type == 'Default') and darken(G.C.BLACK, 0.1) or
+          (debuffed and darken(G.C.BLACK, 0.1)) or 
+          (card_type_colour and darken(G.C.BLACK, 0.1)) or
+          G.C.SET[AUT.card_type] or
+          {0, 1, 1, 1}
+'''
+position = 'after'
+payload = '''
+local alpha_val = 0.8
+if card.config and card.config.center and card.config.center.key == "j_UTDR_weird_deard_gaster" then
+	card_type_background = darken(G.C.GASTER, 10)
+	alpha_val = 1
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+{n=G.UIT.R, config={align = "cm", padding = 0.07, r = 0.1, colour = adjust_alpha(card_type_background, 0.8)}, nodes={
+'''
+position = 'at'
+payload = '''
+{n=G.UIT.R, config={align = "cm", padding = 0.07, r = 0.1, colour = adjust_alpha(card_type_background, alpha_val)}, nodes={
+'''
+match_indent = true
 

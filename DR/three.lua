@@ -233,8 +233,8 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "shadowguy",
 	config = {
-		chip_gain = 5,
-		mult_gain = 2
+		chips = 5,
+		mult = 2
 	},
 	rarity = 1,
 	blueprint_compat = false,
@@ -243,8 +243,25 @@ SMODS.Joker {
 	pos = { x = 2, y = 7 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chip_gain, card.ability.mult_gain } }
+		return { vars = { card.ability.chips, card.ability.mult } }
 	end,
+	remove_from_deck = function(self, card, from_debuff)
+		if not from_debuff then
+			play_sound("UTDR_shadowguy_gone", 1.0, 0.7)
+		end
+	end,
+	calculate = function(self, card, context)
+		if context.poker_hand_changed and context.card.config.center.key ~= "j_UTDR_shadowguy" then --shadowguys cannot feed off each other under ANY CIRCUMSTANCES (it crashes the game instantly)
+			SMODS.upgrade_poker_hands({
+				hands = context.scoring_name,
+				func = function(base, hand, parameter, level_up)
+					return base + card.ability[parameter]
+				end,
+				level_up = 0,
+				from = card,
+			})
+		end
+	end
 }
 
 SMODS.Joker {
@@ -271,38 +288,9 @@ SMODS.Joker {
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 	end,
 	calculate = function(self, card, context)
-		-- Old behaviour :p
-		--[[if context.before and context.cardarea == G.jokers and context.scoring_name == card.ability.selected_hand then
-			G.E_MANAGER:add_event(Event({
-				trigger = 'after',
-				delay = 0.4,
-				func = function()
-					if G.consumeables.config.card_limit > #G.consumeables.cards then
-						play_sound('timpani')
-						local new_card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'tenna')
-						new_card:add_to_deck()
-						G.consumeables:emplace(new_card)
-						card:juice_up(0.3, 0.5)
-						local number = pseudorandom_element({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" },
-							"tenna_blip")
-						play_sound('UTDR_tenna_blip_' .. number, 1.0, 0.7)
-						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Amazing!" })
-					end
-					return true
-				end
-			}))
-		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
-			while not G.GAME.hands[card.ability.selected_hand].visible do
-				card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
-			end
-		end]]
-
-		if context.setting_blind then
+		if context.press_play then
 			UTDR_Tenna.start_quiz(nil, card)
-		end
-
-		if context.joker_main then
+		elseif context.joker_main then
 			return {
 				xmult = UTDR_Tenna.won and card.ability.extra.xmult or nil
 			}
@@ -432,7 +420,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "hero_sword",
+	key = "HERO_SWORD",
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -481,6 +469,18 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
+	merge_table = function(self, regular, subs)
+		local emm = {}
+		for _, value in ipairs(regular) do
+			table.insert(emm, value)
+		end
+		for _, t6 in ipairs(subs) do
+			for _, value in ipairs(t6) do
+				table.insert(emm, value)
+			end
+		end
+		return emm
+	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
@@ -488,33 +488,51 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			local cards_destroyed = G.hand.cards
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "SWOON", colour = G.C.RED })
+			
+			local cards_to_destroy = G.hand.cards
+			
+			--wanna destroy more jokers? add an SMODS.find_card("j_jokerkey") to that array! all will be taken care of for you
+			cards_to_destroy = self:merge_table(cards_to_destroy, {
+				SMODS.find_card("j_UTDR_kris"),
+				SMODS.find_card("j_UTDR_susie"),
+				SMODS.find_card("j_UTDR_ralsei"),
+				SMODS.find_card("j_UTDR_tenna"),
+				SMODS.find_card("j_UTDR_undyne"),
+				SMODS.find_card("j_UTDR_asgore"),
+				SMODS.find_card("j_UTDR_flowery"),
+			})
+			
+			--trigger swoon graphic HERE. make sure main thread halts so cards dont get destroyed off screen
+			
 			G.E_MANAGER:add_event(Event({
-				trigger = 'after',
-				delay = 0.1,
 				func = function()
 					play_sound("UTDR_swoon", 1.0, 1.0)
 					return true
 				end
 			}))
-			for i = 1, #G.hand.cards do
-				local knife = G.hand.cards[i]
+			for i = 1, #cards_to_destroy do
+				local heart_as_my_mark = cards_to_destroy[i]
+				local is_joker = heart_as_my_mark.ability.set == "Joker"
+				local message_color = G.C.RED
+				if is_joker then
+					message_color = G.C.BALLGAME
+				end
+				card_eval_status_text(heart_as_my_mark, 'extra', nil, nil, nil, { message = localize('k_swoon'), colour = message_color, blocking = false })
 				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.1,
 					func = function()
-						card:juice_up(0.3, 0.5)
-						return true
-					end
-				}))
-				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.1,
-					func = function()
-						if SMODS.has_enhancement(knife, "m_glass") then
-							knife:shatter()
+						card:juice_up(1.2, 0.5)
+						if is_joker then
+							SMODS.scale_card(card, {
+								ref_table = card.ability,
+								ref_value = "xmult",
+								scalar_value = "xmult_gain",
+								no_message = true
+							})
+						end
+						if SMODS.has_enhancement(heart_as_my_mark, "m_glass") then
+							heart_as_my_mark:shatter()
 						else
-							knife:start_dissolve(nil, false)
+							heart_as_my_mark:start_dissolve(nil, false)
 						end
 						return true
 					end

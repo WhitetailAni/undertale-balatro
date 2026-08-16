@@ -34,27 +34,80 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
+target = 'game.lua'
+pattern = 'ease_background_colour{new_colour = G.C.BLACK, contrast = 1}'
+position = 'at'
+payload = 'ease_background_colour{new_colour = G.C.GASTER, contrast = 1}'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''
+{name = 'colour_1', ref_table = G.C, ref_value = 'RED'},
+{name = 'colour_2', ref_table = G.C, ref_value = 'BLUE'},
+'''
+position = 'at'
+payload = '''
+{name = 'colour_1', ref_table = G.C, ref_value = 'GASTER'},
+{name = 'colour_2', ref_table = G.C, ref_value = 'BALLGAME'},
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''
+{name = 'colour_1', ref_table = G.C, ref_value = 'BLUE'},
+{name = 'colour_2', ref_table = G.C, ref_value = 'WHITE'},
+'''
+position = 'at'
+payload = '''
+{name = 'colour_1', ref_table = G.C, ref_value = 'GASTER'},
+{name = 'colour_2', ref_table = G.C, ref_value = 'BALLGAME'},
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
 target = "game.lua"
 pattern = "SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_joker'])"
 position = "at"
 payload = '''
 if math.fmod(os.time(), 8192) == 0 then
-	SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_joker'])
+	SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_chara'], {bypass_discovery_center = true})
 else
 	local config = SMODS.find_mod('UTDR')[1].config_file
-	local tv_world = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_tv_world_title'])
-	local sans = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_sans_title'])
+
+	local tv_world = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_tv_world'], {bypass_discovery_center = true})
+	local sans = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_sans'], {bypass_discovery_center = true})
 	if config.deltarune and not config.undertale then
 		SC = tv_world
 	elseif config.undertale and not config.deltarune then
 		SC = sans
 	else
 		if math.fmod(os.time(), 2) == 0 then
-			SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_tv_world_title'])
+			SC = tv_world
 		else
-			SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_sans_title'])
+			SC = sans
 		end
 	end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+G:save_settings()
+G.FILE_HANDLER.force = true
+'''
+position = 'after'
+payload = '''
+local new_name = G.PROFILES[_profile].name
+if new_name.upper(new_name) == "GASTER" then
+	love.event.quit()
 end
 '''
 match_indent = true

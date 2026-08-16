@@ -47,6 +47,25 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 9, y = 0 },
 	cost = 5,
+	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 1, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+		return {
+			vars = {
+				elements = { element }
+			}
+		}
+	end,
 	calculate = function(self, card, context)
 		if context.setting_blind and card.ability.increased_interest and not card.getting_sliced and not context.blueprint then
 			G.GAME.interest_amount = G.GAME.interest_amount / 2
@@ -82,7 +101,23 @@ SMODS.Joker {
 	pos = { x = 5, y = 4 },
 	cost = 7,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chip_gain, card.ability.chips } }
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 7, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+		return { vars = {
+			elements = { element },
+			card.ability.chip_gain,
+			card.ability.chips
+		} }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		return { vars = localize("Full House", 'poker_hands') }
@@ -119,7 +154,26 @@ SMODS.Joker {
 		bought = false
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 4, y = 0 })
+		if #SMODS.find_card("j_UTDR_flowery") > 0 then
+			self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 4, y = 1 })
+		end
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+		return { vars = {
+			elements = { element },
+			card.ability.xmult_gain,
+			card.ability.xmult
+		} }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		return { vars = localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' }
@@ -196,8 +250,26 @@ SMODS.Joker {
 	--unlocked = false
 	unlock_condition = { type = 'hand_contents' },
 	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 6, y = 0 })
+		if #SMODS.find_card("j_UTDR_mettaton") > 0 or #SMODS.find_card("j_UTDR_mettaton_ex") > 0 then
+			self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 6, y = 2 })
+		elseif #SMODS.find_card("j_UTDR_spamton_neo") > 0 then
+			self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 6, y = 1 })
+		end
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
 		return {
 			vars = {
+				elements = { element },
 				card.ability.mult_gain,
 				card.ability.mult
 			}
@@ -281,22 +353,49 @@ SMODS.Joker {
 	soul_pos = { x = 6, y = 7 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult, card.ability.threshold, card.ability.turns_elapsed, localize("Ace", 'ranks') or "Ace" } }
+		local vars = {
+			(localize("Ace", 'ranks') or "Ace"),
+			card.ability.xmult,
+			card.ability.threshold,
+			card.ability.turns_elapsed,
+		} 
+		if card.ability.turns_elapsed >= card.ability.threshold then
+			return {
+				key = "j_UTDR_asriel_active",
+				vars = vars
+			}
+		end
+		return { vars = vars }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		return { vars = { localize("Ace", 'ranks') or "Ace" } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		if #SMODS.find_card("j_UTDR_fallen_human") > 0 then
+			card.ability.turns_elapsed = 6
+			play_sound("UTDR_asriel", 1.0, 0.7)
+			card:juice_up(0.3, 0.5)
+		end
+	end,
+	update = function(self, card, dt)
 	end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and context.other_card.base.value == "Ace" and card.ability.turns_elapsed >= card.ability.threshold then
 			return {
 				xmult = card.ability.xmult
 			}
+		elseif context.card_added and context.card.config.center.key == "j_UTDR_fallen_human" then
+			card.ability.turns_elapsed = 6
+			play_sound("UTDR_asriel", 1.0, 0.7)
+			card:juice_up(0.3, 0.5)
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+			ease_background_colour{new_colour = SMODS.Gradients["UTDR_asriel_background"]}
 			card.ability.turns_elapsed = card.ability.turns_elapsed + 1
-			card:juice_up(0.3, 0.4)
 			if card.ability.turns_elapsed == card.ability.threshold then
 				play_sound("UTDR_asriel", 1.0, 0.7)
 				card:juice_up(0.3, 0.5)
+			elseif card.ability.turns_elapsed < card.ability.threshold then
+				card:juice_up(0.3, 0.4)
 			end
 		end
 	end
@@ -356,7 +455,29 @@ SMODS.Joker {
 		chips = 150
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.chips } }
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 5, y = 0 })
+		if #SMODS.find_card("j_UTDR_papyrus") > 0 then
+			self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 5, y = 3 })
+		elseif #SMODS.find_card("j_UTDR_weird_deard_gaster") > 0 then
+			self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 5, y = 2 })
+		elseif #SMODS.find_card("j_UTDR_sans") > 0 then
+			self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 5, y = 1 })
+		end
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+		return { vars = {
+			elements = { element },
+			card.ability.chips
+		} }
 	end,
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 25 },
@@ -449,8 +570,21 @@ SMODS.Joker {
 	pos = { x = 3, y = 3 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 3, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
 		return {
 			vars = {
+				elements = { element },
 				G.localization.descriptions.Edition.e_foil.name,
 				card.ability.foil,
 				G.localization.descriptions.Edition.e_holo.name,
@@ -547,7 +681,27 @@ SMODS.Joker {
 	--unlocked = false
 	unlock_condition = { type = 'win_custom' },
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult, card.ability.cap, card.ability.enhancement_count, string.lower(localize("b_full_deck")) } }
+		if self.icon and self.icon.remove then
+			self.icon:remove()
+			self.icon = nil
+		end
+		self.icon = Sprite(0, 0, 0.46, 0.46, G.ASSET_ATLAS["UTDR_souls"], { x = 2, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { align = "cm", padding = 0.1 },
+			nodes = {
+				{ n = G.UIT.O, config = { object = self.icon } },
+			}
+		}
+		return {
+			vars = {
+				elements = { element },
+				card.ability.xmult,
+				card.ability.cap,
+				card.ability.enhancement_count,
+				string.lower(localize("b_full_deck"))
+			}
+		}
 	end,
 	rarity = 2,
 	blueprint_compat = true,
