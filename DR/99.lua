@@ -140,7 +140,7 @@ SMODS.Joker {
 		else
 			return { vars = {
 				localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
-				card.ability.thorn_ring_xmult,
+				card.ability.xmult,
 				probabilities_normal,
 				odds,
 			} }
