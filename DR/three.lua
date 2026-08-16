@@ -262,7 +262,10 @@ SMODS.Joker {
 		}
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { G.localization.misc.poker_hands[card.ability.selected_hand], localize("k_tarot") } }
+		local s = G.TILESCALE*G.TILESIZE
+		local text = SMODS.create_sprite(0,0,391/s*.75,69/s*.75, "UTDR_tenna_physical_challenge", {x=0,y=0})
+		local element = { n = G.UIT.O, config = { object = text } }
+		return { vars = { card.ability.extra.xmult, elements = {element} } }
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
@@ -295,7 +298,7 @@ SMODS.Joker {
 			end
 		end]]
 
-		if context.UTDR_on_play_press then
+		if context.setting_blind then
 			UTDR_Tenna.start_quiz(nil, card)
 		end
 

@@ -88,3 +88,13 @@ SMODS.Atlas {
     px = 71,
     py = 95,
 }
+
+SMODS.Atlas {
+	key = "tenna_physical_challenge",
+	path = "tenna_physical_challenge.png",
+	px = 391,
+	py = 69,
+	atlas_table = 'ANIMATION_ATLAS',
+	frames = 18,
+	fps = 30
+}

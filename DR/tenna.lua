@@ -28,10 +28,10 @@ UTDR_Tenna = {
 					spot.config.object = tenna
 					tenna.ui_object_updated = true
 					tenna:add_speech_bubble('tennaquiz_'..quiz, nil, {quip = true})
-					tenna:say_stuff(10)
+					tenna:say_stuff(5)
 				end
 
-				UTDR_Tenna.timer = 10
+				UTDR_Tenna.timer = 12
 				UTDR_Tenna.won = false
 
 				-- Start Events
@@ -86,7 +86,7 @@ UTDR_Tenna = {
 			question_nodes[#question_nodes+1] = n
 		end
 
-		local slider = create_slider({w = 3*G.CARD_W, max = 10, ref_table = UTDR_Tenna, ref_value = "timer"})
+		local slider = create_slider({w = 3*G.CARD_W, max = 12, ref_table = UTDR_Tenna, ref_value = "timer"})
 		slider.nodes[1].config.func = "utdr_tenna_timer"
 
 		local t = create_UIBox_generic_options({ padding = 0, colour = G.C.BLACK, outline_colour = G.C.RED, no_back = true, no_esc = true, contents = {
@@ -338,13 +338,6 @@ function love.update(dt)
     if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('tenna_spot') then
 		UTDR_Tenna.timer = UTDR_Tenna.timer - dt
 	end
-end
-
-local hook = G.FUNCS.play_cards_from_highlighted
-G.FUNCS.play_cards_from_highlighted = function(e)
-	SMODS.calculate_context { UTDR_on_play_press = true }
-	
-	hook(e)
 end
 
 

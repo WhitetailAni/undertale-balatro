@@ -755,10 +755,9 @@ return {
 			j_UTDR_tenna = {
 				name = "Mr. (Ant) Tenna",
 				text = {
-					"Creates a {C:tarot}#2#{} card when",
-					"played hand is a {C:attention}#1#{}",
-					"{s:0.8}hand changes at end of round",
-					"{C:inactive}(Must have room)",
+					"{C:white,X:mult}X#1#{} Mult after completing a",
+					" {element:1} ",
+					"at the start of round"
 				},
 			},
 			j_UTDR_blackshard = {

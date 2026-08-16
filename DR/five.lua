@@ -1063,18 +1063,12 @@ SMODS.Joker {
 	pos = { x = 1, y = 9 },
 	atlas = "DR_jokers",
 	loc_vars = function(self, info_queue, card)
-		if self.susie and self.susie.remove then
-			self.susie:remove()
-			self.susie = nil
-		end
-		self.susie = Sprite(0, 0, 0.5,
-			0.5 * (G.ASSET_ATLAS["UTDR_susies_idea"].py / G.ASSET_ATLAS["UTDR_susies_idea"].px),
-			G.ASSET_ATLAS["UTDR_susies_idea"], { x = 0, y = 0 })
+		local susie = SMODS.create_sprite(0,0,0.5,0.5, "UTDR_susies_idea", {x=0,y=0})
 		local element = {
 			n = G.UIT.C,
 			config = { align = "cm", padding = 0.1 },
 			nodes = {
-				{ n = G.UIT.O, config = { object = self.susie } },
+				{ n = G.UIT.O, config = { object = susie } },
 			}
 		}
 		return {
