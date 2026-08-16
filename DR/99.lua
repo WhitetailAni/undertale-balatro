@@ -169,6 +169,9 @@ SMODS.Joker {
 				glass_xmult(card.ability.xmult)
 			end
 		end
+		if card.config.center.discovered or card.bypass_discovery_center then
+			card.children.center:set_sprite_pos( #SMODS.find_card("j_UTDR_thornring") > 0 and card.area == G.jokers and {x=5,y=8} or card.config.center.pos)
+		end
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
