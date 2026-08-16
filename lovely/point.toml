@@ -87,9 +87,9 @@ position = 'after'
 payload = '''
 if G.GAME.ante.points_to_be_gained > 0 then
 	ease_points(G.GAME.ante.points_to_be_gained)
-	if G.GAME.ante.points_to_be_gained > 1000 then
+	if G.GAME.ante.points_to_be_gained >= 1000 then
 		play_sound('UTDR_points20', 1.0, 0.6)
-	elseif G.GAME.ante.points_to_be_gained > 500 then
+	elseif G.GAME.ante.points_to_be_gained >= 600 then
 		play_sound('UTDR_points15', 1.0, 0.6)
 	else
 		play_sound('UTDR_points10', 1.0, 0.6)
