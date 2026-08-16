@@ -685,7 +685,7 @@ SMODS.Joker {
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
 	end,
-	set_badges = function(self, card, badges)
+	set_card_type_badge = function(self, card, badges)
 		badges[#badges] = create_badge("Kee kee~", G.C.GASTER, G.C.NETSKIE, 1.2)
 	end,
 	set_ability = function(self, card, initial, delay_sprites)

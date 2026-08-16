@@ -526,7 +526,7 @@ SMODS.Joker {
 	pos = { x = 2, y = 9 },
 	soul_pos = { x = 3, y = 9 },
 	cost = 12,
-	set_badges = function(self, card, badges)
+	set_card_type_badge = function(self, card, badges)
 		badges[#badges] = create_badge(localize("k_him"), G.C.GASTER, G.C.ANGEL, 1.2)
 	end,
 	loc_vars = function(self, info_queue, card)
