@@ -744,7 +744,7 @@ SMODS.Joker {
 	soul_pos = { x = 7, y = 7 },
 	cost = 9,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult, card.ability.hand_loss } }
+		return { vars = { card.ability.xmult, card.ability.hand_loss, G.PROFILES[G.SETTINGS.profile].name } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		G.hand:change_size(-card.ability.hand_loss)

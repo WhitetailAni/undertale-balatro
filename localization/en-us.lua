@@ -763,7 +763,7 @@ return {
 					"{X:ballgame,C:white}X#1#{} Mult",
 					"{C:ballgame}-#2#{} hand size",
 				},
-				name = "​",
+				name = "#3#​",
 			},
 			
 			j_UTDR_new_home = {
