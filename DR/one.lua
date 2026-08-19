@@ -5,6 +5,11 @@ SMODS.Joker {
 		hands = 2,
 		hand_size = 1
 	},
+	attributes = {
+		"hands",
+		"hand_size",
+		"passive"
+	},
 	pixel_size = { w = 69, h = 69 },
 	rarity = 1,
 	blueprint_compat = false,
@@ -31,6 +36,11 @@ SMODS.Joker {
 	key = "lancer_cookie",
 	config = {
 		chips = 60
+	},
+	attributes = {
+		"food",
+		"chips",
+		"boss_blind"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -81,6 +91,12 @@ SMODS.Joker {
 		xmult = 1,
 		hands = 0,
 		hand_limit = 15,
+	},
+	attributes = {
+		"food",
+		"scaling",
+		"xmult",
+		"hands"
 	},
 	rarity = 3,
 	blueprint_compat = true,
@@ -155,6 +171,10 @@ SMODS.Joker {
 		chips = 100,
 		discards_remaining = 0
 	},
+	attributes = {
+		"chips",
+		"discard",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -179,6 +199,11 @@ SMODS.Joker {
 		chip_gain = 5,
 		chip_loss = -5,
 		chips = 0
+	},
+	attributes = {
+		"chips",
+		"hands",
+		"discard",
 	},
 	pixel_size = { w = 68, h = 68 },
 	rarity = 1,
@@ -216,6 +241,9 @@ SMODS.Joker {
 --forest
 SMODS.Joker {
 	key = "seam",
+	attributes = {
+		"passive",
+	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -228,6 +256,11 @@ SMODS.Joker {
 	key = "lancer",
 	config = {
 		chips = 30,
+	},
+	attributes = {
+		"food",
+		"chips",
+		"boss_blind"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -259,6 +292,14 @@ SMODS.Joker {
 		xmult_gain = 0.2,
 		xmult = 1,
 		total_gain = 0
+	},
+	attributes = {
+		"scaling",
+		"xmult",
+		"suit",
+		"hearts",
+		"diamonds",
+		"clubs"
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult, localize("Spades", 'suits_singular') or "Spade" } }
@@ -296,6 +337,12 @@ SMODS.Joker {
 		chips = 21,
 		mult = 3,
 	},
+	attributes = {
+		"suit",
+		"clubs",
+		"chips",
+		"mult"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -317,6 +364,10 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "jevil",
+	attributes = {
+		"enhancements",
+		"retrigger",
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -342,6 +393,11 @@ SMODS.Joker {
 	config = {
 		mult_gain = 2,
 		mult = 0
+	},
+	attributes = {
+		"scaling",
+		"mult",
+		"hand_type"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -380,6 +436,10 @@ SMODS.Joker {
 		sell_value_gain = 1,
 		extra_value = 0
 	},
+	attributes = {
+		"scaling",
+		"sell_value",
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.sell_value_gain } }
 	end,
@@ -414,6 +474,11 @@ SMODS.Joker {
 		chips = 0,
 		selected_hand = "Three of a Kind"
 	},
+	attributes = {
+		"scaling",
+		"chips",
+		"hand_type"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chip_gain, G.localization.misc.poker_hands[card.ability.selected_hand], card.ability.chips } }
 	end,
@@ -445,6 +510,10 @@ SMODS.Joker {
 	key = "iron_shackle",
 	config = {
 		in_build = false
+	},
+	attributes = {
+		"passive",
+		"enhancements",
 	},
 	rarity = 2,
 	blueprint_compat = false,
@@ -497,6 +566,10 @@ SMODS.Joker {
 	key = "devilsknife",
 	config = {
 		xmult = 1.75
+	},
+	attributes = {
+		"xmult",
+		"enhancements",
 	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
