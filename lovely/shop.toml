@@ -128,3 +128,13 @@ end
 
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "(self.config.type == 'deck' and self ~= G.deck) or"
+position = "before"
+payload = '''
+(self.config.type == 'hand' and (state == G.STATES.UTDR_SHOP_CAPSULE or G.STATES.UTDR_SHOP_CATTYBRATTY)) or
+'''
+match_indent = true

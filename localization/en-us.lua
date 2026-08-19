@@ -1596,7 +1596,7 @@ return {
 			j_UTDR_lacquer_triangle = {
 				name = "Lacquer Triangle",
 				text = {
-					"{C:ballgame}-#1#{} Hand",
+					"{C:blue}-#1#{} Hand",
 					"{C:gold}Gold{} capsule prizes",
 					"begin at {C:points}300 POINTs"
 				},
@@ -2249,7 +2249,11 @@ return {
 			b_stat_spectrals = dr and "Prophecies" or nil,
 			k_plus_spectral = dr and "+1 Prophecy" or nil,
 			k_spectral = dr and "Prophecy" or nil,
-			k_spectral_pack = dr and "Prophecy Pack" or nil
+			k_spectral_pack = dr and "Prophecy Pack" or nil,
+
+			-- Shop stuff
+			ph_utdr_capsule = "Gamble points for cards!",
+			ph_utdr_cattybratty = "Trade for tags!"
 		},
 		achievement_descriptions = {
 			clairvoyance = dr and "Discover every Prophecy card" or nil

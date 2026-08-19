@@ -112,3 +112,20 @@ SMODS.Atlas {
 	frames = 18,
 	fps = 30
 }
+
+SMODS.Atlas {
+	key = "shopsign_cattybratty",
+	path = "shop/sign_cattybratty.png",
+	px = 114,
+	py = 58,
+}
+
+SMODS.Atlas {
+	key = "shopsign_capsule",
+	path = "shop/sign_ball.png",
+	px = 119,
+	py = 45,
+	atlas_table = 'ANIMATION_ATLAS',
+	frames = 4,
+	fps = 10
+}
