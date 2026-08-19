@@ -6,6 +6,11 @@ SMODS.Joker {
 		mult = 20,
 		chips = 10,
 	},
+	attributes = {
+		"chips",
+		"mult",
+		"chance"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -34,6 +39,10 @@ SMODS.Joker {
 	config = {
 		mult = 7
 	},
+	attributes = {
+		"mult",
+		"hands",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -59,6 +68,11 @@ SMODS.Joker {
 		chips = 0,
 		rounds = 0,
 		round_limit = 6,
+	},
+	attributes = {
+		"food",
+		"chips",
+		"scaling"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -126,6 +140,11 @@ SMODS.Joker {
 		mult_gain = 2,
 		mult = 0
 	},
+	attributes = {
+		"mult",
+		"scaling",
+		"hand_type"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -162,6 +181,13 @@ SMODS.Joker {
 	config = {
 		tarot_odds = 2,
 		destroy_odds = 8
+	},
+	attributes = {
+		"food",
+		"generation",
+		"tarot",
+		"planet",
+		"chance"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -237,6 +263,11 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 7, y = 3 },
 	cost = 7,
+	attributes = {
+		"boss_blind",
+		"generation",
+		"spectral"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { localize("k_spectral") } }
 	end,
@@ -268,6 +299,10 @@ SMODS.Joker {
 	config = {
 		xmult = 3
 	},
+	attributes = {
+		"xmult",
+		"hand_type",
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -295,6 +330,11 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 2, y = 5 },
 	cost = 4,
+	attributes = {
+		"planet",
+		"generation",
+		"hand_type",
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { G.localization.misc.poker_hands['Straight'], localize("k_planet") } }
 	end,
@@ -328,6 +368,10 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 3, y = 5 },
 	cost = 6,
+	attributes = {
+		"hand_type",
+		"retrigger"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { G.localization.misc.poker_hands['Straight'].upper(G.localization.misc.poker_hands['Straight']) } }
 	end,
@@ -345,6 +389,13 @@ SMODS.Joker {
 	key = "mad_mew_mew",
 	config = {
 		money = 5,
+	},
+	attributes = {
+		"economy",
+		"destroy_card",
+		"rank",
+		"king",
+		"jack"
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.money, localize("King", 'ranks') or "King", localize("Jack", 'ranks') or "Jack" } }
@@ -378,6 +429,9 @@ SMODS.Joker {
 	config = {
 		other_card = false
 	},
+	attributes = {
+		"retrigger",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -406,6 +460,10 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 8, y = 1 },
 	cost = 7,
+	attributes = {
+		"retrigger",
+		"enhancements"
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
 		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_bonus" }) } }
@@ -424,6 +482,11 @@ SMODS.Joker {
 	config = {
 		xmult = 1.25,
 		has_scored = false
+	},
+	attributes = {
+		"suit",
+		"spades",
+		"xmult",
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -467,6 +530,11 @@ SMODS.Joker {
 		chip_gain = 15,
 		chips = 0,
 	},
+	attributes = {
+		"chips",
+		"scaling",
+		"destroy_card",
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chip_gain, card.ability.chips } }
 	end,
@@ -492,6 +560,12 @@ SMODS.Joker {
 	config = {
 		odds = 2,
 		money = 1
+	},
+	attributes = {
+		"suit",
+		"diamonds",
+		"chance",
+		"economy"
 	},
 	rarity = 1,
 	blueprint_compat = true,

@@ -5,6 +5,11 @@ SMODS.Joker {
 		chips = 125,
 		chips_loss = -25,
 	},
+	attributes = {
+		"chips",
+		"scaling",
+		"food",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = false,
@@ -63,6 +68,11 @@ SMODS.Joker {
 	config = {
 		thorning_is_older = false
 	},
+	attributes = {
+		"enhancements",
+		"mod_chance",
+		"passive",
+	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -94,6 +104,9 @@ SMODS.Joker {
 	config = {
 		discount = 1
 	},
+	attributes = {
+		"passive",
+	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -122,6 +135,11 @@ SMODS.Joker {
 	config = {
 		chips = 30,
 		has_scored = false
+	},
+	attributes = {
+		"clubs",
+		"suit",
+		"chips"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -157,6 +175,11 @@ SMODS.Joker {
 	config = {
 		odds = 5,
 		tag_count = 3
+	},
+	attributes = {
+		"tag",
+		"chance",
+		"food",
 	},
 	rarity = 2,
 	blueprint_compat = false,
@@ -230,6 +253,10 @@ SMODS.Joker {
 		},
 		spared = false,
 	},
+	attributes = {
+		"xmult",
+		"hands",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -288,6 +315,15 @@ SMODS.Joker {
 		money_min = 1,
 		money_max = 4
 	},
+	attributes = {
+		"rank",
+		"two",
+		"chips",
+		"mult",
+		"xmult",
+		"economy",
+		"chance"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -344,6 +380,10 @@ SMODS.Joker {
 	config = {
 		cards_destroyed = 1
 	},
+	attributes = {
+		"destroy_card",
+		"passive"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -389,6 +429,12 @@ SMODS.Joker {
 	config = {
 		xmult = 2
 	},
+	attributes = {
+		"xmult",
+		"rank",
+		"two",
+		"enhancements"
+	},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -412,6 +458,15 @@ SMODS.Joker {
 	key = "mystery_key",
 	config = {
 		spectral_gen = false
+	},
+	attributes = {
+		"hand_type",
+		"spectral",
+		"generation",
+		"destroy_card",
+		"rank",
+		"ace",
+		"hands"
 	},
 	rarity = 2,
 	blueprint_compat = false,
@@ -464,6 +519,10 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 0, y = 6 },
 	cost = 7,
+	attributes = {
+		"hands",
+		"seals"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.money } }
 	end,
@@ -501,6 +560,11 @@ SMODS.Joker {
 	key = "instant_noodles",
 	config = {
 		xmult = 3
+	},
+	attributes = {
+		"xmult",
+		"food",
+		"boss_blind"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -550,6 +614,12 @@ SMODS.Joker {
 	config = {
 		mult_per_card = 3,
 		mult = 0
+	},
+	attributes = {
+		"mult",
+		"scaling",
+		"discard",
+		"reset"
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.mult_per_card, card.ability.mult } }
@@ -604,6 +674,17 @@ SMODS.Joker {
 			retrigger = false,
 			chicot = false
 		}
+	},
+	attributes = {
+		"passive",
+		"hands",
+		"discard",
+		"hand_size",
+		"chips",
+		"mult",
+		"xmult",
+		"chance",
+		"boss_blind"
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -668,7 +749,7 @@ SMODS.Joker {
 		local rand = pseudorandom("alphys_effect")
 		play_sound("UTDR_alphys", 1.0, 0.7)
 		card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Called in!" })
-	
+
 		if G.GAME.blind.name == "Big Blind" then
 			local zeroth = 0
 			local first = 1 / 8
@@ -796,7 +877,7 @@ SMODS.Joker {
 			elseif card.ability.states.chicot then
 				card.ability.states.chicot = false
 			end
-			
+
 			self:pick_bonus(card)
 		end
 	end
@@ -806,6 +887,13 @@ SMODS.Joker {
 	key = "mettaton",
 	config = {
 		money = 2
+	},
+	attributes = {
+		"economy",
+		"hands",
+		"destroy_card",
+		"suit",
+		"clubs"
 	},
 	rarity = 1,
 	blueprint_compat = false,

@@ -142,7 +142,7 @@ return {
 					"next multiple of {C:attention}#2#{}",
 				},
 			},
-			
+
 			j_UTDR_monster_kid = {
 				name = "Monster Kid",
 				text = {
@@ -263,7 +263,7 @@ return {
 					"{C:green}#1# in #2#{} chance to give {C:money}$#3#{}",
 				},
 			},
-			
+
 			j_UTDR_sea_tea = {
 				name = "Sea Tea",
 				text = {
@@ -441,7 +441,7 @@ return {
 					"{C:red}destroy{} it and earn {C:money}$#1#{}",
 				},
 			},
-			
+
 			j_UTDR_true_lab = {
 				name = "True Lab",
 				text = {
@@ -567,7 +567,7 @@ return {
 				},
 				name = "CORE",
 			},
-			
+
 			j_UTDR_worn_dagger = {
 				unlock = {
 					"Have no more than",
@@ -593,7 +593,7 @@ return {
 				},
 				name = "{element:1}Patience",
 			},
-			j_UTDR_boss_monster_soul = {	
+			j_UTDR_boss_monster_soul = {
 				name = "{element:1}Boss Monster Soul",
 				unlock = {
 					"Discard a",
@@ -765,7 +765,7 @@ return {
 				},
 				name = "#3#​",
 			},
-			
+
 			j_UTDR_new_home = {
 				name = "New Home",
 				text = {
@@ -796,7 +796,8 @@ return {
 					"{C:attention}Boss Blind{} is defeated",
 				},
 				name = "The End",
-			},j_UTDR_surface = {
+			},
+			j_UTDR_surface = {
 				unlock = {
 					"Have at least {E:1,C:attention}5",
 					"{E:1,C:attention}#1#s{} in",
@@ -896,7 +897,7 @@ return {
 				},
 				name = "Roast Chicken",
 			},
-			
+
 			j_UTDR_amber_card = {
 				name = "Amber Card",
 				text = {
@@ -1016,7 +1017,7 @@ return {
 					"{X:mult,C:white}X#1#{} Mult when scored",
 				},
 			},
-			
+
 			j_UTDR_sweet_capn_cakes = {
 				name = "Sweet Cap'n Cakes",
 				text = {
@@ -1146,7 +1147,7 @@ return {
 					"{C:attention}Blind{} is defeated",
 				},
 			},
-			
+
 			j_UTDR_gingerguard = {
 				name = "Ginger Guard",
 				text = {
@@ -1268,7 +1269,7 @@ return {
 					"during {C:attention}Boss Blind{}",
 				},
 			},
-			
+
 			j_UTDR_cupwalker = {
 				name = "Cuptains",
 				text = {
@@ -1391,7 +1392,7 @@ return {
 					"in any {C:attention}#2#",
 				},
 			},
-			
+
 			j_UTDR_the_lake = {
 				name = "The Lake",
 				text = {
@@ -1450,7 +1451,8 @@ return {
 					"{C:attention}+#1#{} card per",
 					"Booster Pack"
 				},
-			},j_UTDR_yellow = {
+			},
+			j_UTDR_yellow = {
 				name = "{C:flower_yellow,element:1}Yellow ",
 				text = {
 					"{X:mult,C:white} X#1# {} Mult if scoring hand",
@@ -1571,7 +1573,7 @@ return {
 					"{C:attention}edition{} to your hand",
 				},
 			},
-			
+
 			j_UTDR_thornring = {
 				name = "Thorn Ring",
 				text = {
@@ -1618,7 +1620,7 @@ return {
 				text = {
 					"{C:green}#1# in #2#{} chance to",
 					"prevent death and",
-					"create a {C:attention}random tag",
+					"create a {C:attention}random Tag",
 				},
 			},
 			j_UTDR_shelter_code = {
@@ -1715,8 +1717,8 @@ return {
 					"{C:inactive}(Must have room)",
 				},
 			},
-			
-			
+
+
 			j_UTDR_hometown = {
 				name = "Hometown",
 				text = {
@@ -1877,9 +1879,9 @@ return {
 					"{S:1.1,C:dark_edition,E:2}You found it!{}",
 				},
 			},
-			
-			
-			
+
+
+
 			j_ring_master = {
 				text = {
 				},
@@ -1888,11 +1890,11 @@ return {
 				text = {
 				},
 			},
-			
 
-			
-			
-			
+
+
+
+
 		},
 		Back = {
 			b_ghost = {
@@ -2157,73 +2159,73 @@ return {
 			c_UTDR_sans = "{F:ComicSansUT}sans."
 		},
 		quips = {
-			tennaquiz_UTDR_tvtime ={
+			tennaquiz_UTDR_tvtime = {
 				"What time is it right now?"
 			},
-			tennaquiz_UTDR_ralsei ={
+			tennaquiz_UTDR_ralsei = {
 				"The Shop values this {C:attention}Joker{} at {C:money}$6{}.",
 				"What's the true value?"
 			},
-			tennaquiz_UTDR_tennaname ={
+			tennaquiz_UTDR_tennaname = {
 				"What's the name of this show's host?"
 			},
-			tennaquiz_UTDR_lancer ={
+			tennaquiz_UTDR_lancer = {
 				"What's the name of this {C:attention}Joker{}?",
 				"Seriously, I don't remember."
 			},
-			tennaquiz_UTDR_jokers ={
+			tennaquiz_UTDR_jokers = {
 				"Apparently base game",
 				"{C:attention}Joker{} art",
 				"looks like this.",
 				"Except for...?"
 			},
-			tennaquiz_UTDR_tarot ={
+			tennaquiz_UTDR_tarot = {
 				"Apparently base game",
 				"{C:tarot}Tarot{} card art",
 				"looks like this.",
 				"Except for...?"
 			},
-			tennaquiz_UTDR_spectral ={
+			tennaquiz_UTDR_spectral = {
 				"Apparently base game",
 				"{C:spectral}Spectral{} cardart",
 				"looks like this.",
 				"Except for...?"
 			},
-			tennaquiz_UTDR_satellite ={
+			tennaquiz_UTDR_satellite = {
 				"Which one of these stellar",
 				"{C:attention}Jokers{} generates money?"
 			},
-			tennaquiz_UTDR_jimbo ={
+			tennaquiz_UTDR_jimbo = {
 				"What's the ability of this unpleasant card?"
 			},
-			tennaquiz_UTDR_balala ={
+			tennaquiz_UTDR_balala = {
 				"What's the name of",
 				"the game you're playing?"
 			},
-			tennaquiz_UTDR_dev ={
+			tennaquiz_UTDR_dev = {
 				"Who was this mod's Director again?"
 			},
-			tennaquiz_UTDR_jokercount ={
+			tennaquiz_UTDR_jokercount = {
 				"How many {C:attention}Jokers{} does this",
 				"wonderful mod add?"
 			},
-			tennaquiz_UTDR_reskins ={
+			tennaquiz_UTDR_reskins = {
 				"This mod retextures all",
 				"Vanilla {C:attention}Consumable{} types.",
 				"Except for...?"
 			}
 		},
 		poker_hands = {
-            ["UTDR_him"] = "Him",
-        },
+			["UTDR_him"] = "Him",
+		},
 		poker_hand_descriptions = {
-            ["UTDR_him"] = {
-                "",
-            },
-        },
-        labels = {
-        	UTDR_friend = "Rare"
-        },
+			["UTDR_him"] = {
+				"",
+			},
+		},
+		labels = {
+			UTDR_friend = "Rare"
+		},
 		dictionary = {
 			totem_UTDR_punch_card = "Redeemed the Punch Card",
 			totem_UTDR_omegaflowey = "HAHAHAHAHAHAHAHAHAHAHA!!",
@@ -2239,7 +2241,7 @@ return {
 			k_UTDR_robot = "Roboticized!",
 			k_UTDR_yellow_thanks = "Thanks, y'all!",
 			k_upgrade_qm = "Upgrade?",
-			
+
 			k_dog = "Dog",
 			k_him = "Him",
 			k_swoon = "SWOON",

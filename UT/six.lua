@@ -4,6 +4,10 @@ SMODS.Joker {
 	config = {
 		chips = 300
 	},
+	attributes = {
+		"chips",
+		"hands"
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -26,6 +30,9 @@ SMODS.Joker {
 	key = "barrier",
 	config = {
 		money = 2,
+	},
+	attributes = {
+		"economy",
 	},
 	--unlocked = false
 	unlock_condition = {
@@ -55,6 +62,10 @@ SMODS.Joker {
 	config = {
 		money = 12,
 	},
+	attributes = {
+		"economy",
+		"boss_blind"
+	},
 	--unlocked = false
 	unlock_condition = { type = 'win_stake', stake = 4 },
 	loc_vars = function(self, info_queue, card)
@@ -80,6 +91,10 @@ SMODS.Joker {
 	key = "surface",
 	config = {
 		mult = 5,
+	},
+	attributes = {
+		"mult",
+		"enhancements"
 	},
 	--unlocked = false
 	unlock_condition = { type = 'modify_deck', extra = { count = 5, enhancement = 'Stone Card', e_key = 'm_stone' } },
@@ -113,6 +128,10 @@ SMODS.Joker {
 	config = {
 		chips = 20,
 	},
+	attributes = {
+		"chips",
+		"joker_slot"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -142,6 +161,10 @@ SMODS.Joker {
 		slotted = false,
 		in_build = false
 	},
+	attributes = {
+		"boss_blind",
+		"tag"
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = { key = 'tag_voucher', set = 'Tag' }
 		return { vars = { card.ability.slot_count, localize { type = 'name_text', set = 'Tag', key = 'tag_voucher' } } }
@@ -166,6 +189,10 @@ SMODS.Joker {
 	config = {
 		xmult = 3,
 		slots = 2,
+	},
+	attributes = {
+		"xmult",
+		"passive"
 	},
 	rarity = 3,
 	blueprint_compat = true,
@@ -206,6 +233,11 @@ SMODS.Joker {
 	config = {
 		hand_size = 5
 	},
+	attributes = {
+		"hand_size",
+		"passive",
+		"discard"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.hand_size } }
 	end,
@@ -238,6 +270,11 @@ SMODS.Joker {
 	key = "dog_residue",
 	config = {
 		mult = 1
+	},
+	attributes = {
+		"mult",
+		"joker",
+		"generation"
 	},
 	in_pool = function()
 		return false
@@ -281,6 +318,11 @@ SMODS.Joker {
 	config = {
 		mult_gain = 1,
 		mult = 0
+	},
+	attributes = {
+		"mult",
+		"scaling",
+		"joker"
 	},
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
@@ -354,6 +396,12 @@ SMODS.Joker {
 			money = false,
 		}
 	},
+	attributes = {
+		"mult",
+		"chips",
+		"xmult",
+		"economy"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -424,6 +472,9 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dog_shrine",
+	attributes = {
+		"passive",
+	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -453,6 +504,11 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "true_reset",
+	attributes = {
+		"on_sell",
+		"tag",
+		"destroy_card"
+	},
 	--unlocked = false
 	unlock_condition = { type = 'round_win' },
 	rarity = 2,
@@ -499,6 +555,10 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "mysterious_artifact",
+	attributes = {
+		"destroy_card",
+		"generation"
+	},
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = false,
@@ -542,12 +602,19 @@ SMODS.Joker {
 	cost = 3,
 	pos = { x = 6, y = 11 },
 	config = { extra = { hands = 0, hands_required = 3, consumable_type = "Planet" } },
+	attributes = {
+		"planet",
+		"generation",
+		"hands"
+	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = {
-			card.ability.extra.hands,
-			card.ability.extra.hands_required,
-			localize("k_" .. string.lower(card.ability.extra.consumable_type)),
-		} }
+		return {
+			vars = {
+				card.ability.extra.hands,
+				card.ability.extra.hands_required,
+				localize("k_" .. string.lower(card.ability.extra.consumable_type)),
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.after then

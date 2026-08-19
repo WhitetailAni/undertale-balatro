@@ -5,6 +5,10 @@ SMODS.Joker {
 		mult = 0,
 		mult_gain = 10,
 	},
+	attributes = {
+		"scaling",
+		"mult",
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -35,6 +39,11 @@ SMODS.Joker {
 	config = {
 		slots = 2,
 		chips_per = 40,
+	},
+	attributes = {
+		"scaling",
+		"chips",
+		"passive"
 	},
 	rarity = 1,
 	blueprint_compat = false,
@@ -69,6 +78,11 @@ SMODS.Joker {
 	config = {
 		chip_gain = 5,
 		chips = 0
+	},
+	attributes = {
+		"scaling",
+		"chips",
+		"hand_type",
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -107,6 +121,9 @@ SMODS.Joker {
 		money = 1,
 		other_card = false
 	},
+	attributes = {
+		"economy",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -136,6 +153,11 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "amalgam",
+	attributes = {
+		"passive",
+		"rank",
+		"suit"
+	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -173,6 +195,12 @@ SMODS.Joker {
 	key = "hot_dog",
 	config = {
 		in_build = false
+	},
+	attributes = {
+		"tarot",
+		"generation",
+		"on_sell",
+		"food"
 	},
 	rarity = 1,
 	blueprint_compat = false,
@@ -227,6 +255,12 @@ SMODS.Joker {
 		bigbucks_chance = 8,
 		bigbucks = 10,
 		munch_chance = 10
+	},
+	attributes = {
+		"mult",
+		"economy",
+		"chance",
+		"food"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -298,6 +332,9 @@ SMODS.Joker {
 		size_increased = false,
 		in_build = false
 	},
+	attributes = {
+		"hand_size",
+	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -337,6 +374,11 @@ SMODS.Joker {
 		mult = 15,
 		has_scored = false
 	},
+	attributes = {
+		"food",
+		"face",
+		"mult"
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -363,6 +405,12 @@ SMODS.Joker {
 	key = "hot_cat",
 	config = {
 		in_build = false
+	},
+	attributes = {
+		"planet",
+		"generation",
+		"on_sell",
+		"food"
 	},
 	rarity = 1,
 	blueprint_compat = false,
@@ -412,6 +460,10 @@ SMODS.Joker {
 		money = 6,
 		hand_loss = 1
 	},
+	attributes = {
+		"economy",
+		"hand_size",
+	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -437,6 +489,20 @@ SMODS.Joker {
 	config = {
 		low_mult = 3,
 		high_mult = 5
+	},
+	attributes = {
+		"chance",
+		"mult",
+		"rank",
+		"two",
+		"three",
+		"four",
+		"five",
+		"six",
+		"seven",
+		"eight",
+		"nine",
+		"ten"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -470,6 +536,9 @@ SMODS.Joker {
 		xmult_per = 0.1,
 		money = 5
 	},
+	attributes = {
+		"xmult",
+	},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -484,7 +553,7 @@ SMODS.Joker {
 			return {
 				xmult = 1 +
 					card.ability.xmult_per *
-						math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money)
+					math.floor((G.GAME.dollars + (G.GAME.dollar_buffer or 0)) / card.ability.money)
 			}
 		end
 	end
@@ -492,6 +561,11 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "empty_gun",
+	attributes = {
+		"hand_type",
+		"hands",
+		"retrigger"
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -511,6 +585,10 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "CORE",
+	attributes = {
+		"hand_type",
+		"passive",
+	},
 	--unlocked = false
 	unlock_condition = { type = 'discard_custom' },
 	rarity = 2,
@@ -534,7 +612,3 @@ SMODS.Joker {
 		end
 	end
 }
-
-
-
-
