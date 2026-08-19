@@ -16,16 +16,23 @@ function Game:update_utdr_shop_capsule(dt)
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_CAPSULE)
 
 		local targets = {
-			"SHOP_SIGN",
 			"UTDR_SHOP_SIGN_CATTY",
 			"buttons",
-			"shop",
 			"utdr_shop_cattybratty"
 		}
 
 		for _, v in ipairs(targets) do
 			if self[v] then self[v]:remove(); self[v] = nil end
 		end
+
+		G.E_MANAGER:add_event(Event({
+			trigger = 'immediate',
+			func = (function()
+				G.shop.alignment.offset.y = 10
+				G.SHOP_SIGN.alignment.offset.y = -15
+				return true
+			end)
+		}))
 
 		G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
 		G.STATE_COMPLETE = true
@@ -56,16 +63,23 @@ function Game:update_utdr_shop_cattybratty(dt)
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_CATTYBRATTY)
 
 		local targets = {
-			"SHOP_SIGN",
 			"UTDR_SHOP_SIGN_CAPSULE",
 			"buttons",
-			"shop",
 			"utdr_shop_capsule"
 		}
 
 		for _, v in ipairs(targets) do
 			if self[v] then self[v]:remove(); self[v] = nil end
 		end
+
+		G.E_MANAGER:add_event(Event({
+			trigger = 'immediate',
+			func = (function()
+				G.shop.alignment.offset.y = 10
+				G.SHOP_SIGN.alignment.offset.y = -15
+				return true
+			end)
+		}))
 
 		G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
 		G.STATE_COMPLETE = true
@@ -260,6 +274,16 @@ end
 local update_shop_hook = Game.update_shop
 function Game:update_shop(dt)
 	if not G.STATE_COMPLETE then
+		if G.SHOP_SIGN then
+			G.E_MANAGER:add_event(Event({
+				trigger = 'immediate',
+				func = (function()
+					G.SHOP_SIGN.alignment.offset.y = 0
+					return true
+				end)
+			}))
+		end
+		
 		local targets = {
 			"UTDR_SHOP_SIGN_CATTY",
 			"UTDR_SHOP_SIGN_CAPSULE",
