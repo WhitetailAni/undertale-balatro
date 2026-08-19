@@ -1,14 +1,14 @@
-UTDR_Tenna = {
+UTDR_Modules.Tenna = {
 	start_quiz = function(quiz, card)
-		if UTDR_Tenna.playing then return end
-		quiz = quiz or pseudorandom_element(UTDR_Tenna.quiz_pool)
+		if UTDR_Modules.Tenna.playing then return end
+		quiz = quiz or pseudorandom_element(UTDR_Modules.Tenna.quiz_pool)
 		
-		UTDR_Tenna.playing = true
-		local quiz_table = UTDR_Tenna.quizzes[quiz]
+		UTDR_Modules.Tenna.playing = true
+		local quiz_table = UTDR_Modules.Tenna.quizzes[quiz]
 
 		-- Make Quiz UI
 		G.FUNCS.overlay_menu{
-			definition = UTDR_Tenna.create_UIBox_quiz(quiz_table),
+			definition = UTDR_Modules.Tenna.create_UIBox_quiz(quiz_table),
 			config = {no_esc = true}
 		}
 		if quiz_table.init then quiz_table:init() end
@@ -31,18 +31,18 @@ UTDR_Tenna = {
 					tenna:say_stuff(5)
 				end
 
-				UTDR_Tenna.timer = 12
-				UTDR_Tenna.won = false
+				UTDR_Modules.Tenna.timer = 12
+				UTDR_Modules.Tenna.won = false
 
 				-- Start Events
 				G.E_MANAGER:add_event(Event({func = function()
-					return UTDR_Tenna.timer <= 0 or UTDR_Tenna.won
+					return UTDR_Modules.Tenna.timer <= 0 or UTDR_Modules.Tenna.won
 				end}))
 
 				G.E_MANAGER:add_event(Event({func = function()
 					G.FUNCS.exit_overlay_menu()
-					UTDR_Tenna.playing = false
-					play_sound(UTDR_Tenna.won and "UTDR_win" or "UTDR_lose") -- Temporary sounds, pls replace
+					UTDR_Modules.Tenna.playing = false
+					play_sound(UTDR_Modules.Tenna.won and "UTDR_win" or "UTDR_lose") -- Temporary sounds, pls replace
 				return true end}))
 		return true end)}))
 	end,
@@ -86,7 +86,7 @@ UTDR_Tenna = {
 			question_nodes[#question_nodes+1] = n
 		end
 
-		local slider = create_slider({w = 3*G.CARD_W, max = 12, ref_table = UTDR_Tenna, ref_value = "timer"})
+		local slider = create_slider({w = 3*G.CARD_W, max = 12, ref_table = UTDR_Modules.Tenna, ref_value = "timer"})
 		slider.nodes[1].config.func = "utdr_tenna_timer"
 
 		local t = create_UIBox_generic_options({ padding = 0, colour = G.C.BLACK, outline_colour = G.C.RED, no_back = true, no_esc = true, contents = {
@@ -111,8 +111,8 @@ UTDR_Tenna = {
 	Quiz = function(t)
 		local key = SMODS.current_mod.prefix.."_"..t.key
 		t.key = nil
-		UTDR_Tenna.quiz_pool[#UTDR_Tenna.quiz_pool+1] = key
-		UTDR_Tenna.quizzes[key] = t
+		UTDR_Modules.Tenna.quiz_pool[#UTDR_Modules.Tenna.quiz_pool+1] = key
+		UTDR_Modules.Tenna.quizzes[key] = t
 		return t
 	end,
 	FakerQuiz = function(t)
@@ -175,7 +175,7 @@ UTDR_Tenna = {
 			return qu
 		end
 
-		return UTDR_Tenna.Quiz(t)
+		return UTDR_Modules.Tenna.Quiz(t)
 	end,
 
 	fakers = {
@@ -326,8 +326,8 @@ function G.FUNCS.utdr_tenna_timer(e)
 end
 
 function G.FUNCS.utdr_tenna_button(e)
-	UTDR_Tenna.won = e.config.question[2]
-	UTDR_Tenna.timer = 0
+	UTDR_Modules.Tenna.won = e.config.question[2]
+	UTDR_Modules.Tenna.timer = 0
 end
 
 -- Hooking base love functions acts weird sometimes lol
@@ -336,12 +336,12 @@ local oldgameupdate = love.update
 function love.update(dt)
     local g = oldgameupdate(dt)
     if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('tenna_spot') then
-		UTDR_Tenna.timer = UTDR_Tenna.timer - dt
+		UTDR_Modules.Tenna.timer = UTDR_Modules.Tenna.timer - dt
 	end
 end
 
 --[[
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "example",
 	init = function(self) end, -- Add behaviour at start of quiz load
 	cards = function(self) -- Return table of card keys or SMODS.create_card tables, could also just be table (eg: j_joker)
@@ -359,7 +359,7 @@ UTDR_Tenna.Quiz{
 }
 ]]
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "tvtime",
 	questions = function(self, area)
 		return {
@@ -371,7 +371,7 @@ UTDR_Tenna.Quiz{
 	end
 }
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "ralsei",
 	cards = function(self) return {"j_UTDR_ralsei"} end,
 	questions = function(self, area)
@@ -384,7 +384,7 @@ UTDR_Tenna.Quiz{
 	end
 }
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "tennaname",
 	questions = function(self, area)
 		return {
@@ -396,7 +396,7 @@ UTDR_Tenna.Quiz{
 	end
 }
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "lancer",
 	cards = function(self) return {"j_UTDR_lancer"} end,
 	questions = function(self, area)
@@ -410,29 +410,29 @@ UTDR_Tenna.Quiz{
 }
 
 -- These need more effort to make
-UTDR_Tenna.FakerQuiz{
+UTDR_Modules.Tenna.FakerQuiz{
 	key = "jokers",
-	fake = UTDR_Tenna.fakers.jokers,
+	fake = UTDR_Modules.Tenna.fakers.jokers,
 	count = 4,
 	faker_count = 1,
 	pool = "Joker",
 	in_pool = function(self,v,args) return not v.mod end -- Vanilla Jokers Only
 }
 
-UTDR_Tenna.FakerQuiz{
+UTDR_Modules.Tenna.FakerQuiz{
 	key = "tarot",
-	fake = UTDR_Tenna.fakers.tarot,
-	not_fake = UTDR_Tenna.fakers.tarot_vanilla,
+	fake = UTDR_Modules.Tenna.fakers.tarot,
+	not_fake = UTDR_Modules.Tenna.fakers.tarot_vanilla,
 	count = 4,
 	faker_count = 1,
 	pool = "Tarot",
 	in_pool = function(self,v,args) return not v.mod end -- Vanilla Tarots Only
 }
 
-UTDR_Tenna.FakerQuiz{
+UTDR_Modules.Tenna.FakerQuiz{
 	key = "spectral",
-	fake = UTDR_Tenna.fakers.spectral,
-	not_fake = UTDR_Tenna.fakers.spectral_vanilla,
+	fake = UTDR_Modules.Tenna.fakers.spectral,
+	not_fake = UTDR_Modules.Tenna.fakers.spectral_vanilla,
 	count = 4,
 	faker_count = 1,
 	pool = "Spectral",
@@ -440,21 +440,21 @@ UTDR_Tenna.FakerQuiz{
 	questions = function(area)
 		local qu = {}
 		for i, v in ipairs(area.cards) do
-			qu[#qu+1] = {UTDR_Tenna.fakers.spectral_names[v.config.center_key] or localize({type = 'name_text', key = v.config.center_key, set = v.config.center.set}),v.fake or false}
+			qu[#qu+1] = {UTDR_Modules.Tenna.fakers.spectral_names[v.config.center_key] or localize({type = 'name_text', key = v.config.center_key, set = v.config.center.set}),v.fake or false}
 		end
 		return qu
 	end
 }
 
 --[[
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "tarot"
 }
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "spectral"
 }]]
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "satellite",
 	cards = function(self) return {
 		"j_supernova",
@@ -472,7 +472,7 @@ UTDR_Tenna.Quiz{
 	end
 }
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "jimbo",
 	cards = function(self) return { "j_joker" } end,
 	questions = function(self, area)
@@ -485,7 +485,7 @@ UTDR_Tenna.Quiz{
 	end
 }
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "balala",
 	questions = function(self, area)
 		return {
@@ -497,7 +497,7 @@ UTDR_Tenna.Quiz{
 	end
 }
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "dev",
 	pool = "Joker",
 	card_post = function(self, area)
@@ -519,7 +519,7 @@ UTDR_Tenna.Quiz{
 	end
 }
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "jokercount",
 	questions = function(self, area)
 		local count = 0 -- Keep Joker count correct even when more are added
@@ -537,7 +537,7 @@ UTDR_Tenna.Quiz{
 	end
 }
 
-UTDR_Tenna.Quiz{
+UTDR_Modules.Tenna.Quiz{
 	key = "reskins",
 	questions = function(self, area)
 		return {

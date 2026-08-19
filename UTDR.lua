@@ -1,3 +1,5 @@
+UTDR_Modules = {}
+
 local lovely = require("lovely")
 
 assert(SMODS.load_file('atlas.lua'))()

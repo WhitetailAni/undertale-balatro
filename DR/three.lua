@@ -280,7 +280,7 @@ SMODS.Joker {
 	},
 	loc_vars = function(self, info_queue, card)
 		local s = G.TILESCALE*G.TILESIZE
-		local text = SMODS.create_sprite(0,0,391/s*.75,69/s*.75, "UTDR_tenna_physical_challenge", {x=0,y=0})
+		local text = SMODS.create_sprite(0,0,391/s*.75,69/s*.75, "UTDR_Tenna_physical_challenge", {x=0,y=0})
 		local element = { n = G.UIT.O, config = { object = text } }
 		return { vars = { card.ability.extra.xmult, elements = {element} } }
 	end,
@@ -288,11 +288,11 @@ SMODS.Joker {
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 	end,
 	calculate = function(self, card, context)
-		if context.press_play then
-			UTDR_Tenna.start_quiz(nil, card)
+		if context.press_play and SMODS.find_card(self.key)[1]==card then
+			UTDR_Modules.Tenna.start_quiz(nil, card)
 		elseif context.joker_main then
 			return {
-				xmult = UTDR_Tenna.won and card.ability.extra.xmult or nil
+				xmult = UTDR_Modules.Tenna.won and card.ability.extra.xmult or nil
 			}
 		end
 	end
@@ -453,6 +453,19 @@ SMODS.Joker {
 	end
 }
 
+local function merge_table(regular, subs)
+	local emm = {}
+	for _, value in ipairs(regular) do
+		table.insert(emm, value)
+	end
+	for _, t6 in ipairs(subs) do
+		for _, value in ipairs(t6) do
+			table.insert(emm, value)
+		end
+	end
+	return emm
+end
+
 SMODS.Joker {
 	key = "knight",
 	config = {
@@ -469,18 +482,15 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
-	merge_table = function(self, regular, subs)
-		local emm = {}
-		for _, value in ipairs(regular) do
-			table.insert(emm, value)
-		end
-		for _, t6 in ipairs(subs) do
-			for _, value in ipairs(t6) do
-				table.insert(emm, value)
-			end
-		end
-		return emm
-	end,
+	targets = {
+		"j_UTDR_kris",
+		"j_UTDR_susie",
+		"j_UTDR_ralsei",
+		"j_UTDR_tenna",
+		"j_UTDR_undyne",
+		"j_UTDR_asgore",
+		"j_UTDR_flowery",
+	},
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
@@ -491,16 +501,12 @@ SMODS.Joker {
 			
 			local cards_to_destroy = G.hand.cards
 			
-			--wanna destroy more jokers? add an SMODS.find_card("j_jokerkey") to that array! all will be taken care of for you
-			cards_to_destroy = self:merge_table(cards_to_destroy, {
-				SMODS.find_card("j_UTDR_kris"),
-				SMODS.find_card("j_UTDR_susie"),
-				SMODS.find_card("j_UTDR_ralsei"),
-				SMODS.find_card("j_UTDR_tenna"),
-				SMODS.find_card("j_UTDR_undyne"),
-				SMODS.find_card("j_UTDR_asgore"),
-				SMODS.find_card("j_UTDR_flowery"),
-			})
+			local targ = {}
+			for _,v in ipairs(self.targets) do
+				targ[#targ+1] = SMODS.find_card(v,true)
+			end
+
+			cards_to_destroy = merge_table(cards_to_destroy, targ)
 			
 			--trigger swoon graphic HERE. make sure main thread halts so cards dont get destroyed off screen
 			
@@ -510,13 +516,10 @@ SMODS.Joker {
 					return true
 				end
 			}))
-			for i = 1, #cards_to_destroy do
+			for i,v in ipairs(cards_to_destroy) do
 				local heart_as_my_mark = cards_to_destroy[i]
 				local is_joker = heart_as_my_mark.ability.set == "Joker"
-				local message_color = G.C.RED
-				if is_joker then
-					message_color = G.C.BALLGAME
-				end
+				local message_color = is_joker and G.C.BALLGAME or G.C.RED
 				card_eval_status_text(heart_as_my_mark, 'extra', nil, nil, nil, { message = localize('k_swoon'), colour = message_color, blocking = false })
 				G.E_MANAGER:add_event(Event({
 					func = function()

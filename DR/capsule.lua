@@ -1,4 +1,6 @@
-function add_vouchers()
+UTDR_Modules.Capsule = {}
+
+function UTDR_Modules.Capsule.add_vouchers()
 	for key, value in pairs(G.P_CENTERS) do
 		if value.set == "Voucher" then
 			G.GAME.capsule.gold_prizes[#G.GAME.capsule.gold_prizes + 1] = key
@@ -32,7 +34,7 @@ local function wow_that_was_so_gold(input, filter)
 	return possible_keys
 end
 
-function get_reward(bet)
+function UTDR_Modules.Capsule.get_reward(bet)
 	if bet == "1225" then
 		return {
 			key = "j_UTDR_lacquer_triangle",
