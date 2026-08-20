@@ -4,6 +4,9 @@ SMODS.Joker {
 	config = {
 		rank_increase = 1,
 	},
+	attributes = {
+		"modify_card",
+	},
 	loc_vars = function(self, info_queue, card)
 		if math.fmod(os.time(), 512) == 0 then
 			return {
@@ -47,6 +50,9 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "aqua",
+	attributes = {
+		"mult",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -76,7 +82,7 @@ SMODS.Joker {
 		if context.individual and context.cardarea == G.play then
 			G.E_MANAGER:add_event(Event({
 				func = function()
-					ease_background_colour{new_colour = G.C.FLOWER_AQUA_BG, contrast = 1}
+					ease_background_colour { new_colour = G.C.FLOWER_AQUA_BG, contrast = 1 }
 					return true
 				end
 			}))
@@ -89,6 +95,10 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "petal_feather",
+	attributes = {
+		"passive",
+		"hand_type"
+	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -131,6 +141,10 @@ SMODS.Joker {
 	config = {
 		levelup_chance = 5,
 	},
+	attributes = {
+		"chance",
+		"planet"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -140,7 +154,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		local probabilities_normal, levelup_chance = SMODS.get_probability_vars(card, 1, card.ability.levelup_chance,
 			"DR_seth")
-	
+
 		if self.icon and self.icon.remove then
 			self.icon:remove()
 			self.icon = nil
@@ -153,7 +167,7 @@ SMODS.Joker {
 				{ n = G.UIT.O, config = { object = self.icon } },
 			}
 		}
-		
+
 		return {
 			vars = {
 				probabilities_normal,
@@ -173,14 +187,14 @@ SMODS.Joker {
 					most_played_count = value.played
 				end
 			end
-			
+
 			G.E_MANAGER:add_event(Event({
 				func = function()
-					ease_background_colour{new_colour = G.C.FLOWER_SETH_BG, contrast = 1}
+					ease_background_colour { new_colour = G.C.FLOWER_SETH_BG, contrast = 1 }
 					return true
 				end
 			}))
-			
+
 			return {
 				level_up = 1,
 				level_up_hand = most_played,
@@ -223,6 +237,11 @@ SMODS.Joker {
 		xmult = 2,
 		all_punishments_worse_than_burying = false
 	},
+	attributes = {
+		"xmult",
+		"suit",
+		"destroy_card"
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = false,
@@ -243,17 +262,22 @@ SMODS.Joker {
 			}
 		}
 		if #SMODS.find_card("j_UTDR_blue") > 0 then
-			return { vars = {
+			return {
+				vars = {
+					card.ability.xmult,
+					card.ability.required_suit_num,
+					elements = { element }
+				},
+				key = "j_UTDR_yellow_gay"
+			}
+		end
+		return {
+			vars = {
 				card.ability.xmult,
 				card.ability.required_suit_num,
 				elements = { element }
-			}, key = "j_UTDR_yellow_gay" }
-		end
-		return { vars = {
-			card.ability.xmult,
-			card.ability.required_suit_num,
-			elements = { element }
-		} }
+			}
+		}
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -272,11 +296,11 @@ SMODS.Joker {
 					card.ability.all_punishments_worse_than_burying = true
 				end
 				G.E_MANAGER:add_event(Event({
-				func = function()
-					ease_background_colour{new_colour = G.C.FLOWER_YELLOW_BG, contrast = 1}
-					return true
-				end
-			}))
+					func = function()
+						ease_background_colour { new_colour = G.C.FLOWER_YELLOW_BG, contrast = 1 }
+						return true
+					end
+				}))
 				return {
 					xmult = card.ability.xmult
 				}
@@ -322,6 +346,12 @@ SMODS.Joker {
 		chips = 0,
 		chip_gain = 2
 	},
+	attributes = {
+		"scaling",
+		"chips",
+		"suit",
+		"clubs"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chip_gain, localize("Clubs", 'suits_singular'), card.ability.chips } }
 	end,
@@ -364,6 +394,10 @@ end
 
 SMODS.Joker {
 	key = "flowery_scarf",
+	attributes = {
+		"modify_card",
+		"enhancements",
+	},
 	atlas = "DR_jokers",
 	pos = { x = 6, y = 10 },
 	config = { extra = { old = {} } },
@@ -451,6 +485,11 @@ SMODS.Joker {
 	config = {
 		required_chips = 75,
 	},
+	attributes = {
+		"prevents_death",
+		"tarot",
+		"generation"
+	},
 	--unlocked = false
 	rarity = 2,
 	blueprint_compat = true,
@@ -471,7 +510,7 @@ SMODS.Joker {
 				{ n = G.UIT.O, config = { object = self.icon } },
 			}
 		}
-	
+
 		return {
 			vars = {
 				card.ability.required_chips,
@@ -481,7 +520,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and G.GAME.chips / G.GAME.blind.chips >= card.ability.required_chips / 100 and not context.blueprint then
-			ease_background_colour{new_colour = G.C.FLOWER_BLUE, contrast = 1}
+			ease_background_colour { new_colour = G.C.FLOWER_BLUE, contrast = 1 }
 			G.E_MANAGER:add_event(Event({
 				trigger = 'after',
 				delay = 0.4,
@@ -539,6 +578,10 @@ SMODS.Joker {
 			floating_pos = { x = 1, y = 12 }
 		},
 	},
+	attributes = {
+		"mult",
+		"enhancements",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -552,7 +595,7 @@ SMODS.Joker {
 		for key, value in pairs(G.P_CENTERS) do
 			keys[#keys + 1] = key
 		end
-		
+
 		local j = 1
 		for i = 1, #keys do
 			if keys[i]:sub(1, 2) == "j_" then
@@ -566,13 +609,13 @@ SMODS.Joker {
 
 		--set key
 		card.config.chosen_joker.joker_key = pseudorandom_element(keys, "netskie_joker")
-		
+
 		--set atlases
 		local center = G.P_CENTERS[card.config.chosen_joker.joker_key]
 		if center.original_mod then
 			card.config.chosen_joker.atlas_key = G.P_CENTERS[card.config.chosen_joker.joker_key].atlas
 		end
-		
+
 		--set sprite pos
 		card.config.chosen_joker.center_pos = center.pos
 		if center.soul_pos then
@@ -585,15 +628,15 @@ SMODS.Joker {
 		--so we fix that by making it disguise itself as... Close To Itself! manually. its textbox is very slightly different :D
 		if base_card.config.chosen_joker.joker_key == "j_UTDR_netskie" then
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name = G.localization.descriptions.Joker
-			["j_UTDR_netskie_bad_disguise"].name
+				["j_UTDR_netskie_bad_disguise"].name
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].name_parsed = G.localization.descriptions.Joker
-			["j_UTDR_netskie_bad_disguise"].name_parsed
-		
+				["j_UTDR_netskie_bad_disguise"].name_parsed
+
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = G.localization.descriptions.Joker
-			["j_UTDR_netskie_bad_disguise"].text
+				["j_UTDR_netskie_bad_disguise"].text
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = G.localization.descriptions.Joker
-			["j_UTDR_netskie_bad_disguise"].text_parsed
-		
+				["j_UTDR_netskie_bad_disguise"].text_parsed
+
 			base_card.config.chosen_joker.atlas_key = "UTDR_DR_jokers"
 			return { base_card.config.mult }
 		end
@@ -625,9 +668,9 @@ SMODS.Joker {
 			set = "Joker",
 			no_edition = true
 		})
-	
+
 		local can_localize = true
-		
+
 		--modded jokers work differently from vanilla jokers - each modded joker has its own separate loc_vars function, or, if they dont need it, none! so we have to check if there is one.
 		--however, vanilla jokers dont - Card has a global function that just checks each applicable jokers and returns what's appropriate, which could be nothing. so we can safely assume :generate_UIBox_ability_table can be called!
 		if center.original_mod then
@@ -639,9 +682,9 @@ SMODS.Joker {
 				end
 			end
 		end
-		
+
 		--modded jokers have loc_vars on their center, while vanilla jokers have generate_UIBox_ability_table on the global *Card*. thankfully, we create a card object, so we can just call it!!
-		local vars = { }
+		local vars = {}
 		if can_localize then
 			local card = dummy.config.center
 			card.ability = dummy.config.center.config
@@ -655,7 +698,7 @@ SMODS.Joker {
 			end
 		end
 		dummy:remove()
-		
+
 		return vars
 	end,
 	loc_vars = function(self, info_queue, card)
@@ -694,14 +737,15 @@ SMODS.Joker {
 			func = function()
 				if not (card and card.area and card.area.config.collection) then
 					self:choose_disguise(card)
-					
+
 					card:set_cost_value(card.config.center.config.chosen_joker.joker_key)
-				
+
 					card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
 					card.children.center:set_sprite_pos(card.config.center.config.chosen_joker.center_pos)
-					
+
 					if card.config.center.config.chosen_joker.should_floating then
-						card.children.floating_sprite.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
+						card.children.floating_sprite.atlas = G.ASSET_ATLAS
+							[card.config.center.config.chosen_joker.atlas_key]
 						card.children.floating_sprite:set_sprite_pos(card.config.center.config.chosen_joker.floating_pos)
 					end
 				end
@@ -740,6 +784,9 @@ SMODS.Joker {
 		card_was_sold = false,
 		all_flowers = false
 	},
+	attributes = {
+		"mult",
+	},
 	loc_vars = function(self, info_queue, card)
 		if self.icon and self.icon.remove then
 			self.icon:remove()
@@ -753,7 +800,7 @@ SMODS.Joker {
 				{ n = G.UIT.O, config = { object = self.icon } },
 			}
 		}
-	
+
 		return {
 			vars = {
 				card.ability.mult,
@@ -781,7 +828,7 @@ SMODS.Joker {
 		elseif context.joker_main and card.ability.card_was_sold and not card.ability.all_flowers then
 			G.E_MANAGER:add_event(Event({
 				func = function()
-					ease_background_colour{new_colour = G.C.FLOWER_ORANGE, contrast = 1}
+					ease_background_colour { new_colour = G.C.FLOWER_ORANGE, contrast = 1 }
 					return true
 				end
 			}))
@@ -804,6 +851,13 @@ SMODS.Joker {
 		suit = "Hearts",
 		card_type = "Tarot"
 	},
+	attributes = {
+		"odds",
+		"tarot",
+		"generation",
+		"suit",
+		"hearts"
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -823,10 +877,10 @@ SMODS.Joker {
 				{ n = G.UIT.O, config = { object = self.icon } },
 			}
 		}
-	
+
 		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
 		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.odds, 'pink')
-		
+
 		local vars = {
 			elements = { element },
 			numerator,
@@ -839,7 +893,7 @@ SMODS.Joker {
 				G.C.SECONDARY_SET[card.ability.card_type] or G.C.FILTER
 			},
 		}
-		
+
 		if #SMODS.find_card("j_UTDR_you") > 0 then
 			return {
 				vars = vars,
@@ -900,6 +954,10 @@ SMODS.Joker {
 			booster_requirement = 2,
 		}
 	},
+	attributes = {
+		"tarot",
+		"generation",
+	},
 	loc_vars = function(self, info_queue, card)
 		if self.icon and self.icon.remove then
 			self.icon:remove()
@@ -913,7 +971,7 @@ SMODS.Joker {
 				{ n = G.UIT.O, config = { object = self.icon } },
 			}
 		}
-	
+
 		info_queue[#info_queue + 1] = { type = 'name_text', key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
 		return {
 			vars = {
@@ -956,7 +1014,7 @@ SMODS.Joker {
 							func = function() -- This is for timing purposes, everything here runs after the message
 								G.E_MANAGER:add_event(Event({
 									func = (function()
-										ease_background_colour{new_colour = G.C.FLOWER_GREEN, contrast = 1}
+										ease_background_colour { new_colour = G.C.FLOWER_GREEN, contrast = 1 }
 										SMODS.add_card {
 											set = card.ability.extra.card_type,
 											edition = "e_negative",
@@ -985,13 +1043,17 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "susies_idea",
+	attributes = {
+		"generation",
+		"editions"
+	},
 	blueprint_compat = true,
 	rarity = 2,
 	cost = 5,
 	pos = { x = 1, y = 9 },
 	atlas = "DR_jokers",
 	loc_vars = function(self, info_queue, card)
-		local susie = SMODS.create_sprite(0,0,0.5,0.5, "UTDR_susies_idea", {x=0,y=0})
+		local susie = SMODS.create_sprite(0, 0, 0.5, 0.5, "UTDR_susies_idea", { x = 0, y = 0 })
 		local element = {
 			n = G.UIT.C,
 			config = { align = "cm", padding = 0.1 },

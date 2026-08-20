@@ -4,6 +4,10 @@ SMODS.Joker {
 	config = {
 		chips = 50
 	},
+	attributes = {
+		"chips",
+		"enhancements"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -25,6 +29,11 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "ramb",
+	attributes = {
+		"tarot",
+		"planet",
+		"generation"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -62,6 +71,10 @@ SMODS.Joker {
 	config = {
 		polycule_odds = 3
 	},
+	attributes = {
+		"chance",
+		"passive"
+	},
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -97,6 +110,10 @@ SMODS.Joker {
 	config = {
 		bigbucks = 2,
 		said_buble = false
+	},
+	attributes = {
+		"enhancements",
+		"economy"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -143,6 +160,12 @@ SMODS.Joker {
 		mult_gain = 1,
 		mult = 0,
 		selected_suit = 'Hearts'
+	},
+	attributes = {
+		"scaling",
+		"mult",
+		"hand_type",
+		"reset"
 	},
 	loc_vars = function(self, info_queue, card)
 		return {
@@ -199,6 +222,9 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "oddcontroller",
+	attributes = {
+		"passive",
+	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -235,6 +261,9 @@ SMODS.Joker {
 	config = {
 		chips = 5,
 		mult = 2
+	},
+	attributes = {
+		"passive",
 	},
 	rarity = 1,
 	blueprint_compat = false,
@@ -278,17 +307,22 @@ SMODS.Joker {
 			won = false
 		}
 	},
+	attributes = {
+		"scaling",
+		"xmult"
+	},
 	loc_vars = function(self, info_queue, card)
-		local s = G.TILESCALE*G.TILESIZE
-		local text = SMODS.create_sprite(0,0,391/s*.75,69/s*.75, "UTDR_Tenna_physical_challenge", {x=0,y=0})
+		local s = G.TILESCALE * G.TILESIZE
+		local text = SMODS.create_sprite(0, 0, 391 / s * .75, 69 / s * .75, "UTDR_Tenna_physical_challenge",
+			{ x = 0, y = 0 })
 		local element = { n = G.UIT.O, config = { object = text } }
-		return { vars = { card.ability.extra.xmult, elements = {element} } }
+		return { vars = { card.ability.extra.xmult, elements = { element } } }
 	end,
 	set_ability = function(self, card, initial, delay_sprites)
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 	end,
 	calculate = function(self, card, context)
-		if context.press_play and SMODS.find_card(self.key)[1]==card then
+		if context.press_play and SMODS.find_card(self.key)[1] == card then
 			UTDR_Modules.Tenna.start_quiz(nil, card)
 		elseif context.joker_main then
 			return {
@@ -303,6 +337,10 @@ SMODS.Joker {
 	key = "mike",
 	config = {
 		bigbucks = 5,
+	},
+	attributes = {
+		"economy",
+		"hand_type"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -336,6 +374,15 @@ SMODS.Joker {
 		},
 		mult_inc = 2,
 		mult = 0
+	},
+	attributes = {
+		"hand_type",
+		"scaling",
+		"mult",
+		"reset",
+		"rank",
+		"seven",
+		"four"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -396,6 +443,11 @@ SMODS.Joker {
 	config = {
 		odds = 15
 	},
+	attributes = {
+		"destroy_card",
+		"chance",
+		"discard"
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -421,6 +473,10 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "HERO_SWORD",
+	attributes = {
+		"tarot",
+		"generation",
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -472,6 +528,11 @@ SMODS.Joker {
 		xmult_gain = 0.25,
 		xmult = 1
 	},
+	attributes = {
+		"scaling",
+		"xmult",
+		"destroy_card"
+	},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -498,29 +559,30 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			local cards_destroyed = G.hand.cards
-			
+
 			local cards_to_destroy = G.hand.cards
-			
+
 			local targ = {}
-			for _,v in ipairs(self.targets) do
-				targ[#targ+1] = SMODS.find_card(v,true)
+			for _, v in ipairs(self.targets) do
+				targ[#targ + 1] = SMODS.find_card(v, true)
 			end
 
 			cards_to_destroy = merge_table(cards_to_destroy, targ)
-			
+
 			--trigger swoon graphic HERE. make sure main thread halts so cards dont get destroyed off screen
-			
+
 			G.E_MANAGER:add_event(Event({
 				func = function()
 					play_sound("UTDR_swoon", 1.0, 1.0)
 					return true
 				end
 			}))
-			for i,v in ipairs(cards_to_destroy) do
+			for i, v in ipairs(cards_to_destroy) do
 				local heart_as_my_mark = cards_to_destroy[i]
 				local is_joker = heart_as_my_mark.ability.set == "Joker"
 				local message_color = is_joker and G.C.BALLGAME or G.C.RED
-				card_eval_status_text(heart_as_my_mark, 'extra', nil, nil, nil, { message = localize('k_swoon'), colour = message_color, blocking = false })
+				card_eval_status_text(heart_as_my_mark, 'extra', nil, nil, nil,
+					{ message = localize('k_swoon'), colour = message_color, blocking = false })
 				G.E_MANAGER:add_event(Event({
 					func = function()
 						card:juice_up(1.2, 0.5)
@@ -557,6 +619,11 @@ SMODS.Joker {
 	config = {
 		xmult = 2
 	},
+	attributes = {
+		"boss_blind",
+		"xmult",
+		"retrigger"
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -584,6 +651,11 @@ SMODS.Joker {
 	config = {
 		hands = 2,
 		discards = 2
+	},
+	attributes = {
+		"boss_blind",
+		"hands",
+		"discard",
 	},
 	rarity = 2,
 	blueprint_compat = true,

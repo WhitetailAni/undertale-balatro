@@ -5,6 +5,10 @@ SMODS.Joker {
 		chips = 5,
 		mult = 2
 	},
+	attributes = {
+		"chips",
+		"mult",
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips, card.ability.mult } }
 	end,
@@ -30,6 +34,10 @@ SMODS.Joker {
 		mult = 30,
 		cycled = 3,
 		hands_remaining = 3,
+	},
+	attributes = {
+		"mult",
+		"hands"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -67,6 +75,10 @@ SMODS.Joker {
 		mult = 99,
 		hand_loss = 2
 	},
+	attributes = {
+		"mult",
+		"hand_size"
+	},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -103,6 +115,11 @@ SMODS.Joker {
 		odds = 8,
 		noelle_is_older = false
 	},
+	attributes = {
+		"enhancements",
+		"mod_chance",
+		"passive",
+	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -135,6 +152,10 @@ SMODS.Joker {
 	config = {
 		chips_per = 40,
 		chips = 0
+	},
+	attributes = {
+		"chips",
+		"joker_slot",
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -185,6 +206,12 @@ SMODS.Joker {
 	config = {
 		mult = 5,
 		odds = 4,
+	},
+	attributes = {
+		"mult",
+		"food",
+		"rank",
+		"chance"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -240,6 +267,10 @@ SMODS.Joker {
 		mult = 5,
 		chips = 20
 	},
+	attributes = {
+		"chips",
+		"mult",
+	},
 	discovered = true,
 	rarity = 1,
 	blueprint_compat = true,
@@ -267,6 +298,10 @@ SMODS.Joker {
 		joker_count = 0,
 		in_build = false
 	},
+	attributes = {
+		"hand_size",
+		"joker_slot",
+	},
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -287,17 +322,21 @@ SMODS.Joker {
 			}
 		}
 		if card.ability.in_build then
-			return { vars = {
-				elements = { element },
-				card.ability.hand_size_gain,
-				#G.jokers.cards * card.ability.hand_size_gain
-			} }
+			return {
+				vars = {
+					elements = { element },
+					card.ability.hand_size_gain,
+					#G.jokers.cards * card.ability.hand_size_gain
+				}
+			}
 		else
-			return { vars = {
-				elements = { element },
-				card.ability.hand_size_gain,
-				card.ability.hand_size_gain
-			} }
+			return {
+				vars = {
+					elements = { element },
+					card.ability.hand_size_gain,
+					card.ability.hand_size_gain
+				}
+			}
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
@@ -327,6 +366,9 @@ SMODS.Joker {
 	config = {
 		xmult = 1.5,
 	},
+	attributes = {
+		"xmult",
+	},
 	discovered = true,
 	rarity = 1,
 	blueprint_compat = true,
@@ -354,6 +396,12 @@ SMODS.Joker {
 		seven_rank = "7",
 		nine_rank = "9",
 		destroy_self = false
+	},
+	attributes = {
+		"rank",
+		"seven",
+		"nine",
+		"mult"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -413,6 +461,9 @@ SMODS.Joker {
 	config = {
 		chips = 100
 	},
+	attributes = {
+		"chips",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -439,6 +490,10 @@ SMODS.Joker {
 	key = "butterscotch-cinnamon_pie",
 	config = {
 		spared = false,
+	},
+	attributes = {
+		"food",
+		"on_sell"
 	},
 	rarity = 2,
 	blueprint_compat = false,
@@ -470,6 +525,11 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 0, y = 5 },
 	cost = 9,
+	attributes = {
+		"joker",
+		"generation",
+		"boss_blind"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult, localize("k_uncommon"), localize("k_rare") } }
 	end,
@@ -477,14 +537,14 @@ SMODS.Joker {
 		if context.setting_blind and not (context.blueprint_card or card).getting_sliced and #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit and context.blind.boss then
 			G.GAME.joker_buffer = G.GAME.joker_buffer +
 				math.min(1, G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
-				
+
 			local uncommon_or_rare = pseudorandom_element({
 				{ color = G.C.GREEN, rarity = 1 },
 				{ color = G.C.GREEN, rarity = 1 },
 				{ color = G.C.GREEN, rarity = 1 },
-				{ color = G.C.RED, rarity = 0.75 }
+				{ color = G.C.RED,   rarity = 0.75 }
 			}, "toriel_rarity")
-			
+
 			SMODS.add_card({
 				set = "Joker",
 				rarity = uncommon_or_rare.rarity,
@@ -508,6 +568,12 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 8, y = 0 },
 	cost = 8,
+	attributes = {
+		"editions",
+		"on_sell",
+		"food",
+		"modify_card"
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.e_foil
 		info_queue[#info_queue + 1] = G.P_CENTERS.e_holo
@@ -539,6 +605,10 @@ SMODS.Joker {
 	config = {
 		mult_round = 10,
 		chips_round = 50
+	},
+	attributes = {
+		"chips",
+		"mult",
 	},
 	rarity = 1,
 	blueprint_compat = false,

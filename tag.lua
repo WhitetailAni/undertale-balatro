@@ -4,15 +4,7 @@ SMODS.Tag {
 	pos = { x = 0, y = 0 },
 	apply = function(self, tag, context)
 		tag:yep("+", G.C.DOG)
-		local key = pseudorandom_element({
-			"j_UTDR_annoying_dog",
-			"j_UTDR_dog_residue",
-			"j_UTDR_hot_dog",
-			"j_UTDR_dog_shrine",
-			"j_UTDR_lesser_dog",
-			"j_UTDR_doghole",
-			"j_UTDR_dogcheck"
-		}, "annoying_tag")
+		local key = pseudorandom_element(SMODS.get_attribute_pool("UTDR_dog"), "annoying_tag")
 		local card = SMODS.add_card({
 			set = "Joker",
 			key = key,

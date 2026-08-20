@@ -5,6 +5,12 @@ SMODS.Joker {
 		money = 1,
 		chips = 20
 	},
+	attributes = {
+		"hearts",
+		"suit",
+		"economy",
+		"chips"
+	},
 	--unlocked = false
 	unlock_condition = { type = 'win_custom' },
 	rarity = 1,
@@ -38,6 +44,10 @@ SMODS.Joker {
 	config = {
 		final_hand = false,
 		increased_interest = false
+	},
+	attributes = {
+		"economy",
+		"hands",
 	},
 	--unlocked = false
 	unlock_condition = { type = 'win_custom' },
@@ -92,6 +102,10 @@ SMODS.Joker {
 		chip_gain = 35,
 		increase_count = 0
 	},
+	attributes = {
+		"chips",
+		"scaling",
+	},
 	--unlocked = false
 	unlock_condition = { type = 'discard_custom' },
 	rarity = 3,
@@ -113,11 +127,13 @@ SMODS.Joker {
 				{ n = G.UIT.O, config = { object = self.icon } },
 			}
 		}
-		return { vars = {
-			elements = { element },
-			card.ability.chip_gain,
-			card.ability.chips
-		} }
+		return {
+			vars = {
+				elements = { element },
+				card.ability.chip_gain,
+				card.ability.chips
+			}
+		}
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		return { vars = localize("Full House", 'poker_hands') }
@@ -153,6 +169,10 @@ SMODS.Joker {
 		xmult = 1,
 		bought = false
 	},
+	attributes = {
+		"xmult",
+		"scaling",
+	},
 	loc_vars = function(self, info_queue, card)
 		if self.icon and self.icon.remove then
 			self.icon:remove()
@@ -169,11 +189,13 @@ SMODS.Joker {
 				{ n = G.UIT.O, config = { object = self.icon } },
 			}
 		}
-		return { vars = {
-			elements = { element },
-			card.ability.xmult_gain,
-			card.ability.xmult
-		} }
+		return {
+			vars = {
+				elements = { element },
+				card.ability.xmult_gain,
+				card.ability.xmult
+			}
+		}
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		return { vars = localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' }
@@ -213,6 +235,11 @@ SMODS.Joker {
 	config = {
 		chips = 200
 	},
+	attributes = {
+		"chips",
+		"suit",
+		"hearts"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.chips, localize("Hearts", 'suits_singular') } }
 	end,
@@ -246,6 +273,10 @@ SMODS.Joker {
 		mult = 0,
 		mult_gain = 4,
 		mult_gained = false
+	},
+	attributes = {
+		"mult",
+		"scaling",
 	},
 	--unlocked = false
 	unlock_condition = { type = 'hand_contents' },
@@ -306,6 +337,11 @@ SMODS.Joker {
 		xmult_per = 0.75,
 		slots = 4
 	},
+	attributes = {
+		"xmult",
+		"scaling",
+		"passive"
+	},
 	--unlocked = false
 	unlock_condition = { type = 'modify_jokers', extra = { count = 7 } },
 	rarity = 3,
@@ -343,6 +379,12 @@ SMODS.Joker {
 		threshold = 6,
 		turns_elapsed = 0
 	},
+	attributes = {
+		"xmult",
+		"ranks",
+		"ace",
+		"hands"
+	},
 	rarity = 3,
 	--unlocked = false
 	unlock_condition = { type = 'hand_contents' },
@@ -358,7 +400,7 @@ SMODS.Joker {
 			card.ability.xmult,
 			card.ability.threshold,
 			card.ability.turns_elapsed,
-		} 
+		}
 		if card.ability.turns_elapsed >= card.ability.threshold then
 			return {
 				key = "j_UTDR_asriel_active",
@@ -389,7 +431,7 @@ SMODS.Joker {
 			play_sound("UTDR_asriel", 1.0, 0.7)
 			card:juice_up(0.3, 0.5)
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-			ease_background_colour{new_colour = SMODS.Gradients["UTDR_asriel_background"]}
+			ease_background_colour { new_colour = SMODS.Gradients["UTDR_asriel_background"] }
 			card.ability.turns_elapsed = card.ability.turns_elapsed + 1
 			if card.ability.turns_elapsed == card.ability.threshold then
 				play_sound("UTDR_asriel", 1.0, 0.7)
@@ -407,6 +449,11 @@ SMODS.Joker {
 		required_chips = 50,
 		xmult_gain = 1,
 		xmult = 1
+	},
+	attributes = {
+		"prevents_death",
+		"scaling",
+		"xmult",
 	},
 	check_for_unlock = function(self, args)
 		return (args.type == "loss_ante" and args.ante == 8)
@@ -454,6 +501,10 @@ SMODS.Joker {
 	config = {
 		chips = 150
 	},
+	attributes = {
+		"chips",
+		"enhancements",
+	},
 	loc_vars = function(self, info_queue, card)
 		if self.icon and self.icon.remove then
 			self.icon:remove()
@@ -474,10 +525,12 @@ SMODS.Joker {
 				{ n = G.UIT.O, config = { object = self.icon } },
 			}
 		}
-		return { vars = {
-			elements = { element },
-			card.ability.chips
-		} }
+		return {
+			vars = {
+				elements = { element },
+				card.ability.chips
+			}
+		}
 	end,
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 25 },
@@ -517,6 +570,12 @@ SMODS.Joker {
 		xmult_gain = 0.6,
 		xmult = 1,
 		total_gain = 0,
+	},
+	attributes = {
+		"suit",
+		"hearts",
+		"scaling",
+		"xmult"
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
@@ -560,6 +619,12 @@ SMODS.Joker {
 		old_poly = 0,
 
 		in_build = false
+	},
+	attributes = {
+		"editions",
+		"chips",
+		"mult",
+		"xmult"
 	},
 	--unlocked = false
 	unlock_condition = { type = 'round_win' },
@@ -646,6 +711,10 @@ SMODS.Joker {
 	config = {
 		mult = 15
 	},
+	attributes = {
+		"enhancements",
+		"mult",
+	},
 	--unlocked = false
 	unlock_condition = { type = 'modify_deck', extra = { count = 5, enhancement = 'Steel Card', e_key = 'm_steel' } },
 	rarity = 2,
@@ -677,6 +746,11 @@ SMODS.Joker {
 		enhancement_count = 0,
 		cap = 8,
 		xmult = 2
+	},
+	attributes = {
+		"enhancements",
+		"xmult",
+		"full_deck"
 	},
 	--unlocked = false
 	unlock_condition = { type = 'win_custom' },
@@ -733,6 +807,10 @@ SMODS.Joker {
 	config = {
 		xmult = 5,
 		hand_loss = 3
+	},
+	attributes = {
+		"xmult",
+		"hand_size"
 	},
 	--unlocked = false
 	unlock_condition = { type = 'hand_contents' },

@@ -80,7 +80,7 @@ SMODS.DynaTextEffect {
 SMODS.DynaTextEffect {
 	key = "gaster",
 	draw_letter = function(dynatext, index, letter)
-		
+
 	end,
 }
 
@@ -176,7 +176,7 @@ if UTDR.config_file['undertale'] then
 	assert(SMODS.load_file('UT/four.lua'))()
 	assert(SMODS.load_file('UT/five.lua'))()
 	assert(SMODS.load_file('UT/six.lua'))()
-	
+
 
 	SMODS.Font {
 		key = "ComicSansUT",
@@ -235,16 +235,16 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/two.lua'))()
 	assert(SMODS.load_file('DR/three.lua'))()
 	assert(SMODS.load_file('DR/tenna.lua'))()
-	
+
 	assert(SMODS.load_file('DR/four.lua'))()
 	assert(SMODS.load_file('DR/five.lua'))()
-	
+
 	assert(SMODS.load_file('DR/66.lua'))()
 	assert(SMODS.load_file('DR/99.lua'))()
 
 	assert(SMODS.load_file('DR/point.lua'))()
 	assert(SMODS.load_file('DR/capsule.lua'))()
-	
+
 	assert(SMODS.load_file('DR/deck.lua'))()
 	assert(SMODS.load_file('DR/booster.lua'))()
 	assert(SMODS.load_file('DR/prophecy.lua'))()
@@ -310,51 +310,64 @@ function get_keys(t)
 end
 
 SMODS.PokerHand {
-    key = "him",
-    mult = 66666,
-    chips = 66666,
-    l_mult = 6666,
-    l_chips = 6666,
-    example = {
-        { 'H_6', true },
-        { 'H_6', true },
-        { 'S_6', true },
-        { 'S_6', true },
-        { 'C_6', true },
-        { 'C_6', true },
-    },
-    visible = false,
-    evaluate = function(parts, hand)
-    	--it's like it's some king of unused content....
-   		if #hand < 6 or #hand > 6 then return false end
-    	for i = 1, #hand do
-    		if hand[i].base.value ~= "6" then
-    			return { }
-    		end
-    	end
-    	return { hand }
-    end,
+	key = "him",
+	mult = 66666,
+	chips = 66666,
+	l_mult = 6666,
+	l_chips = 6666,
+	example = {
+		{ 'H_6', true },
+		{ 'H_6', true },
+		{ 'S_6', true },
+		{ 'S_6', true },
+		{ 'C_6', true },
+		{ 'C_6', true },
+	},
+	visible = false,
+	evaluate = function(parts, hand)
+		--it's like it's some king of unused content....
+		if #hand < 6 or #hand > 6 then return false end
+		for i = 1, #hand do
+			if hand[i].base.value ~= "6" then
+				return {}
+			end
+		end
+		return { hand }
+	end,
+}
+
+SMODS.Attribute {
+	key = "UTDR_dog",
+	keys = {
+		"j_UTDR_annoying_dog",
+		"j_UTDR_dog_residue",
+		"j_UTDR_hot_dog",
+		"j_UTDR_dog_shrine",
+		"j_UTDR_lesser_dog",
+		"j_UTDR_doghole",
+		"j_UTDR_dogcheck"
+	}
 }
 
 --rigging the rarity poll to make FRIEND show up quicker if youve got protein is hard, so we cheat. cause im LAZY
 SMODS.Rarity {
-    key = "UTDR_FRIEND",
-    badge_colour = HEX('fe5f55'),
-    pools = {
-    	Joker = true
-    },
-    get_weight = function(self, weight, object_type)
-    	local multiplier = 1
-    	local protein_count = #SMODS.find_card("j_egg")
-    	if protein_count == 1 then
-    		multiplier = 4
-    	elseif protein_count == 2 then
-    		multiplier = 7
-    	elseif protein_count == 3 then
-    		multiplier = 9
-    	elseif protein_count >= 4 then
-    		multiplier = 10
-    	end
-        return 0.0025 * multiplier
-    end,
+	key = "UTDR_FRIEND",
+	badge_colour = HEX('fe5f55'),
+	pools = {
+		Joker = true
+	},
+	get_weight = function(self, weight, object_type)
+		local multiplier = 1
+		local protein_count = #SMODS.find_card("j_egg")
+		if protein_count == 1 then
+			multiplier = 4
+		elseif protein_count == 2 then
+			multiplier = 7
+		elseif protein_count == 3 then
+			multiplier = 9
+		elseif protein_count >= 4 then
+			multiplier = 10
+		end
+		return 0.0025 * multiplier
+	end,
 }

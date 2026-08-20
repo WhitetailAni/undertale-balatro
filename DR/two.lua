@@ -5,6 +5,11 @@ SMODS.Joker {
 		chips = 10,
 		mult = 5,
 	},
+	attributes = {
+		"chips",
+		"mult",
+		"joker"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -33,6 +38,19 @@ SMODS.Joker {
 		bigbucks = 1,
 		steep_time = 4,
 		tea_timer = 0,
+	},
+	attributes = {
+		"chips",
+		"mult",
+		"xmult",
+		"money",
+		"suit",
+		"hearts",
+		"diamonds",
+		"clubs",
+		"spades",
+		"hands",
+		"food"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -112,6 +130,12 @@ SMODS.Joker {
 	config = {
 		odds = 2
 	},
+	attributes = {
+		"chance",
+		"planet",
+		"tarot",
+		"generation"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -154,6 +178,11 @@ SMODS.Joker {
 		chip_gain = 3,
 		chips = 0
 	},
+	attributes = {
+		"chips",
+		"scaling",
+		"face",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -183,6 +212,11 @@ SMODS.Joker {
 	key = "starwalker",
 	config = {
 		chips = 90
+	},
+	attributes = {
+		"chips",
+		"suit",
+		"diamonds",
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -220,6 +254,11 @@ SMODS.Joker {
 	config = {
 		mult = 15
 	},
+	attributes = {
+		"hands",
+		"passive",
+		"mult",
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -245,6 +284,10 @@ SMODS.Joker {
 	config = {
 		mult_gain = 1,
 		mult = 0
+	},
+	attributes = {
+		"mult",
+		"scaling"
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.mult_gain, card.ability.mult } }
@@ -273,6 +316,11 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "queen",
+	attributes = {
+		"enhancements",
+		"face",
+		"modify_card"
+	},
 	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -286,18 +334,18 @@ SMODS.Joker {
 		if context.before and not context.blueprint then
 			local faces = {}
 			for k, v in ipairs(context.scoring_hand) do
-				if v:is_face() and v.config.center_key ~= "m_steel" then 
-					faces[#faces+1] = v
+				if v:is_face() and v.config.center_key ~= "m_steel" then
+					faces[#faces + 1] = v
 					v:set_ability("m_steel", nil, true)
 					G.E_MANAGER:add_event(Event({
 						func = function()
 							v:juice_up()
 							return true
 						end
-					})) 
+					}))
 				end
 			end
-			if #faces > 0 then 
+			if #faces > 0 then
 				return {
 					message = localize('k_UTDR_robot'),
 					colour = G.C.STEEL,
@@ -311,6 +359,10 @@ SMODS.Joker {
 	key = "tasque_manager",
 	config = {
 		xmult = 3
+	},
+	attributes = {
+		"full_deck",
+		"xmult",
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -334,6 +386,10 @@ SMODS.Joker {
 	key = "twin_ribbon",
 	config = {
 		mult = 25
+	},
+	attributes = {
+		"hand_size",
+		"mult",
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -362,6 +418,12 @@ SMODS.Joker {
 	key = "revivemint",
 	config = {
 		odds = 6
+	},
+	attributes = {
+		"chance",
+		"tarot",
+		"generation",
+		"food"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -420,6 +482,14 @@ SMODS.Joker {
 		odds = 2,
 		bigbucks = 2
 	},
+	attributes = {
+		"chance",
+		"economy",
+		"rank",
+		"ace",
+		"nine",
+		"seven"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -448,7 +518,8 @@ SMODS.Joker {
 									"Planet",
 									"Spectral"
 								}, "spamtenna_pipis")
-								local pipis = create_card(set, G.consumeables, nil, nil, nil, nil, nil, 'spamtenna_consumable')
+								local pipis = create_card(set, G.consumeables, nil, nil, nil, nil, nil,
+									'spamtenna_consumable')
 								pipis:add_to_deck()
 								G.consumeables:emplace(pipis)
 								other_card:juice_up(0.3, 0.5)
@@ -457,7 +528,7 @@ SMODS.Joker {
 						end
 					}))
 				end
-				
+
 				return {
 					dollars = card.ability.bigbucks
 				}
@@ -471,6 +542,10 @@ SMODS.Joker {
 	config = {
 		bigbucks = 1,
 		discards_remaining = 0
+	},
+	attributes = {
+		"discard",
+		"economy",
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -492,6 +567,12 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "spamton_neo",
+	attributes = {
+		"retrigger",
+		"ace",
+		"nine",
+		"seven"
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -515,6 +596,12 @@ SMODS.Joker {
 	config = {
 		mult = 5,
 		xmult = 1.25
+	},
+	attributes = {
+		"mult",
+		"xmult",
+		"boss_blind",
+		"food"
 	},
 	pixel_size = { w = 69, h = 69 },
 	rarity = 1,
@@ -567,7 +654,7 @@ SMODS.Joker {
 				end
 			}))
 			return {
-				message = "["..pseudorandom('pipis_liked_that', 1173, 8824).." liked that]",
+				message = "[" .. pseudorandom('pipis_liked_that', 1173, 8824) .. " liked that]",
 				colour = G.C.BLUE
 			}
 		end
