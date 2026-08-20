@@ -131,6 +131,15 @@ if G.GAME.blind.boss then
 	local hand_rank = "Z"
 	local interest_rank = "Z"
 	
+	for i = 1, #G.vouchers.cards do
+		if G.vouchers.cards[i].config.center_key == "v_UTDR_rippling_stars" then
+			chips_rank = "C"
+			hand_rank = "C"
+			interest_rank = "C"
+			break
+		end
+	end
+	
 	if chips_scored / total_chips >= 10 then
 		chips_rank = "T"
 	elseif chips_scored / total_chips >= 3 then
@@ -170,6 +179,26 @@ if G.GAME.blind.boss then
 	local chips_points = points_from_rank(chips_rank, 250, 50)
 	local hand_points = points_from_rank(hand_rank, 250, 50)
 	local interest_points = points_from_rank(interest_rank, 200, 40)
+	
+	local fallen_star = 0 --NOT 9 DO NOT GIVE 9 FREE POINTS FOR S + T RANK YOU SOUPID
+	for i = 1, #G.vouchers.cards do
+		if G.vouchers.cards[i].config.center_key == "v_UTDR_fallen_star" then
+			fallen_star = G.vouchers.cards[i].ability.points
+			break
+		end
+	end
+	
+	if fallen_star then
+		if chips_rank == "T" then
+			chips_points = chips_points + fallen_star
+		end
+		if hand_rank == "T" then
+			hand_points = hand_points + fallen_star
+		end
+		if interest_rank == "T" then
+			interest_points = interest_points + fallen_star
+		end
+	end
 	
 	local total_points = 0
 	

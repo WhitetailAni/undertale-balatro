@@ -9,6 +9,23 @@ return {
 				},
 			},
 		},
+		Voucher = {
+			v_UTDR_rippling_stars = {
+				name = "Rippling Stars",
+				text = {
+					"{C:attention}Lowest earnable{} rank at",
+					"end of ante is {C:c_rank}C-Rank{}"
+				},
+			},
+			v_UTDR_fallen_star = {
+				name = "Fallen Star",
+				text = {
+					"{C:t_rank}T-Rank{} and {C:s_rank}S-Rank",
+					"grant {C:points}100 POINTs",
+					"extra at {C:attention}end of ante",
+				},
+			}
+		},
 		Joker = {
 			j_UTDR_froggit = {
 				name = "Froggit",

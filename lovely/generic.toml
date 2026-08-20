@@ -44,6 +44,13 @@ flower_pink = G.C.FLOWER_PINK,
 catty = G.C.CATTY,
 bratty = G.C.BRATTY,
 points = G.C.POINTS,
+
+t_rank = G.C.TRANK,
+s_rank = G.C.SRANK,
+a_rank = G.C.ARANK,
+b_rank = G.C.BRANK,
+c_rank = G.C.CRANK,
+z_rank = G.C.ZRANK,
 '''
 match_indent = true
 

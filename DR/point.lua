@@ -1,3 +1,24 @@
+SMODS.Voucher {
+	key = "rippling_stars",
+	atlas = "DR_jokers",
+	pos = { x = 0, y = 0 },
+	cost = 10,
+}
+
+SMODS.Voucher {
+	key = "fallen_star",
+	atlas = "DR_jokers",
+	pos = { x = 1, y = 0 },
+	cost = 10,
+	requires = { "v_UTDR_rippling_stars" },
+	config = {
+		points = 100
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.points } }
+	end
+}
+
 function points_from_rank(rank, max, decrease)
 	if rank == "T" then
 		return max
