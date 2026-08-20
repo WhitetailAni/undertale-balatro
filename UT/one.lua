@@ -571,7 +571,8 @@ SMODS.Joker {
 	attributes = {
 		"editions",
 		"on_sell",
-		"food"
+		"food",
+		"modify_card"
 	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.e_foil

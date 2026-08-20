@@ -626,6 +626,12 @@ SMODS.Joker {
 		final_hand = false,
 		udid = 0,
 	},
+	attributes = {
+		"rank",
+		"nine",
+		"retrigger",
+		"xmult"
+	},
 	loc_vars = function(self, info_queue, card)
 		if not card.debuff then
 			self:play_flowery_sound_random({
@@ -649,7 +655,7 @@ SMODS.Joker {
 				G.GAME.flowery_udid = card.ability.udid
 			end
 		end
-	
+
 		self:last_jarona(card)
 	end,
 	rarity = 3,
@@ -661,13 +667,13 @@ SMODS.Joker {
 	cost = 3,
 	play_flowery_sound = function(self, sfx)
 		if UTDR.config_file['voiceclips'] then
-			play_sound("UTDR_flowery_"..sfx, 1.0, 0.7)
+			play_sound("UTDR_flowery_" .. sfx, 1.0, 0.7)
 		end
 	end,
 	play_flowery_sound_random = function(self, table)
 		if UTDR.config_file['voiceclips'] then
 			local sfx = pseudorandom_element(table, "flowery_sfx")
-			play_sound("UTDR_flowery_"..sfx, 1.0, 0.7)
+			play_sound("UTDR_flowery_" .. sfx, 1.0, 0.7)
 		end
 	end,
 	is_card_flower = function(self, card, include_pink, include_flowery)
@@ -677,7 +683,9 @@ SMODS.Joker {
 		if include_flowery and card.config.center.key == "j_UTDR_flowery" then
 			return true
 		end
-		return card.config.center.key == "j_UTDR_aqua" or card.config.center.key == "j_UTDR_seth" or card.config.center.key == "j_UTDR_yellow"or  card.config.center.key == "j_UTDR_blue" or card.config.center.key == "j_UTDR_green" or card.config.center.key == "j_UTDR_orange"
+		return card.config.center.key == "j_UTDR_aqua" or card.config.center.key == "j_UTDR_seth" or
+		card.config.center.key == "j_UTDR_yellow" or card.config.center.key == "j_UTDR_blue" or
+		card.config.center.key == "j_UTDR_green" or card.config.center.key == "j_UTDR_orange"
 	end,
 	last_jarona = function(self, card)
 		local aquas = SMODS.find_card("j_UTDR_aqua")
@@ -854,22 +862,22 @@ SMODS.Joker {
 						self:play_flowery_sound("susie")
 					end
 				elseif context.card.config.center.key == "j_UTDR_kris" then
-                    if #SMODS.find_card("j_UTDR_susie") > 0 then
-                        self:play_flowery_sound("my_favorite_two")
-                    elseif #SMODS.find_card("j_UTDR_asgore") > 0 then
-                        self:play_flowery_sound("no_way_its_your_children")
-                    else
-                        self:play_flowery_sound_random({
-                            "kris",
-                            "grown_like_a_turnip",
-                        })
-                    end
-                elseif context.card.config.center.key == "j_UTDR_asgore" then
-                    if #SMODS.find_card("j_UTDR_kris") > 0 then
-                        self:play_flowery_sound("your_dad")
-                    else
-                        self:play_flowery_sound("my_king")
-                    end
+					if #SMODS.find_card("j_UTDR_susie") > 0 then
+						self:play_flowery_sound("my_favorite_two")
+					elseif #SMODS.find_card("j_UTDR_asgore") > 0 then
+						self:play_flowery_sound("no_way_its_your_children")
+					else
+						self:play_flowery_sound_random({
+							"kris",
+							"grown_like_a_turnip",
+						})
+					end
+				elseif context.card.config.center.key == "j_UTDR_asgore" then
+					if #SMODS.find_card("j_UTDR_kris") > 0 then
+						self:play_flowery_sound("your_dad")
+					else
+						self:play_flowery_sound("my_king")
+					end
 				elseif context.card.config.center.key == "j_UTDR_flowery" then
 					self:play_flowery_sound_random({
 						"flowery",

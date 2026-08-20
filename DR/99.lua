@@ -5,6 +5,10 @@ SMODS.Joker {
 		xmult_gain = 0.02,
 		xmult = 1,
 	},
+	attributes = {
+		"scaling",
+		"xmult"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
@@ -36,6 +40,12 @@ SMODS.Joker {
 		mult = 6,
 		bigbucks = 1,
 	},
+	attributes = {
+		"mod_chance",
+		"enhancements",
+		"economy",
+		"mult"
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
 		return { vars = { card.ability.mult, card.ability.bigbucks, localize({ type = 'name_text', set = "Enhanced", key = "m_lucky" }) or 'Lucky Card' } }
@@ -64,6 +74,14 @@ SMODS.Joker {
 	key = "newsletter",
 	config = {
 		money = 6,
+	},
+	attributes = {
+		"generation",
+		"boss_blind",
+		"economy",
+		"generation",
+		"tarot",
+		"planet"
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.money } }
@@ -119,31 +137,39 @@ SMODS.Joker {
 		ribbon_is_older = false,
 		in_build = false
 	},
+	attributes = {
+		"mod_chance",
+		"xmult",
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_noelle")
 		if #SMODS.find_card("j_UTDR_thornring") > 0 then
 			return {
-			key = "j_UTDR_noelle_side_b",
-			vars = {
-				localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
-				card.ability.thorn_ring_xmult,
-			} }
+				key = "j_UTDR_noelle_side_b",
+				vars = {
+					localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
+					card.ability.thorn_ring_xmult,
+				}
+			}
 		elseif #SMODS.find_card("j_UTDR_susie") > 0 then
 			return {
-			key = "j_UTDR_suselle",
-			vars = {
-				localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
-				card.ability.xmult,
-				odds,
-			} }
+				key = "j_UTDR_suselle",
+				vars = {
+					localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
+					card.ability.xmult,
+					odds,
+				}
+			}
 		else
-			return { vars = {
-				localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
-				card.ability.xmult,
-				probabilities_normal,
-				odds,
-			} }
+			return {
+				vars = {
+					localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card',
+					card.ability.xmult,
+					probabilities_normal,
+					odds,
+				}
+			}
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
@@ -170,7 +196,8 @@ SMODS.Joker {
 			end
 		end
 		if card.config.center.discovered or card.bypass_discovery_center then
-			card.children.center:set_sprite_pos( #SMODS.find_card("j_UTDR_thornring") > 0 and card.area == G.jokers and {x=5,y=8} or card.config.center.pos)
+			card.children.center:set_sprite_pos(#SMODS.find_card("j_UTDR_thornring") > 0 and card.area == G.jokers and
+				{ x = 5, y = 8 } or card.config.center.pos)
 		end
 	end,
 	remove_from_deck = function(self, card, from_debuff)
@@ -213,6 +240,9 @@ SMODS.Joker {
 		turns = 0,
 		ante_loss = 1
 	},
+	attributes = {
+		"on_sell",
+	},
 	pixel_size = { w = 70, h = 71 },
 	rarity = 2,
 	blueprint_compat = false,
@@ -248,6 +278,11 @@ SMODS.Joker {
 		slotted = false,
 		in_build = false
 	},
+	attributes = {
+		"on_sell",
+		"tag",
+		"generation",
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = { key = 'tag_charm', set = 'Tag' }
 		if math.fmod(os.time(), 16) == 0 then
@@ -277,6 +312,10 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "kris",
+	attributes = {
+		"copying",
+		"hands"
+	},
 	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -302,37 +341,48 @@ SMODS.Joker {
 				}
 				key = "j_UTDR_kris_split"
 			end
-		
-            local other_joker = nil
+
+			local other_joker = nil
 
 			-- find kris
-            for i = 1, #G.jokers.cards do
-                if G.jokers.cards[i] == card then
-                    other_joker = G.jokers.cards[i-1]
-                    break
-                end
-            end
+			for i = 1, #G.jokers.cards do
+				if G.jokers.cards[i] == card then
+					other_joker = G.jokers.cards[i - 1]
+					break
+				end
+			end
 
 			-- create the ui as needed
 			local compatible = other_joker and other_joker.config.center.blueprint_compat
 			return {
 				key = key,
 				vars = { elements = { element } },
-				main_end = {{n=G.UIT.C, config={align = "bm", mh = 0.4}, nodes={
-					{n=G.UIT.C, config={
-						ref_table = card,
-						align = "m",
-						colour = mix_colours(compatible and G.C.GREEN or G.C.RED, G.C.JOKER_GREY, 0.8),
-						r = 0.05,
-						padding = 0.06,
-					}, nodes={
-						{n=G.UIT.T, config={
-							text = compatible and localize("k_compatible") or localize("k_incompatible"),
-							colour = G.C.UI.TEXT_LIGHT,
-							scale = 0.32*0.8
-						}},
-					}}
-				}}}
+				main_end = { {
+					n = G.UIT.C,
+					config = { align = "bm", mh = 0.4 },
+					nodes = {
+						{
+							n = G.UIT.C,
+							config = {
+								ref_table = card,
+								align = "m",
+								colour = mix_colours(compatible and G.C.GREEN or G.C.RED, G.C.JOKER_GREY, 0.8),
+								r = 0.05,
+								padding = 0.06,
+							},
+							nodes = {
+								{
+									n = G.UIT.T,
+									config = {
+										text = compatible and localize("k_compatible") or localize("k_incompatible"),
+										colour = G.C.UI.TEXT_LIGHT,
+										scale = 0.32 * 0.8
+									}
+								},
+							}
+						}
+					}
+				} }
 			}
 		end
 	end,
@@ -352,6 +402,9 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "you",
+	attributes = {
+		"copying",
+	},
 	unlocked = false,
 	unlock_condition = { type = '', extra = '', hidden = true },
 	rarity = 4,
@@ -363,42 +416,49 @@ SMODS.Joker {
 	cost = 20,
 	loc_vars = function(self, info_queue, card)
 		if card.area and card.area == G.jokers then
-            local nodes = {}
-            local jokers = {}
+			local nodes = {}
+			local jokers = {}
 
 			-- find you
-            for i = 1, #G.jokers.cards do
-                if G.jokers.cards[i] == card then
-                    jokers[1] = G.jokers.cards[i-1]
-                    jokers[2] = G.jokers.cards[i+1]
-                    break
-                end
-            end
+			for i = 1, #G.jokers.cards do
+				if G.jokers.cards[i] == card then
+					jokers[1] = G.jokers.cards[i - 1]
+					jokers[2] = G.jokers.cards[i + 1]
+					break
+				end
+			end
 
 			-- create the ui
-            for i = 1, 2 do
-                local other_joker = jokers[i]
-                local compatible = other_joker and other_joker.config.center.blueprint_compat
-                nodes[#nodes+1] = {n=G.UIT.C, config={
-					ref_table = card,
-					align = "m",
-					colour = mix_colours(compatible and G.C.GREEN or G.C.RED, G.C.JOKER_GREY, 0.8),
-					r = 0.05,
-					padding = 0.06,
-				}, nodes={
-					{n=G.UIT.T, config={
-						text = compatible and localize("k_compatible") or localize("k_incompatible"),
-						colour = G.C.UI.TEXT_LIGHT,
-						scale = 0.32*0.8
-					}},
-				}}
+			for i = 1, 2 do
+				local other_joker = jokers[i]
+				local compatible = other_joker and other_joker.config.center.blueprint_compat
+				nodes[#nodes + 1] = {
+					n = G.UIT.C,
+					config = {
+						ref_table = card,
+						align = "m",
+						colour = mix_colours(compatible and G.C.GREEN or G.C.RED, G.C.JOKER_GREY, 0.8),
+						r = 0.05,
+						padding = 0.06,
+					},
+					nodes = {
+						{
+							n = G.UIT.T,
+							config = {
+								text = compatible and localize("k_compatible") or localize("k_incompatible"),
+								colour = G.C.UI.TEXT_LIGHT,
+								scale = 0.32 * 0.8
+							}
+						},
+					}
+				}
 
 				-- create a spacer node if we aren't on the last node
-                if i ~= 2 then nodes[#nodes+1] = {n=G.UIT.B, config={align = "m", h = 0.4, w = 0.12}} end
-            end
+				if i ~= 2 then nodes[#nodes + 1] = { n = G.UIT.B, config = { align = "m", h = 0.4, w = 0.12 } } end
+			end
 
 			return {
-				main_end = {{n=G.UIT.C, config={align = "bm", mh = 0.4}, nodes=nodes}}
+				main_end = { { n = G.UIT.C, config = { align = "bm", mh = 0.4 }, nodes = nodes } }
 			}
 		end
 	end,
@@ -406,26 +466,26 @@ SMODS.Joker {
 		local left_joker_results, right_joker_results
 		for i = 1, #G.jokers.cards do
 			if G.jokers.cards[i] == card then
-				local left_joker = G.jokers.cards[i-1]
-                local right_joker = G.jokers.cards[i+1]
+				local left_joker = G.jokers.cards[i - 1]
+				local right_joker = G.jokers.cards[i + 1]
 
 				-- copy left joker
-                -- also check for if we're trying to copy context.blueprint_card; if so, don't copy it
+				-- also check for if we're trying to copy context.blueprint_card; if so, don't copy it
 				if left_joker and left_joker ~= context.blueprint_copier then
-                    left_joker_results = SMODS.blueprint_effect(card, left_joker, context)
-                end
+					left_joker_results = SMODS.blueprint_effect(card, left_joker, context)
+				end
 
-                -- copy right joker
-                -- again, check for if we're trying to copy context.blueprint_card
-                if right_joker and right_joker ~= context.blueprint_copier then
-                    right_joker_results = SMODS.blueprint_effect(card, right_joker, context)
-                end
+				-- copy right joker
+				-- again, check for if we're trying to copy context.blueprint_card
+				if right_joker and right_joker ~= context.blueprint_copier then
+					right_joker_results = SMODS.blueprint_effect(card, right_joker, context)
+				end
 
 				-- stop the loop; we've found what we need
-                break
+				break
 			end
 		end
-		
+
 		local results = SMODS.merge_effects({ left_joker_results or {}, right_joker_results or {} })
 		return results
 	end
@@ -437,6 +497,9 @@ SMODS.Joker {
 		xmult_small = 2,
 		xmult_big = 3,
 		xmult_boss = 4
+	},
+	attributes = {
+		"xmult",
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_small, card.ability.xmult_big, card.ability.xmult_boss } }
@@ -475,6 +538,10 @@ SMODS.Joker {
 	config = {
 		xmult = 2,
 	},
+	attributes = {
+		"xmult",
+		"joker_slot"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult } }
 	end,
@@ -499,6 +566,10 @@ SMODS.Joker {
 	config = {
 		mult_per = 6,
 		mult = 0
+	},
+	attributes = {
+		"mult",
+		"joker_slot"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -549,6 +620,10 @@ SMODS.Joker {
 	config = {
 		mult_per = 5
 	},
+	attributes = {
+		"mult",
+		"full_deck"
+	},
 	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -579,6 +654,11 @@ SMODS.Joker {
 	key = "ralsei",
 	config = {
 		repetitions = 2
+	},
+	attributes = {
+		"retrigger",
+		"suit",
+		"rank"
 	},
 	loc_vars = function(self, info_queue, card)
 		local ralseis = true
@@ -612,7 +692,7 @@ SMODS.Joker {
 	cost = 9,
 	set_ability = function(self, card, initial, delay_sprites)
 		if G.GAME.current_round and #SMODS.find_card("j_UTDR_ralsei") == 0 then --check to ensure a duplicated ralsei will not change the ralsei card
-			G.GAME.current_round.ralsei_card = { }
+			G.GAME.current_round.ralsei_card = {}
 			G.GAME.current_round.ralsei_card.selected_suit = "Hearts"
 			G.GAME.current_round.ralsei_card.selected_rank = "Queen"
 			if G.playing_cards then
@@ -649,6 +729,10 @@ SMODS.Joker {
 	config = {
 		turn_cap = 3,
 		turns = 0
+	},
+	attributes = {
+		"on_sell",
+		"modify_card",
 	},
 	rarity = 3,
 	blueprint_compat = false,
@@ -696,6 +780,9 @@ SMODS.Joker {
 	key = "moss",
 	config = {
 		joker_slots = 1
+	},
+	attributes = {
+		"passive",
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.joker_slots } }

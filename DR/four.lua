@@ -5,6 +5,11 @@ SMODS.Joker {
 		chip_gain = 4,
 		chips = 0
 	},
+	attributes = {
+		"chips",
+		"scaling",
+		"hand_type",
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -41,6 +46,11 @@ SMODS.Joker {
 	config = {
 		bigbucks = 1,
 		card_count = 30
+	},
+	attributes = {
+		"food",
+		"economy",
+		"scaling"
 	},
 	rarity = 2,
 	blueprint_compat = true,
@@ -94,6 +104,12 @@ SMODS.Joker {
 		mult = 0,
 		last_played_hand = nil
 	},
+	attributes = {
+		"hand_type",
+		"mult",
+		"scaling",
+		"reset"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -131,6 +147,10 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "missmizzle",
+	attributes = {
+		"economy",
+		"seals"
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_SEALS['gold_seal'] or G.P_SEALS[SMODS.Seal.badge_to_key['gold_seal'] or '']
 		return { vars = { localize { type = 'name_text', set = "Other", key = 'gold_seal' } } }
@@ -154,6 +174,10 @@ SMODS.Joker {
 	config = {
 		xmult_first = 2,
 		xmult_too_long = 0.5
+	},
+	attributes = {
+		"xmult",
+		"hands",
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_first, card.ability.xmult_too_long } }
@@ -197,6 +221,9 @@ SMODS.Joker {
 		xmult = 1.25,
 		money_spent = 0
 	},
+	attributes = {
+		"xmult",
+	},
 	in_pool = function(self, args)
 		local money_spent = G.GAME.money_spent or 0
 		return money_spent >= 150
@@ -225,6 +252,10 @@ SMODS.Joker {
 	config = {
 		mult_per = 0.5
 	},
+	attributes = {
+		"mult",
+		"full_deck"
+	},
 	loc_vars = function(self, info_queue, card)
 		if G.deck then
 			return { vars = { card.ability.mult_per, card.ability.mult_per * #G.deck.cards } }
@@ -252,6 +283,10 @@ SMODS.Joker {
 	config = {
 		xmult_gain = 0.25,
 		xmult = 1
+	},
+	attributes = {
+		"mult",
+		"scaling"
 	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult, localize("k_voucher") } }
@@ -289,6 +324,10 @@ SMODS.Joker {
 		xmult_gain = 0.05,
 		xmult = 1,
 	},
+	attributes = {
+		"mult",
+		"scaling"
+	},
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
@@ -302,7 +341,8 @@ SMODS.Joker {
 					no_message = true
 				})
 			end
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT, blocking = false })
+			card_eval_status_text(card, 'extra', nil, nil, nil,
+				{ message = localize('k_upgrade_ex'), colour = G.C.MULT, blocking = false })
 		elseif context.joker_main then
 			return {
 				xmult = card.ability.xmult
@@ -315,6 +355,11 @@ SMODS.Joker {
 	key = "sound_of_justice",
 	config = {
 		retrigger_chance = 4,
+	},
+	attributes = {
+		"chance",
+		"retrigger",
+		"passive"
 	},
 	--unlocked = false
 	rarity = 3,
@@ -331,59 +376,60 @@ SMODS.Joker {
 	end,
 	change_blind_text = function(self)
 		G.FUNCS.blind_chip_UI_scale(G.hand_text_area.blind_chips) --set the blind text during/after a round back
-		
+
 		--set the blind text on selection screen back
 		if G.blind_select_opts then --make sure the game wont attempt to get a nonexistent UI element
 			--we have to do it 1 for each blind. if you add more than the standard small, big, boss blinds, tough luck!
 			--i tried to do it programatic by looping over G.blind_select_opts, but wasn't able to get it working reliably.
 			local small_baby = G.blind_select_opts.small.parent
 			G.blind_select_opts.small = nil
-			G.blind_select_opts.small = UIBox{
-			  T = {small_baby.T.x, 0, 0, 0, },
-			  definition =
-				{n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={
-				  UIBox_dyn_container({create_UIBox_blind_choice('Small')},false,get_blind_main_colour('Small'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
-				}},
-			  config = {align="bmi",
-						offset = {x=0,y=G.ROOM.T.y + 9},
-						major = small_baby,
-						xy_bond = 'Weak'
-					  }
+			G.blind_select_opts.small = UIBox {
+				T = { small_baby.T.x, 0, 0, 0, },
+				definition =
+				{ n = G.UIT.ROOT, config = { align = "cm", colour = G.C.CLEAR }, nodes = {
+					UIBox_dyn_container({ create_UIBox_blind_choice('Small') }, false, get_blind_main_colour('Small'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
+				} },
+				config = { align = "bmi",
+					offset = { x = 0, y = G.ROOM.T.y + 9 },
+					major = small_baby,
+					xy_bond = 'Weak'
+				}
 			}
-			
+
 			local big_baby = G.blind_select_opts.big.parent
 			G.blind_select_opts.big = nil
-			G.blind_select_opts.big = UIBox{
-			  T = {big_baby.T.x, 0, 0, 0, },
-			  definition =
-				{n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={
-				  UIBox_dyn_container({create_UIBox_blind_choice('Big')},false,get_blind_main_colour('Big'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
-				}},
-			  config = {align="bmi",
-						offset = {x=0,y=G.ROOM.T.y + 9},
-						major = big_baby,
-						xy_bond = 'Weak'
-					  }
+			G.blind_select_opts.big = UIBox {
+				T = { big_baby.T.x, 0, 0, 0, },
+				definition =
+				{ n = G.UIT.ROOT, config = { align = "cm", colour = G.C.CLEAR }, nodes = {
+					UIBox_dyn_container({ create_UIBox_blind_choice('Big') }, false, get_blind_main_colour('Big'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
+				} },
+				config = { align = "bmi",
+					offset = { x = 0, y = G.ROOM.T.y + 9 },
+					major = big_baby,
+					xy_bond = 'Weak'
+				}
 			}
-			
+
 			local boss_baby = G.blind_select_opts.boss.parent
 			G.blind_select_opts.boss = nil
-			G.blind_select_opts.boss = UIBox{
-			  T = {boss_baby.T.x, 0, 0, 0, },
-			  definition =
-				{n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={
-				  UIBox_dyn_container({create_UIBox_blind_choice('Boss')},false,get_blind_main_colour('Boss'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
-				}},
-			  config = {align="bmi",
-						offset = {x=0,y=G.ROOM.T.y + 9},
-						major = boss_baby,
-						xy_bond = 'Weak'
-					  }
+			G.blind_select_opts.boss = UIBox {
+				T = { boss_baby.T.x, 0, 0, 0, },
+				definition =
+				{ n = G.UIT.ROOT, config = { align = "cm", colour = G.C.CLEAR }, nodes = {
+					UIBox_dyn_container({ create_UIBox_blind_choice('Boss') }, false, get_blind_main_colour('Boss'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
+				} },
+				config = { align = "bmi",
+					offset = { x = 0, y = G.ROOM.T.y + 9 },
+					major = boss_baby,
+					xy_bond = 'Weak'
+				}
 			}
-        end
+		end
 	end,
 	loc_vars = function(self, info_queue, card)
-		local probabilities_normal, odds = SMODS.get_probability_vars(card, 3, card.ability.retrigger_chance, 'DR_sound_of_justice')
+		local probabilities_normal, odds = SMODS.get_probability_vars(card, 3, card.ability.retrigger_chance,
+			'DR_sound_of_justice')
 		return { vars = { probabilities_normal, odds } }
 	end,
 	calculate = function(self, card, context)
@@ -403,6 +449,11 @@ SMODS.Joker {
 		money = 8,
 		hole_in_my_pocket = 2,
 		first_round = true
+	},
+	attributes = {
+		"food",
+		"economy",
+		"scaling"
 	},
 	rarity = 1,
 	blueprint_compat = false,
@@ -464,6 +515,11 @@ SMODS.Joker {
 		mult_gain = 2,
 		mult = 0
 	},
+	attributes = {
+		"scaling",
+		"mult",
+		"enhancements"
+	},
 	rarity = 1,
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -495,6 +551,10 @@ SMODS.Joker {
 	config = {
 		repetitions = 4
 	},
+	attributes = {
+		"enhancements",
+		"retrigger"
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
 		return { vars = { card.ability.repetitions, localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) or "Stone Card" } }
@@ -520,6 +580,10 @@ SMODS.Joker {
 	config = {
 		chips = 50
 	},
+	attributes = {
+		"enhancements",
+		"chips"
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
 		return { vars = { card.ability.chips, localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' } }
@@ -541,6 +605,10 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "philosopher",
+	attributes = {
+		"passive",
+		"planet"
+	},
 	rarity = 1,
 	blueprint_compat = false,
 	eternal_compat = true,
