@@ -1,9 +1,9 @@
 -- TO-DO LIST:
---      - State switching
---      - 
+--      - Shop Tabs
+--      - Capsule Machine
 
 -- Run this to manually switch states
--- eval G.STATE, G.STATE_COMPLETE = G.STATES[state], false
+-- eval G.STATE, G.STATE_COMPLETE = G.STATES.state_name, false
 
 -- Global Table for all Shop related stuff.
 UTDR_Modules.Shop = {
