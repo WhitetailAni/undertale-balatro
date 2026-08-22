@@ -5,6 +5,9 @@
 -- Run this to manually switch states
 -- eval G.STATE, G.STATE_COMPLETE = G.STATES.state_name, false
 
+-- Run this to quick reroll the Catty & Bratty shop while in it
+-- eval UTDR_Modules.Shop.reroll_catty_shop() UTDR_Modules.Shop.refresh_cattybratty()
+
 -- Global Table for all Shop related stuff.
 UTDR_Modules.Shop = {
 	catty_trades = {},
@@ -17,6 +20,9 @@ UTDR_Modules.Shop = {
 		tag_coupon = true,
 		tag_UTDR_t_rank = true,
 		tag_UTDR_capsule = true,
+	},
+	excluded_tags = {
+		tag_UTDR_glamorous = true
 	}
 }
 
@@ -408,15 +414,17 @@ function ease_background_colour_blind(state, blind_override, ...)
 	end
 end
 
-function UTDR_Modules.Shop.add_catty_trade(args)
+function UTDR_Modules.Shop.add_catty_trade(args, refresh)
 	args.cards = args.cards or {"c_fool"}
 	args.tag = args.tag or SMODS.poll_object({
 		type = "Tag",
 		filter = function(pool)
-			if args.rare_tag or G.GAME.used_vouchers["v_UTDR_attack"] then return pool end -- Only restrict pool if not 3rd or don't have voucher
+			--if args.rare_tag or G.GAME.used_vouchers["v_UTDR_attack"] then return pool end -- Only restrict pool if not 3rd or don't have voucher
 			local ret = {}
 			for _,v in ipairs(pool) do
-				if not UTDR_Modules.Shop.rare_tags[v.key] then
+				if not UTDR_Modules.Shop.excluded_tags[v.key] and (
+					(args.rare_tag == (UTDR_Modules.Shop.rare_tags[v.key]))
+				) then
 					ret[#ret+1] = v
 				end
 			end
@@ -425,13 +433,19 @@ function UTDR_Modules.Shop.add_catty_trade(args)
 	})
 
 	G.GAME.utdr_trades[#G.GAME.utdr_trades+1] = args
+
+	if refresh then UTDR_Modules.Shop.refresh_cattybratty() end
 end
 
 function UTDR_Modules.Shop.reroll_catty_shop()
 	G.GAME.utdr_trades = {}
+	
+	SMODS.poll_object{ type = "Tarot" } -- For some reason this keeps being polled as The Fool
 	-- Hook here to add more trades :3
 	UTDR_Modules.Shop.add_catty_trade{
-		SMODS.poll_object{ type = "Tarot" }
+		cards = {
+			SMODS.poll_object{ type = "Tarot" }
+		}
 	}
 	UTDR_Modules.Shop.add_catty_trade{
 		cards = {
