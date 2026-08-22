@@ -1,7 +1,7 @@
 UTDR_Modules.Tenna = {
 	start_quiz = function(quiz, card)
 		if UTDR_Modules.Tenna.playing then return end
-		quiz = quiz or pseudorandom_element(UTDR_Modules.Tenna.quiz_pool)
+		quiz = UTDR_Modules.Tenna.quizzes[quiz] and quiz or pseudorandom_element(UTDR_Modules.Tenna.quiz_pool)
 		
 		UTDR_Modules.Tenna.playing = true
 		local quiz_table = UTDR_Modules.Tenna.quizzes[quiz]
@@ -16,7 +16,7 @@ UTDR_Modules.Tenna = {
 			trigger = 'after',
 			blocking = false,
 			func = (function()
-				if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('tenna_spot') then 
+				if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('tenna_spot') then
 					local tenna = Card_Character({
 						x = 0,
 						y = 5,
@@ -30,7 +30,7 @@ UTDR_Modules.Tenna = {
 					tenna:add_speech_bubble('tennaquiz_'..quiz, nil, {quip = true})
 					tenna:say_stuff(5)
 				end
-
+				
 				UTDR_Modules.Tenna.timer = 12
 				UTDR_Modules.Tenna.won = false
 
