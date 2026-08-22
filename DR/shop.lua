@@ -490,7 +490,7 @@ function G.FUNCS.UTDR_cattybratty_tradefunc(e)
 		end
 	end
 	
-	e.config.colour = cantrade and G.C.RED or G.C.UI.BACKGROUND_INACTIVE
+	e.config.colour = cantrade and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
 	e.config.button = cantrade and 'UTDR_cattybratty_trade' or nil
 end
 
