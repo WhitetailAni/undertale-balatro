@@ -313,7 +313,7 @@ SMODS.Joker {
 	},
 	loc_vars = function(self, info_queue, card)
 		local s = G.TILESCALE * G.TILESIZE
-		local text = SMODS.create_sprite(0, 0, 391 / s * .75, 69 / s * .75, "UTDR_Tenna_physical_challenge",
+		local text = SMODS.create_sprite(0, 0, 391 / s * .75, 69 / s * .75, "UTDR_tenna_physical_challenge",
 			{ x = 0, y = 0 })
 		local element = { n = G.UIT.O, config = { object = text } }
 		return { vars = { card.ability.extra.xmult, elements = { element } } }
@@ -322,7 +322,7 @@ SMODS.Joker {
 		card.ability.selected_hand = pseudorandom_element(get_keys(G.GAME.hands), "tenna")
 	end,
 	calculate = function(self, card, context)
-		if context.press_play and SMODS.find_card(self.key)[1] == card then
+		if context.setting_blind and SMODS.find_card(self.key)[1] == card then
 			UTDR_Modules.Tenna.start_quiz(nil, card)
 		elseif context.joker_main then
 			return {

@@ -7,10 +7,12 @@ assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
 assert(SMODS.load_file('challenge.lua'))()
 
-local profile_name = G.PROFILES[G.SETTINGS.profile].name
-if profile_name.upper(profile_name) == "GASTER" then
-	G.PROFILES[G.SETTINGS.profile].name = "P" .. G.SETTINGS.profile
-end
+G.E_MANAGER:add_event(Event{func=function()
+	local profile_name = G.PROFILES[G.SETTINGS.profile].name
+	if profile_name and profile_name.upper(profile_name) == "GASTER" then
+		G.PROFILES[G.SETTINGS.profile].name = "P" .. G.SETTINGS.profile
+	end
+return true end})
 
 UTDR = SMODS.current_mod
 if NFS.read(SMODS.current_mod.path .. "config.lua") then
@@ -157,6 +159,12 @@ UTDR.config_tab = function()
 	}
 end
 
+function UTDR.reset_game_globals(run_start)
+	if run_start then
+		UTDR_Modules.Shop.reroll_catty_shop()
+	end
+end
+
 function joker_rarity(common, uncommon, rare, legendary)
 	SMODS.ObjectTypes["Joker"].rarities[1].weight = common
 	SMODS.ObjectTypes["Joker"].rarities[2].weight = uncommon
@@ -252,6 +260,7 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/spectral.lua'))()
 	assert(SMODS.load_file('DR/spectral_crystal.lua'))()
 	assert(SMODS.load_file('DR/shop.lua'))()
+	assert(SMODS.load_file('DR/swoon.lua'))()
 	--become_prophecy()
 end
 
@@ -309,7 +318,7 @@ function get_keys(t)
 	return keys
 end
 
-SMODS.PokerHand {
+--[[SMODS.PokerHand {
 	key = "him",
 	mult = 66666,
 	chips = 66666,
@@ -334,7 +343,7 @@ SMODS.PokerHand {
 		end
 		return { hand }
 	end,
-}
+}]]
 
 SMODS.Attribute {
 	key = "UTDR_dog",
@@ -370,4 +379,9 @@ SMODS.Rarity {
 		end
 		return 0.0025 * multiplier
 	end,
+}
+
+SMODS.Shader {
+	key = 'empty', -- ScreenShaders need a shader key, even if the shader never gets applied. Used by Swoon ScreenShader effect.
+	path = 'empty.fs'
 }

@@ -7,7 +7,16 @@
 
 -- Global Table for all Shop related stuff.
 UTDR_Modules.Shop = {
-
+	catty_trades = {},
+	rare_tags = {
+		tag_rare = true,
+		tag_polychrome = true,
+		tag_negative = true,
+		tag_handy = true,
+		tag_coupon = true,
+		tag_UTDR_t_rank = true,
+		tag_UTDR_capsule = true,
+	}
 }
 
 function Game:update_utdr_shop_capsule(dt)
@@ -25,23 +34,24 @@ function Game:update_utdr_shop_capsule(dt)
 			if self[v] then self[v]:remove(); self[v] = nil end
 		end
 
-		G.E_MANAGER:add_event(Event({
-			trigger = 'immediate',
-			func = (function()
-				G.shop.alignment.offset.y = 10
-				G.SHOP_SIGN.alignment.offset.y = -15
-				return true
-			end)
-		}))
+		if G.shop then
+			G.E_MANAGER:add_event(Event({
+				trigger = 'immediate',
+				func = (function()
+					G.shop.alignment.offset.y = 10
+					G.SHOP_SIGN.alignment.offset.y = -15
+					return true
+				end)
+			}))
+		end
 
 		G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
 		G.STATE_COMPLETE = true
 		G.CONTROLLER.interrupt.focus = true
 		
-		G.E_MANAGER:add_event(Event{ func = function()
-			G.E_MANAGER:add_event(Event{
-				trigger = 'immediate',
-				func = function()
+		if not G.utdr_shop_capsule then
+			G.E_MANAGER:add_event(Event{ func = function()
+				G.E_MANAGER:add_event(Event{ trigger = 'immediate', func = function()
 					play_sound('cancel')
 					G.utdr_shop_capsule = UIBox{
 						definition = UTDR_Modules.Shop.create_UIBox_capsule(),
@@ -52,8 +62,9 @@ function Game:update_utdr_shop_capsule(dt)
 					for i = 1, #G.GAME.tags do
 						G.GAME.tags[i]:apply_to_run({type = 'immediate'})
 					end
+				return true end})
 			return true end})
-		return true end})
+		end
 	end
 end
 
@@ -72,35 +83,37 @@ function Game:update_utdr_shop_cattybratty(dt)
 			if self[v] then self[v]:remove(); self[v] = nil end
 		end
 
-		G.E_MANAGER:add_event(Event({
-			trigger = 'immediate',
-			func = (function()
-				G.shop.alignment.offset.y = 10
-				G.SHOP_SIGN.alignment.offset.y = -15
-				return true
-			end)
-		}))
+		if G.shop then
+			G.E_MANAGER:add_event(Event({
+				trigger = 'immediate',
+				func = (function()
+					G.shop.alignment.offset.y = 10
+					G.SHOP_SIGN.alignment.offset.y = -15
+					return true
+				end)
+			}))
+		end
 
 		G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
 		G.STATE_COMPLETE = true
 		G.CONTROLLER.interrupt.focus = true
 		
-		G.E_MANAGER:add_event(Event{ func = function()
-			G.E_MANAGER:add_event(Event{
-				trigger = 'immediate',
-				func = function()
-					play_sound('cancel')
-					G.utdr_shop_cattybratty = UIBox{
-						definition = UTDR_Modules.Shop.create_UIBox_cattybratty(),
-						config = {align="bmi", offset = {x=0,y=G.ROOM.T.y + 29}, major = G.hand, bond = 'Weak'}
-					}
-					G.ROOM.jiggle = G.ROOM.jiggle + 3
-					G.CONTROLLER.lock_input = false
-					for i = 1, #G.GAME.tags do
-						G.GAME.tags[i]:apply_to_run({type = 'immediate'})
-					end
+		if not G.utdr_shop_cattybratty then
+			G.E_MANAGER:add_event(Event{ func = function()
+				G.E_MANAGER:add_event(Event{
+					trigger = 'immediate',
+					func = function()
+						play_sound('cancel')
+						G.utdr_shop_cattybratty = UIBox{
+							definition = UTDR_Modules.Shop.create_UIBox_cattybratty(),
+							config = {align="bmi", offset = {x=0,y=G.ROOM.T.y + 29}, major = G.hand, bond = 'Weak'}
+						}
+						G.ROOM.jiggle = G.ROOM.jiggle + 3
+						G.CONTROLLER.lock_input = false
+						G.utdr_shop_cattybratty.alignment.offset.y = G.ROOM.T.y + 22
+				return true end})
 			return true end})
-		return true end})
+		end
 	end
 end
 
@@ -140,6 +153,7 @@ function UTDR_Modules.Shop.create_UIBox_capsule()
 	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
 		UIBox_dyn_container({
 			{n=G.UIT.C, config={align = "cm", padding = 0.1, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN}, nodes={
+				
 				--[[{n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
 					{n=G.UIT.C, config={align = "cm", padding = 0.1}, nodes={
 						{n=G.UIT.R,config={id = 'next_round_button', align = "cm", minw = 2.8, minh = 1.5, r=0.15,colour = G.C.RED, one_press = true, button = 'toggle_shop', hover = true,shadow = true}, nodes = {
@@ -220,51 +234,34 @@ function UTDR_Modules.Shop.create_UIBox_cattybratty()
 		end)
 	}))
 
+	local tradenodes = {}
+
+	for _,v in ipairs(G.GAME.utdr_trades) do
+		tradenodes[#tradenodes+1] = {n=G.UIT.C, config={align = "cm", padding = 0.2}, nodes={
+			{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.T, config={text=v.tag,scale=1,colour=G.C.WHITE}}}},
+		}}
+	end
+
+	local catty_text = DynaText({ string = localize("utdr_catty_text"), float = true, colours = { HEX("DC8DF0") }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5 })
+	local bratty_text = DynaText({ string = localize("utdr_bratty_text"), float = true, colours = { HEX("8DE1BF") }, pop_in = .5, pop_in_rate = 3, spacing = 1, scale = .5 })
+	local cb_spr = SMODS.create_sprite(0,0,5.5,5.5*139/215,"UTDR_shop_cattybratty_body",{x=0,y=0})
+
 	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
 		UIBox_dyn_container({
-			{n=G.UIT.C, config={align = "cm", padding = 0.1, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN}, nodes={
-				--[[{n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
-					{n=G.UIT.C, config={align = "cm", padding = 0.1}, nodes={
-						{n=G.UIT.R,config={id = 'next_round_button', align = "cm", minw = 2.8, minh = 1.5, r=0.15,colour = G.C.RED, one_press = true, button = 'toggle_shop', hover = true,shadow = true}, nodes = {
-							{n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'y', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
-								{n=G.UIT.R, config={align = "cm", maxw = 1.3}, nodes={
-									{n=G.UIT.T, config={text = localize('b_next_round_1'), scale = 0.4, colour = G.C.WHITE, shadow = true}}
-								}},
-								{n=G.UIT.R, config={align = "cm", maxw = 1.3}, nodes={
-									{n=G.UIT.T, config={text = localize('b_next_round_2'), scale = 0.4, colour = G.C.WHITE, shadow = true}}
-								}}
-							}},
-						}},
-						{n=G.UIT.R, config={align = "cm", minw = 2.8, minh = 1.6, r=0.15,colour = G.C.GREEN, button = 'reroll_shop', func = 'can_reroll', hover = true,shadow = true}, nodes = {
-							{n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'x', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
-								{n=G.UIT.R, config={align = "cm", maxw = 1.3}, nodes={
-									{n=G.UIT.T, config={text = localize('k_reroll'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
-								}},
-								{n=G.UIT.R, config={align = "cm", maxw = 1.3, minw = 1}, nodes={
-									{n=G.UIT.T, config={text = localize('$'), scale = 0.7, colour = G.C.WHITE, shadow = true}},
-									{n=G.UIT.T, config={ref_table = G.GAME.current_round, ref_value = 'reroll_cost', scale = 0.75, colour = G.C.WHITE, shadow = true}},
-								}}
-							}}
-						}},
+			{n=G.UIT.C, config={align = "cm", padding = 0.2}, nodes={
+			{n=G.UIT.C, config={align = "cm"}, nodes={
+				{n=G.UIT.R, config={align = "cm", minh = 0.2}, nodes={
+					{n=G.UIT.C, config={align = "cr", minw=6, padding=-.03}, nodes = {
+						{n=G.UIT.O, config={object = cb_spr}}
 					}},
-					{n=G.UIT.C, config={align = "cm", padding = 0.2, r=0.2, colour = G.C.L_BLACK, emboss = 0.05, minw = 8.2}, nodes={
-							{n=G.UIT.O, config={object = G.shop_jokers}},
-					}},
+					{n=G.UIT.C, config={align = "cl", minw=5, padding = .3}, nodes = {
+						{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object = catty_text}}}},
+						{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object = bratty_text}}}}
+					}}
 				}},
-				{n=G.UIT.R, config={align = "cm", minh = 0.2}, nodes={}},
-				{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-					{n=G.UIT.C, config={align = "cm", padding = 0.15, r=0.2, colour = G.C.L_BLACK, emboss = 0.05}, nodes={
-						{n=G.UIT.C, config={align = "cm", padding = 0.2, r=0.2, colour = G.C.BLACK, maxh = G.shop_vouchers.T.h+0.4}, nodes={
-							{n=G.UIT.T, config={text = localize{type = 'variable', key = 'ante_x_voucher', vars = {G.GAME.round_resets.ante}}, scale = 0.45, colour = G.C.L_BLACK, vert = true}},
-							{n=G.UIT.O, config={object = G.shop_vouchers}},
-						}},
-					}},
-					{n=G.UIT.C, config={align = "cm", padding = 0.15, r=0.2, colour = G.C.L_BLACK, emboss = 0.05}, nodes={
-						{n=G.UIT.O, config={object = G.shop_booster}},
-					}},
-				}}]]
-			}
-		},
+				{n=G.UIT.R, config={align = "cm", minh = 0.2, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN,padding = .4}, nodes = tradenodes}
+			}}
+		}},
 		
 		}, false)
 	}}
@@ -310,4 +307,54 @@ function ease_background_colour_blind(state, blind_override, ...)
 	else
 		ease_background_colour_blind_hook(state, blind_override, ...)
 	end
+end
+
+function UTDR_Modules.Shop.add_catty_trade(args)
+	args.cards = args.cards or {"c_fool"}
+	args.tag = args.tag or SMODS.poll_object({
+		type = "Tag",
+		filter = function(pool)
+			if args.rare_tag or G.GAME.used_vouchers["v_UTDR_attack"] then return pool end -- Only restrict pool if not 3rd or don't have voucher
+			local ret = {}
+			for _,v in ipairs(pool) do
+				if not UTDR_Modules.Shop.rare_tags[v.key] then
+					ret[#ret+1] = v
+				end
+			end
+			return ret
+		end
+	})
+
+	G.GAME.utdr_trades[#G.GAME.utdr_trades+1] = args
+end
+
+function UTDR_Modules.Shop.reroll_catty_shop()
+	G.GAME.utdr_trades = {}
+	-- Hook here to add more trades :3
+	UTDR_Modules.Shop.add_catty_trade{
+		cards = {
+			SMODS.poll_object{ type = "Tarot" }
+		}
+	}
+	UTDR_Modules.Shop.add_catty_trade{
+		cards = {
+			SMODS.poll_object{ type = "Planet" }
+		}
+	}
+	UTDR_Modules.Shop.add_catty_trade{
+		cards = {
+			SMODS.poll_object{ type = "Tarot" },
+			SMODS.poll_object{ type = "Planet" }
+		},
+		rare_tag = true
+	}
+end
+
+local reset_blinds_hook = reset_blinds
+function reset_blinds(...)
+	if G.GAME.round_resets.blind_states.Boss == "Defeated" then
+		UTDR_Modules.Shop.reroll_catty_shop()
+	end
+
+	reset_blinds_hook(...)
 end

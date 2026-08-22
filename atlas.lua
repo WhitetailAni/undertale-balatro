@@ -129,3 +129,17 @@ SMODS.Atlas {
 	frames = 4,
 	fps = 10
 }
+
+SMODS.Atlas {
+	key = "shop_cattybratty_body",
+	path = "shop/cattybratty_body.png",
+	px = 215,
+	py = 139,
+}
+
+SMODS.Atlas {
+	key = "shop_cattybratty_arms",
+	path = "shop/cattybratty_arms.png",
+	px = 64,
+	py = 48,
+}

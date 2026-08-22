@@ -1224,8 +1224,9 @@ return {
 			j_UTDR_tenna = {
 				name = "Mr. (Ant) Tenna",
 				text = {
-					"PLACEHOLDER",
-					"DESCRIPTION",
+					"When round begins, play a",
+					" {element:1} ",
+					"and give {C:white,X:mult}X#1#{} if successful"
 				},
 			},
 			j_UTDR_mike = {
@@ -2272,7 +2273,9 @@ return {
 
 			-- Shop stuff
 			ph_utdr_capsule = "Gamble points for cards!",
-			ph_utdr_cattybratty = "Trade for tags!"
+			ph_utdr_cattybratty = "Trade for tags!",
+			utdr_catty_text = "Hey, check it out!",
+			utdr_bratty_text = "Yeah, check it out!",
 		},
 		achievement_descriptions = {
 			clairvoyance = dr and "Discover every Prophecy card" or nil
