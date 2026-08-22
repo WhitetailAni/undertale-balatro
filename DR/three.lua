@@ -569,14 +569,8 @@ SMODS.Joker {
 
 			cards_to_destroy = merge_table(cards_to_destroy, targ)
 
-			--trigger swoon graphic HERE. make sure main thread halts so cards dont get destroyed off screen
-
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					play_sound("UTDR_swoon", 1.0, 1.0)
-					return true
-				end
-			}))
+			UTDR_Modules.Swoon.play(4)
+			
 			for i, v in ipairs(cards_to_destroy) do
 				local heart_as_my_mark = cards_to_destroy[i]
 				local is_joker = heart_as_my_mark.ability.set == "Joker"

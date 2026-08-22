@@ -35,7 +35,6 @@ local sounds = {
 	"revivemint",
 	"ERAM",
 	"true_reset",
-	"swoon",
 	"badexplosion",
 	"amalgam",
 	"netskie",
