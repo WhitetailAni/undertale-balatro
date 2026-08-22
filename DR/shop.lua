@@ -8,6 +8,7 @@
 -- Global Table for all Shop related stuff.
 UTDR_Modules.Shop = {
 	catty_trades = {},
+	cheer = false,
 	rare_tags = {
 		tag_rare = true,
 		tag_polychrome = true,
@@ -18,6 +19,22 @@ UTDR_Modules.Shop = {
 		tag_UTDR_capsule = true,
 	}
 }
+
+-- Code given by @invalid_os, originally from Cryptid
+local function calc_text_scale(text)
+	local size = 0.9
+	local font = G.LANG.font
+	local max_text_width = 5
+	local calced_text_width = 0
+	-- Math reproduced from DynaText:update_text
+	for _, c in utf8.chars(text) do
+		local tx = font.FONT:getWidth(c) * (0.33 * size) * G.TILESCALE * font.FONTSCALE
+			+ 2.7 * 1 * G.TILESCALE * font.FONTSCALE
+		calced_text_width = calced_text_width + tx / (G.TILESIZE * G.TILESCALE)
+	end
+	local scale_fac = calced_text_width > max_text_width and max_text_width / calced_text_width or 1
+	return scale_fac
+end
 
 function Game:update_utdr_shop_capsule(dt)
 	if not G.STATE_COMPLETE then
@@ -98,6 +115,9 @@ function Game:update_utdr_shop_cattybratty(dt)
 		G.STATE_COMPLETE = true
 		G.CONTROLLER.interrupt.focus = true
 		
+		UTDR_Modules.Shop.dialogue = "open"
+		UTDR_Modules.Shop.cheer = false
+
 		if not G.utdr_shop_cattybratty then
 			G.E_MANAGER:add_event(Event{ func = function()
 				G.E_MANAGER:add_event(Event{
@@ -110,7 +130,7 @@ function Game:update_utdr_shop_cattybratty(dt)
 						}
 						G.ROOM.jiggle = G.ROOM.jiggle + 3
 						G.CONTROLLER.lock_input = false
-						G.utdr_shop_cattybratty.alignment.offset.y = G.ROOM.T.y + 22
+						G.utdr_shop_cattybratty.alignment.offset.y = G.ROOM.T.y + 21.4
 				return true end})
 			return true end})
 		end
@@ -201,50 +221,103 @@ function UTDR_Modules.Shop.create_UIBox_capsule()
 	}}
 	return t
 end
-function UTDR_Modules.Shop.create_UIBox_cattybratty()
-	local shop_sign = Sprite(0,0, 4.4, 2.2, G.ASSET_ATLAS.UTDR_shopsign_cattybratty)
-	shop_sign:define_draw_steps({
-		{shader = 'dissolve', shadow_height = 0.05},
-		{shader = 'dissolve'}
-	})
-	G.UTDR_SHOP_SIGN_CATTY = UIBox{
-		definition = 
-			{n=G.UIT.ROOT, config = {colour = G.C.DYN_UI.MAIN, emboss = 0.05, align = 'cm', r = 0.1, padding = 0.1}, nodes={
-				{n=G.UIT.R, config={align = "cm", padding = 0.1, minw = 4.72, minh = 3.1, colour = G.C.DYN_UI.DARK, r = 0.1}, nodes={
-					{n=G.UIT.R, config={align = "cm"}, nodes={
-						{n=G.UIT.O, config={object = shop_sign}}
-					}},
-					{n=G.UIT.R, config={align = "cm"}, nodes={
-						{n=G.UIT.O, config={object = DynaText({string = {localize('ph_utdr_cattybratty')}, colours = {lighten(G.C.GOLD, 0.3)},shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3})}}
+function UTDR_Modules.Shop.create_UIBox_cattybratty(reload)
+	reload = reload or false
+	if not G.UTDR_SHOP_SIGN_CATTY then
+		local shop_sign = Sprite(0,0, 4.4, 2.2, G.ASSET_ATLAS.UTDR_shopsign_cattybratty)
+		shop_sign:define_draw_steps({
+			{shader = 'dissolve', shadow_height = 0.05},
+			{shader = 'dissolve'}
+		})
+		G.UTDR_SHOP_SIGN_CATTY = UIBox{
+			definition = 
+				{n=G.UIT.ROOT, config = {colour = G.C.DYN_UI.MAIN, emboss = 0.05, align = 'cm', r = 0.1, padding = 0.1}, nodes={
+					{n=G.UIT.R, config={align = "cm", padding = 0.1, minw = 4.72, minh = 3.1, colour = G.C.DYN_UI.DARK, r = 0.1}, nodes={
+						{n=G.UIT.R, config={align = "cm"}, nodes={
+							{n=G.UIT.O, config={object = shop_sign}}
+						}},
+						{n=G.UIT.R, config={align = "cm"}, nodes={
+							{n=G.UIT.O, config={object = DynaText({string = {localize('ph_utdr_cattybratty')}, colours = {lighten(G.C.GOLD, 0.3)},shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3})}}
+						}},
 					}},
 				}},
-			}},
-		config = {
-			align="cm",
-			offset = {x=0,y=-15},
-			major = G.HUD:get_UIE_by_ID('row_blind'),
-			bond = 'Weak'
+			config = {
+				align="cm",
+				offset = {x=0,y=-15},
+				major = G.HUD:get_UIE_by_ID('row_blind'),
+				bond = 'Weak'
+			}
 		}
-	}
-	G.E_MANAGER:add_event(Event({
-		trigger = 'immediate',
-		func = (function()
-			G.UTDR_SHOP_SIGN_CATTY.alignment.offset.y = 0
-			return true
-		end)
-	}))
+		G.E_MANAGER:add_event(Event({
+			trigger = 'immediate',
+			func = (function()
+				G.UTDR_SHOP_SIGN_CATTY.alignment.offset.y = 0
+				return true
+			end)
+		}))
+	end
 
 	local tradenodes = {}
 
 	for _,v in ipairs(G.GAME.utdr_trades) do
-		tradenodes[#tradenodes+1] = {n=G.UIT.C, config={align = "cm", padding = 0.2}, nodes={
-			{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.T, config={text=v.tag,scale=1,colour=G.C.WHITE}}}},
-		}}
+		if not v.complete then
+			local area = CardArea(
+				0,
+				0,
+				G.CARD_W,
+				G.CARD_H,
+				{card_limit = #v.cards, type = 'title_2', highlight_limit = 0, UTDR_w_space = .6}
+			)
+			for _, v2 in ipairs(v.cards) do
+				local c = SMODS.create_card{key = v2, allow_duplicates=true, bypass_discovery_center=true}
+				area:emplace(c)
+			end
+
+			local _tag = Tag(v.tag):generate_UI(1)
+			local arrow = SMODS.create_sprite(0,0,.6,.6,"UTDR_shop_arrow")
+
+			tradenodes[#tradenodes+1] = {n=G.UIT.C, config={align = "cm", padding = 0.2,colour=G.C.L_BLACK,emboss=.05,r=.1,minw=3.5, minh=4}, nodes={
+				{n=G.UIT.R, config={align = "cm", func="utdr_setup_uie_reverse_order"}, nodes = {
+					{n=G.UIT.C, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object=area}}}},
+					{n=G.UIT.C, config={align = "cm", padding = -.1}, nodes = {
+						{n=G.UIT.C, config={align = "cm", padding = .1}, nodes = {
+							{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object=arrow}}}},
+							{n=G.UIT.R, config={align = "cm"}, nodes = { _tag }}
+						}},
+					}},
+				}},
+				{n=G.UIT.R, config={align = "cm"}, nodes = {
+					{n=G.UIT.C, config={ -- Button
+						align="cm",
+						minw=2.4,
+						colour=G.C.RED,
+						func="UTDR_cattybratty_tradefunc",
+						button="UTDR_cattybratty_trade",
+						emboss=.05,
+						r=.1,
+						padding=.1,
+						trade = v
+					},nodes={
+						{n=G.UIT.T,config={text=localize("b_utdr_cattybratty_trade"),scale=.5,colour=G.C.WHITE}}
+					}}
+				}}
+			}}
+		end
 	end
 
-	local catty_text = DynaText({ string = localize("utdr_catty_text"), float = true, colours = { HEX("DC8DF0") }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5 })
-	local bratty_text = DynaText({ string = localize("utdr_bratty_text"), float = true, colours = { HEX("8DE1BF") }, pop_in = .5, pop_in_rate = 3, spacing = 1, scale = .5 })
-	local cb_spr = SMODS.create_sprite(0,0,5.5,5.5*139/215,"UTDR_shop_cattybratty_body",{x=0,y=0})
+	
+	local notrades = #tradenodes == 0
+	UTDR_Modules.Shop.dialogue = notrades and "sold" or UTDR_Modules.Shop.dialogue or "open"
+	local cheer = UTDR_Modules.Shop.cheer and 1 or 0
+
+	local ct = localize("utdr_shopcatty_"..UTDR_Modules.Shop.dialogue)
+	local bt = localize("utdr_shopbratty_"..UTDR_Modules.Shop.dialogue)
+	--calc_text_scale("Bratty! We're gonna be rich!")
+	--calc_text_scale("Yeah! We're gonna be rich!")
+
+	local catty_text = DynaText({ string = ct, float = true, colours = { HEX("DC8DF0") }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
+	local bratty_text = DynaText({ string = bt, float = true, colours = { HEX("8DE1BF") }, pop_in = .5, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
+	local cb_spr = SMODS.create_sprite(0,0,5.5,5.5*139/215,"UTDR_shop_cattybratty_body",{x=0,y=cheer})
 
 	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
 		UIBox_dyn_container({
@@ -254,18 +327,45 @@ function UTDR_Modules.Shop.create_UIBox_cattybratty()
 					{n=G.UIT.C, config={align = "cr", minw=6, padding=-.03}, nodes = {
 						{n=G.UIT.O, config={object = cb_spr}}
 					}},
-					{n=G.UIT.C, config={align = "cl", minw=5, padding = .3}, nodes = {
-						{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object = catty_text}}}},
-						{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object = bratty_text}}}}
+					{n=G.UIT.C, config={align = "cl", minw=5}, nodes = {
+						{n=G.UIT.C, config={align = "cl", padding = .3}, nodes = {
+							{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object = catty_text}}}},
+							{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object = bratty_text}}}}
+						}}
 					}}
 				}},
-				{n=G.UIT.R, config={align = "cm", minh = 0.2, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN,padding = .4}, nodes = tradenodes}
+				{n=G.UIT.R, config={align = notrades and "cm" or "cl", minh = 4.45, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN,padding = .2, minw=11.3}, nodes = tradenodes}
 			}}
 		}},
 		
 		}, false)
 	}}
 	return t
+end
+
+function UTDR_Modules.Shop.refresh_cattybratty()
+	if G.utdr_shop_cattybratty then
+		G.utdr_shop_cattybratty:remove()
+		G.utdr_shop_cattybratty = nil
+		G.utdr_shop_cattybratty = UIBox{
+			definition = UTDR_Modules.Shop.create_UIBox_cattybratty(true),
+			config = {align="bmi", offset = {x=0,y=G.ROOM.T.y + 21.4}, major = G.hand, bond = 'Weak'}
+		}
+	end
+end
+
+-- Copied from Mallatro bc I'm not reinventing a weel I already invented
+local achook = CardArea.align_cards
+function CardArea.align_cards(self)
+	if self.config.UTDR_w_space then
+		self.T.x = self.T.x-self.config.UTDR_w_space
+		self.T.w = self.T.w+self.config.UTDR_w_space*2
+		
+		achook(self)
+		
+		self.T.x = self.T.x+self.config.UTDR_w_space
+		self.T.w = self.T.w-self.config.UTDR_w_space*2
+	else achook(self) end
 end
 
 local update_shop_hook = Game.update_shop
@@ -280,7 +380,6 @@ function Game:update_shop(dt)
 				end)
 			}))
 		end
-		
 		local targets = {
 			"UTDR_SHOP_SIGN_CATTY",
 			"UTDR_SHOP_SIGN_CAPSULE",
@@ -332,9 +431,7 @@ function UTDR_Modules.Shop.reroll_catty_shop()
 	G.GAME.utdr_trades = {}
 	-- Hook here to add more trades :3
 	UTDR_Modules.Shop.add_catty_trade{
-		cards = {
-			SMODS.poll_object{ type = "Tarot" }
-		}
+		SMODS.poll_object{ type = "Tarot" }
 	}
 	UTDR_Modules.Shop.add_catty_trade{
 		cards = {
@@ -357,4 +454,70 @@ function reset_blinds(...)
 	end
 
 	reset_blinds_hook(...)
+end
+
+function G.FUNCS.UTDR_cattybratty_tradefunc(e)
+	local cantrade = not e.config.trade.complete
+	local checked = {}
+	if cantrade then
+		for _, v in ipairs(e.config.trade.cards) do
+			for _, v2 in ipairs(SMODS.find_card(v)) do -- In case you want a trade that asks for 2 of the same card
+				--cantrade = cantrade and v2.utdr_trade_target
+				if not v2.utdr_trade_target then
+					v2.utdr_trade_target = true
+					checked[#checked+1] = v2
+					break
+				end
+			end
+		end
+		cantrade = #checked == #e.config.trade.cards
+		for _, v in ipairs(checked) do
+			v.utdr_trade_target = false
+		end
+	end
+	
+	e.config.colour = cantrade and G.C.RED or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = cantrade and 'UTDR_cattybratty_trade' or nil
+end
+
+function G.FUNCS.UTDR_cattybratty_trade(e)
+	local cards = {}
+	for _, v in ipairs(e.config.trade.cards) do
+		for _, v2 in ipairs(SMODS.find_card(v)) do -- In case you want a trade that asks for multiple of the same card
+			if not v2.utdr_trade_target then
+				v2.utdr_trade_target = true
+				cards[#cards+1] = v2
+				break
+			end
+		end
+	end
+
+	SMODS.destroy_cards(cards)
+	add_tag({key = e.config.trade.tag})
+	e.config.trade.complete = true
+
+	UTDR_Modules.Shop.dialogue = "buy"
+	UTDR_Modules.Shop.cheer = true
+	UTDR_Modules.Shop.refresh_cattybratty()
+	play_sound("UTDR_buy")
+	-- Saving is rly buggy and messes up trade functionality
+	--G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
+end
+
+-- Code by @sleepy.g11 on Discord
+G.FUNCS.utdr_setup_uie_reverse_order = function(e)
+    e.config.func = nil
+    function e:draw_children()
+        if self.states.visible then
+            -- Draw children in reverse order
+            for k = #self.children, 1, -1 do
+                local v = self.children[k]
+                if not v.config.draw_layer and k ~= "h_popup" and k ~= "alert" then
+                    if v.draw_self and not v.config.draw_after then v:draw_self() else v:draw() end
+                    if v.draw_children then v:draw_children() end
+                    if v.draw_self and v.config.draw_after then v:draw_self() else v:draw() end
+                end
+            end
+        end
+    end
 end

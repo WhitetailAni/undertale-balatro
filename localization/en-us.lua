@@ -2274,8 +2274,18 @@ return {
 			-- Shop stuff
 			ph_utdr_capsule = "Gamble points for cards!",
 			ph_utdr_cattybratty = "Trade for tags!",
-			utdr_catty_text = "Hey, check it out!",
-			utdr_bratty_text = "Yeah, check it out!",
+			b_utdr_cattybratty_trade = "Trade",
+
+			-- Shop Dialogue
+			utdr_shopcatty_open = "Hey! Check it out!",
+			utdr_shopbratty_open = "Yeah! Check it out!",
+
+			utdr_shopcatty_buy = "Bratty! We're gonna be rich!",
+			utdr_shopbratty_buy = "Yeah! We're gonna be rich!",
+
+			utdr_shopcatty_sold = "Mee-YOW!",
+			utdr_shopbratty_sold = "We're all $$$$old out!",
+
 		},
 		achievement_descriptions = {
 			clairvoyance = dr and "Discover every Prophecy card" or nil
