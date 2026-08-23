@@ -135,10 +135,8 @@ SMODS.Joker {
 		return { vars = { card.ability.hands_lost } }
 	end,
 	add_to_deck = function(self, card, from_debuff)
+		G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.hands_lost
 		ease_hands_played(-card.ability.hands_lost)
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		ease_hands_played(card.ability.hands_lost)
 	end,
 	calculate = function(self, card, context)
 		if context.reroll_shop then

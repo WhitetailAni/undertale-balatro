@@ -1,14 +1,14 @@
 SMODS.Voucher {
 	key = "rippling_stars",
-	atlas = "DR_jokers",
-	pos = { x = 0, y = 0 },
+	atlas = "voucher",
+	pos = { x = 1, y = 0 },
 	cost = 10,
 }
 
 SMODS.Voucher {
 	key = "fallen_star",
-	atlas = "DR_jokers",
-	pos = { x = 1, y = 0 },
+	atlas = "voucher",
+	pos = { x = 1, y = 1 },
 	cost = 10,
 	requires = { "v_UTDR_rippling_stars" },
 	config = {
