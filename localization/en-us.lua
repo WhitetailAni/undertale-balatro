@@ -13,8 +13,9 @@ return {
 			v_UTDR_rippling_stars = {
 				name = "Rippling Stars",
 				text = {
-					"{C:attention}Lowest earnable{} rank at",
-					"end of ante is {C:c_rank}C-Rank{}"
+					"{C:z_rank}Z-Rank{} is",
+					"{C:attention}no longer earnable",
+					"at end of ante",
 				},
 			},
 			v_UTDR_fallen_star = {
@@ -22,7 +23,7 @@ return {
 				text = {
 					"{C:t_rank}T-Rank{} and {C:s_rank}S-Rank",
 					"grant {C:points}100 POINTs",
-					"extra at {C:attention}end of ante",
+					"{C:attention}extra{} at end of ante",
 				},
 			}
 		},
@@ -1616,7 +1617,7 @@ return {
 			j_UTDR_lacquer_triangle = {
 				name = "Lacquer Triangle",
 				text = {
-					"{C:blue}-#1#{} Hand",
+					"{C:ballgame}-#1# Hand{}",
 					"{C:gold}Gold{} capsule prizes",
 					"begin at {C:points}300 POINTs"
 				},
