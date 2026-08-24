@@ -275,7 +275,7 @@ function UTDR_Modules.Shop.create_UIBox_cattybratty(reload)
 				{card_limit = #v.cards, type = 'title_2', highlight_limit = 0, UTDR_w_space = .6}
 			)
 			for _, v2 in ipairs(v.cards) do
-				local c = SMODS.create_card{key = v2, allow_duplicates=true, bypass_discovery_center=true}
+				local c = SMODS.create_card{key = v2, allow_duplicates=true, bypass_discovery_center=true, skip_materialize = reload}
 				area:emplace(c)
 			end
 
@@ -470,8 +470,28 @@ function reset_blinds(...)
 	reset_blinds_hook(...)
 end
 
+local grad = SMODS.Gradient {
+	key = "catty_bratty",
+	colours = {
+		G.C.CATTY,
+		G.C.BRATTY
+	},
+	cycle = 5,
+	interpolation = "linear"
+}
+
+-- Returns reason, allows for handling of that in other functions (via hooks if doing crossmod)
+function UTDR_Modules.Shop.is_trade_free(trade)
+	local has_glamorous = false
+	for _,v in ipairs(G.GAME.tags) do
+		has_glamorous = has_glamorous or v.key == "tag_UTDR_glamorous"
+	end
+	if has_glamorous then return "tag_glamorous" end
+end
+
 function G.FUNCS.UTDR_cattybratty_tradefunc(e)
 	local cantrade = not e.config.trade.complete
+	local freetrade = UTDR_Modules.Shop.is_trade_free(e.config.trade)
 	local checked = {}
 	if cantrade then
 		for _, v in ipairs(e.config.trade.cards) do
@@ -489,24 +509,35 @@ function G.FUNCS.UTDR_cattybratty_tradefunc(e)
 			v.utdr_trade_target = false
 		end
 	end
-	
-	e.config.colour = cantrade and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
-	e.config.button = cantrade and 'UTDR_cattybratty_trade' or nil
+
+	e.config.colour = freetrade and grad or (cantrade and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE)
+	e.config.button = (freetrade or cantrade) and 'UTDR_cattybratty_trade' or nil
 end
 
 function G.FUNCS.UTDR_cattybratty_trade(e)
-	local cards = {}
-	for _, v in ipairs(e.config.trade.cards) do
-		for _, v2 in ipairs(SMODS.find_card(v)) do -- In case you want a trade that asks for multiple of the same card
-			if not v2.utdr_trade_target then
-				v2.utdr_trade_target = true
-				cards[#cards+1] = v2
-				break
-			end
+	local freetrade = UTDR_Modules.Shop.is_trade_free(e.config.trade)
+	-- Apply Glamorous tag
+	if freetrade == "tag_glamorous" then
+		for _,v in ipairs(G.GAME.tags) do
+			local apply = v:apply_to_run{type = "utdr_shop_tag"}
+			if apply then break end -- Only do one
 		end
 	end
+	
+	if not paid then
+		local cards = {}
+		for _, v in ipairs(e.config.trade.cards) do
+			for _, v2 in ipairs(SMODS.find_card(v)) do -- In case you want a trade that asks for multiple of the same card
+				if not v2.utdr_trade_target then
+					v2.utdr_trade_target = true
+					cards[#cards+1] = v2
+					break
+				end
+			end
+		end
 
-	SMODS.destroy_cards(cards)
+		SMODS.destroy_cards(cards)
+	end
 	add_tag({key = e.config.trade.tag})
 	e.config.trade.complete = true
 
@@ -514,6 +545,7 @@ function G.FUNCS.UTDR_cattybratty_trade(e)
 	UTDR_Modules.Shop.cheer = true
 	UTDR_Modules.Shop.refresh_cattybratty()
 	play_sound("UTDR_buy")
+
 	-- Saving is rly buggy and messes up trade functionality
 	--G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
 end

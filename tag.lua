@@ -21,13 +21,15 @@ SMODS.Tag {
 	atlas = "tag",
 	pos = { x = 1, y = 0 },
 	apply = function(self, tag, context)
-		local color = pseudorandom_element({
-			G.C.BRATTY,
-			G.C.CATTY
-		})
-		tag:yep("+", color)
-		print("we applyin out here")
-		tag.triggered = true
+		if context.type == 'utdr_shop_tag' then
+			local color = pseudorandom_element({
+				G.C.BRATTY,
+				G.C.CATTY
+			})
+			tag:yep("+", color)
+			tag.triggered = true
+			return true
+		end
 	end
 }
 
