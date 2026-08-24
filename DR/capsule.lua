@@ -35,7 +35,7 @@ local function wow_that_was_so_gold(input, filter)
 end
 
 function UTDR_Modules.Capsule.get_reward(bet)
-	if bet == "1225" then
+	if bet == 1225 then
 		return {
 			key = "j_UTDR_lacquer_triangle",
 			december = true			

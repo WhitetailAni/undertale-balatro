@@ -313,11 +313,11 @@ function UTDR_Modules.Shop.create_UIBox_cattybratty(reload)
 
 	
 	local notrades = #tradenodes == 0
-	UTDR_Modules.Shop.dialogue = notrades and "sold" or UTDR_Modules.Shop.dialogue or "open"
+	local dialogue = notrades and "sold" or UTDR_Modules.Shop.dialogue or "open"
 	local cheer = UTDR_Modules.Shop.cheer and 1 or 0
 
-	local ct = localize("utdr_shopcatty_"..UTDR_Modules.Shop.dialogue)
-	local bt = localize("utdr_shopbratty_"..UTDR_Modules.Shop.dialogue)
+	local ct = localize("utdr_shopcatty_"..dialogue)
+	local bt = localize("utdr_shopbratty_"..dialogue)
 	--calc_text_scale("Bratty! We're gonna be rich!")
 	--calc_text_scale("Yeah! We're gonna be rich!")
 
