@@ -21,7 +21,7 @@ SMODS.Tag {
 	atlas = "tag",
 	pos = { x = 1, y = 0 },
 	apply = function(self, tag, context)
-		if context.type == 'utdr_shop_tag' then
+		if context.type == 'utdr_glamorous_tag' then
 			local color = pseudorandom_element({
 				G.C.BRATTY,
 				G.C.CATTY

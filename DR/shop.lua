@@ -519,7 +519,7 @@ function G.FUNCS.UTDR_cattybratty_trade(e)
 	-- Apply Glamorous tag
 	if freetrade == "tag_glamorous" then
 		for _,v in ipairs(G.GAME.tags) do
-			local apply = v:apply_to_run{type = "utdr_shop_tag"}
+			local apply = v:apply_to_run{type = "utdr_glamorous_tag"}
 			if apply then break end -- Only do one
 		end
 	end
