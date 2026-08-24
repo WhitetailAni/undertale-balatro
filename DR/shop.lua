@@ -484,7 +484,7 @@ local grad = SMODS.Gradient {
 function UTDR_Modules.Shop.is_trade_free(trade)
 	local has_glamorous = false
 	for _,v in ipairs(G.GAME.tags) do
-		has_glamorous = has_glamorous or v.key == "tag_UTDR_glamorous"
+		has_glamorous = has_glamorous or (v.key == "tag_UTDR_glamorous" and not v.triggered)
 	end
 	if has_glamorous then return "tag_glamorous" end
 end
