@@ -173,51 +173,6 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { localize("k_spectral") } }
 	end,
-	add_to_deck = function(self, card, from_debuff)
-		card.ability.old_ouija = G.localization.descriptions.Spectral.c_ouija.text
-		G.localization.descriptions.Spectral.c_ouija.text = { "Converts all cards", "in hand to a single",
-			"random {C:attention}rank" }
-
-		card.ability.old_ectoplasm = G.localization.descriptions.Spectral.c_ectoplasm.text
-		G.localization.descriptions.Spectral.c_ectoplasm.text = { "Add {C:dark_edition}Negative{} to",
-			"a random {C:attention}Joker" }
-
-		card.ability.old_familiar = G.localization.descriptions.Spectral.c_familiar.text
-		G.localization.descriptions.Spectral.c_familiar.text = { "Add {C:attention}#1#{} random {C:attention}Enhanced",
-			"{C:attention}face cards{} to your hand" }
-
-		card.ability.old_grim = G.localization.descriptions.Spectral.c_grim.text
-		G.localization.descriptions.Spectral.c_grim.text = { "Add {C:attention}#1#{} random {C:attention}Enhanced",
-			"{C:attention}Aces{} to your hand" }
-
-		card.ability.old_incantation = G.localization.descriptions.Spectral.c_incantation.text
-		G.localization.descriptions.Spectral.c_incantation.text = { "Add {C:attention}#1# random",
-			"{C:attention}Enhanced numbered", "{C:attention}cards{} to your hand" }
-
-		card.ability.old_wraith = G.localization.descriptions.Spectral.c_wraith.text
-		G.localization.descriptions.Spectral.c_wraith.text = { "Creates a random", "{C:red}Rare{C:attention} Joker{}" }
-
-		card.ability.old_ankh = G.localization.descriptions.Spectral.c_ankh.text
-		G.localization.descriptions.Spectral.c_ankh.text = { "Create a copy of a", "random {C:attention}Joker{}" }
-
-		card.ability.old_hex = G.localization.descriptions.Spectral.c_hex.text
-		G.localization.descriptions.Spectral.c_hex.text = { "Add {C:dark_edition}Polychrome{} to",
-			"a random {C:attention}Joker{}" }
-
-		card.ability.old_immolate = G.localization.descriptions.Spectral.c_immolate.text
-		G.localization.descriptions.Spectral.c_immolate.text = { "Gain {C:money}$#2#" }
-	end,
-	remove_from_deck = function(self, card, from_debuff)
-		G.localization.descriptions.Spectral.c_ouija.text = card.ability.old_ouija
-		G.localization.descriptions.Spectral.c_ectoplasm.text = card.ability.old_ectoplasm
-		G.localization.descriptions.Spectral.c_familiar.text = card.ability.old_familiar
-		G.localization.descriptions.Spectral.c_grim.text = card.ability.old_grim
-		G.localization.descriptions.Spectral.c_incantation.text = card.ability.old_incantation
-		G.localization.descriptions.Spectral.c_wraith.text = card.ability.old_wraith
-		G.localization.descriptions.Spectral.c_ankh.text = card.ability.old_ankh
-		G.localization.descriptions.Spectral.c_hex.text = card.ability.old_hex
-		G.localization.descriptions.Spectral.c_immolate.text = card.ability.old_immolate
-	end,
 }
 
 SMODS.Joker {

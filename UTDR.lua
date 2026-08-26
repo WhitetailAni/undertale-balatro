@@ -258,7 +258,7 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/prophecy.lua'))()
 	assert(SMODS.load_file('DR/tarot.lua'))()
 	assert(SMODS.load_file('DR/spectral.lua'))()
-	assert(SMODS.load_file('DR/spectral_crystal.lua'))()
+	
 	assert(SMODS.load_file('DR/shop.lua'))()
 	assert(SMODS.load_file('DR/swoon.lua'))()
 	--become_prophecy()

@@ -1901,14 +1901,7 @@ return {
 
 
 
-			j_ring_master = {
-				text = {
-				},
-			},
-			j_sixth_sense = {
-				text = {
-				},
-			},
+			
 
 
 
