@@ -1,8 +1,5 @@
 UTDR = SMODS.current_mod
-if NFS.read(SMODS.current_mod.path .. "config.lua") then
-	local file = STR_UNPACK(NFS.read(SMODS.current_mod.path .. "config.lua"))
-	UTDR.config_file = file
-end
+local my_config = UTDR.config
 
 SMODS.Sound {
 	key = "flowery_according_to_plant",
@@ -666,12 +663,12 @@ SMODS.Joker {
 	soul_pos = { x = 0, y = 12 },
 	cost = 3,
 	play_flowery_sound = function(self, sfx)
-		if UTDR.config_file['voiceclips'] then
+		if my_config['voiceclips'] then
 			play_sound("UTDR_flowery_" .. sfx, 1.0, 0.7)
 		end
 	end,
 	play_flowery_sound_random = function(self, table)
-		if UTDR.config_file['voiceclips'] then
+		if my_config['voiceclips'] then
 			local sfx = pseudorandom_element(table, "flowery_sfx")
 			play_sound("UTDR_flowery_" .. sfx, 1.0, 0.7)
 		end
@@ -684,8 +681,8 @@ SMODS.Joker {
 			return true
 		end
 		return card.config.center.key == "j_UTDR_aqua" or card.config.center.key == "j_UTDR_seth" or
-		card.config.center.key == "j_UTDR_yellow" or card.config.center.key == "j_UTDR_blue" or
-		card.config.center.key == "j_UTDR_green" or card.config.center.key == "j_UTDR_orange"
+			card.config.center.key == "j_UTDR_yellow" or card.config.center.key == "j_UTDR_blue" or
+			card.config.center.key == "j_UTDR_green" or card.config.center.key == "j_UTDR_orange"
 	end,
 	last_jarona = function(self, card)
 		local aquas = SMODS.find_card("j_UTDR_aqua")

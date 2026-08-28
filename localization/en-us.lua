@@ -1,4 +1,4 @@
-local dr = UTDR.config_file.deltarune
+local dr = UTDR.config["deltarune"]
 
 return {
 	descriptions = {
@@ -1898,22 +1898,42 @@ return {
 					"{S:1.1,C:dark_edition,E:2}You found it!{}",
 				},
 			},
-
-
-
-			j_ring_master = {
+			j_UTDR_dev_viomarks = {
+				name = "VioMarks",
 				text = {
-				},
+					"(insert",
+					"credits",
+					"description",
+					"here)"
+				}
 			},
-			j_sixth_sense = {
+			j_UTDR_dev_ani = {
+				name = "WhitetailAni",
 				text = {
-				},
+					"(insert",
+					"credits",
+					"description",
+					"here)"
+				}
 			},
-
-
-
-
-
+			j_UTDR_dev_j8 = {
+				name = "J8-Bit",
+				text = {
+					"(insert",
+					"credits",
+					"description",
+					"here)"
+				}
+			},
+			j_UTDR_dev_elle = {
+				name = "ellestuff.dev",
+				text = {
+					"(insert",
+					"credits",
+					"description",
+					"here)"
+				}
+			},
 		},
 		Back = {
 			b_ghost = {
@@ -1994,7 +2014,7 @@ return {
 					"be used immediately",
 				},
 			},
-		},
+		} or nil,
 		Tag = {
 			tag_ethereal = {
 				text = {
@@ -2286,6 +2306,13 @@ return {
 
 			utdr_shopcatty_sold = "Mee-YOW!",
 			utdr_shopbratty_sold = "We're all $$$$old out!",
+
+			-- Config options
+			b_utdr_enable_undertale = "Enable UNDERTALE content",
+			b_utdr_enable_deltarune = "Enable DELTARUNE content",
+			b_utdr_voice_clips = "Voice Clips",
+			b_utdr_ralseis = "Ralseis",
+			b_utdr_requires_restart = "Requires restart for changes to appear!"
 
 		},
 		achievement_descriptions = {

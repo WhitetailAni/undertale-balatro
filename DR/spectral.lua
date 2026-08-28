@@ -1,14 +1,5 @@
 SMODS.Consumable:take_ownership('familiar',
 	{
-		loc_txt = {
-			name = "Queen's Chariot",
-			text={
-				"Destroy {C:attention}1{} random",
-				"card in your hand, add",
-				"{C:attention}#1#{} random {C:attention}Enhanced face",
-				"{C:attention}cards{} to your hand",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
 			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0  then
 				return {
@@ -16,7 +7,9 @@ SMODS.Consumable:take_ownership('familiar',
 					vars = { card.ability.extra }
 				}
 			end
-			return { vars = { card.ability.extra } }
+			return {
+				vars = { card.ability.extra }
+			}
 		end,
 		atlas = "UTDR_consumables",
 		pos = { x = 0, y = 4 },
@@ -64,15 +57,6 @@ SMODS.Consumable:take_ownership('familiar',
 
 SMODS.Consumable:take_ownership('grim',
 	{
-		loc_txt = {
-			name = "Flower Man",
-			text={
-				"Destroy {C:attention}1{} random",
-				"card in your hand,",
-				"add {C:attention}#1#{} random {C:attention}Enhanced",
-				"{C:attention}Aces{} to your hand",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
 			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0  then
 				return {
@@ -122,15 +106,6 @@ SMODS.Consumable:take_ownership('grim',
 
 SMODS.Consumable:take_ownership('incantation',
  	{
- 		loc_txt = {
-			name = "Lord of Screens",
-			 text={
-				"Destroy {C:attention}1{} random",
-				"card in your hand, add {C:attention}#1#",
-				"random {C:attention}Enhanced numbered",
-				"{C:attention}cards{} to your hand",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
 			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0  then
 				return {
@@ -186,14 +161,6 @@ SMODS.Consumable:take_ownership('incantation',
 
 SMODS.Consumable:take_ownership('talisman',
  	{
- 		loc_txt = {
-			name = "Four Tones",
-			 text={
-				"Add a {C:attention}Gold Seal{}",
-				"to {C:attention}1{} selected",
-				"card in your hand",
-			},
-		},
 		atlas = "UTDR_consumables",
 		pos = { x = 3, y = 4 },
 	},
@@ -202,32 +169,26 @@ SMODS.Consumable:take_ownership('talisman',
 
 SMODS.Consumable:take_ownership('aura',
  	{
- 		loc_txt = {
-			name = "Heaven's Call",
-			 text={
-				"Add {C:dark_edition}Foil{}, {C:dark_edition}Holographic{},",
-				"or {C:dark_edition}Polychrome{} effect to",
-				"{C:attention}1{} selected card in hand",
-			},
-		},
 		atlas = "UTDR_consumables",
 		pos = { x = 4, y = 4 },
+		loc_vars = function(self, info_queue, card)
+			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0 then
+				if math.fmod(os.time(), 16) == 0 then
+					return { key = "c_UTDR_jorkington_crystal" }
+				else
+					return { key = "c_UTDR_wraith_crystal" }
+				end
+			elseif math.fmod(os.time(), 16) == 0 then
+				return { key = "c_UTDR_jorkington" }
+			end
+		end,
 	},
 	true
 )
 
 SMODS.Consumable:take_ownership('wraith',
  	{
- 		loc_txt = {
-			name="Jockington",
-			text={
-				"Creates a random",
-				"{C:red}Rare{C:attention} Joker{},",
-				"sets money to {C:money}$0",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
-			
 			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0 then
 				if math.fmod(os.time(), 16) == 0 then
 					return { key = "c_UTDR_jorkington_crystal" }
@@ -259,14 +220,6 @@ SMODS.Consumable:take_ownership('wraith',
 
 SMODS.Consumable:take_ownership('sigil',
  	{
- 		loc_txt = {
-			name = "Gallery",
-			  text={
-				"Converts all cards",
-				"in hand to a single",
-				"random {C:attention}suit",
-			},
-		},
 		atlas = "UTDR_consumables",
 		pos = { x = 6, y = 4 },
 	},
@@ -275,15 +228,6 @@ SMODS.Consumable:take_ownership('sigil',
 
 SMODS.Consumable:take_ownership('ouija',
 	{
-		loc_txt = {
-			name="Darkened Eyes",
-			 text={
-				"Converts all cards",
-				"in hand to a single",
-				"random {C:attention}rank",
-				"{C:red}-1{} hand size",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
 			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0  then
 				return { key = "c_UTDR_ouija_crystal" }
@@ -325,14 +269,6 @@ SMODS.Consumable:take_ownership('ouija',
 
 SMODS.Consumable:take_ownership('ectoplasm',
  	{
- 		loc_txt = {
-			name="Three Heroes",
-			 text={
-				"Add {C:dark_edition}Negative{} to",
-				"a random {C:attention}Joker,",
-				"{C:red}-#1#{} hand size",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
 			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0  then
 				return { key = "c_UTDR_ectoplasm_crystal", vars = { G.GAME.ecto_minus } }
@@ -357,14 +293,6 @@ SMODS.Consumable:take_ownership('ectoplasm',
 
 SMODS.Consumable:take_ownership('immolate',
  	{
- 		loc_txt = {
-			name="Final Tragedy",
-			 text={
-				"Destroys {C:attention}#1#{} random",
-				"cards in hand,",
-				"gain {C:money}$#2#",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
 			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0  then
 				return {
@@ -421,14 +349,6 @@ SMODS.Consumable:take_ownership('immolate',
 
 SMODS.Consumable:take_ownership('ankh',
  	{
- 		loc_txt = {
-			name="Pointy-Headed",
-			  text={
-				"Create a copy of a",
-				"random {C:attention}Joker{}, destroy",
-				"all other Jokers",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
 			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0  then
 				return { key = "c_UTDR_ankh_crystal" }
@@ -472,14 +392,6 @@ SMODS.Consumable:take_ownership('ankh',
 
 SMODS.Consumable:take_ownership('deja_vu',
  	{
- 		loc_txt = {
-			name = "The Girl",
-			text={
-				"Add a {C:red}Red Seal{}",
-				"to {C:attention}1{} selected",
-				"card in your hand",
-			},
-		},
 		atlas = "UTDR_consumables",
 		pos = { x = 1, y = 5 },
 	},
@@ -488,14 +400,6 @@ SMODS.Consumable:take_ownership('deja_vu',
 
 SMODS.Consumable:take_ownership('hex',
  	{
- 		loc_txt = {
-			name="Blackened Knife",
-			text={
-				"Add {C:dark_edition}Polychrome{} to a",
-				"random {C:attention}Joker{}, destroy",
-				"all other Jokers",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
 			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0  then
 				return { key = "c_UTDR_hex_crystal" }
@@ -520,14 +424,6 @@ SMODS.Consumable:take_ownership('hex',
 
 SMODS.Consumable:take_ownership('trance',
  	{
- 		loc_txt = {
-			name="The Cage",
-			text={
-				"Add a {C:blue}Blue Seal{}",
-				"to {C:attention}1{} selected",
-				"card in your hand",
-			},
-		},
 		atlas = "UTDR_consumables",
 		pos = { x = 3, y = 5 }
 	},
@@ -536,14 +432,6 @@ SMODS.Consumable:take_ownership('trance',
 
 SMODS.Consumable:take_ownership('medium',
  	{
- 		loc_txt = {
-			name="The Prince",
-			text={
-				"Add a {C:purple}Purple Seal{}",
-				"to {C:attention}1{} selected",
-				"card in your hand",
-			},
-		},
 		atlas = "UTDR_consumables",
 		pos = { x = 4, y = 5 }
 	},
@@ -552,14 +440,6 @@ SMODS.Consumable:take_ownership('medium',
 
 SMODS.Consumable:take_ownership('cryptid',
  	{
- 		loc_txt = {
-			name="Tail of Hell",
-			text={
-				"Create {C:attention}#1#{} copies of",
-				"{C:attention}1{} selected card",
-				"in your hand",
-			},
-		},
 		loc_vars = function(self, info_queue, card)
 			return { vars = { card.ability.extra } }
 		end,
@@ -571,14 +451,6 @@ SMODS.Consumable:take_ownership('cryptid',
 
 SMODS.Consumable:take_ownership('soul',
  	{
- 		loc_txt = {
-			name="DELTARUNE",
-			 text={
-				"Creates a",
-				"{C:legendary,E:1}Legendary{} Joker",
-				"{C:inactive}(Must have room)",
-			},
-		},
 		atlas = "UTDR_consumables",
 		pos = { x = 2, y = 2 }
 	},

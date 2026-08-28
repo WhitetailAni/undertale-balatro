@@ -1,3 +1,6 @@
+UTDR = SMODS.current_mod
+local my_config = UTDR.config
+
 --beginning
 SMODS.Joker {
 	key = "hometown",
@@ -661,7 +664,7 @@ SMODS.Joker {
 		"rank"
 	},
 	loc_vars = function(self, info_queue, card)
-		local ralseis = true
+		local ralseis = my_config.ralseis
 		if not ralseis then
 			return {
 				key = "j_UTDR_ralseis",

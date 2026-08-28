@@ -74,16 +74,15 @@ target = "game.lua"
 pattern = "SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_joker'])"
 position = "at"
 payload = '''
-if math.fmod(os.time(), 8192) == 0 then
+local config = SMODS.find_mod('UTDR')[1].config
+if math.fmod(os.time(), 8192) == 0 and config["undertale"] then
 	SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_chara'], {bypass_discovery_center = true})
 else
-	local config = SMODS.find_mod('UTDR')[1].config_file
-
-	local tv_world = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_tv_world'], {bypass_discovery_center = true})
-	local sans = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_sans'], {bypass_discovery_center = true})
-	if config.deltarune and not config.undertale then
+	local tv_world = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, config["deltarune"] and G.P_CENTERS['j_UTDR_tv_world'] or G.P_CENTERS['j_joker'], {bypass_discovery_center = true})
+	local sans = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, config["undertale"] and G.P_CENTERS['j_UTDR_sans'] or G.P_CENTERS['j_joker'], {bypass_discovery_center = true})
+	if config["deltarune"] and not config["undertale"] then
 		SC = tv_world
-	elseif config.undertale and not config.deltarune then
+	elseif config["undertale"] and not config["deltarune"] then
 		SC = sans
 	else
 		if math.fmod(os.time(), 2) == 0 then
