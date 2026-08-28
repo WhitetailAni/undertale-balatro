@@ -161,7 +161,7 @@ end
 
 function UTDR.reset_game_globals(run_start)
 	if run_start then
-		UTDR_Modules.Shop.reroll_catty_shop()
+		UTDR_Modules.Trading.reroll_catty_shop()
 	end
 end
 
@@ -184,6 +184,7 @@ if UTDR.config_file['undertale'] then
 	assert(SMODS.load_file('UT/four.lua'))()
 	assert(SMODS.load_file('UT/five.lua'))()
 	assert(SMODS.load_file('UT/six.lua'))()
+	assert(SMODS.load_file('UT/trading.lua'))()
 
 
 	SMODS.Font {
@@ -259,7 +260,6 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/tarot.lua'))()
 	assert(SMODS.load_file('DR/spectral.lua'))()
 	assert(SMODS.load_file('DR/spectral_crystal.lua'))()
-	assert(SMODS.load_file('DR/shop.lua'))()
 	assert(SMODS.load_file('DR/swoon.lua'))()
 	--become_prophecy()
 end
