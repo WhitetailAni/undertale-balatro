@@ -7,12 +7,13 @@ assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
 assert(SMODS.load_file('challenge.lua'))()
 
-G.E_MANAGER:add_event(Event{func=function()
+G.E_MANAGER:add_event(Event { func = function()
 	local profile_name = G.PROFILES[G.SETTINGS.profile].name
 	if profile_name and profile_name.upper(profile_name) == "GASTER" then
 		G.PROFILES[G.SETTINGS.profile].name = "P" .. G.SETTINGS.profile
 	end
-return true end})
+	return true
+end })
 
 UTDR = SMODS.current_mod
 if NFS.read(SMODS.current_mod.path .. "config.lua") then
@@ -86,7 +87,265 @@ SMODS.DynaTextEffect {
 	end,
 }
 
--- config tabs
+-- developer cards
+SMODS.Joker {
+	key = "dev_viomarks",
+	discovered = true,
+	atlas = "UTDR_devs",
+	pos = { x = 0, y = 0 },
+	pixel_size = { w = 69, h = 69 },
+	display_size = { w = 69, h = 69 },
+	no_collection = true,
+	loc_vars = function(self, info_queue, card)
+		return {}
+	end,
+	in_pool = function(self, args)
+		return false
+	end,
+	set_badges = function(self, card, badges)
+		badges = EMPTY(badges)
+	end
+}
+
+SMODS.Joker {
+	key = "dev_ani",
+	discovered = true,
+	atlas = "UTDR_devs",
+	pos = { x = 1, y = 0 },
+	pixel_size = { w = 69, h = 69 },
+	display_size = { w = 69, h = 69 },
+	no_collection = true,
+	loc_vars = function(self, info_queue, card)
+		return {}
+	end,
+	in_pool = function(self, args)
+		return false
+	end,
+	set_badges = function(self, card, badges)
+		badges = EMPTY(badges)
+	end
+}
+
+SMODS.Joker {
+	key = "dev_j8",
+	discovered = true,
+	atlas = "UTDR_devs",
+	pos = { x = 0, y = 1 },
+	pixel_size = { w = 69, h = 69 },
+	display_size = { w = 69, h = 69 },
+	no_collection = true,
+	loc_vars = function(self, info_queue, card)
+		return {}
+	end,
+	in_pool = function(self, args)
+		return false
+	end,
+	set_badges = function(self, card, badges)
+		badges = EMPTY(badges)
+	end
+}
+
+SMODS.Joker {
+	key = "dev_elle",
+	discovered = true,
+	atlas = "UTDR_devs",
+	pos = { x = 1, y = 1 },
+	pixel_size = { w = 69, h = 69 },
+	display_size = { w = 69, h = 69 },
+	no_collection = true,
+	loc_vars = function(self, info_queue, card)
+		return {}
+	end,
+	in_pool = function(self, args)
+		return false
+	end,
+	set_badges = function(self, card, badges)
+		badges = EMPTY(badges)
+	end
+}
+
+-- credits/config tabs
+
+UTDR.special_thanks = {
+	"Toby Fox",
+	"Temmie Chang",
+	"UT/DR Developers",
+	"invalidos",
+	"Balatro Discord Server",
+	"...and you!"
+}
+
+UTDR.text_to_text_table = function(text, char_limit)
+	local text_table = {}
+	local string_copy = text
+	local cur_string = ""
+	while (#string_copy > 0) do
+		local next_char = string.sub(string_copy, 1, 1)
+		string_copy = string.sub(string_copy, 2, #string_copy)
+		if (next_char == " " and #cur_string >= char_limit) or next_char == "\n" then
+			table.insert(text_table, cur_string)
+			cur_string = ""
+		else
+			cur_string = cur_string .. next_char
+		end
+	end
+	if #cur_string > 0 then
+		table.insert(text_table, cur_string)
+	end
+	return text_table
+end
+
+SMODS.current_mod.custom_ui = function(mod_nodes)
+	-- header stuff
+
+	local modname_text = ""
+	local modname_scale = 0.75
+	if UTDR.config_file['undertale'] and UTDR.config_file['deltarune'] then
+		modname_text = "UNDERTALE/DELTARUNE"
+	elseif UTDR.config_file['undertale'] then
+		modname_text = "UNDERTALE"
+		modname_scale = 1.0
+	elseif UTDR.config_file['deltarune'] then
+		modname_text = "DELTARUNE"
+		modname_scale = 1.0
+	else
+		modname_text = "UNRELATED"
+		modname_scale = 1.0
+	end
+
+	-- description stuff
+
+	local desc_table = UTDR.text_to_text_table(UTDR.description, 72)
+	local desc_nodes = {}
+	for _, text in ipairs(desc_table) do
+		table.insert(desc_nodes,
+			{
+				n = G.UIT.R,
+				config = {
+					align = "cl",
+				},
+				nodes = {
+					{ n = G.UIT.T, config = { text = text, scale = .3, colour = G.C.TEXT_LIGHT } }
+				}
+			})
+	end
+
+	-- developer area
+
+	local dev_area = CardArea(
+		0,
+		0,
+		4.125 * G.CARD_W,
+		1.05 * G.CARD_W,
+		{ card_limit = 4, type = 'title', highlight_limit = 0 }
+	)
+	local dev_cards = { "j_UTDR_dev_viomarks", "j_UTDR_dev_ani", "j_UTDR_dev_j8", "j_UTDR_dev_elle" }
+
+	for _, v in ipairs(dev_cards) do
+		local c = SMODS.create_card(type(v) == "table" and v or
+			{ key = v, area = dev_area, no_edition = true, soulable = false })
+		dev_area:emplace(c)
+	end
+
+	-- special thanks
+
+	local thanks_nodes = {}
+	for _, text in ipairs(UTDR.special_thanks) do
+		table.insert(thanks_nodes,
+			{
+				n = G.UIT.R,
+				config = {
+					align = "cl",
+				},
+				nodes = {
+					{ n = G.UIT.T, config = { text = text, scale = .275, colour = G.C.TEXT_LIGHT } }
+				}
+			})
+	end
+
+	-- putting it all together
+
+	mod_nodes = EMPTY(mod_nodes)
+
+	mod_nodes[#mod_nodes + 1] = {
+		n = G.UIT.C,
+		config = { padding = 0.1, align = 'cm' },
+		nodes = {
+			{
+				n = G.UIT.R,
+				config = { padding = 0.05, align = 'cm' },
+				nodes = {
+					{
+						n = G.UIT.R,
+						config = {
+							align = "cl"
+						},
+						nodes = {
+							{ n = G.UIT.T, config = { text = "the", scale = .325, colour = G.C.TEXT_LIGHT } }
+						}
+					},
+					{
+						n = G.UIT.R,
+						config = {
+							align = "cm"
+						},
+						nodes = {
+							{ n = G.UIT.T, config = { text = modname_text, scale = modname_scale, colour = G.C.TEXT_LIGHT } }
+						}
+					},
+					{
+						n = G.UIT.R,
+						config = {
+							align = "cr"
+						},
+						nodes = {
+							{ n = G.UIT.T, config = { text = "mod", scale = .325, colour = G.C.TEXT_LIGHT } }
+						}
+					},
+				}
+			},
+			{
+				n = G.UIT.R,
+				config = { padding = 0.05, align = 'cm' },
+				nodes = desc_nodes
+			},
+			{
+				n = G.UIT.R,
+				config = { padding = 0.05, align = 'cm', colour = G.C.L_BLACK, r = 0.05 },
+				nodes = {
+					{ n = G.UIT.T, config = { text = "AUTHORS", scale = 0.625, colour = G.C.BLACK, vert = true } },
+					{ n = G.UIT.T, config = { text = "(hover for info)", scale = 0.25, colour = G.C.BLACK, vert = true } },
+					{
+						n = G.UIT.C,
+						config = { padding = 0.1, align = 'cm', colour = G.C.BLACK, r = 0.05, minw = 3.0 },
+						nodes = {
+							{ n = G.UIT.O, config = { object = dev_area } }
+						}
+					}
+
+				}
+			},
+			{
+				n = G.UIT.R,
+				config = { padding = 0.05, align = 'cm', colour = G.C.L_BLACK, r = 0.05 },
+				nodes = {
+					{
+						n = G.UIT.C,
+						config = { padding = 0.1, align = 'cm' },
+						nodes = {
+							{ n = G.UIT.T, config = { text = "SPECIAL THANKS", scale = 0.25, colour = G.C.BLACK, vert = true } },
+						}
+					},
+					{
+						n = G.UIT.C,
+						config = { padding = 0.05, align = 'cm', colour = G.C.BLACK, r = 0.05, minw = 9.0 },
+						nodes = thanks_nodes
+					}
+				}
+			},
+		}
+	}
+end
 
 UTDR.config_tab = function()
 	return {
@@ -258,7 +517,7 @@ if UTDR.config_file.deltarune then
 	assert(SMODS.load_file('DR/prophecy.lua'))()
 	assert(SMODS.load_file('DR/tarot.lua'))()
 	assert(SMODS.load_file('DR/spectral.lua'))()
-	
+
 	assert(SMODS.load_file('DR/shop.lua'))()
 	assert(SMODS.load_file('DR/swoon.lua'))()
 	--become_prophecy()

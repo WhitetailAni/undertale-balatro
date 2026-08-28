@@ -2,7 +2,7 @@
     "id": "UTDR",
     "name": "Undertale/Deltarune",
     "author": ["_VioMarks_", "WhitetailAni", "J8-Bit", "slimestuff."],
-    "description": "Thank you Toby Fox, Temmie Chang, and the rest of the Undertale and Deltarune team for releasing this game 10 years ago. It really has changed a lot of lives past what anyone could have expected. Again, thank you.",
+    "description": "The Undertale / Deltarune mod is a vanilla-adjacent mod that adds 195 new Jokers, 2 new shops, 10 new challenges, retextured Tarot and Spectral cards, and even more past just that!\n\nEverything in this mod is based on the Undertale series by Toby Fox, Temmie Chang, and the rest of the team behind those games.\n\nThis mod can be enjoyed by people that have no experience or knowledge of the series, but it will contain spoilers therein and there are secrets that will only be able to be found by people with knowledge of the games.",
     "prefix": "UTDR",
     "main_file": "UTDR.lua",
     "badge_colour": "000000",
