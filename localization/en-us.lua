@@ -1,4 +1,4 @@
-local dr = UTDR.config_file.deltarune
+local dr = UTDR.config["deltarune"]
 
 return {
 	descriptions = {
@@ -2014,7 +2014,7 @@ return {
 					"be used immediately",
 				},
 			},
-		},
+		} or nil,
 		Tag = {
 			tag_ethereal = {
 				text = {
@@ -2306,6 +2306,13 @@ return {
 
 			utdr_shopcatty_sold = "Mee-YOW!",
 			utdr_shopbratty_sold = "We're all $$$$old out!",
+
+			-- Config options
+			b_utdr_enable_undertale = "Enable UNDERTALE content",
+			b_utdr_enable_deltarune = "Enable DELTARUNE content",
+			b_utdr_voice_clips = "Voice Clips",
+			b_utdr_ralseis = "Ralseis",
+			b_utdr_requires_restart = "Requires restart for changes to appear!"
 
 		},
 		achievement_descriptions = {
