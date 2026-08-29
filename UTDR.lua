@@ -118,12 +118,8 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-<<<<<<< HEAD
 	key = "dev_white_tail_ani",
-=======
-	key = "dev_ani",
 	no_mod_badge = true,
->>>>>>> 74c6176dc4fa7ffdb42f58921a903d81f22f8280
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 0 },
@@ -151,7 +147,7 @@ SMODS.Joker {
 			"j_UTDR_dev_ani_sweepstakes_6",
 			"j_UTDR_dev_ani_sweepstakes_7",
 			"j_UTDR_dev_ani_juice",
-			
+
 		}, "14a93012r")
 		return {
 			key = key,
