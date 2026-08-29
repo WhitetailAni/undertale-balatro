@@ -25,6 +25,7 @@ end
 ]]
 
 G.FUNCS.restart_game_smods = function(e)
+	SMODS.save_mod_config(UTDR)
 	SMODS.restart_game()
 end
 
@@ -175,7 +176,6 @@ UTDR.special_thanks = {
 	"UT/DR Developers",
 	"invalidOS (aka alexi)",
 	"Balatro Discord Server",
-	"...and you!"
 }
 
 UTDR.text_to_text_table = function(text, char_limit)
@@ -265,6 +265,18 @@ SMODS.current_mod.custom_ui = function(mod_nodes)
 				}
 			})
 	end
+	table.insert(thanks_nodes,
+		{
+			n = G.UIT.R,
+			config = {
+				align = "cl",
+			},
+			nodes = {
+				{ n = G.UIT.T, config = { text = "..and ", scale = .275, colour = G.C.TEXT_LIGHT } },
+				{ n = G.UIT.T, config = { text = string.upper(localize({ type = 'name_text', set = "Joker", key = "j_UTDR_you" })) or 'YOU', scale = .275, colour = G.C.BALLGAME } },
+				{ n = G.UIT.T, config = { text = "!", scale = .275, colour = G.C.TEXT_LIGHT } }
+			}
+		})
 
 	-- putting it all together
 
