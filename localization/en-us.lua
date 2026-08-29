@@ -1907,15 +1907,216 @@ return {
 					"here)"
 				}
 			},
+			
+			j_UTDR_dev_white_tail_ani = {
+				name = "WhitetailAni",
+				text = {
+					"OCCUPIED"
+				}
+			},
+			j_UTDR_dev_ani_riddle = {
+				name = "WhitetailAni",
+				text = {
+					"If ye want to know anything about me,",
+					"Ye must solve my {C:red}riddles three!",
+					"{C:green}Life, {C:ballgame}death, {}and {C:ballgame}misery!"
+				}
+			},
+			j_UTDR_dev_ani_caly = {
+				name = "Calypso",
+				text = {
+					"{C:caly}Is that really what you're hoping for?",
+				}
+			},
+			j_UTDR_dev_ani_oh_no = {
+				name = "",
+				text = {
+					"{C:gaster}Are you who you say you are?",
+					"",
+					"Are you who you say you are?",
+					"",
+					"{C:homura}Are you who you say you are?",
+				}
+			},
+			j_UTDR_dev_ani_bridge_mistress = {
+				name = "Bridgemistress",
+				text = {
+					"If ye want to know anything about me,",
+					"Ye must solve my {C:red}riddles three!",
+					"{C:flower_blue}Life, {C:ballgame}death, {}and {C:flower_green}misery!"
+				}
+			},
+			j_UTDR_dev_ani_xavier_magic_button = {
+				name = "Xavier: Renegade Angel",
+				text = {
+					"Okay, so imagine a magic button. I'm imagining the button. If you press the button- What color is it? It's the only button. It doesn't matter what color it is. Nah, I ain't falling for that again. Last time there was a {C:red}red{} button and a {C:blue}blue{} button- That's a different thought experiment. -and I tried to be a nice guy and pick {C:blue}blue{} so I could save everybody, but it turns out y'all a bunch of {C:red}selfish motherfuckers{} and I died. It wasn't buttons. It was pills. Don't care. I'm out for {C:attention}me{} this time. What color is the button? Ugh, fine. It's {C:red}red{}. I press the button. You don't even know what it does yet! And I pull the trolley lever. There's no lever! Bias for Action. Just listen: there's a button that lets you save 10^100 shrimp, but it kills one random person. Would you press it? What flavor are the shrimp? Flavor? Yeah, you know: garlic, Old Bay, Korean BBQ. You're saving the shrimp, not eating them!",
+					"Saving them for what? For nothing. They get to live their lives. What? Just doin' shrimp stuff? Yeah. How long do shrimp live? Uh, it depends on the species? {C:attention}1-2 years?{} And then what happens? They {C:ballgame}die{}. That seems like a waste. How is that a waste? They got to live full lives. Weren't you just telling me last week that bees live in perpetual agony and we should {C:ballgame}commit insect omnicide{} to free from the suffering of the flesh? Yeah, but that was last week. This week I read a new Snubstack post with a {C:blue}math equation{} in it and believe something totally different. Uh huh. It's called updating your priors. Okay, well here's my updated prior: I press the button, let the shrimp live for a year, and then I eat them. What? All of them. You can't eat 10^100 shrimp. I freeze the leftovers. You would need a freezer bigger than the universe! Really?",
+					"Yes! 10^100 is more than all the atoms in the observable universe! Okay, then I have a freezer bigger than the universe. You can't just- No, wait. Three freezers. One for each flavor. You can't just make up three freezers! Why not? It's a hypothetical! Yeah I hypothetically have {C:attention}three{} big ass freezers. The point- If you get to throw out a big ass number of shrimp, I get to have some big ass freezers. {C:maytag}Maytag{} freezers. The point of the hypothetical- I've always been a {C:maytag{}Maytag{} man. The point of the hypothetical is to {C:attention{}interrogate{} our moral intuitions! Yeah well the only thing I want to interrogate right now is a Red Lobster menu. I don't think you're engaging with this in good faith. Wait, I got a new hypothetical. A counterfactual even. Oh really. You know what I would've done differently if I knew you were gonna hit me with this mouthwatering supper-time supposition? What? I would've had breakfast this morning. Fuck you."
+				}
+			},
+			j_UTDR_dev_ani_sjelter = {
+				name = "What?",
+				text = {
+					"{C:ballgame}Lost{} where the {C:rental}Forrest would grow,",
+					"the {C:money}children{} wandered across the {C:kyoko}dield,",
+					"into the {C:gaster}drakness{} of the {C:red}Sjelter"
+				}
+			},
+			j_UTDR_dev_ani_usps = {
+				name = "{f:UTDR_USPS}City Carrier Assistant 1",
+				text = {
+					"Arrived at USPS Facility",
+					"CHICAGO IL LOGISTICS CENTER, 60502"
+				}
+			},
+			j_UTDR_dev_ani_kalos = {
+				name = "Hex Maniac",
+				text = {
+					"{C:homura}No, you're not the one.",
+				}
+			},
+			j_UTDR_dev_ani_kalos_Z = {
+				name = "Clemont",
+				text = {
+					"They {C:red}got him{}.",
+					"I liked him too.",
+				}
+			},
 			j_UTDR_dev_ani = {
 				name = "WhitetailAni",
 				text = {
-					"(insert",
-					"credits",
-					"description",
-					"here)"
+					"{C:cerulean}https://cerulean.fm"
 				}
 			},
+			j_UTDR_dev_ani_spamton_neo = {
+				name = "Kris",
+				text = {
+					"I",
+					"JUST NEED",
+					"THAT LITTLE",
+					"",
+					"[[{C:ballgame}SOUL{}]]",
+					"",
+					"Y O U   HAVE",
+				}
+			},
+			j_UTDR_dev_ani_theory = {
+				name = "How does this connect to Roaring Knight IDF theory",
+				text = {
+					"The {C:green}seven aces of Mancountry{} Light World {C:FRIEND_YELLOW}pro{C:FRIEND_PINK}tein {C:scarlet_forest_pink}tree{} egg...",
+					"He says {C:attention}11 years{} Deltarune {C:gaster}Gaster{} prophecy,",
+					"which connects to {C:kris_cape}trauma {C:kris_body}Kris{} and the {C:goner}VESSEL",
+					"The {C:goner}VESSEL{} {C:attention}Forgotten Man {C:goner}Goner {C:gaster}Gaster{} copies are monochrome...",
+					"Hmm."
+				}
+			},
+			j_UTDR_dev_ani_sweepstakes_1 = {
+				name = "Worm from the string.",
+				text = {
+					"Are you a single mother?",
+					"Well you will be soon!"
+				}
+			},
+			j_UTDR_dev_ani_sweepstakes_2 = {
+				name = "Wild Prizes!",
+				text = {
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+					"Worm from the string.",
+				}
+			},
+			j_UTDR_dev_ani_sweepstakes_3 = {
+				name = "Ode to Spamton",
+				text = {
+					"You may ask, {C:FRIEND_PINK}Who is next?",
+					"You may ask, {C:FRIEND_YELLOW}Who will be?",
+					"Who will be {C:red}secret boss,",
+					"Of {C:attention}Adventure no 3?"
+				}
+			},
+			j_UTDR_dev_ani_sweepstakes_5 = {
+				name = "Ode to Spamton",
+				text = {
+					"Me don't know",
+					"And me don't cares!",
+					"Me only cares about {C:FRIEND_PINK}Spam{C:FRIEND_YELLOW}ton{}",
+					"The rest can go up in the {C:flower_aqua}airs!!",
+					" ",
+					"Please pay {C:money}[4.99]{} to continue the poem"
+				}
+			},
+			j_UTDR_dev_ani_sweepstakes_6 = {
+				name = "Kill Your TV",
+				text = {
+					"I'll {C:red}smash{} my TV with a battering ram",
+					"I'll {C:ballgame}kill{} my TV with a battering ram!",
+					"I'll {C:blue}brush{} my TV with mayonnaise and slimes",
+					"I'll {C:ballgame}crush{} my TV for its horrible crimes!",
+					"I {C:red}don't need a TV anymore!",
+					"{C:FRIEND_PINK}Spam{C:FRIEND_YELLOW}ton{} is here, and he I adore!"
+				}
+			},
+			j_UTDR_dev_ani_sweepstakes_7 = {
+				name = "JUSTIN_FX",
+				text = {
+					"{C:money}SINGALONG SUBTITLES BY JUSTIN-FX",
+					"{C:money}THEY {C:red}DID NOT {C:money}PAY ME 2 DO THIS ONE",
+					"{C:money}SO I DIDENT",
+				}
+			},
+			j_UTDR_dev_ani_juice = {
+				name = "Juiece",
+				text = {
+					"If I go make my {C:alphys_juice_1}12% red{}",
+					"and {C:alphys_juice_2}3% yellow{} and",
+					"{C:alphys_juice_3}8% pink{} and {C:alphys_juice_4}9% blue{} and",
+					"and {C:alphys_juice_5}1% green{} and",
+					"{C:alphys_juice_6}4% purple{} and {C:alphys_juice_7}10% orange{}",
+					"and {C:alphys_juice_8}1% vermillion{} and",
+					"{C:gaster}3% dark{} and {C:angel}5% light{}",
+					"and {C:alphys_juice_9}7% original{} and",
+					"{C:alphys_juice_10}1% sea{} and {C:alphys_juice_11}1% weed{} and",
+					"{C:alphys_juice_12}2% free{} and {C:alphys_juice_13}5% Gaster",
+					"and {C:alphys_juice_14}6% #d13931{} and",
+					"{C:alphys_juice_15}4% buble{} and {C:gaster}1225% guitar{}",
+					"and {C:alphys_juice_16}5% genocides{} and",
+					"{C:alphys_juice_17}1% flower{} and {C:goner}0% vessel{} and"
+				}
+			},
+			
 			j_UTDR_dev_j8 = {
 				name = "J8-Bit",
 				text = {

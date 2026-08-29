@@ -7,6 +7,11 @@ assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
 assert(SMODS.load_file('challenge.lua'))()
 
+SMODS.Font {
+		key = "USPS",
+		path = "USPS.ttf"
+	}
+
 G.E_MANAGER:add_event(Event { func = function()
 	local profile_name = G.PROFILES[G.SETTINGS.profile].name
 	if profile_name and profile_name.upper(profile_name) == "GASTER" then
@@ -111,21 +116,64 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-	key = "dev_ani",
+	key = "dev_white_tail_ani",
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 0 },
 	pixel_size = { w = 69, h = 69 },
 	display_size = { w = 69, h = 69 },
 	no_collection = true,
+	no_mod_badge = true,
 	loc_vars = function(self, info_queue, card)
-		return {}
+		local key = pseudorandom_element({
+			"j_UTDR_dev_ani",
+			"j_UTDR_dev_ani_riddle",
+			"j_UTDR_dev_ani_caly",
+			"j_UTDR_dev_ani_oh_no",
+			"j_UTDR_dev_ani_sjelter",
+			"j_UTDR_dev_ani_xavier_magic_button",
+			"j_UTDR_dev_ani_usps",
+			"j_UTDR_dev_ani_bridge_mistress",
+			"j_UTDR_dev_ani_kalos",
+			"j_UTDR_dev_ani_kalos_Z",
+			"j_UTDR_dev_ani_theory",
+			"j_UTDR_dev_ani_sweepstakes_1",
+			"j_UTDR_dev_ani_sweepstakes_2",
+			"j_UTDR_dev_ani_sweepstakes_3",
+			"j_UTDR_dev_ani_sweepstakes_5",
+			"j_UTDR_dev_ani_sweepstakes_6",
+			"j_UTDR_dev_ani_sweepstakes_7",
+			"j_UTDR_dev_ani_juice",
+			
+		}, "14a93012r")
+		return {
+			key = key,
+			colours = {
+				G.C.ALPHYS_JUICE_1,
+				G.C.ALPHYS_JUICE_2,
+				G.C.ALPHYS_JUICE_3,
+				G.C.ALPHYS_JUICE_4,
+				G.C.ALPHYS_JUICE_5,
+				G.C.ALPHYS_JUICE_6,
+				G.C.ALPHYS_JUICE_7,
+				G.C.ALPHYS_JUICE_8,
+				G.C.ALPHYS_JUICE_9,
+				G.C.ALPHYS_JUICE_10,
+				G.C.ALPHYS_JUICE_11,
+				G.C.ALPHYS_JUICE_12,
+				G.C.ALPHYS_JUICE_13,
+				G.C.ALPHYS_JUICE_14,
+				G.C.ALPHYS_JUICE_15,
+				G.C.ALPHYS_JUICE_16,
+				G.C.ALPHYS_JUICE_17,
+			},
+		}
 	end,
 	in_pool = function(self, args)
 		return false
 	end,
 	set_badges = function(self, card, badges)
-		badges = EMPTY(badges)
+		badges[#badges] = create_badge("   /   ", G.C.HOMURA, G.C.ANGEL, 1.2)
 	end
 }
 
@@ -242,7 +290,7 @@ SMODS.current_mod.custom_ui = function(mod_nodes)
 		1.05 * G.CARD_W,
 		{ card_limit = 4, type = 'title', highlight_limit = 0 }
 	)
-	local dev_cards = { "j_UTDR_dev_viomarks", "j_UTDR_dev_ani", "j_UTDR_dev_j8", "j_UTDR_dev_elle" }
+	local dev_cards = { "j_UTDR_dev_viomarks", "j_UTDR_dev_white_tail_ani", "j_UTDR_dev_j8", "j_UTDR_dev_elle" }
 
 	for _, v in ipairs(dev_cards) do
 		local c = SMODS.create_card(type(v) == "table" and v or
@@ -524,7 +572,7 @@ if my_config["deltarune"] then
 	assert(SMODS.load_file('DR/99.lua'))()
 
 	assert(SMODS.load_file('DR/point.lua'))()
-	assert(SMODS.load_file('DR/capsule.lua'))()
+	--assert(SMODS.load_file('DR/capsule.lua'))()
 
 	assert(SMODS.load_file('DR/deck.lua'))()
 	assert(SMODS.load_file('DR/booster.lua'))()

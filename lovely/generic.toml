@@ -51,6 +51,36 @@ a_rank = G.C.ARANK,
 b_rank = G.C.BRANK,
 c_rank = G.C.CRANK,
 z_rank = G.C.ZRANK,
+
+homura = G.C.HOMURA2,
+kyoko = G.C.KYOKO,
+kyoko2 = G.C.KYOKO2,
+caly = G.C.CALY,
+biden = G.C.BIDEN,
+goner = G.C.GONER,
+scarlet_forest_pink = G.C.SCARLET_FOREST_PINK,
+rental = G.C.RENTAL,
+kris_body = G.C.KRIS_BODY,
+kris_cape = G.C.KRIS_CAPE,
+maytag = G.C.MAYTAG,
+
+alphys_juice_1 = G.C.ALPHYS_JUICE_1,
+alphys_juice_2 = G.C.ALPHYS_JUICE_2,
+alphys_juice_3 = G.C.ALPHYS_JUICE_3,
+alphys_juice_4 = G.C.ALPHYS_JUICE_4,
+alphys_juice_5 = G.C.ALPHYS_JUICE_5,
+alphys_juice_6 = G.C.ALPHYS_JUICE_6,
+alphys_juice_7 = G.C.ALPHYS_JUICE_7,
+alphys_juice_8 = G.C.ALPHYS_JUICE_8,
+alphys_juice_9 = G.C.ALPHYS_JUICE_9,
+alphys_juice_10 = G.C.ALPHYS_JUICE_10,
+alphys_juice_11 = G.C.ALPHYS_JUICE_11,
+alphys_juice_12 = G.C.ALPHYS_JUICE_12,
+alphys_juice_13 = G.C.ALPHYS_JUICE_13,
+alphys_juice_14 = G.C.ALPHYS_JUICE_14,
+alphys_juice_15 = G.C.ALPHYS_JUICE_15,
+alphys_juice_16 = G.C.ALPHYS_JUICE_16,
+alphys_juice_17 = G.C.ALPHYS_JUICE_17,
 '''
 match_indent = true
 
@@ -96,6 +126,36 @@ FLOWER_AQUA_BG = HEX('3ab1c6'),
 FLOWER_SETH_BG = HEX('b141b1'),
 FLOWER_YELLOW_BG = HEX('b1a906'),
 
+HOMURA = HEX('6e4585'),
+HOMURA2 = HEX('8c48b3'),
+KYOKO = HEX('b15f6d'),
+KYOKO2 = HEX('c62d30'),
+CERULEAN = HEX('1acab0'),
+CALY = HEX('84c84e'),
+BIDEN = HEX('113e88'),
+GONER = HEX('c3c3c3'),
+SCARLET_FOREST_PINK = HEX('c00080'),
+KRIS_BODY = HEX('75fbed'),
+KRIS_CAPE = HEX('ec0095'),
+MAYTAG = HEX('022439'),
+
+ALPHYS_JUICE_1 = HEX('dd3820'),
+ALPHYS_JUICE_2 = HEX('efee40'),
+ALPHYS_JUICE_3 = HEX('d44c9c'),
+ALPHYS_JUICE_4 = HEX('2040db'),
+ALPHYS_JUICE_5 = HEX('68d04b'),
+ALPHYS_JUICE_6 = HEX('6e24d1'),
+ALPHYS_JUICE_7 = HEX('db8849'),
+ALPHYS_JUICE_8 = HEX('e65534'),
+ALPHYS_JUICE_9 = HEX('f5eb81'),
+ALPHYS_JUICE_10 = HEX('68dfde'),
+ALPHYS_JUICE_11 = HEX('738d76'),
+ALPHYS_JUICE_12 = HEX('e69467'),
+ALPHYS_JUICE_13 = HEX('63c846'),
+ALPHYS_JUICE_14 = HEX('d13931'),
+ALPHYS_JUICE_15 = HEX('3763ea'),
+ALPHYS_JUICE_16 = HEX('ea3c25'),
+ALPHYS_JUICE_17 = HEX('e4b85b'),
 '''
 match_indent = true
 
@@ -111,4 +171,3 @@ if page == 1 then
 end
 '''
 match_indent = true
-
