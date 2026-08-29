@@ -94,6 +94,7 @@ SMODS.DynaTextEffect {
 -- developer cards
 SMODS.Joker {
 	key = "dev_viomarks",
+	no_mod_badge = true,
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 0, y = 0 },
@@ -113,6 +114,7 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dev_ani",
+	no_mod_badge = true,
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 0 },
@@ -132,6 +134,7 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dev_j8",
+	no_mod_badge = true,
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 0, y = 1 },
@@ -151,6 +154,7 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dev_elle",
+	no_mod_badge = true,
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 1 },
