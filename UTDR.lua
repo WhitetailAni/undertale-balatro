@@ -5,12 +5,12 @@ local lovely = require("lovely")
 assert(SMODS.load_file('atlas.lua'))()
 assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
-assert(SMODS.load_file('challenge.lua'))()
+--assert(SMODS.load_file('challenge.lua'))() 3.1 feature! wait.
 
 SMODS.Font {
-		key = "USPS",
-		path = "USPS.ttf"
-	}
+	key = "USPS",
+	path = "USPS.ttf"
+}
 
 G.E_MANAGER:add_event(Event { func = function()
 	local profile_name = G.PROFILES[G.SETTINGS.profile].name
