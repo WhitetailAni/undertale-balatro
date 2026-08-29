@@ -1,3 +1,7 @@
+UTDR = SMODS.current_mod
+local my_config = UTDR.config
+
+--if my_config["undertale"] or my_config["deltarune"] then
 SMODS.Tag {
 	key = "annoying",
 	atlas = "tag",
@@ -15,7 +19,9 @@ SMODS.Tag {
 		tag.triggered = true
 	end
 }
+--end
 
+--if my_config["undertale"] then
 SMODS.Tag {
 	key = "glamorous",
 	atlas = "tag",
@@ -32,7 +38,9 @@ SMODS.Tag {
 		end
 	end
 }
+--end
 
+--if my_config["deltarune"] then
 SMODS.Tag {
 	key = "capsule",
 	atlas = "tag",
@@ -55,3 +63,4 @@ SMODS.Tag {
 		return { vars = { tag.config.points } }
 	end,
 }
+--end

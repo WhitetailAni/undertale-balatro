@@ -30,6 +30,7 @@ end
 ]]
 
 G.FUNCS.restart_game_smods = function(e)
+	SMODS.save_mod_config(UTDR)
 	SMODS.restart_game()
 end
 
@@ -98,6 +99,7 @@ SMODS.DynaTextEffect {
 -- developer cards
 SMODS.Joker {
 	key = "dev_viomarks",
+	no_mod_badge = true,
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 0, y = 0 },
@@ -116,7 +118,12 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+<<<<<<< HEAD
 	key = "dev_white_tail_ani",
+=======
+	key = "dev_ani",
+	no_mod_badge = true,
+>>>>>>> 74c6176dc4fa7ffdb42f58921a903d81f22f8280
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 0 },
@@ -179,6 +186,7 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dev_j8",
+	no_mod_badge = true,
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 0, y = 1 },
@@ -198,6 +206,7 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dev_elle",
+	no_mod_badge = true,
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 1 },
@@ -223,7 +232,6 @@ UTDR.special_thanks = {
 	"UT/DR Developers",
 	"invalidOS (aka alexi)",
 	"Balatro Discord Server",
-	"...and you!"
 }
 
 UTDR.text_to_text_table = function(text, char_limit)
@@ -313,6 +321,18 @@ SMODS.current_mod.custom_ui = function(mod_nodes)
 				}
 			})
 	end
+	table.insert(thanks_nodes,
+		{
+			n = G.UIT.R,
+			config = {
+				align = "cl",
+			},
+			nodes = {
+				{ n = G.UIT.T, config = { text = "..and ", scale = .275, colour = G.C.TEXT_LIGHT } },
+				{ n = G.UIT.T, config = { text = string.upper(localize({ type = 'name_text', set = "Joker", key = "j_UTDR_you" })) or 'YOU', scale = .275, colour = G.C.BALLGAME } },
+				{ n = G.UIT.T, config = { text = "!", scale = .275, colour = G.C.TEXT_LIGHT } }
+			}
+		})
 
 	-- putting it all together
 
