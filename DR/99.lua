@@ -1,5 +1,4 @@
 UTDR = SMODS.current_mod
-local my_config = UTDR.config
 
 --beginning
 SMODS.Joker {
@@ -664,8 +663,9 @@ SMODS.Joker {
 		"rank"
 	},
 	loc_vars = function(self, info_queue, card)
-		local ralseis = my_config.ralseis
+		local ralseis = UTDR.config.ralseis
 		if not ralseis then
+			play_sound("UTDR_ralseis", 1.0, 0.7)
 			return {
 				key = "j_UTDR_ralseis",
 				vars = {
@@ -709,7 +709,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and (context.other_card:is_suit(G.GAME.current_round.ralsei_card.selected_suit) or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == G.GAME.current_round.ralsei_card.selected_rank then
-			local ralseis = true
+			local ralseis = UTDR.config.ralseis
 			if not ralseis then
 				return {
 					message = "",

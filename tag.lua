@@ -1,5 +1,4 @@
 UTDR = SMODS.current_mod
-local my_config = UTDR.config
 
 --if my_config["undertale"] or my_config["deltarune"] then
 SMODS.Tag {

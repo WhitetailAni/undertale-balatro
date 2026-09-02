@@ -49,7 +49,8 @@ local sounds = {
 	"pipis_laugh",
 	"win",
 	"lose",
-	"buy"
+	"buy",
+	"ralseis"
 }
 
 local volume = {

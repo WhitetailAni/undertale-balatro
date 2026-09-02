@@ -1,5 +1,4 @@
 UTDR = SMODS.current_mod
-local my_config = UTDR.config
 
 SMODS.Sound {
 	key = "flowery_according_to_plant",
@@ -447,6 +446,13 @@ SMODS.Sound {
 }
 
 SMODS.Sound {
+	key = "flowery_sorryaboutthatlittleguy",
+	path = "flowery/sorryaboutthatlittleguy.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
+SMODS.Sound {
 	key = "flowery_sorryabouttheguy",
 	path = "flowery/sorryabouttheguy.ogg",
 	pitch = 1.0,
@@ -663,12 +669,12 @@ SMODS.Joker {
 	soul_pos = { x = 0, y = 12 },
 	cost = 3,
 	play_flowery_sound = function(self, sfx)
-		if my_config['voiceclips'] then
+		if UTDR.config['voiceclips'] then
 			play_sound("UTDR_flowery_" .. sfx, 1.0, 0.7)
 		end
 	end,
 	play_flowery_sound_random = function(self, table)
-		if my_config['voiceclips'] then
+		if UTDR.config['voiceclips'] then
 			local sfx = pseudorandom_element(table, "flowery_sfx")
 			play_sound("UTDR_flowery_" .. sfx, 1.0, 0.7)
 		end

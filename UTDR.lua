@@ -21,13 +21,7 @@ G.E_MANAGER:add_event(Event { func = function()
 end })
 
 UTDR = SMODS.current_mod
-local my_config = UTDR.config
---[[
-if NFS.read(SMODS.current_mod.path .. "config.lua") then
-	local file = STR_UNPACK(NFS.read(SMODS.current_mod.path .. "config.lua"))
-	UTDR.config_file = file
-end
-]]
+local UTDR_config = UTDR.config
 
 G.FUNCS.restart_game_smods = function(e)
 	SMODS.save_mod_config(UTDR)
@@ -128,6 +122,13 @@ SMODS.Joker {
 	no_collection = true,
 	no_mod_badge = true,
 	loc_vars = function(self, info_queue, card)
+		for key, value in pairs(G.CONTROLLER.held_keys) do
+			if (key == "lalt" and value == true) or (key == "ralt" and value == true) then
+				return { key = "j_UTDR_dev_white_tail_ani" }
+			elseif (key == "lctrl" and value == true) or (key == "rctrl" and value == true) then
+				return { key = "j_UTDR_dev_ani_no_no_no" }
+			end
+		end
 		local key = pseudorandom_element({
 			"j_UTDR_dev_ani",
 			"j_UTDR_dev_ani_riddle",
@@ -147,29 +148,9 @@ SMODS.Joker {
 			"j_UTDR_dev_ani_sweepstakes_6",
 			"j_UTDR_dev_ani_sweepstakes_7",
 			"j_UTDR_dev_ani_juice",
-
 		}, "14a93012r")
 		return {
 			key = key,
-			colours = {
-				G.C.ALPHYS_JUICE_1,
-				G.C.ALPHYS_JUICE_2,
-				G.C.ALPHYS_JUICE_3,
-				G.C.ALPHYS_JUICE_4,
-				G.C.ALPHYS_JUICE_5,
-				G.C.ALPHYS_JUICE_6,
-				G.C.ALPHYS_JUICE_7,
-				G.C.ALPHYS_JUICE_8,
-				G.C.ALPHYS_JUICE_9,
-				G.C.ALPHYS_JUICE_10,
-				G.C.ALPHYS_JUICE_11,
-				G.C.ALPHYS_JUICE_12,
-				G.C.ALPHYS_JUICE_13,
-				G.C.ALPHYS_JUICE_14,
-				G.C.ALPHYS_JUICE_15,
-				G.C.ALPHYS_JUICE_16,
-				G.C.ALPHYS_JUICE_17,
-			},
 		}
 	end,
 	in_pool = function(self, args)
@@ -255,12 +236,12 @@ SMODS.current_mod.custom_ui = function(mod_nodes)
 
 	local modname_text = ""
 	local modname_scale = 0.75
-	if my_config['undertale'] and my_config['deltarune'] then
+	if UTDR_config['undertale'] and UTDR_config['deltarune'] then
 		modname_text = "UNDERTALE/DELTARUNE"
-	elseif my_config['undertale'] then
+	elseif UTDR_config['undertale'] then
 		modname_text = "UNDERTALE"
 		modname_scale = 1.0
-	elseif my_config['deltarune'] then
+	elseif UTDR_config['deltarune'] then
 		modname_text = "DELTARUNE"
 		modname_scale = 1.0
 	else
@@ -428,38 +409,26 @@ UTDR.config_tab = function()
 			create_toggle(
 				{
 					align = "tl",
-					label = localize("b_utdr_enable_undertale"),
-					ref_table = my_config,
+					label = localize("b_UTDR_enable_undertale"),
+					ref_table = UTDR_config,
 					ref_value = "undertale",
-					tooltip = { text = localize("b_utdr_requires_restart"), scale = 0.5 }
-					--[[
-					callback = function(_set_toggle)
-						UTDR.config_file.undertale = _set_toggle
-						NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
-					end
-					]]
+					tooltip = { text = localize("b_UTDR_requires_restart"), scale = 0.5 }
 				}
 			),
 			create_toggle(
 				{
 					align = "tl",
-					label = localize("b_utdr_enable_deltarune"),
-					ref_table = my_config,
+					label = localize("b_UTDR_enable_deltarune"),
+					ref_table = UTDR_config,
 					ref_value = "deltarune",
-					tooltip = { text = localize("b_utdr_requires_restart"), scale = 0.5 }
-					--[[
-					callback = function(_set_toggle)
-						UTDR.config_file.deltarune = _set_toggle
-						NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
-					end
-					]]
+					tooltip = { text = localize("b_UTDR_requires_restart"), scale = 0.5 }
 				}
 			),
 			create_toggle(
 				{
 					align = "tl",
-					label = localize("b_utdr_voice_clips"),
-					ref_table = my_config,
+					label = localize("b_UTDR_voice_clips"),
+					ref_table = UTDR_config,
 					ref_value = "voiceclips",
 					--[[
 					callback = function(_set_toggle)
@@ -472,21 +441,20 @@ UTDR.config_tab = function()
 			create_toggle(
 				{
 					align = "tl",
-					label = localize("b_utdr_ralseis"),
-					ref_table = my_config,
+					label = localize("b_UTDR_ralseis"),
+					ref_table = UTDR_config,
 					ref_value = "ralseis",
-					--[[
 					callback = function(_set_toggle)
-						UTDR.config_file.ralseis = _set_toggle
-						NFS.write(lovely.mod_dir .. "/UTDR/config.lua", STR_PACK(UTDR.config_file))
+						if UTDR_config.voiceclips and #SMODS.find_card("j_UTDR_flowery") > 0 and not UTDR_config.ralseis then
+							play_sound("UTDR_flowery_sorryaboutthatlittleguy")
+						end
 					end
-					]]
 				}
 			),
 			UIBox_button(
 				{
 					align = "tl",
-					label = { "Apply Changes" },
+					label = { localize("b_UTDR_restart") },
 					minw = 3.5,
 					button = 'restart_game_smods'
 				}
@@ -513,7 +481,7 @@ function joker_rarity(common, uncommon, rare, legendary)
 end
 
 -- load UT
-if my_config['undertale'] then
+if UTDR_config['undertale'] then
 	assert(SMODS.load_file('UT/one.lua'))()
 	assert(SMODS.load_file('UT/two.lua'))()
 	assert(SMODS.load_file('UT/three.lua'))()
@@ -570,7 +538,7 @@ if my_config['undertale'] then
 end
 
 -- load DR
-if my_config["deltarune"] then
+if UTDR_config["deltarune"] then
 	SMODS.Font {
 		key = "HIM",
 		path = "gaster.ttf"

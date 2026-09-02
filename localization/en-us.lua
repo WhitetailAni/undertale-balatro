@@ -1911,11 +1911,31 @@ return {
 			j_UTDR_dev_white_tail_ani = {
 				name = "WhitetailAni",
 				text = {
-					"OCCUPIED"
+					"Hi! I'm {C:homura}WhitetailAni.",
+					"Until v3, I was the {C:attention}sole dev{} for this mod.",
+					"{C:vio_marks}Vio{} did the art, designed the jokers,",
+					"but it was my job to implement them. It was pretty fun!",
+					"Lots of {C:ballgame}Late Night{}s spent digging through the Balatro source,",
+					"asking the {C:discord}Balatro Discord{} for tips on where to find stuff..",
+					"Anyway. In v3 we had {C:blue}too many ideas{} and realized we'd need more help.",
+					"I also got a {C:money}job{} in the meantime,",
+					"which meant I couldn't spend all day working on it anymore...",
+					"It was difficult to adjust to not being the only dev anymore.",
+					"{s:0.71}I'm not very good at working with other people.",
+					"But I think it turned out pretty well.",
+					"After all, you're playing the new update right now!",
+				}
+			},
+			j_UTDR_dev_ani_no_no_no = {
+				name = "WhitetailAni",
+				text = {
+					"By the way, I hope you liked Flowery.",
+					"I spent 2 weeks constantly tweaking his voice clip interactions.",
+					"The 'Ralseis' toggle was suggested by someone else... I don't remember who :("
 				}
 			},
 			j_UTDR_dev_ani_riddle = {
-				name = "WhitetailAni",
+				name = "14A93012r",
 				text = {
 					"If ye want to know anything about me,",
 					"Ye must solve my {C:red}riddles three!",
@@ -2114,6 +2134,13 @@ return {
 					"{C:alphys_juice_15}4% buble{} and {C:gaster}1225% guitar{}",
 					"and {C:alphys_juice_16}5% genocides{} and",
 					"{C:alphys_juice_17}1% flower{} and {C:goner}0% vessel{} and"
+				}
+			},
+			j_UTDR_dev_ani_survey = {
+				name = "Survey",
+				text = {
+					"Thanks for your feedback!",
+					"Be seeing you soon!"
 				}
 			},
 			
@@ -2509,12 +2536,12 @@ return {
 			utdr_shopbratty_sold = "We're all $$$$old out!",
 
 			-- Config options
-			b_utdr_enable_undertale = "Enable UNDERTALE content",
-			b_utdr_enable_deltarune = "Enable DELTARUNE content",
-			b_utdr_voice_clips = "Voice Clips",
-			b_utdr_ralseis = "Ralseis",
-			b_utdr_requires_restart = "Requires restart for changes to appear!"
-
+			b_UTDR_enable_undertale = "UNDERTALE content",
+			b_UTDR_enable_deltarune = "DELTARUNE content",
+			b_UTDR_voice_clips = "Voice Clips",
+			b_UTDR_ralseis = "Ralseis",
+			b_UTDR_restart = "Restart Game",
+			b_UTDR_requires_restart = "Requires restart for changes to appear!",
 		},
 		achievement_descriptions = {
 			clairvoyance = dr and "Discover every Prophecy card" or nil

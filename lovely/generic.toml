@@ -63,6 +63,9 @@ rental = G.C.RENTAL,
 kris_body = G.C.KRIS_BODY,
 kris_cape = G.C.KRIS_CAPE,
 maytag = G.C.MAYTAG,
+discord = G.C.DISCORD,
+
+vio_marks = G.C.VIO_MARKS,
 
 alphys_juice_1 = G.C.ALPHYS_JUICE_1,
 alphys_juice_2 = G.C.ALPHYS_JUICE_2,
@@ -121,10 +124,11 @@ FLOWER_GREEN = HEX('00a651'),
 FLOWER_BLUE = HEX('00aef0'),
 FLOWER_YELLOW = HEX('fff200'),
 FLOWER_PINK = HEX('ff8a91'),
-
 FLOWER_AQUA_BG = HEX('3ab1c6'),
 FLOWER_SETH_BG = HEX('b141b1'),
 FLOWER_YELLOW_BG = HEX('b1a906'),
+
+VIO_MARKS = HEX('ba76c3'),
 
 HOMURA = HEX('6e4585'),
 HOMURA2 = HEX('8c48b3'),
@@ -138,7 +142,7 @@ SCARLET_FOREST_PINK = HEX('c00080'),
 KRIS_BODY = HEX('75fbed'),
 KRIS_CAPE = HEX('ec0095'),
 MAYTAG = HEX('022439'),
-
+DISCORD = HEX('7289da'),
 ALPHYS_JUICE_1 = HEX('dd3820'),
 ALPHYS_JUICE_2 = HEX('efee40'),
 ALPHYS_JUICE_3 = HEX('d44c9c'),
