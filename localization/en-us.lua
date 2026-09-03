@@ -2542,6 +2542,13 @@ return {
 			b_UTDR_ralseis = "Ralseis",
 			b_UTDR_restart = "Restart Game",
 			b_UTDR_requires_restart = "Requires restart for changes to appear!",
+			
+			-- shop tab stuff
+			s_UTDR_shop = "Shop",
+			s_UTDR_ball_1 = "Capsule",
+			s_UTDR_ball_2 = "Machine",
+			s_UTDR_catty = "Catty &",
+			s_UTDR_bratty = "Bratty",
 		},
 		achievement_descriptions = {
 			clairvoyance = dr and "Discover every Prophecy card" or nil
