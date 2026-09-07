@@ -125,7 +125,7 @@ function Game:update_utdr_shop_capsule(dt)
 				G.E_MANAGER:add_event(Event{ trigger = 'immediate', func = function()
 					play_sound('cancel')
 					G.utdr_shop_capsule = UIBox{
-						definition = UTDR_Modules.Trading.create_UIBox_capsule(),
+						definition = UTDR_Modules.Capsule.create_UIBox_capsule(),
 						config = {align="bmi", offset = {x=0,y=G.ROOM.T.y + 29}, major = G.hand, bond = 'Weak'}
 					}
 					G.ROOM.jiggle = G.ROOM.jiggle + 3
@@ -139,7 +139,7 @@ function Game:update_utdr_shop_capsule(dt)
 	end
 end
 
-function UTDR_Modules.Trading.create_UIBox_capsule()
+function UTDR_Modules.Capsule.create_UIBox_capsule()
 	local shop_sign = AnimatedSprite(0,0, 4.4, 4.4/119*45, G.ANIMATION_ATLAS.UTDR_shopsign_capsule)
 	shop_sign:define_draw_steps({
 		{shader = 'dissolve', shadow_height = 0.05},

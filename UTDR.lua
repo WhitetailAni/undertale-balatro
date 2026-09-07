@@ -7,37 +7,17 @@ assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
 --assert(SMODS.load_file('challenge.lua'))() 3.1 feature! wait.
 
-G.FUNCS.UTDR_shop = function()
+G.FUNCS.UTDR_shop = function(e)
 	G.E_MANAGER:add_event(Event({
 		func = function()
-			G.STATE = G.STATES.SHOP
-			G.STATE_COMPLETE = false
+			G.STATE, G.STATE_COMPLETE = G.STATES[e.config.target_state], false
 			return true
 		end
 	}))
 end
 
-G.FUNCS.UTDR_catty_bratty = function()
-	G.E_MANAGER:add_event(Event({
-		func = function()
-			G.STATE = G.STATES.UTDR_SHOP_CATTYBRATTY
-			G.STATE_COMPLETE = false
-			return true
-		end
-	}))
-end
-
-G.FUNCS.UTDR_capsule = function()
-	G.E_MANAGER:add_event(Event({
-		func = function()
-			G.STATE = G.STATES.UTDR_SHOP_CAPSULE
-			G.STATE_COMPLETE = false
-			return true
-		end
-	}))
-end 
-
-function G.UIDEF.shop()
+-- ani no.
+--[[ function G.UIDEF.shop()
     G.shop_jokers = CardArea(
       G.hand.T.x+0,
       G.hand.T.y+G.ROOM.T.y + 9,
@@ -171,9 +151,7 @@ function G.UIDEF.shop()
               }, false)
         }}
     return t
-end
-
-
+end ]]
 
 SMODS.Font {
 	key = "USPS",
@@ -724,7 +702,7 @@ if UTDR_config["deltarune"] then
 	assert(SMODS.load_file('DR/99.lua'))()
 
 	assert(SMODS.load_file('DR/point.lua'))()
-	--assert(SMODS.load_file('DR/capsule.lua'))()
+	assert(SMODS.load_file('DR/capsule.lua'))()
 
 	assert(SMODS.load_file('DR/deck.lua'))()
 	assert(SMODS.load_file('DR/booster.lua'))()
@@ -856,3 +834,11 @@ SMODS.Shader {
 	key = 'empty', -- ScreenShaders need a shader key, even if the shader never gets applied. Used by Swoon ScreenShader effect.
 	path = 'empty.fs'
 }
+
+function UTDR.reset_game_globals()
+	-- Ralsei Card stuff
+	local selected_card = pseudorandom_element(G.playing_cards, "ralsei")
+	G.GAME.current_round.ralsei_card = G.GAME.current_round.ralsei_card or {}
+	G.GAME.current_round.ralsei_card.suit = selected_card.base.suit
+	G.GAME.current_round.ralsei_card.rank = selected_card.base.value
+end
