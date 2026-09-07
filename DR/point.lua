@@ -64,7 +64,7 @@ function sfx_for_rank(rank)
 	play_sound("UTDR_points1", 1.0, 0.6)
 end
 
-function ease_points(mod, instant)
+function UTDR_Modules.Capsule.ease_points(mod, instant)
     local function _mod(mod)
     	mod = mod or 0
     	

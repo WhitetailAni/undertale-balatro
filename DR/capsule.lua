@@ -13,7 +13,7 @@ end
 
 
 
-local function did_win_gold(bet)
+function UTDR_Modules.Capsule.did_win_gold(bet)
 	local remaining = #G.GAME.capsule.gold_prizes
 	local remaining_block = 0.1 + (remaining / 50)
 	local oldbet_block = 1 + (G.GAME.capsule.last_bet / 50)
@@ -24,7 +24,7 @@ local function did_win_gold(bet)
 	return pseudorandom("capsule_gold") > chance
 end
 
-local function wow_that_was_so_gold(input, filter)
+function UTDR_Modules.Capsule.wow_that_was_so_gold(input, filter)
 	local possible_keys = input
 	local knightmare = {}
 	for _, value in ipairs(filter) do
@@ -45,7 +45,7 @@ function UTDR_Modules.Capsule.get_reward(bet)
 			key = "j_UTDR_lacquer_triangle",
 			december = true			
 		}
-	elseif did_win_gold(bet) then
+	elseif UTDR_Modules.Capsule.did_win_gold(bet) then
 		local gold_prize_key = pseudorandom_element(G.GAME.capsule.gold_prizes, "capsule_prize_gold")
 		
 		--ensure no duplicate gold prizes, unless you got showman!
@@ -67,8 +67,8 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	end
 	
 	--remove gold prize keys, cannot_pull keys
-	possible_keys = wow_that_was_so_gold(possible_keys, G.GAME.capsule.gold_prizes)
-	possible_keys = wow_that_was_so_gold(possible_keys, G.GAME.capsule.cannot_pull)
+	possible_keys = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys, G.GAME.capsule.gold_prizes)
+	possible_keys = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys, G.GAME.capsule.cannot_pull)
 	
 	--if you put in more than 100 points, remove common jokers/planet cards from the pool
 	if bet > 100 then
@@ -215,18 +215,24 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 					
 					{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.2}, nodes = {
 						{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
-							pts_button(50),
-							pts_button(5),
+							{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
+								pts_button(50),
+								pts_button(5),
+							}},
 							{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.BLACK, padding = 0.1}, nodes = {
 								{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.1}, nodes = {
 									{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
-										{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, ref_table = UTDR_Modules.Capsule, ref_value = "bet_amount"}},
-										{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, text = localize("utdr_points_suffix")}},
+										{n=G.UIT.R, config={align = "cm"}, nodes = {
+											{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, ref_table = UTDR_Modules.Capsule, ref_value = "bet_amount"}},
+											{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, text = localize("utdr_points_suffix")}},
+										}},
 									}},
 								}},
 							}},
-							pts_button(-5),
-							pts_button(-50),
+							{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
+								pts_button(-5),
+								pts_button(-50),
+							}},
 						}},
 					}},
 					{n=G.UIT.R, config={align = "cm", colour=G.C.YELLOW, padding = 0.05}},
@@ -290,4 +296,16 @@ end
 
 function G.FUNCS.UTDR_capsule_addpts(e)
 	UTDR_Modules.Capsule.bet_amount = UTDR_Modules.Capsule.bet_amount + e.config.amount
+end
+
+function G.FUNCS.UTDR_capsule_trade_func(e)
+	local can = UTDR_Modules.Capsule.bet_amount >= UTDR_Modules.Capsule.min_amount and UTDR_Modules.Capsule.bet_amount <= G.GAME.utdr_points
+
+	e.config.colour = cantrade and darken(G.C.GREEN, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = cantrade and 'UTDR_capsule_trade' or nil
+end
+
+function G.FUNCS.UTDR_capsule_trade(e)
+	UTDR_Modules.Capsule.ease_points(-UTDR_Modules.Capsule.bet_amount)
+	-- Code for giving a capsule
 end
