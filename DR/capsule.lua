@@ -212,8 +212,10 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 							{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.BLACK, padding = 0.1}, nodes = {
 								{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.1}, nodes = {
 									{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
-										{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, ref_table = UTDR_Modules.Capsule, ref_value = "bet_amount"}},
-										{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, text = localize("utdr_points_suffix")}},
+										{n=G.UIT.R, config={align = "cm"}, nodes = {
+											{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, ref_table = UTDR_Modules.Capsule, ref_value = "bet_amount"}},
+											{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, text = localize("utdr_points_suffix")}},
+										}},
 									}},
 								}},
 							}},
