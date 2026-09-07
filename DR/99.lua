@@ -686,7 +686,8 @@ SMODS.Joker {
 	pos = { x = 8, y = 1 },
 	cost = 9,
 	calculate = function(self, card, context)
-		if context.repetition and context.cardarea == G.play and (context.other_card:is_suit(G.GAME.current_round.ralsei_card.selected_suit) or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == G.GAME.current_round.ralsei_card.selected_rank then
+		local ralcard = G.GAME.current_round.ralsei_card or {}
+		if context.repetition and context.cardarea == G.play and (context.other_card:is_suit(ralcard.suit) or SMODS.has_any_suit(context.other_card)) and context.other_card.base.value == ralcard.rank then
 			local ralseis = UTDR.config.ralseis
 			if not ralseis then
 				return {
