@@ -9,7 +9,7 @@ priority = -2
 target = 'game.lua'
 pattern = 'dollars = 0,'
 position = 'after'
-payload = 'points = 0,'
+payload = 'utdr_points = 0,'
 match_indent = true
 
 [[patches]]
@@ -386,7 +386,7 @@ function add_round_points_row(config)
 		func = function()
 			G.round_eval:add_child(
 					{n=G.UIT.R, config={align = "cm", id = 'dollar_row_'..(points_row+1)..'_'..config.name}, nodes={
-						{n=G.UIT.O, config={object = DynaText({string = {format_ui_value(points_amt).." PTs"}, colours = {G.C.POINTS}, shadow = true, pop_in = 0, scale = 0.6, float = true})}}
+						{n=G.UIT.O, config={object = DynaText({string = {format_ui_value(points_amt)..localize("utdr_points_suffix")}, colours = {G.C.POINTS}, shadow = true, pop_in = 0, scale = 0.6, float = true})}}
 					}},
 					G.round_eval:get_UIE_by_ID('dollar_'..config.name))
 
@@ -442,7 +442,7 @@ function eval_t_rank_tag(config)
 		func = function()
 			G.round_eval:add_child(
 					{n=G.UIT.R, config={align = "cm", id = 'dollar_row_'..(points_row+1)..'_'..config.name}, nodes={
-						{n=G.UIT.O, config={object = DynaText({string = {format_ui_value(points_amt).." PTs"}, colours = {G.C.POINTS}, shadow = true, pop_in = 0, scale = 0.65, float = true})}}
+						{n=G.UIT.O, config={object = DynaText({string = {format_ui_value(points_amt)..localize("utdr_points_suffix")}, colours = {G.C.POINTS}, shadow = true, pop_in = 0, scale = 0.65, float = true})}}
 					}},
 					G.round_eval:get_UIE_by_ID('dollar_'..config.name))
 
@@ -481,9 +481,9 @@ payload = '''
 	{n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 1.45*2 + spacing, minh = 1.15, colour = temp_col, emboss = 0.05, r = 0.1}, nodes={
 	  {n=G.UIT.R, config={align = "cm"}, nodes={
 		{n=G.UIT.C, config={align = "cm", r = 0.1, minw = 1.28*2+spacing, minh = 1, colour = temp_col2}, nodes={
-		  {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'points', prefix = "", suffix = " PTs"}},
+		  {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'utdr_points', prefix = "", suffix = localize("utdr_points_suffix")}},
                             scale_function = function ()
-                                return scale_number(G.GAME.points, 1.4 * scale, 99999, 1000000)
+                                return scale_number(G.GAME.utdr_points, 1.4 * scale, 99999, 1000000)
                             end, maxw = 1.35, colours = {G.C.POINTS}, font = G.LANGUAGES['en-us'].font, shadow = true,spacing = 1, bump = true, scale = 1.4*scale}), id = 'points_text_UI'}}
 	  }},
 	  }},

@@ -2513,6 +2513,8 @@ return {
 			k_him = "Him",
 			k_swoon = "SWOON",
 
+			utdr_points_suffix = " PTs",
+
 			-- Deltarune Prophecy stuff
 			b_spectral_cards = dr and "Prophecy Cards" or nil,
 			b_stat_spectrals = dr and "Prophecies" or nil,
@@ -2549,6 +2551,10 @@ return {
 			s_UTDR_ball_2 = "Machine",
 			s_UTDR_catty = "Catty &",
 			s_UTDR_bratty = "Bratty",
+
+			-- Ball Machine
+			utdr_shopball_chance1 = "% chance of",
+			utdr_shopball_chance2 = "getting GOLD prize"
 		},
 		achievement_descriptions = {
 			clairvoyance = dr and "Discover every Prophecy card" or nil

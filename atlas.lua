@@ -145,6 +145,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+	key = "shop_capsule",
+	path = "shop/ball.png",
+	px = 111,
+	py = 158,
+}
+
+SMODS.Atlas {
 	key = "shop_cattybratty_body",
 	path = "shop/cattybratty_body.png",
 	px = 215,

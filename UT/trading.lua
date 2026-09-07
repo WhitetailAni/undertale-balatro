@@ -169,8 +169,6 @@ function UTDR_Modules.Trading.create_UIBox_cattybratty(reload)
 
 	local ct = localize("utdr_shopcatty_"..dialogue)
 	local bt = localize("utdr_shopbratty_"..dialogue)
-	--calc_text_scale("Bratty! We're gonna be rich!")
-	--calc_text_scale("Yeah! We're gonna be rich!")
 
 	local catty_text = DynaText({ string = ct, float = true, colours = { HEX("DC8DF0") }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
 	local bratty_text = DynaText({ string = bt, float = true, colours = { HEX("8DE1BF") }, pop_in = .5, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
