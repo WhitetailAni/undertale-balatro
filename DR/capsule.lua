@@ -207,8 +207,10 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 					
 					{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.2}, nodes = {
 						{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
-							pts_button(50),
-							pts_button(5),
+							{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
+								pts_button(50),
+								pts_button(5),
+							}},
 							{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.BLACK, padding = 0.1}, nodes = {
 								{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.1}, nodes = {
 									{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
@@ -219,8 +221,10 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 									}},
 								}},
 							}},
-							pts_button(-5),
-							pts_button(-50),
+							{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
+								pts_button(-5),
+								pts_button(-50),
+							}},
 						}},
 					}},
 					{n=G.UIT.R, config={align = "cm", colour=G.C.YELLOW, padding = 0.05}},
@@ -284,4 +288,16 @@ end
 
 function G.FUNCS.UTDR_capsule_addpts(e)
 	UTDR_Modules.Capsule.bet_amount = UTDR_Modules.Capsule.bet_amount + e.config.amount
+end
+
+function G.FUNCS.UTDR_capsule_trade_func(e)
+	local can = UTDR_Modules.Capsule.bet_amount >= UTDR_Modules.Capsule.min_amount and UTDR_Modules.Capsule.bet_amount <= G.GAME.utdr_points
+
+	e.config.colour = cantrade and darken(G.C.GREEN, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = cantrade and 'UTDR_capsule_trade' or nil
+end
+
+function G.FUNCS.UTDR_capsule_trade(e)
+	UTDR_Modules.Capsule.ease_points(-UTDR_Modules.Capsule.bet_amount)
+	-- Code for giving a capsule
 end

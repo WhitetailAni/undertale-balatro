@@ -86,7 +86,7 @@ pattern = 'ease_dollars(G.GAME.current_round.dollars)'
 position = 'after'
 payload = '''
 if G.GAME.ante.points_to_be_gained > 0 then
-	ease_points(G.GAME.ante.points_to_be_gained)
+	UTDR_Modules.Capsule.ease_points(G.GAME.ante.points_to_be_gained)
 	if G.GAME.ante.points_to_be_gained >= 1000 then
 		play_sound('UTDR_points20', 1.0, 0.6)
 	elseif G.GAME.ante.points_to_be_gained >= 600 then
