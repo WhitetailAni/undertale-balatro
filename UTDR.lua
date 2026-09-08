@@ -7,17 +7,53 @@ assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
 --assert(SMODS.load_file('challenge.lua'))() 3.1 feature! wait.
 
+local ease_background_colour_blind_hook = ease_background_colour_blind
+function ease_background_colour_blind(state, blind_override, ...)
+	if state == G.STATES.UTDR_SHOP_CAPSULE then
+		ease_colour(G.C.DYN_UI.MAIN, HEX("ffd601"))
+		ease_background_colour{new_colour = HEX("42d4a3"), special_colour = HEX("799f97"), contrast = 3}
+	elseif state == G.STATES.UTDR_SHOP_CATTYBRATTY then
+		ease_colour(G.C.DYN_UI.MAIN, HEX("dc8df0"))
+		ease_background_colour{new_colour = G.C.PURPLE, special_colour = G.C.L_BLACK, contrast = 3}
+	elseif state == G.STATES.UTDR_SHOP_LACQUER then
+		ease_colour(G.C.DYN_UI.MAIN, G.C.LACQUER_OUTLINE)
+		ease_background_colour{new_colour = G.C.LACQUER_BG, special_colour = G.C.L_BLACK, contrast = 3}
+	else
+		ease_background_colour_blind_hook(state, blind_override, ...)
+	end
+end
+
 G.FUNCS.UTDR_shop = function(e)
 	G.E_MANAGER:add_event(Event({
 		func = function()
-			G.STATE, G.STATE_COMPLETE = G.STATES[e.config.target_state], false
+			G.STATE = G.STATES.SHOP
+			G.STATE_COMPLETE = false
 			return true
 		end
 	}))
 end
 
--- ani no.
---[[ function G.UIDEF.shop()
+G.FUNCS.UTDR_catty_bratty = function()
+	G.E_MANAGER:add_event(Event({
+		func = function()
+			G.STATE = G.STATES.UTDR_SHOP_LACQUER
+			G.STATE_COMPLETE = false
+			return true
+		end
+	}))
+end
+
+G.FUNCS.UTDR_capsule = function()
+	G.E_MANAGER:add_event(Event({
+		func = function()
+			G.STATE = G.STATES.UTDR_SHOP_CAPSULE
+			G.STATE_COMPLETE = false
+			return true
+		end
+	}))
+end 
+
+function G.UIDEF.shop()
     G.shop_jokers = CardArea(
       G.hand.T.x+0,
       G.hand.T.y+G.ROOM.T.y + 9,
@@ -151,7 +187,7 @@ end
               }, false)
         }}
     return t
-end ]]
+end
 
 SMODS.Font {
 	key = "USPS",
@@ -701,8 +737,9 @@ if UTDR_config["deltarune"] then
 	assert(SMODS.load_file('DR/66.lua'))()
 	assert(SMODS.load_file('DR/99.lua'))()
 
-	assert(SMODS.load_file('DR/point.lua'))()
 	assert(SMODS.load_file('DR/capsule.lua'))()
+	assert(SMODS.load_file('DR/point.lua'))()
+	assert(SMODS.load_file('DR/lacquer_shop.lua'))()
 
 	assert(SMODS.load_file('DR/deck.lua'))()
 	assert(SMODS.load_file('DR/booster.lua'))()

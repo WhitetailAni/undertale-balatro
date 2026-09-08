@@ -249,20 +249,6 @@ function Game:update_shop(dt)
 	update_shop_hook(self,dt)
 end
 
--- handles state-related bg/ui color changes
-local ease_background_colour_blind_hook = ease_background_colour_blind
-function ease_background_colour_blind(state, blind_override, ...)
-	if state == G.STATES.UTDR_SHOP_CAPSULE then
-		ease_colour(G.C.DYN_UI.MAIN, HEX("ffd601"))
-		ease_background_colour{new_colour = HEX("42d4a3"), special_colour = HEX("799f97"), contrast = 3}
-	elseif state == G.STATES.UTDR_SHOP_CATTYBRATTY then
-		ease_colour(G.C.DYN_UI.MAIN, HEX("dc8df0"))
-		ease_background_colour{new_colour = G.C.PURPLE, special_colour = G.C.L_BLACK, contrast = 3}
-	else
-		ease_background_colour_blind_hook(state, blind_override, ...)
-	end
-end
-
 function UTDR_Modules.Trading.add_catty_trade(args, refresh)
 	args.cards = args.cards or {"c_fool"}
 	args.tag = args.tag or SMODS.poll_object({

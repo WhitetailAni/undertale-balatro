@@ -74,12 +74,14 @@ function UTDR_Modules.Capsule.ease_points(mod, instant)
         local col = G.C.POINTS
         if mod < 0 then
             prefix = '-'
-            col = G.C.BALLGAME
         else
+        if mod == 1225 then
+        	col = G.C.BALLGAME
+        end
           --inc_career_stat('c_dollars_earned', mod)
         end
         --Ease from current chips to the new number of chips
-        G.GAME.points = G.GAME.points + mod
+        G.GAME.UTDR_points = G.GAME.UTDR_points + mod
         --check_and_set_high_score('most_points', G.GAME.points)
        	--check_for_unlock({type = 'points'})
         points_UI.config.object:update() --CHANGE

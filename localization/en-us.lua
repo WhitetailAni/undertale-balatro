@@ -2530,10 +2530,8 @@ return {
 			-- Shop Dialogue
 			utdr_shopcatty_open = "Hey! Check it out!",
 			utdr_shopbratty_open = "Yeah! Check it out!",
-
 			utdr_shopcatty_buy = "Bratty! We're gonna be rich!",
 			utdr_shopbratty_buy = "Yeah! We're gonna be rich!",
-
 			utdr_shopcatty_sold = "Mee-YOW!",
 			utdr_shopbratty_sold = "We're all $$$$old out!",
 
@@ -2554,7 +2552,11 @@ return {
 
 			-- Ball Machine
 			utdr_shopball_chance1 = "% chance of",
-			utdr_shopball_chance2 = "getting GOLD prize"
+			utdr_shopball_chance2 = "getting GOLD prize",
+			UTDR_shopball_trade = "Trade!",
+			
+			--lacquer script
+			ph_UTDR_improve = "Improve."
 		},
 		achievement_descriptions = {
 			clairvoyance = dr and "Discover every Prophecy card" or nil

@@ -21,19 +21,6 @@ position = "before"
 payload = "SMODS.calculate_context({voucher_redeem = true, voucher = self})"
 match_indent = true
 
-
-#axe of justice total money spent
-[[patches]]
-[patches.pattern]
-target = "game.lua"
-pattern = "modifiers = {},"
-position = "after"
-payload = '''
-money_spent = 0,
-flowery_udid = 0,
-'''
-match_indent = true
-
 [[patches]]
 [patches.pattern]
 target = "functions/button_callbacks.lua"
