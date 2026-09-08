@@ -2554,7 +2554,8 @@ return {
 
 			-- Ball Machine
 			utdr_shopball_chance1 = "% chance of",
-			utdr_shopball_chance2 = "getting GOLD prize"
+			utdr_shopball_chance2 = "getting GOLD prize",
+			utdr_shopball_confirm = "Confirm",
 		},
 		achievement_descriptions = {
 			clairvoyance = dr and "Discover every Prophecy card" or nil

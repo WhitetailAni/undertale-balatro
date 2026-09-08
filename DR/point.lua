@@ -79,8 +79,8 @@ function UTDR_Modules.Capsule.ease_points(mod, instant)
           --inc_career_stat('c_dollars_earned', mod)
         end
         --Ease from current chips to the new number of chips
-        G.GAME.points = G.GAME.points + mod
-        --check_and_set_high_score('most_points', G.GAME.points)
+        G.GAME.utdr_points = G.GAME.utdr_points + mod
+        --check_and_set_high_score('most_points', G.GAME.utdr_points)
        	--check_for_unlock({type = 'points'})
         points_UI.config.object:update() --CHANGE
         G.HUD:recalculate()

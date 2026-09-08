@@ -96,7 +96,7 @@ end
 local function pts_button(amnt)
 	return {n=G.UIT.R, config={
 		align="cm",
-		minw=2.4,
+		minw=3,
 		colour=G.C.RED,
 		func="UTDR_capsule_addpts_func",
 		button="UTDR_capsule_addpts",
@@ -193,26 +193,34 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 		end)
 	}))
 
+	-- Figure out how to add variables to dynatext/dictionary localize
+	-- ...also if there's a gold chance function yet but there should be one pretty pls ani
+	local text = {
+		DynaText({ string = localize("utdr_shopball_chance1"), float = true, colours = { G.C.GOLD }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 }),
+		DynaText({ string = localize("utdr_shopball_chance2"), float = true, colours = { G.C.GOLD }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
+	}
+	for i, v in ipairs(text) do
+		text[i] = {n=G.UIT.R, config={align="cm"},nodes={{n=G.UIT.O,config={object=v}}}}
+	end
+
 	local capsule_spr = SMODS.create_sprite(0,0,5,156/111*5,"UTDR_shop_capsule")
 	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
 		UIBox_dyn_container({
 			{n=G.UIT.C, config={align = "cm", padding = 0.1, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN}, nodes={
-				{n=G.UIT.C, config={align = "cm", minw = 7, padding = .4}, nodes = {
+				{n=G.UIT.C, config={align = "cr", minw = 6.5, padding = .4}, nodes = {
 					{n=G.UIT.O, config={object = capsule_spr}}
 				}},
 				{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
-					{n=G.UIT.R, config={align = "cm", colour=G.C.GREEN, padding = 0.05}, nodes = {
-						text
-					}},
+					{n=G.UIT.R, config={align = "cm", colour=G.C.GREEN, padding = 0.05}, nodes = text},
 					
-					{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.2}, nodes = {
+					{n=G.UIT.R, config={align = "cm", minw=4,emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.2}, nodes = {
 						{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
 							{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
 								pts_button(50),
 								pts_button(5),
 							}},
-							{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.BLACK, padding = 0.1}, nodes = {
-								{n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.1}, nodes = {
+							{n=G.UIT.R, config={align = "cm", minw=3, maxw=3, emboss = 0.05, r = 0.1, colour=G.C.BLACK, padding = 0.1}, nodes = {
+								{n=G.UIT.R, config={align = "cm", minw=3, emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.1}, nodes = {
 									{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
 										{n=G.UIT.R, config={align = "cm"}, nodes = {
 											{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, ref_table = UTDR_Modules.Capsule, ref_value = "bet_amount"}},
@@ -227,8 +235,18 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 							}},
 						}},
 					}},
-					{n=G.UIT.R, config={align = "cm", colour=G.C.YELLOW, padding = 0.05}},
-
+					{n=G.UIT.R, config={
+						align="cm",
+						minw=2.4,
+						colour=G.C.RED,
+						func="UTDR_capsule_buy_func",
+						button="UTDR_capsule_buy",
+						emboss=.05,
+						r=.1,
+						padding=.2
+					},nodes={
+						{n=G.UIT.T, config={colour=G.C.WHITE, scale=.7, text = localize("utdr_shopball_confirm")}}
+					}}
 				}}
 			}},
 				
@@ -290,14 +308,15 @@ function G.FUNCS.UTDR_capsule_addpts(e)
 	UTDR_Modules.Capsule.bet_amount = UTDR_Modules.Capsule.bet_amount + e.config.amount
 end
 
-function G.FUNCS.UTDR_capsule_trade_func(e)
+function G.FUNCS.UTDR_capsule_buy_func(e)
 	local can = UTDR_Modules.Capsule.bet_amount >= UTDR_Modules.Capsule.min_amount and UTDR_Modules.Capsule.bet_amount <= G.GAME.utdr_points
 
-	e.config.colour = cantrade and darken(G.C.GREEN, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
-	e.config.button = cantrade and 'UTDR_capsule_trade' or nil
+	e.config.colour = can and darken(G.C.GREEN, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = can and 'UTDR_capsule_buy' or nil
 end
 
-function G.FUNCS.UTDR_capsule_trade(e)
+function G.FUNCS.UTDR_capsule_buy(e)
 	UTDR_Modules.Capsule.ease_points(-UTDR_Modules.Capsule.bet_amount)
+	UTDR_Modules.Capsule.bet_amount = 0
 	-- Code for giving a capsule
 end
