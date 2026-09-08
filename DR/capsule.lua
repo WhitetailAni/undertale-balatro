@@ -73,7 +73,15 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	--if you put in more than 100 points, remove common jokers/planet cards from the pool
 	if bet > 100 then
 		for i = 1, #possible_keys do
-			if G.P_CENTERS[possible_keys[i]].set == "Planet" or G.P_CENTERS[possible_keys[i]].rarity == 1 then
+			if G.P_CENTERS[possible_keys[i]].set == "Planet" then
+				possible_keys[i] = nil
+			end
+		end
+	end
+	
+	if bet > 200 then
+		for i = 1, #possible_keys do
+			if G.P_CENTERS[possible_keys[i]].rarity == 1 then
 				possible_keys[i] = nil
 			end
 		end
