@@ -2551,8 +2551,9 @@ return {
 			s_UTDR_bratty = "Bratty",
 
 			-- Ball Machine
-			utdr_shopball_chance1 = "% chance of",
-			utdr_shopball_chance2 = "getting GOLD prize",
+			UTDR_shopball_chance0 = "%",
+			UTDR_shopball_chance1 = " chance of",
+			UTDR_shopball_chance2 = "getting GOLD prize",
 			UTDR_shopball_trade = "Trade!",
 			
 			--lacquer script

@@ -11,15 +11,19 @@ function UTDR_Modules.Capsule.add_vouchers()
 	end
 end
 
-function UTDR_Modules.Capsule.did_win_gold(bet)
+function UTDR_Modules.Capsule.gold_chance(bet)
 	local remaining = #G.GAME.capsule.gold_prizes
 	local remaining_block = 0.1 + (remaining / 50)
 	local oldbet_block = 1 + (G.GAME.capsule.last_bet / 50)
-	
+
 	local chance = 5 + (bet - 100) * remaining_block * oldbet_block
 	G.GAME.capsule.last_bet = bet
 	chance = chance / 100
-	return pseudorandom("capsule_gold") > chance
+	return chance
+end
+
+function UTDR_Modules.Capsule.did_win_gold(bet)
+	return pseudorandom("capsule_gold") > UTDR_Modules.Capsule.gold_chance(bet)
 end
 
 --filters tables. provide 2 tables, removes all keys present in table 2 from table 1
@@ -218,13 +222,13 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 		end)
 	}))
 	
-	--[[local text = {
+	local text = {
 		DynaText({ string = localize("utdr_shopball_chance1"), float = true, colour = G.C.GOLD, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 }),
 		DynaText({ string = localize("utdr_shopball_chance2"), float = true, colour = G.C.GOLD, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
 	}
 	for i, v in ipairs(text) do
-		text[i] = {n=G.UIT.R, config={align="cm"},nodes={{n=G.UIT.O,config={object=v}}}}
-	end]]
+		--text[i] = {n=G.UIT.R, config={align="cm", colour = G.C.CLEAR},nodes={{n=G.UIT.O,config={object=v, colour = G.C.CLEAR}}}}
+	end
 
 	local capsule_spr = SMODS.create_sprite(0,0,5,156/111*5,"UTDR_shop_capsule")
 	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
@@ -234,9 +238,15 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 					{n=G.UIT.O, config={object = capsule_spr}}
 				}},
 				{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
-					{n=G.UIT.R, config={align = "cm", colour=G.C.GREEN, padding = 0.05}, nodes = {
-						text
+					{n=G.UIT.R, config={align = "cm", colour=G.C.CLEAR, padding = 0.05}, nodes = {
+						{n=G.UIT.R, config={align = "cm"}, nodes = {
+							{n=G.UIT.O,config={object=DynaText({ string = tostring(UTDR_Modules.Capsule.gold_chance(UTDR_Modules.Capsule.bet_amount))..localize("UTDR_shopball_chance0"), float = true, colours = { G.C.GOLD }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}},
+							{n=G.UIT.O,config={object=DynaText({ string = localize("UTDR_shopball_chance1"), float = true, colours = { G.C.POINTS }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}},
+						}},
+						{n=G.UIT.R, config={align="cm"},nodes={{n=G.UIT.O,config={object=DynaText({ string = localize("UTDR_shopball_chance2"), float = true, colours = { G.C.POINTS }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}}}},
 					}},
+					
+					{n=G.UIT.R, config={align = "cm", colour=G.C.GREEN, padding = 0.05}},
 					
 					{n=G.UIT.R, config={align = "cm", minw=4,emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.2}, nodes = {
 						{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {

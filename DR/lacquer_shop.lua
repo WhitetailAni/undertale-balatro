@@ -202,6 +202,7 @@ function UTDR_Modules.Lacquer_Shop.lacquer_shop()
                             }}   
                           }},              
                         }},
+                        {n=G.UIT.R, config={align = "cm", padding = 0.1}},
                         {n=G.UIT.R, config={align = "cm", minw = 2.8, minh = 1.6, r=0.15,colour = G.C.GREEN, button = 'reroll_lacquer', hover = true,shadow = true}, nodes = {
                           {n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'x', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
                             {n=G.UIT.R, config={align = "cm", maxw = 1.3}, nodes={
