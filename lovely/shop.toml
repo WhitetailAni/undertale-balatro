@@ -109,6 +109,31 @@ payload = '''
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+if self.STATE == self.STATES.SHOP then 
+'''
+position = 'after'
+payload = '''
+	self:update_UTDR_shop_tabs(dt)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+function Game:update_blind_select(dt)
+'''
+position = 'after'
+payload = '''
+	if self.UTDR_shop_tabs then self.UTDR_shop_tabs:remove(); self.UTDR_shop_tabs = nil end
+'''
+match_indent = true
+
+
 
 [[patches]]
 [patches.pattern]
@@ -120,11 +145,13 @@ end
 '''
 position = 'before'
 payload = '''
-if self.STATE == self.STATES.UTDR_SHOP_CAPSULE then
-    self:update_utdr_shop_capsule(dt)
-end
 if self.STATE == self.STATES.UTDR_SHOP_CATTYBRATTY then
+	self:update_UTDR_shop_tabs(dt)
     self:update_utdr_shop_cattybratty(dt)
+end
+if self.STATE == self.STATES.UTDR_SHOP_CAPSULE then
+	self:update_UTDR_shop_tabs(dt)
+	self:update_utdr_shop_capsule(dt)
 end
 if self.STATE == self.STATES.UTDR_SHOP_LACQUER then
     self:update_utdr_shop_lacquer(dt)

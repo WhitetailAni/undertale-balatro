@@ -2545,16 +2545,14 @@ return {
 			
 			-- shop tab stuff
 			s_UTDR_shop = "Shop",
-			s_UTDR_ball_1 = "Capsule",
-			s_UTDR_ball_2 = "Machine",
-			s_UTDR_catty = "Catty &",
-			s_UTDR_bratty = "Bratty",
+			s_UTDR_cattybratty = "Catty & Bratty",
+			s_UTDR_ball = "Ball Machine",
 
 			-- Ball Machine
 			UTDR_shopball_chance0 = "%",
 			UTDR_shopball_chance1 = " chance of",
 			UTDR_shopball_chance2 = "getting GOLD prize",
-			UTDR_shopball_trade = "Trade!",
+			UTDR_shopball_trade = "Bet!",
 			
 			--lacquer script
 			ph_UTDR_improve = "Improve."
