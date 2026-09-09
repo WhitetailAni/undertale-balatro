@@ -106,6 +106,9 @@ STEEL = HEX('afb4be'),
 NETSKIE = HEX('ff00d6'),
 POINTS = HEX('fd6359'),
 
+LACQUER_BG = HEX('2c3537'),
+LACQUER_OUTLINE = HEX('6b91cf'),
+
 BRATTY = HEX('e7b1c5'),
 CATTY = HEX('cbafed'),
 DOG = HEX('dddddd'),
@@ -173,5 +176,21 @@ payload = '''
 if page == 1 then
 	cols = 7
 end
+'''
+match_indent = true
+
+#G.GAME patches all in 1
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "STOP_USE = 0,"
+position = "after"
+payload = '''
+dollar_max = 0,
+discard_streak = 0,
+money_spent = 0,
+flowery_udid = 0,
+utdr_trades = {},
+UTDR_lacquer_script_step = 0,
 '''
 match_indent = true

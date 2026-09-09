@@ -105,6 +105,7 @@ position = 'after'
 payload = '''
     UTDR_SHOP_CAPSULE =		12.25,
     UTDR_SHOP_CATTYBRATTY =	159.2015,
+    UTDR_SHOP_LACQUER =     67,
 '''
 match_indent = true
 
@@ -125,6 +126,9 @@ end
 if self.STATE == self.STATES.UTDR_SHOP_CATTYBRATTY then
     self:update_utdr_shop_cattybratty(dt)
 end
+if self.STATE == self.STATES.UTDR_SHOP_LACQUER then
+    self:update_utdr_shop_lacquer(dt)
+end
 
 '''
 match_indent = true
@@ -135,6 +139,6 @@ target = "cardarea.lua"
 pattern = "(self.config.type == 'deck' and self ~= G.deck) or"
 position = "before"
 payload = '''
-(self.config.type == 'hand' and (state == G.STATES.UTDR_SHOP_CAPSULE or state == G.STATES.UTDR_SHOP_CATTYBRATTY)) or
+(self.config.type == 'hand' and (state == G.STATES.UTDR_SHOP_CAPSULE or state == G.STATES.UTDR_SHOP_CATTYBRATTY or state == G.STATES.UTDR_SHOP_LACQUER)) or
 '''
 match_indent = true

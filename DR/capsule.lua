@@ -1,6 +1,6 @@
 UTDR_Modules.Capsule = {
 	bet_amount = 0,
-	min_amount = 50
+	min_amount = 50,
 }
 
 function UTDR_Modules.Capsule.add_vouchers()
@@ -11,19 +11,22 @@ function UTDR_Modules.Capsule.add_vouchers()
 	end
 end
 
-
-
-function UTDR_Modules.Capsule.did_win_gold(bet)
+function UTDR_Modules.Capsule.gold_chance(bet)
 	local remaining = #G.GAME.capsule.gold_prizes
 	local remaining_block = 0.1 + (remaining / 50)
 	local oldbet_block = 1 + (G.GAME.capsule.last_bet / 50)
-	
+
 	local chance = 5 + (bet - 100) * remaining_block * oldbet_block
 	G.GAME.capsule.last_bet = bet
 	chance = chance / 100
-	return pseudorandom("capsule_gold") > chance
+	return chance
 end
 
+function UTDR_Modules.Capsule.did_win_gold(bet)
+	return pseudorandom("capsule_gold") > UTDR_Modules.Capsule.gold_chance(bet)
+end
+
+--filters tables. provide 2 tables, removes all keys present in table 2 from table 1
 function UTDR_Modules.Capsule.wow_that_was_so_gold(input, filter)
 	local possible_keys = input
 	local knightmare = {}
@@ -42,7 +45,6 @@ end
 function UTDR_Modules.Capsule.get_reward(bet)
 	if bet == 1225 then
 		return {
-			key = "j_UTDR_lacquer_triangle",
 			december = true			
 		}
 	elseif UTDR_Modules.Capsule.did_win_gold(bet) then
@@ -71,18 +73,21 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	possible_keys = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys, G.GAME.capsule.cannot_pull)
 	
 	--if you put in more than 100 points, remove common jokers/planet cards from the pool
-	if bet > 100 then
+	if bet >= 100 then
 		for i = 1, #possible_keys do
 			if G.P_CENTERS[possible_keys[i]].set == "Planet" then
-				possible_keys[i] = nil
+				table.remove(possible_keys, i)
 			end
 		end
 	end
 	
-	if bet > 200 then
+	if bet >= 200 then
 		for i = 1, #possible_keys do
-			if G.P_CENTERS[possible_keys[i]].rarity == 1 then
-				possible_keys[i] = nil
+			local key = possible_keys[i]
+			local center = G.P_CENTERS[possible_keys[i]] or { rarity = "fuck" }
+			local rarity = center.rarity or nil
+			if rarity == 1 then
+				table.remove(possible_keys, i)
 			end
 		end
 	end
@@ -101,13 +106,29 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	}
 end
 
-local function pts_button(amnt)
+local function add_pts_button(amnt)
 	return {n=G.UIT.R, config={
 		align="cm",
 		minw=3,
 		colour=G.C.RED,
 		func="UTDR_capsule_addpts_func",
-		button="UTDR_capsule_addpts",
+		button="UTDR_capsule_deltapts",
+		emboss=.05,
+		r=.1,
+		padding=.1,
+		amount = amnt
+	},nodes={
+		{n=G.UIT.T, config={colour=G.C.WHITE, scale=.4, text = SMODS.signed(amnt)..localize("utdr_points_suffix")}}
+	}}
+end
+
+local function remove_pts_button(amnt)
+	return {n=G.UIT.R, config={
+		align="cm",
+		minw=3,
+		colour=G.C.RED,
+		func="UTDR_capsule_removepts_func",
+		button="UTDR_capsule_deltapts",
 		emboss=.05,
 		r=.1,
 		padding=.1,
@@ -147,7 +168,7 @@ function Game:update_utdr_shop_capsule(dt)
 		G.STATE_COMPLETE = true
 		G.CONTROLLER.interrupt.focus = true
 
-		UTDR_Modules.Capsule.bet_amount = math.min(G.GAME.utdr_points,UTDR_Modules.Capsule.min_amount)
+		UTDR_Modules.Capsule.bet_amount = math.min(G.GAME.UTDR_points,UTDR_Modules.Capsule.min_amount)
 		
 		if not G.utdr_shop_capsule then
 			G.E_MANAGER:add_event(Event{ func = function()
@@ -200,15 +221,13 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 			return true
 		end)
 	}))
-
-	-- Figure out how to add variables to dynatext/dictionary localize
-	-- ...also if there's a gold chance function yet but there should be one pretty pls ani
+	
 	local text = {
-		DynaText({ string = localize("utdr_shopball_chance1"), float = true, colours = { G.C.GOLD }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 }),
-		DynaText({ string = localize("utdr_shopball_chance2"), float = true, colours = { G.C.GOLD }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
+		DynaText({ string = localize("utdr_shopball_chance1"), float = true, colour = G.C.GOLD, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 }),
+		DynaText({ string = localize("utdr_shopball_chance2"), float = true, colour = G.C.GOLD, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
 	}
 	for i, v in ipairs(text) do
-		text[i] = {n=G.UIT.R, config={align="cm"},nodes={{n=G.UIT.O,config={object=v}}}}
+		--text[i] = {n=G.UIT.R, config={align="cm", colour = G.C.CLEAR},nodes={{n=G.UIT.O,config={object=v, colour = G.C.CLEAR}}}}
 	end
 
 	local capsule_spr = SMODS.create_sprite(0,0,5,156/111*5,"UTDR_shop_capsule")
@@ -219,13 +238,21 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 					{n=G.UIT.O, config={object = capsule_spr}}
 				}},
 				{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
-					{n=G.UIT.R, config={align = "cm", colour=G.C.GREEN, padding = 0.05}, nodes = text},
+					{n=G.UIT.R, config={align = "cm", colour=G.C.CLEAR, padding = 0.05}, nodes = {
+						{n=G.UIT.R, config={align = "cm"}, nodes = {
+							{n=G.UIT.O,config={object=DynaText({ string = tostring(UTDR_Modules.Capsule.gold_chance(UTDR_Modules.Capsule.bet_amount))..localize("UTDR_shopball_chance0"), float = true, colours = { G.C.GOLD }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}},
+							{n=G.UIT.O,config={object=DynaText({ string = localize("UTDR_shopball_chance1"), float = true, colours = { G.C.POINTS }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}},
+						}},
+						{n=G.UIT.R, config={align="cm"},nodes={{n=G.UIT.O,config={object=DynaText({ string = localize("UTDR_shopball_chance2"), float = true, colours = { G.C.POINTS }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}}}},
+					}},
+					
+					{n=G.UIT.R, config={align = "cm", colour=G.C.GREEN, padding = 0.05}},
 					
 					{n=G.UIT.R, config={align = "cm", minw=4,emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.2}, nodes = {
 						{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
 							{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
-								pts_button(50),
-								pts_button(5),
+								add_pts_button(50),
+								add_pts_button(5),
 							}},
 							{n=G.UIT.R, config={align = "cm", minw=3, maxw=3, emboss = 0.05, r = 0.1, colour=G.C.BLACK, padding = 0.1}, nodes = {
 								{n=G.UIT.R, config={align = "cm", minw=3, emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.1}, nodes = {
@@ -238,8 +265,8 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 								}},
 							}},
 							{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
-								pts_button(-5),
-								pts_button(-50),
+								remove_pts_button(-5),
+								remove_pts_button(-50),
 							}},
 						}},
 					}},
@@ -247,8 +274,8 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 						align="cm",
 						minw=2.4,
 						colour=G.C.RED,
-						func="UTDR_capsule_buy_func",
-						button="UTDR_capsule_buy",
+						func="UTDR_capsule_trade_func",
+						button="UTDR_capsule_trade",
 						emboss=.05,
 						r=.1,
 						padding=.2
@@ -306,25 +333,50 @@ end
 
 function G.FUNCS.UTDR_capsule_addpts_func(e)
 	local target = e.config.amount + UTDR_Modules.Capsule.bet_amount
-	local cantrade = target >= 0 and target <= G.GAME.utdr_points
+	local cantrade = target >= 0 and target <= G.GAME.UTDR_points
 
 	e.config.colour = cantrade and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
-	e.config.button = cantrade and 'UTDR_capsule_addpts' or nil
+	e.config.button = cantrade and 'UTDR_capsule_deltapts' or nil
 end
 
-function G.FUNCS.UTDR_capsule_addpts(e)
+function G.FUNCS.UTDR_capsule_removepts_func(e)
+	local target = UTDR_Modules.Capsule.bet_amount - e.config.amount
+	local cantrade = target >= 0
+
+	e.config.colour = cantrade and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = cantrade and 'UTDR_capsule_deltapts' or nil
+end
+
+function G.FUNCS.UTDR_capsule_deltapts(e)
 	UTDR_Modules.Capsule.bet_amount = UTDR_Modules.Capsule.bet_amount + e.config.amount
 end
 
-function G.FUNCS.UTDR_capsule_buy_func(e)
-	local can = UTDR_Modules.Capsule.bet_amount >= UTDR_Modules.Capsule.min_amount and UTDR_Modules.Capsule.bet_amount <= G.GAME.utdr_points
+function G.FUNCS.UTDR_capsule_trade_func(e)
+	local can_trade = UTDR_Modules.Capsule.bet_amount >= UTDR_Modules.Capsule.min_amount and G.GAME.UTDR_points >= UTDR_Modules.Capsule.bet_amount
 
-	e.config.colour = can and darken(G.C.GREEN, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
-	e.config.button = can and 'UTDR_capsule_buy' or nil
+	e.config.colour = can_trade and darken(G.C.GREEN, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = can_trade and 'UTDR_capsule_trade' or nil
 end
 
-function G.FUNCS.UTDR_capsule_buy(e)
-	UTDR_Modules.Capsule.ease_points(-UTDR_Modules.Capsule.bet_amount)
-	UTDR_Modules.Capsule.bet_amount = 0
-	-- Code for giving a capsule
+function G.FUNCS.UTDR_capsule_trade(e)
+	print("mmmm yummy yummy points do you have any more?")
+	local reward = UTDR_Modules.Capsule.get_reward(UTDR_Modules.Capsule.bet_amount)
+	
+	if reward.december and G.GAME.UTDR_lacquer_script_step == 0 then
+		ease_background_colour { new_colour = G.C.LACQUER, contrast = 1 }
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				G.STATE = G.STATES.UTDR_SHOP_LACQUER
+				G.STATE_COMPLETE = false
+				return true
+			end
+		}))
+	else
+		UTDR_Modules.Capsule.ease_points(-UTDR_Modules.Capsule.bet_amount)
+		local set = G.P_CENTERS[reward.key].set
+		--do some fancy animations stuff here
+		SMODS.add_card({
+			key = reward.key
+		})
+	end
 end

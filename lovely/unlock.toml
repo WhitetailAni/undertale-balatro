@@ -214,18 +214,6 @@ payload = '''
 '''
 match_indent = true
 
-#worn dagger, kindness
-[[patches]]
-[patches.pattern]
-target = "game.lua"
-pattern = "STOP_USE = 0,"
-position = "after"
-payload = '''
-dollar_max = 0,
-discard_streak = 0,
-'''
-match_indent = true
-
 #asgore
 [[patches]]
 [patches.pattern]

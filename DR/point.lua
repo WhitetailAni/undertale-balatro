@@ -74,8 +74,10 @@ function UTDR_Modules.Capsule.ease_points(mod, instant)
         local col = G.C.POINTS
         if mod < 0 then
             prefix = '-'
-            col = G.C.BALLGAME
         else
+        if mod == 1225 then
+        	col = G.C.BALLGAME
+        end
           --inc_career_stat('c_dollars_earned', mod)
         end
         --Ease from current chips to the new number of chips

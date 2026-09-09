@@ -23,8 +23,24 @@ UTDR_Modules.Trading = {
 	},
 	excluded_tags = {
 		tag_UTDR_glamorous = true
+	},
+	timer = {
+		silly = 0.0, -- set to a value > 0 and always decreases down to 0
+		arms = 0.0, -- increases up to 1 if timer.silly > 0, decreases down to 0 otherwise
+	},
+	timer_max = {
+		silly = 2.0,
+		extra_silly = 10.0,
+		arms = 0.25
 	}
 }
+
+local table_lerp = function(a, b, t)
+	local ret = { x = 0, y = 0 }
+	ret.x = a.x + (b.x - a.x) * t
+	ret.y = a.y + (b.y - a.y) * t
+	return ret
+end
 
 function Game:update_utdr_shop_cattybratty(dt)
 	if not G.STATE_COMPLETE then
@@ -38,7 +54,9 @@ function Game:update_utdr_shop_cattybratty(dt)
 		}
 
 		for _, v in ipairs(targets) do
-			if self[v] then self[v]:remove(); self[v] = nil end
+			if self[v] then
+				self[v]:remove(); self[v] = nil
+			end
 		end
 
 		if G.shop then
@@ -52,55 +70,174 @@ function Game:update_utdr_shop_cattybratty(dt)
 			}))
 		end
 
-		G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
+		G.E_MANAGER:add_event(Event { func = function()
+			save_run(); return true
+		end })
 		G.STATE_COMPLETE = true
 		G.CONTROLLER.interrupt.focus = true
-		
+
 		UTDR_Modules.Trading.dialogue = "open"
 		UTDR_Modules.Trading.cheer = false
 
 		if not G.utdr_shop_cattybratty then
-			G.E_MANAGER:add_event(Event{ func = function()
-				G.E_MANAGER:add_event(Event{
+			G.E_MANAGER:add_event(Event { func = function()
+				G.E_MANAGER:add_event(Event {
 					trigger = 'immediate',
 					func = function()
 						play_sound('cancel')
-						G.utdr_shop_cattybratty = UIBox{
+						G.utdr_shop_cattybratty = UIBox {
 							definition = UTDR_Modules.Trading.create_UIBox_cattybratty(),
-							config = {align="bmi", offset = {x=0,y=G.ROOM.T.y + 29}, major = G.hand, bond = 'Weak'}
+							config = { align = "bmi", offset = { x = 0, y = G.ROOM.T.y + 29 }, major = G.hand, bond = 'Weak' }
 						}
 						G.ROOM.jiggle = G.ROOM.jiggle + 3
 						G.CONTROLLER.lock_input = false
 						G.utdr_shop_cattybratty.alignment.offset.y = G.ROOM.T.y + 21.4
-				return true end})
-			return true end})
+						return true
+					end })
+				return true
+			end })
+		end
+	else
+		if G.utdr_shop_cattybratty then
+			if UTDR_Modules.Trading.timer.silly > 0.0 then
+				UTDR_Modules.Trading.timer.silly = math.max(0.0, UTDR_Modules.Trading.timer.silly - dt)
+				UTDR_Modules.Trading.timer.arms = math.min(UTDR_Modules.Trading.timer_max.arms,
+					UTDR_Modules.Trading.timer.arms + dt)
+			else
+				UTDR_Modules.Trading.timer.arms = math.max(0.0, UTDR_Modules.Trading.timer.arms - dt)
+			end
+			--print("silly: " .. tostring(UTDR_Modules.Trading.timer.silly) .. "/" .. tostring(UTDR_Modules.Trading.timer_max.silly))
+			--print("arms: " .. tostring(UTDR_Modules.Trading.timer.arms) .. "/" .. tostring(UTDR_Modules.Trading.timer_max.arms))
+			if G.UTDR_CATTY_BRATTY_MAIN_SPRITE then
+				local cb_pos_normal = { x = 0.0, y = (math.sin(G.TIMERS.REAL * 2.0) + 1.0) / 2.0 * 0.05 }
+				local cb_pos_excited = { x = 0.0, y = math.abs(math.sin(G.TIMERS.REAL * 10.0)) * -0.1 + 0.1 }
+				local cb_pos = table_lerp(cb_pos_normal, cb_pos_excited,
+					UTDR_Modules.Trading.timer.arms / UTDR_Modules.Trading.timer_max.arms)
+				G.UTDR_CATTY_BRATTY_MAIN_SPRITE.alignment.offset.x = cb_pos.x
+				G.UTDR_CATTY_BRATTY_MAIN_SPRITE.alignment.offset.y = cb_pos.y
+
+				local actual_cb_sprite = G.UTDR_CATTY_BRATTY_MAIN_SPRITE:get_UIE_by_ID("sprite")
+				if actual_cb_sprite then
+					actual_cb_sprite.config.object:set_sprite_pos({
+						x = 0,
+						y = (UTDR_Modules.Trading.timer.arms > 0.0) and
+							1 or 0
+					})
+				end
+			end
+			if G.UTDR_CATTY_ARM_SPRITE then
+				local c_pos_normal = { x = -0.5, y = 3.0 }
+				local c_pos_excited = { x = -0.5, y = 1.5 + math.abs(math.sin(G.TIMERS.REAL * 10.0 + 2.0)) * -0.1 + 0.1 }
+				local c_pos = table_lerp(c_pos_normal, c_pos_excited,
+					UTDR_Modules.Trading.timer.arms / UTDR_Modules.Trading.timer_max.arms)
+				G.UTDR_CATTY_ARM_SPRITE.alignment.offset.x = c_pos.x
+				G.UTDR_CATTY_ARM_SPRITE.alignment.offset.y = c_pos.y
+			end
+			if G.UTDR_BRATTY_ARM_SPRITE then
+				local b_pos_normal = { x = -3.5, y = 3.0 }
+				local b_pos_excited = { x = -3.5, y = 1.5 + math.abs(math.sin(G.TIMERS.REAL * 10.0 + 2.0)) * -0.1 + 0.1 }
+				local b_pos = table_lerp(b_pos_normal, b_pos_excited,
+					UTDR_Modules.Trading.timer.arms / UTDR_Modules.Trading.timer_max.arms)
+				G.UTDR_BRATTY_ARM_SPRITE.alignment.offset.x = b_pos.x
+				G.UTDR_BRATTY_ARM_SPRITE.alignment.offset.y = b_pos.y
+			end
 		end
 	end
 end
 
 function UTDR_Modules.Trading.create_UIBox_cattybratty(reload)
 	reload = reload or false
-	if not G.UTDR_SHOP_SIGN_CATTY then
-		local shop_sign = Sprite(0,0, 4.4, 2.2, G.ASSET_ATLAS.UTDR_shopsign_cattybratty)
-		shop_sign:define_draw_steps({
-			{shader = 'dissolve', shadow_height = 0.05},
-			{shader = 'dissolve'}
+	if not G.UTDR_CATTY_BRATTY_MAIN_SPRITE or reload then
+		local cb_spr = Sprite(0, 0, 5.5, 5.5 * 139 / 215, G.ASSET_ATLAS.UTDR_shop_cattybratty_body, { x = 0, y = 0 })
+		cb_spr:define_draw_steps({
+			{ shader = 'dissolve', shadow_height = 0.05 },
+			{ shader = 'dissolve' }
 		})
-		G.UTDR_SHOP_SIGN_CATTY = UIBox{
-			definition = 
-				{n=G.UIT.ROOT, config = {colour = G.C.DYN_UI.MAIN, emboss = 0.05, align = 'cm', r = 0.1, padding = 0.1}, nodes={
-					{n=G.UIT.R, config={align = "cm", padding = 0.1, minw = 4.72, minh = 3.1, colour = G.C.DYN_UI.DARK, r = 0.1}, nodes={
-						{n=G.UIT.R, config={align = "cm"}, nodes={
-							{n=G.UIT.O, config={object = shop_sign}}
-						}},
-						{n=G.UIT.R, config={align = "cm"}, nodes={
-							{n=G.UIT.O, config={object = DynaText({string = {localize('ph_utdr_cattybratty')}, colours = {lighten(G.C.GOLD, 0.3)},shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3})}}
-						}},
-					}},
-				}},
+		G.UTDR_CATTY_BRATTY_MAIN_SPRITE = UIBox {
+			definition =
+			{ n = G.UIT.ROOT, config = { colour = G.C.CLEAR, align = 'cm', padding = 0.0 }, nodes = {
+				{ n = G.UIT.R, config = { align = "cm" }, nodes = {
+					{ n = G.UIT.O, config = { object = cb_spr, id = "sprite" } }
+				} },
+			} },
 			config = {
-				align="cm",
-				offset = {x=0,y=-15},
+				align = "cm",
+				offset = { x = 0, y = 0 },
+				major = G.utdr_shop_cattybratty,
+				bond = 'Weak'
+			}
+		}
+		G.E_MANAGER:add_event(Event({
+			trigger = 'immediate',
+			func = (function()
+				G.UTDR_CATTY_BRATTY_MAIN_SPRITE.alignment.offset.y = 0
+				return true
+			end)
+		}))
+	end
+	if not G.UTDR_BRATTY_ARM_SPRITE or reload then
+		local cb_spr = Sprite(0, 0, 2.0, 2.0 * 48 / 64, G.ASSET_ATLAS.UTDR_shop_cattybratty_arms, { x = 0, y = 0 })
+		cb_spr:define_draw_steps({
+			{ shader = 'dissolve', shadow_height = 0.05 },
+			{ shader = 'dissolve' }
+		})
+		G.UTDR_BRATTY_ARM_SPRITE = UIBox {
+			definition =
+			{ n = G.UIT.ROOT, config = { colour = G.C.CLEAR, align = 'cm', padding = 0.0 }, nodes = {
+				{ n = G.UIT.R, config = { align = "cm" }, nodes = {
+					{ n = G.UIT.O, config = { object = cb_spr, id = "sprite" } }
+				} },
+			} },
+			config = {
+				align = "cm",
+				offset = { x = 0, y = 3 },
+				major = G.utdr_shop_cattybratty,
+				bond = 'Weak'
+			}
+		}
+	end
+	if not G.UTDR_CATTY_ARM_SPRITE or reload then
+		local cb_spr = Sprite(0, 0, 2.0, 2.0 * 48 / 64, G.ASSET_ATLAS.UTDR_shop_cattybratty_arms, { x = 1, y = 0 })
+		cb_spr:define_draw_steps({
+			{ shader = 'dissolve', shadow_height = 0.05 },
+			{ shader = 'dissolve' }
+		})
+		G.UTDR_CATTY_ARM_SPRITE = UIBox {
+			definition =
+			{ n = G.UIT.ROOT, config = { colour = G.C.CLEAR, align = 'cm', padding = 0.0 }, nodes = {
+				{ n = G.UIT.R, config = { align = "cm" }, nodes = {
+					{ n = G.UIT.O, config = { object = cb_spr, id = "sprite" } }
+				} },
+			} },
+			config = {
+				align = "cm",
+				offset = { x = 0, y = 3 },
+				major = G.utdr_shop_cattybratty,
+				bond = 'Weak'
+			}
+		}
+	end
+	if not G.UTDR_SHOP_SIGN_CATTY then
+		local shop_sign = Sprite(0, 0, 4.4, 2.2, G.ASSET_ATLAS.UTDR_shopsign_cattybratty)
+		shop_sign:define_draw_steps({
+			{ shader = 'dissolve', shadow_height = 0.05 },
+			{ shader = 'dissolve' }
+		})
+		G.UTDR_SHOP_SIGN_CATTY = UIBox {
+			definition =
+			{ n = G.UIT.ROOT, config = { colour = G.C.DYN_UI.MAIN, emboss = 0.05, align = 'cm', r = 0.1, padding = 0.1 }, nodes = {
+				{ n = G.UIT.R, config = { align = "cm", padding = 0.1, minw = 4.72, minh = 3.1, colour = G.C.DYN_UI.DARK, r = 0.1 }, nodes = {
+					{ n = G.UIT.R, config = { align = "cm" }, nodes = {
+						{ n = G.UIT.O, config = { object = shop_sign } }
+					} },
+					{ n = G.UIT.R, config = { align = "cm" }, nodes = {
+						{ n = G.UIT.O, config = { object = DynaText({ string = { localize('ph_utdr_cattybratty') }, colours = { lighten(G.C.GOLD, 0.3) }, shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3 }) } }
+					} },
+				} },
+			} },
+			config = {
+				align = "cm",
+				offset = { x = 0, y = -15 },
 				major = G.HUD:get_UIE_by_ID('row_blind'),
 				bond = 'Weak'
 			}
@@ -116,85 +253,139 @@ function UTDR_Modules.Trading.create_UIBox_cattybratty(reload)
 
 	local tradenodes = {}
 
-	for _,v in ipairs(G.GAME.utdr_trades) do
+	for _, v in ipairs(G.GAME.utdr_trades) do
 		if not v.complete then
 			local area = CardArea(
 				0,
 				0,
 				G.CARD_W,
 				G.CARD_H,
-				{card_limit = #v.cards, type = 'title_2', highlight_limit = 0, UTDR_w_space = .6}
+				{ card_limit = #v.cards, type = 'title_2', highlight_limit = 0, UTDR_w_space = .6 }
 			)
 			for _, v2 in ipairs(v.cards) do
-				local c = SMODS.create_card{key = v2, allow_duplicates=true, bypass_discovery_center=true, skip_materialize = reload}
+				local c = SMODS.create_card { key = v2, allow_duplicates = true, bypass_discovery_center = true, skip_materialize = reload }
 				area:emplace(c)
 			end
 
 			local _tag = Tag(v.tag):generate_UI(1)
-			local arrow = SMODS.create_sprite(0,0,.6,.6,"UTDR_shop_arrow")
+			local arrow = SMODS.create_sprite(0, 0, .6, .6, "UTDR_shop_arrow")
 
-			tradenodes[#tradenodes+1] = {n=G.UIT.C, config={align = "cm", padding = 0.2,colour=G.C.L_BLACK,emboss=.05,r=.1,minw=3.5, minh=4}, nodes={
-				{n=G.UIT.R, config={align = "cm", func="utdr_setup_uie_reverse_order"}, nodes = {
-					{n=G.UIT.C, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object=area}}}},
-					{n=G.UIT.C, config={align = "cm", padding = -.1}, nodes = {
-						{n=G.UIT.C, config={align = "cm", padding = .1}, nodes = {
-							{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object=arrow}}}},
-							{n=G.UIT.R, config={align = "cm"}, nodes = { _tag }}
-						}},
-					}},
-				}},
-				{n=G.UIT.R, config={align = "cm"}, nodes = {
-					{n=G.UIT.C, config={ -- Button
-						align="cm",
-						minw=2.4,
-						colour=G.C.RED,
-						func="UTDR_cattybratty_tradefunc",
-						button="UTDR_cattybratty_trade",
-						emboss=.05,
-						r=.1,
-						padding=.1,
-						trade = v
-					},nodes={
-						{n=G.UIT.T,config={text=localize("b_utdr_cattybratty_trade"),scale=.5,colour=G.C.WHITE}}
-					}}
-				}}
-			}}
+			tradenodes[#tradenodes + 1] = {
+				n = G.UIT.C,
+				config = { align = "cm", padding = 0.2, colour = G.C.L_BLACK, emboss = .05, r = .1, minw = 3.5, minh = 4 },
+				nodes = {
+					{
+						n = G.UIT.R,
+						config = { align = "cm", func = "utdr_setup_uie_reverse_order" },
+						nodes = {
+							{ n = G.UIT.C, config = { align = "cm" }, nodes = { { n = G.UIT.O, config = { object = area } } } },
+							{
+								n = G.UIT.C,
+								config = { align = "cm", padding = -.1 },
+								nodes = {
+									{
+										n = G.UIT.C,
+										config = { align = "cm", padding = .1 },
+										nodes = {
+											{ n = G.UIT.R, config = { align = "cm" }, nodes = { { n = G.UIT.O, config = { object = arrow } } } },
+											{ n = G.UIT.R, config = { align = "cm" }, nodes = { _tag } }
+										}
+									},
+								}
+							},
+						}
+					},
+					{
+						n = G.UIT.R,
+						config = { align = "cm" },
+						nodes = {
+							{
+								n = G.UIT.C,
+								config = { -- Button
+									align = "cm",
+									minw = 2.4,
+									colour = G.C.RED,
+									func = "UTDR_cattybratty_tradefunc",
+									button = "UTDR_cattybratty_trade",
+									emboss = .05,
+									r = .1,
+									padding = .1,
+									trade = v
+								},
+								nodes = {
+									{ n = G.UIT.T, config = { text = localize("b_utdr_cattybratty_trade"), scale = .5, colour = G.C.WHITE } }
+								}
+							}
+						}
+					}
+				}
+			}
 		end
 	end
 
-	
+
 	local notrades = #tradenodes == 0
 	local dialogue = notrades and "sold" or UTDR_Modules.Trading.dialogue or "open"
 	local cheer = UTDR_Modules.Trading.cheer and 1 or 0
 
-	local ct = localize("utdr_shopcatty_"..dialogue)
-	local bt = localize("utdr_shopbratty_"..dialogue)
+	local ct = localize("utdr_shopcatty_" .. dialogue)
+	local bt = localize("utdr_shopbratty_" .. dialogue)
 
-	local catty_text = DynaText({ string = ct, float = true, colours = { HEX("DC8DF0") }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
-	local bratty_text = DynaText({ string = bt, float = true, colours = { HEX("8DE1BF") }, pop_in = .5, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
-	local cb_spr = SMODS.create_sprite(0,0,5.5,5.5*139/215,"UTDR_shop_cattybratty_body",{x=0,y=cheer})
+	local catty_text = DynaText({ string = ct, float = true, colours = { HEX("DC8DF0") }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw = 4 })
+	local bratty_text = DynaText({ string = bt, float = true, colours = { HEX("8DE1BF") }, pop_in = .5, pop_in_rate = 3, spacing = 1, scale = .5, maxw = 4 })
+	--local cb_spr = SMODS.create_sprite(0, 0, 5.5, 5.5 * 139 / 215, "UTDR_shop_cattybratty_body", { x = 0, y = cheer })
 
-	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
-		UIBox_dyn_container({
-			{n=G.UIT.C, config={align = "cm", padding = 0.2}, nodes={
-			{n=G.UIT.C, config={align = "cm"}, nodes={
-				{n=G.UIT.R, config={align = "cm", minh = 0.2}, nodes={
-					{n=G.UIT.C, config={align = "cr", minw=6, padding=-.03}, nodes = {
-						{n=G.UIT.O, config={object = cb_spr}}
-					}},
-					{n=G.UIT.C, config={align = "cl", minw=5}, nodes = {
-						{n=G.UIT.C, config={align = "cl", padding = .3}, nodes = {
-							{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object = catty_text}}}},
-							{n=G.UIT.R, config={align = "cm"}, nodes = {{n=G.UIT.O, config={object = bratty_text}}}}
-						}}
-					}}
-				}},
-				{n=G.UIT.R, config={align = notrades and "cm" or "cl", minh = 4.45, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN,padding = .2, minw=11.3}, nodes = tradenodes}
-			}}
-		}},
-		
-		}, false)
-	}}
+	local t = {
+		n = G.UIT.ROOT,
+		config = { align = 'cl', colour = G.C.CLEAR },
+		nodes = {
+			UIBox_dyn_container({
+				{
+					n = G.UIT.C,
+					config = { align = "cm", padding = 0.2 },
+					nodes = {
+						{
+							n = G.UIT.C,
+							config = { align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.R,
+									config = { align = "cm", minh = 0.2 },
+									nodes = {
+										{
+											n = G.UIT.C,
+											config = { align = "cr", minw = 6, padding = -.03, id = "catty_bratty_sprite", bond = 'Weak' },
+											nodes = {
+												{ n = G.UIT.O, config = { object = G.UTDR_CATTY_BRATTY_MAIN_SPRITE } },
+												{ n = G.UIT.O, config = { object = G.UTDR_BRATTY_ARM_SPRITE, w = 0., h = 0.0 } },
+												{ n = G.UIT.O, config = { object = G.UTDR_CATTY_ARM_SPRITE, w = 0.0, h = 0.0 } },
+											}
+										},
+										{
+											n = G.UIT.C,
+											config = { align = "cl", minw = 5 },
+											nodes = {
+												{
+													n = G.UIT.C,
+													config = { align = "cl", padding = .3 },
+													nodes = {
+														{ n = G.UIT.R, config = { align = "cm" }, nodes = { { n = G.UIT.O, config = { object = catty_text } } } },
+														{ n = G.UIT.R, config = { align = "cm" }, nodes = { { n = G.UIT.O, config = { object = bratty_text } } } }
+													}
+												}
+											}
+										}
+									}
+								},
+								{ n = G.UIT.R, config = { align = notrades and "cm" or "cl", minh = 4.45, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN, padding = .2, minw = 11.3 }, nodes = tradenodes }
+							}
+						}
+					}
+				},
+
+			}, false)
+		}
+	}
 	return t
 end
 
@@ -202,9 +393,9 @@ function UTDR_Modules.Trading.refresh_cattybratty()
 	if G.utdr_shop_cattybratty then
 		G.utdr_shop_cattybratty:remove()
 		G.utdr_shop_cattybratty = nil
-		G.utdr_shop_cattybratty = UIBox{
+		G.utdr_shop_cattybratty = UIBox {
 			definition = UTDR_Modules.Trading.create_UIBox_cattybratty(true),
-			config = {align="bmi", offset = {x=0,y=G.ROOM.T.y + 21.4}, major = G.hand, bond = 'Weak'}
+			config = { align = "bmi", offset = { x = 0, y = G.ROOM.T.y + 21.4 }, major = G.hand, bond = 'Weak' }
 		}
 	end
 end
@@ -213,14 +404,16 @@ end
 local achook = CardArea.align_cards
 function CardArea.align_cards(self)
 	if self.config.UTDR_w_space then
-		self.T.x = self.T.x-self.config.UTDR_w_space
-		self.T.w = self.T.w+self.config.UTDR_w_space*2
-		
+		self.T.x = self.T.x - self.config.UTDR_w_space
+		self.T.w = self.T.w + self.config.UTDR_w_space * 2
+
 		achook(self)
-		
-		self.T.x = self.T.x+self.config.UTDR_w_space
-		self.T.w = self.T.w-self.config.UTDR_w_space*2
-	else achook(self) end
+
+		self.T.x = self.T.x + self.config.UTDR_w_space
+		self.T.w = self.T.w - self.config.UTDR_w_space * 2
+	else
+		achook(self)
+	end
 end
 
 local update_shop_hook = Game.update_shop
@@ -243,68 +436,56 @@ function Game:update_shop(dt)
 		}
 
 		for _, v in ipairs(targets) do
-			if self[v] then self[v]:remove(); self[v] = nil end
+			if self[v] then
+				self[v]:remove(); self[v] = nil
+			end
 		end
 	end
-	update_shop_hook(self,dt)
-end
-
--- handles state-related bg/ui color changes
-local ease_background_colour_blind_hook = ease_background_colour_blind
-function ease_background_colour_blind(state, blind_override, ...)
-	if state == G.STATES.UTDR_SHOP_CAPSULE then
-		ease_colour(G.C.DYN_UI.MAIN, HEX("ffd601"))
-		ease_background_colour{new_colour = HEX("42d4a3"), special_colour = HEX("799f97"), contrast = 3}
-	elseif state == G.STATES.UTDR_SHOP_CATTYBRATTY then
-		ease_colour(G.C.DYN_UI.MAIN, HEX("dc8df0"))
-		ease_background_colour{new_colour = G.C.PURPLE, special_colour = G.C.L_BLACK, contrast = 3}
-	else
-		ease_background_colour_blind_hook(state, blind_override, ...)
-	end
+	update_shop_hook(self, dt)
 end
 
 function UTDR_Modules.Trading.add_catty_trade(args, refresh)
-	args.cards = args.cards or {"c_fool"}
+	args.cards = args.cards or { "c_fool" }
 	args.tag = args.tag or SMODS.poll_object({
 		type = "Tag",
 		filter = function(pool)
 			--if args.rare_tag or G.GAME.used_vouchers["v_UTDR_attack"] then return pool end -- Only restrict pool if not 3rd or don't have voucher
 			local ret = {}
-			for _,v in ipairs(pool) do
+			for _, v in ipairs(pool) do
 				if not UTDR_Modules.Trading.excluded_tags[v.key] and (
-					(args.rare_tag == (UTDR_Modules.Trading.rare_tags[v.key]))
-				) then
-					ret[#ret+1] = v
+						(args.rare_tag == (UTDR_Modules.Trading.rare_tags[v.key]))
+					) then
+					ret[#ret + 1] = v
 				end
 			end
 			return ret
 		end
 	})
 
-	G.GAME.utdr_trades[#G.GAME.utdr_trades+1] = args
+	G.GAME.utdr_trades[#G.GAME.utdr_trades + 1] = args
 
 	if refresh then UTDR_Modules.Trading.refresh_cattybratty() end
 end
 
 function UTDR_Modules.Trading.reroll_catty_shop()
 	G.GAME.utdr_trades = {}
-	
-	SMODS.poll_object{ type = "Tarot" } -- For some reason this keeps being polled as The Fool
+
+	SMODS.poll_object { type = "Tarot" } -- For some reason this keeps being polled as The Fool
 	-- Hook here to add more trades :3
-	UTDR_Modules.Trading.add_catty_trade{
+	UTDR_Modules.Trading.add_catty_trade {
 		cards = {
-			SMODS.poll_object{ type = "Tarot" }
+			SMODS.poll_object { type = "Tarot" }
 		}
 	}
-	UTDR_Modules.Trading.add_catty_trade{
+	UTDR_Modules.Trading.add_catty_trade {
 		cards = {
-			SMODS.poll_object{ type = "Planet" }
+			SMODS.poll_object { type = "Planet" }
 		}
 	}
-	UTDR_Modules.Trading.add_catty_trade{
+	UTDR_Modules.Trading.add_catty_trade {
 		cards = {
-			SMODS.poll_object{ type = "Tarot" },
-			SMODS.poll_object{ type = "Planet" }
+			SMODS.poll_object { type = "Tarot" },
+			SMODS.poll_object { type = "Planet" }
 		},
 		rare_tag = true
 	}
@@ -332,7 +513,7 @@ local grad = SMODS.Gradient {
 -- Returns reason, allows for handling of that in other functions (via hooks if doing crossmod)
 function UTDR_Modules.Trading.is_trade_free(trade)
 	local has_glamorous = false
-	for _,v in ipairs(G.GAME.tags) do
+	for _, v in ipairs(G.GAME.tags) do
 		has_glamorous = has_glamorous or (v.key == "tag_UTDR_glamorous" and not v.triggered)
 	end
 	if has_glamorous then return "tag_glamorous" end
@@ -348,7 +529,7 @@ function G.FUNCS.UTDR_cattybratty_tradefunc(e)
 				--cantrade = cantrade and v2.utdr_trade_target
 				if not v2.utdr_trade_target then
 					v2.utdr_trade_target = true
-					checked[#checked+1] = v2
+					checked[#checked + 1] = v2
 					break
 				end
 			end
@@ -359,7 +540,8 @@ function G.FUNCS.UTDR_cattybratty_tradefunc(e)
 		end
 	end
 
-	e.config.colour = freetrade and grad or (cantrade and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE)
+	e.config.colour = freetrade and grad or
+		(cantrade and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE)
 	e.config.button = (freetrade or cantrade) and 'UTDR_cattybratty_trade' or nil
 end
 
@@ -367,19 +549,19 @@ function G.FUNCS.UTDR_cattybratty_trade(e)
 	local freetrade = UTDR_Modules.Trading.is_trade_free(e.config.trade)
 	-- Apply Glamorous tag
 	if freetrade == "tag_glamorous" then
-		for _,v in ipairs(G.GAME.tags) do
-			local apply = v:apply_to_run{type = "utdr_glamorous_tag"}
+		for _, v in ipairs(G.GAME.tags) do
+			local apply = v:apply_to_run { type = "utdr_glamorous_tag" }
 			if apply then break end -- Only do one
 		end
 	end
-	
+
 	if not paid then
 		local cards = {}
 		for _, v in ipairs(e.config.trade.cards) do
 			for _, v2 in ipairs(SMODS.find_card(v)) do -- In case you want a trade that asks for multiple of the same card
 				if not v2.utdr_trade_target then
 					v2.utdr_trade_target = true
-					cards[#cards+1] = v2
+					cards[#cards + 1] = v2
 					break
 				end
 			end
@@ -387,11 +569,21 @@ function G.FUNCS.UTDR_cattybratty_trade(e)
 
 		SMODS.destroy_cards(cards)
 	end
-	add_tag({key = e.config.trade.tag})
+	add_tag({ key = e.config.trade.tag })
 	e.config.trade.complete = true
+
+	local trades_complete = true
+	for _, v in ipairs(G.GAME.utdr_trades) do
+		if not v.complete then
+			trades_complete = false
+			break
+		end
+	end
 
 	UTDR_Modules.Trading.dialogue = "buy"
 	UTDR_Modules.Trading.cheer = true
+	UTDR_Modules.Trading.timer.silly = trades_complete and UTDR_Modules.Trading.timer_max.extra_silly or
+		UTDR_Modules.Trading.timer_max.silly
 	UTDR_Modules.Trading.refresh_cattybratty()
 	play_sound("UTDR_buy")
 
@@ -401,18 +593,18 @@ end
 
 -- Code by @sleepy.g11 on Discord
 G.FUNCS.utdr_setup_uie_reverse_order = function(e)
-    e.config.func = nil
-    function e:draw_children()
-        if self.states.visible then
-            -- Draw children in reverse order
-            for k = #self.children, 1, -1 do
-                local v = self.children[k]
-                if not v.config.draw_layer and k ~= "h_popup" and k ~= "alert" then
-                    if v.draw_self and not v.config.draw_after then v:draw_self() else v:draw() end
-                    if v.draw_children then v:draw_children() end
-                    if v.draw_self and v.config.draw_after then v:draw_self() else v:draw() end
-                end
-            end
-        end
-    end
+	e.config.func = nil
+	function e:draw_children()
+		if self.states.visible then
+			-- Draw children in reverse order
+			for k = #self.children, 1, -1 do
+				local v = self.children[k]
+				if not v.config.draw_layer and k ~= "h_popup" and k ~= "alert" then
+					if v.draw_self and not v.config.draw_after then v:draw_self() else v:draw() end
+					if v.draw_children then v:draw_children() end
+					if v.draw_self and v.config.draw_after then v:draw_self() else v:draw() end
+				end
+			end
+		end
+	end
 end

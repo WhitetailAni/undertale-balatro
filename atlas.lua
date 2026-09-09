@@ -128,6 +128,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+	key = "shopsign_lacquer",
+	path = "shop/sign_lacquer.png",
+	px = 114,
+	py = 58,
+}
+
+SMODS.Atlas {
 	key = "shop_arrow",
 	path = "shop/arrow.png",
 	px = 28,
