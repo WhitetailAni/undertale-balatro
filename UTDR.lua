@@ -724,10 +724,13 @@ SMODS.Shader {
 	path = 'empty.fs'
 }
 
-function UTDR.reset_game_globals()
+function UTDR.reset_game_globals(run_start)
 	-- Ralsei Card stuff
 	local selected_card = pseudorandom_element(G.playing_cards, "ralsei")
 	G.GAME.current_round.ralsei_card = G.GAME.current_round.ralsei_card or {}
 	G.GAME.current_round.ralsei_card.suit = selected_card.base.suit
 	G.GAME.current_round.ralsei_card.rank = selected_card.base.value
+
+	-- Restock Shop
+	if UTDR_Modules.Trading and run_start then UTDR_Modules.Trading.reroll_catty_shop() end
 end

@@ -8,18 +8,26 @@ Game.update_UTDR_shop_tabs = function()
 	if not G.STATE_COMPLETE then
 	
 		if not G.UTDR_shop_tabs then
-			G.E_MANAGER:add_event(Event{ func = function()
-				G.E_MANAGER:add_event(Event{
-					trigger = 'after',
-					delay = 0.2,
-					func = function()
-						play_sound('cancel')
-						G.UTDR_shop_tabs = UIBox{
-							definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
-							config = {align="cl", offset = {x=G.ROOM.T.x + 14,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
-						}
-						G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 11.2
-				return true end})
+			G.E_MANAGER:add_event(Event{
+				trigger = 'after',
+				delay = 0.2,
+				func = function()
+					play_sound('cancel')
+					G.UTDR_shop_tabs = UIBox{
+						definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
+						config = {align="cl", offset = {x=G.ROOM.T.x + 14,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+					}
+					G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 11.2
+
+					-- Move shop tabs to start of uibox list
+					for i, v in ipairs(G.I.UIBOX) do
+						if v == G.UTDR_shop_tabs then
+							print(i)
+							table.remove(G.I.UIBOX,i)
+							table.insert(G.I.UIBOX,1,G.UTDR_shop_tabs)
+							break
+						end
+					end
 			return true end})
 		end
 	end
