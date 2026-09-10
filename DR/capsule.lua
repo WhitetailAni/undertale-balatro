@@ -19,6 +19,12 @@ function UTDR_Modules.Capsule.gold_chance(bet)
 	local chance = 5 + (bet - 100) * remaining_block * oldbet_block
 	G.GAME.capsule.last_bet = bet
 	chance = chance / 100
+	
+	print(remaining)
+	print(remaining_block)
+	print(oldbet_block)
+	print(chance)
+	
 	return chance
 end
 
@@ -75,7 +81,10 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	--if you put in more than 100 points, remove common jokers/planet cards from the pool
 	if bet >= 100 then
 		for i = 1, #possible_keys do
-			if G.P_CENTERS[possible_keys[i]].set == "Planet" then
+			local key = possible_keys[i]
+			local center = G.P_CENTERS[possible_keys[i]] or { set = "fuck" }
+			local set = center.set or nil
+			if set == "Planet" then
 				table.remove(possible_keys, i)
 			end
 		end
@@ -111,7 +120,7 @@ local function add_pts_button(amnt)
 		align="cm",
 		minw=3,
 		colour=G.C.RED,
-		func="UTDR_capsule_addpts_func",
+		func="UTDR_capsule_deltapts_func",
 		button="UTDR_capsule_deltapts",
 		emboss=.05,
 		r=.1,
@@ -127,7 +136,7 @@ local function remove_pts_button(amnt)
 		align="cm",
 		minw=3,
 		colour=G.C.RED,
-		func="UTDR_capsule_removepts_func",
+		func="UTDR_capsule_deltapts_func",
 		button="UTDR_capsule_deltapts",
 		emboss=.05,
 		r=.1,
@@ -165,7 +174,6 @@ function Game:update_utdr_shop_capsule(dt)
 		end
 
 		G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
-		G.STATE_COMPLETE = true
 		G.CONTROLLER.interrupt.focus = true
 
 		UTDR_Modules.Capsule.bet_amount = math.min(G.GAME.UTDR_points,UTDR_Modules.Capsule.min_amount)
@@ -187,6 +195,8 @@ function Game:update_utdr_shop_capsule(dt)
 			return true end})
 		end
 	end
+	
+	G.STATE_COMPLETE = true
 end
 
 function UTDR_Modules.Capsule.create_UIBox_capsule()
@@ -197,7 +207,7 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 	})
 	G.UTDR_SHOP_SIGN_CAPSULE = UIBox{
 		definition = 
-			{n=G.UIT.ROOT, config = {colour = G.C.DYN_UI.MAIN, emboss = 0.05, align = 'cm', r = 0.1, padding = 0.1}, nodes={
+			{n=G.UIT.ROOT, config = {id = "UTDR_shop_capsule", colour = G.C.DYN_UI.MAIN, emboss = 0.05, align = 'cm', r = 0.1, padding = 0.1}, nodes={
 				{n=G.UIT.R, config={align = "cm", padding = 0.1, minw = 4.72, minh = 3.1, colour = G.C.DYN_UI.DARK, r = 0.1}, nodes={
 					{n=G.UIT.R, config={align = "cm"}, nodes={
 						{n=G.UIT.O, config={object = shop_sign}}
@@ -221,14 +231,6 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 			return true
 		end)
 	}))
-	
-	local text = {
-		DynaText({ string = localize("utdr_shopball_chance1"), float = true, colour = G.C.GOLD, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 }),
-		DynaText({ string = localize("utdr_shopball_chance2"), float = true, colour = G.C.GOLD, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })
-	}
-	for i, v in ipairs(text) do
-		--text[i] = {n=G.UIT.R, config={align="cm", colour = G.C.CLEAR},nodes={{n=G.UIT.O,config={object=v, colour = G.C.CLEAR}}}}
-	end
 
 	local capsule_spr = SMODS.create_sprite(0,0,5,156/111*5,"UTDR_shop_capsule")
 	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
@@ -245,8 +247,6 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 						}},
 						{n=G.UIT.R, config={align="cm"},nodes={{n=G.UIT.O,config={object=DynaText({ string = localize("UTDR_shopball_chance2"), float = true, colours = { G.C.POINTS }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}}}},
 					}},
-					
-					{n=G.UIT.R, config={align = "cm", colour=G.C.GREEN, padding = 0.05}},
 					
 					{n=G.UIT.R, config={align = "cm", minw=4,emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.2}, nodes = {
 						{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
@@ -270,6 +270,7 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 							}},
 						}},
 					}},
+					
 					{n=G.UIT.R, config={
 						align="cm",
 						minw=2.4,
@@ -278,73 +279,25 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 						button="UTDR_capsule_trade",
 						emboss=.05,
 						r=.1,
-						padding=.2
-					},nodes={
-						{n=G.UIT.T, config={colour=G.C.WHITE, scale=.7, text = localize("utdr_shopball_confirm")}}
+						padding=.1,
+					},nodes = {
+						{n = G.UIT.T, config = {colour=G.C.WHITE, scale=.6, text = localize("UTDR_shopball_trade")}}
 					}}
 				}}
 			}},
-				
-			--[[{n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
-				{n=G.UIT.C, config={align = "cm", padding = 0.1}, nodes={
-					{n=G.UIT.R,config={id = 'next_round_button', align = "cm", minw = 2.8, minh = 1.5, r=0.15,colour = G.C.RED, one_press = true, button = 'toggle_shop', hover = true,shadow = true}, nodes = {
-						{n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'y', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
-							{n=G.UIT.R, config={align = "cm", maxw = 1.3}, nodes={
-								{n=G.UIT.T, config={text = localize('b_next_round_1'), scale = 0.4, colour = G.C.WHITE, shadow = true}}
-							}},
-							{n=G.UIT.R, config={align = "cm", maxw = 1.3}, nodes={
-								{n=G.UIT.T, config={text = localize('b_next_round_2'), scale = 0.4, colour = G.C.WHITE, shadow = true}}
-							}}
-						}},
-					}},
-					{n=G.UIT.R, config={align = "cm", minw = 2.8, minh = 1.6, r=0.15,colour = G.C.GREEN, button = 'reroll_shop', func = 'can_reroll', hover = true,shadow = true}, nodes = {
-						{n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'x', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
-							{n=G.UIT.R, config={align = "cm", maxw = 1.3}, nodes={
-								{n=G.UIT.T, config={text = localize('k_reroll'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
-							}},
-							{n=G.UIT.R, config={align = "cm", maxw = 1.3, minw = 1}, nodes={
-								{n=G.UIT.T, config={text = localize('$'), scale = 0.7, colour = G.C.WHITE, shadow = true}},
-								{n=G.UIT.T, config={ref_table = G.GAME.current_round, ref_value = 'reroll_cost', scale = 0.75, colour = G.C.WHITE, shadow = true}},
-							}}
-						}}
-					}},
-				}},
-				{n=G.UIT.C, config={align = "cm", padding = 0.2, r=0.2, colour = G.C.L_BLACK, emboss = 0.05, minw = 8.2}, nodes={
-						{n=G.UIT.O, config={object = G.shop_jokers}},
-				}},
-			}},
-			{n=G.UIT.R, config={align = "cm", minh = 0.2}, nodes={}},
-			{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-				{n=G.UIT.C, config={align = "cm", padding = 0.15, r=0.2, colour = G.C.L_BLACK, emboss = 0.05}, nodes={
-					{n=G.UIT.C, config={align = "cm", padding = 0.2, r=0.2, colour = G.C.BLACK, maxh = G.shop_vouchers.T.h+0.4}, nodes={
-						{n=G.UIT.T, config={text = localize{type = 'variable', key = 'ante_x_voucher', vars = {G.GAME.round_resets.ante}}, scale = 0.45, colour = G.C.L_BLACK, vert = true}},
-						{n=G.UIT.O, config={object = G.shop_vouchers}},
-					}},
-				}},
-				{n=G.UIT.C, config={align = "cm", padding = 0.15, r=0.2, colour = G.C.L_BLACK, emboss = 0.05}, nodes={
-					{n=G.UIT.O, config={object = G.shop_booster}},
-				}},
-			}}]]
-		
 		}, false)
 	}}
 	return t
 end
 
-function G.FUNCS.UTDR_capsule_addpts_func(e)
-	local target = e.config.amount + UTDR_Modules.Capsule.bet_amount
-	local cantrade = target >= 0 and target <= G.GAME.UTDR_points
+function G.FUNCS.UTDR_capsule_deltapts_func(e)
+	local target = UTDR_Modules.Capsule.bet_amount + e.config.amount
+	local valid_result = G.GAME.UTDR_points >= target
+	
+	local can_press = (valid_result or e.config.amount <= 0) and target >= 0
 
-	e.config.colour = cantrade and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
-	e.config.button = cantrade and 'UTDR_capsule_deltapts' or nil
-end
-
-function G.FUNCS.UTDR_capsule_removepts_func(e)
-	local target = UTDR_Modules.Capsule.bet_amount - e.config.amount
-	local cantrade = target >= 0
-
-	e.config.colour = cantrade and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
-	e.config.button = cantrade and 'UTDR_capsule_deltapts' or nil
+	e.config.colour = can_press and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = can_press and 'UTDR_capsule_deltapts' or nil
 end
 
 function G.FUNCS.UTDR_capsule_deltapts(e)
