@@ -26,35 +26,17 @@ function ease_background_colour_blind(state, blind_override, ...)
 	end
 end
 
-G.FUNCS.UTDR_shop = function(e)
-	G.E_MANAGER:add_event(Event({
-		func = function()
-			G.STATE = G.STATES.SHOP
-			G.STATE_COMPLETE = false
-			return true
-		end
-	}))
+G.FUNCS.UTDR_shop_button = function(e)
+	if G.STATE ~= G.STATES[e.config.state] then
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				G.STATE = G.STATES[e.config.state]
+				G.STATE_COMPLETE = false
+				return true
+			end
+		}))
+	end
 end
-
-G.FUNCS.UTDR_catty_bratty = function()
-	G.E_MANAGER:add_event(Event({
-		func = function()
-			G.STATE = G.STATES.UTDR_SHOP_CATTYBRATTY
-			G.STATE_COMPLETE = false
-			return true
-		end
-	}))
-end
-
-G.FUNCS.UTDR_capsule = function()
-	G.E_MANAGER:add_event(Event({
-		func = function()
-			G.STATE = G.STATES.UTDR_SHOP_CAPSULE
-			G.STATE_COMPLETE = false
-			return true
-		end
-	}))
-end 
 
 SMODS.Font {
 	key = "USPS",
