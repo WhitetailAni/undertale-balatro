@@ -2169,7 +2169,9 @@ return {
 					},
 					{
 						"{f:UTDR_slimelets}We made the {f:UTDR_slimelets,C:attention}Tenna{f:UTDR_slimelets} minigame for this mod too,",
-						"{f:UTDR_slimelets}along with most of the work for the new {f:UTDR_slimelets,C:catty,E:1}shops{f:UTDR_slimelets}."
+						"{f:UTDR_slimelets}along with most of the work for the new {f:UTDR_slimelets,C:catty,E:1}shops{f:UTDR_slimelets}.",
+						"{f:UTDR_slimelets}You can find us on {f:UTDR_slimelets,C:blue}BlueSky{f:UTDR_slimelets} at {f:UTDR_slimelets,V:1}@ellestuff.dev{f:UTDR_slimelets}.",
+						"{f:UTDR_slimelets,s:.8,C:inactive}We have a website too! It's the same link, just type it into your browser."
 					}
 				}
 			},
