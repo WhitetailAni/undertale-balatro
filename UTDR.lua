@@ -226,7 +226,12 @@ SMODS.Joker {
 		local fail = #UTDR_Modules.elle_plurality.syslist==0
 
 		local text = SMODS.create_sprite(0, 0, 2,  69/391*2, "UTDR_tenna_physical_challenge", { x = 0, y = 0 })
-		local element = { n = G.UIT.O, config = { object = text } }
+		local element = {n = G.UIT.C, config = {padding=-.1}, nodes = {
+			{n = G.UIT.R, config = {minh = .2}},
+			{n = G.UIT.R, nodes = {
+				{n = G.UIT.O, config = {object = text}}
+			}}
+		}}
 
 		return { vars = {
 			fail and "???" or #UTDR_Modules.elle_plurality.syslist,

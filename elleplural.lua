@@ -81,7 +81,7 @@ function UTDR_Modules.elle_plurality.generate_syslist_ui(list)
 		},
 		overflow = {
 			node_config = {
-				maxw = 4,
+				maxw = 5,
 			},
 			config = {
 				can_collide = false
@@ -114,7 +114,7 @@ local rainbow = {
 }
 
 SMODS.DynaTextEffect{
-	key = "utdr_ellerainbow",
+	key = "ellerainbow",
 	func = function(dynatext, index, letter)
 		local t = (G.TIMERS.REAL*3.75 + index) * 0.84
 		letter.colour = mix_colours(rainbow[math.ceil(t)%#rainbow+1], rainbow[math.floor(t)%#rainbow+1],t%1)
