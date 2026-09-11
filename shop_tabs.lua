@@ -22,7 +22,6 @@ Game.update_UTDR_shop_tabs = function()
 					-- Move shop tabs to start of uibox list
 					for i, v in ipairs(G.I.UIBOX) do
 						if v == G.UTDR_shop_tabs then
-							print(i)
 							table.remove(G.I.UIBOX,i)
 							table.insert(G.I.UIBOX,1,G.UTDR_shop_tabs)
 							break
@@ -35,6 +34,7 @@ end
 
 
 UTDR_Modules.Shop_Tabs.create_shop_tabs = function(mod_state)
+	--dont forget we need to disable catty bratty/ball machin for different mod states!
 	print(mod_state)
 	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
     		UIBox_dyn_container({
@@ -46,14 +46,14 @@ UTDR_Modules.Shop_Tabs.create_shop_tabs = function(mod_state)
 						}},
 					  }},              
 					}},
-					{n=G.UIT.C, config={align = "cm", minw = 2.8, minh = 0.5, r=0.15,colour = G.C.BRATTY, button = 'UTDR_shop_button', hover = true,shadow = true, state = "UTDR_SHOP_CATTYBRATTY"}, nodes = {
+					{n=G.UIT.C, config={align = "cm", minw = 2.8, minh = 0.5, r=0.15,colour = HEX('d789c7'), button = 'UTDR_shop_button', hover = true,shadow = true, state = "UTDR_SHOP_CATTYBRATTY"}, nodes = {
 					  {n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'x', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
 						{n=G.UIT.R, config={align = "cm", minw = 1.3}, nodes={
 						  {n=G.UIT.T, config={text = localize('s_UTDR_cattybratty'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
 						}},
 					  }}
 					}},
-					{n=G.UIT.C, config={align = "cm", minw = 2.8, minh = 0.5, r=0.15,colour = G.C.BALLGAME, button = 'UTDR_shop_button', hover = true,shadow = true, state = "UTDR_SHOP_CAPSULE"}, nodes = {
+					{n=G.UIT.C, config={align = "cm", minw = 2.8, minh = 0.5, r=0.15,colour = HEX('68bc9a'), button = 'UTDR_shop_button', hover = true,shadow = true, state = "UTDR_SHOP_CAPSULE"}, nodes = {
 					  {n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'x', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
 						{n=G.UIT.R, config={align = "cm", minw = 1.3}, nodes={
 						  {n=G.UIT.T, config={text = localize('s_UTDR_ball'), scale = 0.4, colour = G.C.WHITE, shadow = true}},

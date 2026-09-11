@@ -593,8 +593,8 @@ SMODS.Sound {
 }
 
 SMODS.Sound {
-	key = "flowery_yes",
-	path = "flowery/yes.ogg",
+	key = "flowery_yas",
+	path = "flowery/yas.ogg",
 	pitch = 1.0,
 	volume = 0.7
 }

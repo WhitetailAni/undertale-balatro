@@ -39,11 +39,6 @@ G.FUNCS.UTDR_shop_button = function(e)
 	end
 end
 
-SMODS.Font {
-	key = "USPS",
-	path = "USPS.ttf"
-}
-
 G.E_MANAGER:add_event(Event { func = function()
 	local profile_name = G.PROFILES[G.SETTINGS.profile].name
 	if profile_name and profile_name.upper(profile_name) == "GASTER" then
@@ -115,13 +110,6 @@ SMODS.DynaTextEffect {
 	end,
 }
 
-SMODS.DynaTextEffect {
-	key = "gaster",
-	draw_letter = function(dynatext, index, letter)
-
-	end,
-}
-
 -- developer cards
 SMODS.Joker {
 	key = "dev_viomarks",
@@ -145,6 +133,9 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "dev_white_tail_ani",
+	config = {
+		has_viewed = false
+	},
 	no_mod_badge = true,
 	discovered = true,
 	atlas = "UTDR_devs",
@@ -154,28 +145,28 @@ SMODS.Joker {
 	no_collection = true,
 	no_mod_badge = true,
 	loc_vars = function(self, info_queue, card)
+		if not has_viewed then
+			has_viewed = true
+			return { key = "j_UTDR_dev_white_tail_ani_first_look" }
+		end
+		
 		for key, value in pairs(G.CONTROLLER.held_keys) do
 			if (key == "lalt" and value == true) or (key == "ralt" and value == true) then
 				return { key = "j_UTDR_dev_white_tail_ani" }
 			elseif (key == "lctrl" and value == true) or (key == "rctrl" and value == true) then
+				play_sound("UTDR_flowery_yas", 1.0, 0.7)
 				return { key = "j_UTDR_dev_ani_no_no_no" }
 			end
 		end
 		local key = pseudorandom_element({
 			"j_UTDR_dev_ani",
-			"j_UTDR_dev_ani_riddle",
 			"j_UTDR_dev_ani_caly",
 			"j_UTDR_dev_ani_oh_no",
 			"j_UTDR_dev_ani_sjelter",
 			"j_UTDR_dev_ani_xavier_magic_button",
-			"j_UTDR_dev_ani_usps",
-			"j_UTDR_dev_ani_bridge_mistress",
 			"j_UTDR_dev_ani_kalos",
-			"j_UTDR_dev_ani_kalos_Z",
 			"j_UTDR_dev_ani_theory",
-			"j_UTDR_dev_ani_sweepstakes_1",
 			"j_UTDR_dev_ani_sweepstakes_2",
-			"j_UTDR_dev_ani_sweepstakes_3",
 			"j_UTDR_dev_ani_sweepstakes_5",
 			"j_UTDR_dev_ani_sweepstakes_6",
 			"j_UTDR_dev_ani_sweepstakes_7",
@@ -259,6 +250,7 @@ UTDR.special_thanks = {
 	"Temmie Chang",
 	"UT/DR Developers",
 	"invalidOS (aka alexi)",
+	"GhostSalt",
 	"Balatro Discord Server",
 }
 
