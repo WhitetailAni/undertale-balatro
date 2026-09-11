@@ -7,6 +7,7 @@ assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
 --assert(SMODS.load_file('challenge.lua'))() 3.1 feature!
 assert(SMODS.load_file('shop_tabs.lua'))()
+assert(SMODS.load_file('elleplural.lua'))() -- used by dev credits
 
 
 
@@ -222,13 +223,27 @@ SMODS.Joker {
 	display_size = { w = 69, h = 69 },
 	no_collection = true,
 	loc_vars = function(self, info_queue, card)
-		return {}
+		local fail = #UTDR_Modules.elle_plurality.syslist==0
+
+		local text = SMODS.create_sprite(0, 0, 2,  69/391*2, "UTDR_tenna_physical_challenge", { x = 0, y = 0 })
+		local element = { n = G.UIT.O, config = { object = text } }
+
+		return { vars = {
+			fail and "???" or #UTDR_Modules.elle_plurality.syslist,
+			elements = {
+				UTDR_Modules.elle_plurality.generate_syslist_ui(UTDR_Modules.elle_plurality[fail and "fallback" or "syslist"]),
+				element
+			},
+			colours = {
+				HEX("ff53a9")
+			}
+		}}
 	end,
 	in_pool = function(self, args)
 		return false
 	end,
 	set_badges = function(self, card, badges)
-		badges = EMPTY(badges)
+		badges[#badges] = create_badge("She/It", HEX("ff53a9"),G.C.WHITE, 1.2)
 	end
 }
 

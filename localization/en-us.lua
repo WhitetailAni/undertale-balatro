@@ -2154,12 +2154,23 @@ return {
 				}
 			},
 			j_UTDR_dev_elle = {
-				name = "ellestuff.dev",
+				name = "{f:UTDR_slimelets}slimestuff.",
 				text = {
-					"(insert",
-					"credits",
-					"description",
-					"here)"
+					{
+						"{f:UTDR_slimelets}Hi! We're a system of {f:UTDR_slimelets,E:utdr_ellerainbow}#1#{f:UTDR_slimelets} creatures.",
+						" {element:1} ",
+						"{f:UTDR_slimelets,s:.8,C:inactive}Though it's usually {f:UTDR_slimelets,s:.8,V:1}elle.{f:UTDR_slimelets,s:.8,C:inactive} doing things."
+					},
+					{
+						"{f:UTDR_slimelets}We were brought in because of an old {f:UTDR_slimelets,C:attention}Tenna{f:UTDR_slimelets} microgame system",
+						"{f:UTDR_slimelets}we were working on for our Balatro mod. The Joker is",
+						"{f:UTDR_slimelets}shelved now but it got Vio's attention.",
+						"{f:UTDR_slimelets,s:.8,C:inactive}Recreating all the {element:2,f:UTDR_slimelets,s:.8,C:inactive}s was too daunting"
+					},
+					{
+						"{f:UTDR_slimelets}We made the Tenna minigames for this mod too,",
+						"{f:UTDR_slimelets}along with most of the work for the new shops."
+					}
 				}
 			},
 		},
