@@ -17,7 +17,7 @@ Game.update_UTDR_shop_tabs = function()
 						definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
 						config = {align="cl", offset = {x=G.ROOM.T.x + 14,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
 					}
-					G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 11.2
+					G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 11.4
 
 					-- Move shop tabs to start of uibox list
 					for i, v in ipairs(G.I.UIBOX) do

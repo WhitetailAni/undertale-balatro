@@ -190,7 +190,8 @@ function Game:update_utdr_shop_capsule(dt)
 						}
 						G.ROOM.jiggle = G.ROOM.jiggle + 3
 						G.CONTROLLER.lock_input = false
-						G.utdr_shop_capsule.alignment.offset.y = G.ROOM.T.y + 21.4
+						-- for some reason it's slightly different from G.SHOP's 21.4 to get to the same height
+						G.utdr_shop_capsule.alignment.offset.y = G.ROOM.T.y + 21.55
 				return true end})
 			return true end})
 		end
