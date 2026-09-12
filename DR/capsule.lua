@@ -20,11 +20,6 @@ function UTDR_Modules.Capsule.gold_chance(bet)
 	G.GAME.capsule.last_bet = bet
 	chance = chance / 100
 	
-	print(remaining)
-	print(remaining_block)
-	print(oldbet_block)
-	print(chance)
-	
 	return chance
 end
 
@@ -68,9 +63,20 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	end
 	
 	local possible_keys = { }
+	
+	local possible_keys_jokers = { }
+	local possible_keys_tarot = { }
+	local possible_keys_planet = { }
+	local possible_keys_spectral = { }
 	for key, value in pairs(G.P_CENTERS) do
-		if value.set == "Tarot" or value.set == "Planet" or value.set == "Spectral" or value.set == "Joker" then
-			possible_keys[#possible_keys + 1] = key
+		if value.set == "Joker" then
+			possible_keys_jokers[#possible_keys_jokers + 1] = key
+		elseif value.set == "Tarot" then
+			possible_keys_tarot[#possible_keys_tarot + 1] = key
+		elseif value.set == "Planet" then
+			possible_keys_planet[#possible_keys_planet + 1] = key
+		elseif value.set == "Spectral" then
+			possible_keys_spectral[#possible_keys_spectral + 1] = key
 		end
 	end
 	
@@ -80,38 +86,53 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	
 	--if you put in more than 100 points, remove common jokers/planet cards from the pool
 	if bet >= 100 then
-		for i = 1, #possible_keys do
-			local key = possible_keys[i]
-			local center = G.P_CENTERS[possible_keys[i]] or { set = "fuck" }
-			local set = center.set or nil
-			if set == "Planet" then
-				table.remove(possible_keys, i)
-			end
-		end
+		possible_keys_tarot = {
+			"c_fool",
+			"c_emperor",
+			"c_hermit",
+			"c_hanged_man",
+			"c_death",
+			"c_temperance",
+			"c_judgement"        
+		}
 	end
 	
 	if bet >= 200 then
-		for i = 1, #possible_keys do
-			local key = possible_keys[i]
-			local center = G.P_CENTERS[possible_keys[i]] or { rarity = "fuck" }
+		for i = 1, #possible_keys_jokers do
+			local key = possible_keys_jokers[i]
+			local center = G.P_CENTERS[possible_keys_jokers[i]] or { rarity = "fuck" }
 			local rarity = center.rarity or nil
 			if rarity == 1 then
-				table.remove(possible_keys, i)
+				table.remove(possible_keys_jokers, i)
 			end
 		end
 	end
 	
 	--ensure that you cannot pull 2 prizes in a row
 	if #SMODS.find_card("j_showman") == 0 then
-		for i = 1, #possible_keys do
-			if #SMODS.find_card(possible_keys[i]) > 0 and G.P_CENTERS[possible_keys[i]].set == "Joker" then
-				possible_keys[i] = nil
+		for i = 1, #possible_keys_jokers do
+			if #SMODS.find_card(possible_keys_jokers[i]) > 0 and G.P_CENTERS[possible_keys_jokers[i]].set == "Joker" then
+				table.remove(possible_keys_jokers, i)
 			end
 		end
 	end
 	
+	local winning_set = pseudorandom_element({
+		possible_keys_jokers,
+		possible_keys_tarot,
+		possible_keys_spectral,
+	}, "capsule_prize_set_broke_ass")
+	if bet < 100 then
+		winning_set = pseudorandom_element({
+			possible_keys_jokers,
+			possible_keys_tarot,
+			possible_keys_planet,
+			possible_keys_spectral,
+		}, "capsule_prize_set_super_broke_ass")
+	end
+	
 	return {
-		key =  pseudorandom_element(possible_keys, "capsule_prize_broke_ass"),
+		key = pseudorandom_element(winning_set, "capsule_prize_broke_ass"),
 	}
 end
 
@@ -177,6 +198,7 @@ function Game:update_utdr_shop_capsule(dt)
 		G.CONTROLLER.interrupt.focus = true
 
 		UTDR_Modules.Capsule.bet_amount = math.min(G.GAME.UTDR_points,UTDR_Modules.Capsule.min_amount)
+		UTDR_Modules.Capsule.add_vouchers()
 		
 		if not G.utdr_shop_capsule then
 			G.E_MANAGER:add_event(Event{ func = function()
@@ -313,7 +335,6 @@ function G.FUNCS.UTDR_capsule_trade_func(e)
 end
 
 function G.FUNCS.UTDR_capsule_trade(e)
-	print("mmmm yummy yummy points do you have any more?")
 	local reward = UTDR_Modules.Capsule.get_reward(UTDR_Modules.Capsule.bet_amount)
 	
 	if reward.december and G.GAME.UTDR_lacquer_script_step == 0 then
@@ -327,8 +348,20 @@ function G.FUNCS.UTDR_capsule_trade(e)
 		}))
 	else
 		UTDR_Modules.Capsule.ease_points(-UTDR_Modules.Capsule.bet_amount)
-		local set = G.P_CENTERS[reward.key].set
+		local center = G.P_CENTERS[reward.key]
+		local set = center.set or "Voucher"
 		--do some fancy animations stuff here
+		if set == "Voucher" then
+			print("VOUCHER ALERT DO SPECIAL HANDLING")
+		end
+		--also make sure your joker/consumable slots arent maxed out
+		
+		
+		--idea of the flow:
+		-- -the capsule appears on screen, splits in half to reveal your reward. 
+		-- -hangs there for you to accept/deny (so if your joker/consumable slots are full you can sell other stuff to fit it)
+		-- -if you accept the card (unsure what wording) then it emplaces, or redeems
+		-- if you deny then it Shatters like Glass
 		SMODS.add_card({
 			key = reward.key
 		})

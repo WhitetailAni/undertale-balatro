@@ -1901,45 +1901,76 @@ return {
 			j_UTDR_dev_viomarks = {
 				name = "VioMarks",
 				text = {
-					"(insert",
-					"credits",
-					"description",
-					"here)"
+					{
+						"{s:1.5,E:UTDR_tropiss}what is up you fREAKS",
+					},
+					{
+						"anyway hi i'm vio i'm the director and ideas guy AND",
+						"somehow the artist for all 195 jokers in this mod.",
+						"i started this project back in march of 2025",
+						"as just 'what if the punch card was a joker' ",
+						"and it somehow spiraled into this. i still think",
+						"this is one of the best projects i've been",
+						"a part of and i'm so thankful for all the people",
+						"that both helped actually make this and played/streamed it",
+					}
 				}
 			},
 			
 			j_UTDR_dev_white_tail_ani = {
 				name = "WhitetailAni",
 				text = {
-					"Hi! I'm {C:homura}WhitetailAni.",
-					"Until v3, I was the {C:attention}sole dev{} for this mod.",
-					"{C:vio_marks}Vio{} did the art, designed the jokers,",
-					"but it was my job to implement them. It was pretty fun!",
-					"Lots of {C:ballgame}Late Night{}s spent digging through the Balatro source,",
-					"asking the {C:discord}Balatro Discord{} for tips on where to find stuff..",
-					"Anyway. In v3 we had {C:blue}too many ideas{} and realized we'd need more help.",
-					"I also got a {C:money}job{} in the meantime,",
-					"which meant I couldn't spend all day working on it anymore...",
-					"It was difficult to adjust to not being the only dev anymore.",
-					"{s:0.71}I'm not very good at working with other people.",
-					"But I think it turned out pretty well.",
-					"After all, you're playing the new update right now!",
+					{
+						"{s:1.3}Hi! I'm {s:1.3,C:homura}WhitetailAni.",
+					},{
+						"Until v3, I was the {C:attention}sole dev{} for this mod.",
+						"{C:vio_marks}Vio{} did the art, designed the jokers,",
+						"but it was my job to implement them. It was pretty fun!",
+						"Lots of {C:ballgame}Late Nights{} spent digging through the Balatro source,",
+						"asking the {C:discord}Balatro Discord{} for tips on where to find stuff..",
+					},{
+						"Anyway. In v3 we had {C:blue}too many ideas{} and realized we'd need more help.",
+						"I also got a {C:money}job{} in the meantime,",
+						"which meant I couldn't spend all day working on it anymore...",
+						"It was difficult to adjust to not being the only dev anymore.",
+						"{s:0.71}I'm not very good at working with other people.",
+						"But I think it turned out pretty well.",
+						"After all, you're playing the new update right now!",
+					}
+				}
+			},
+			
+			j_UTDR_dev_white_tail_ani_first_look = {
+				name = "WhitetailAni",
+				text = {
+					{
+						"{s:1.3}Hi! I'm {s:1.3,C:homura}WhitetailAni.",
+					},{
+						"Until v3, I was the {C:attention}sole dev{} for this mod.",
+						"{C:vio_marks}Vio{} did the art, designed the jokers,",
+						"but it was my job to implement them. It was pretty fun!",
+						"Lots of {C:ballgame}Late Nights{} spent digging through the Balatro source,",
+						"asking the {C:discord}Balatro Discord{} for tips on where to find stuff..",
+					},{
+						"Anyway. In v3 we had {C:blue}too many ideas{} and realized we'd need more help.",
+						"I also got a {C:money}job{} in the meantime, which meant I couldn't spend all day working on it anymore...",
+						"It was difficult to adjust to not being the only dev anymore.",
+						"{s:0.71}I'm not very good at working with other people.",
+						"But I think it turned out pretty well.",
+						"After all, you're playing the new update right now!",
+					},{
+						"{s:0.9}If you want to view this message again, hold Alt and hover over me.",
+						"{s:0.9}Or hold Ctrl to view something else!", 
+					}
 				}
 			},
 			j_UTDR_dev_ani_no_no_no = {
 				name = "WhitetailAni",
 				text = {
 					"By the way, I hope you liked Flowery.",
-					"I spent 2 weeks constantly tweaking his voice clip interactions.",
-					"The 'Ralseis' toggle was suggested by someone else... I don't remember who :("
-				}
-			},
-			j_UTDR_dev_ani_riddle = {
-				name = "14A93012r",
-				text = {
-					"If ye want to know anything about me,",
-					"Ye must solve my {C:red}riddles three!",
-					"{C:green}Life, {C:ballgame}death, {}and {C:ballgame}misery!"
+					"I spent {C:attention}2 weeks{} constantly tweaking his voice clip interactions.",
+					"The 'Ralseis' toggle was suggested by someone else...",
+					"I don't remember who......"
 				}
 			},
 			j_UTDR_dev_ani_caly = {
@@ -1958,14 +1989,6 @@ return {
 					"{C:homura}Are you who you say you are?",
 				}
 			},
-			j_UTDR_dev_ani_bridge_mistress = {
-				name = "Bridgemistress",
-				text = {
-					"If ye want to know anything about me,",
-					"Ye must solve my {C:red}riddles three!",
-					"{C:flower_blue}Life, {C:ballgame}death, {}and {C:flower_green}misery!"
-				}
-			},
 			j_UTDR_dev_ani_xavier_magic_button = {
 				name = "Xavier: Renegade Angel",
 				text = {
@@ -1982,42 +2005,16 @@ return {
 					"into the {C:gaster}drakness{} of the {C:red}Sjelter"
 				}
 			},
-			j_UTDR_dev_ani_usps = {
-				name = "{f:UTDR_USPS}City Carrier Assistant 1",
-				text = {
-					"Arrived at USPS Facility",
-					"CHICAGO IL LOGISTICS CENTER, 60502"
-				}
-			},
 			j_UTDR_dev_ani_kalos = {
 				name = "Hex Maniac",
 				text = {
 					"{C:homura}No, you're not the one.",
 				}
 			},
-			j_UTDR_dev_ani_kalos_Z = {
-				name = "Clemont",
-				text = {
-					"They {C:red}got him{}.",
-					"I liked him too.",
-				}
-			},
 			j_UTDR_dev_ani = {
 				name = "WhitetailAni",
 				text = {
 					"{C:cerulean}https://cerulean.fm"
-				}
-			},
-			j_UTDR_dev_ani_spamton_neo = {
-				name = "Kris",
-				text = {
-					"I",
-					"JUST NEED",
-					"THAT LITTLE",
-					"",
-					"[[{C:ballgame}SOUL{}]]",
-					"",
-					"Y O U   HAVE",
 				}
 			},
 			j_UTDR_dev_ani_theory = {
@@ -2028,13 +2025,6 @@ return {
 					"which connects to {C:kris_cape}trauma {C:kris_body}Kris{} and the {C:goner}VESSEL",
 					"The {C:goner}VESSEL{} {C:attention}Forgotten Man {C:goner}Goner {C:gaster}Gaster{} copies are monochrome...",
 					"Hmm."
-				}
-			},
-			j_UTDR_dev_ani_sweepstakes_1 = {
-				name = "Worm from the string.",
-				text = {
-					"Are you a single mother?",
-					"Well you will be soon!"
 				}
 			},
 			j_UTDR_dev_ani_sweepstakes_2 = {
@@ -2078,18 +2068,14 @@ return {
 					"Worm from the string.",
 				}
 			},
-			j_UTDR_dev_ani_sweepstakes_3 = {
+			j_UTDR_dev_ani_sweepstakes_5 = {
 				name = "Ode to Spamton",
 				text = {
 					"You may ask, {C:FRIEND_PINK}Who is next?",
 					"You may ask, {C:FRIEND_YELLOW}Who will be?",
 					"Who will be {C:red}secret boss,",
-					"Of {C:attention}Adventure no 3?"
-				}
-			},
-			j_UTDR_dev_ani_sweepstakes_5 = {
-				name = "Ode to Spamton",
-				text = {
+					"Of {C:attention}Adventure no 3?",
+					" ",
 					"Me don't know",
 					"And me don't cares!",
 					"Me only cares about {C:FRIEND_PINK}Spam{C:FRIEND_YELLOW}ton{}",
@@ -2130,7 +2116,7 @@ return {
 					"and {C:alphys_juice_9}7% original{} and",
 					"{C:alphys_juice_10}1% sea{} and {C:alphys_juice_11}1% weed{} and",
 					"{C:alphys_juice_12}2% free{} and {C:alphys_juice_13}5% Gaster",
-					"and {C:alphys_juice_14}6% #d13931{} and",
+					"and {C:alphys_juice_14}6% d13931{} and",
 					"{C:alphys_juice_15}4% buble{} and {C:gaster}1225% guitar{}",
 					"and {C:alphys_juice_16}5% genocides{} and",
 					"{C:alphys_juice_17}1% flower{} and {C:goner}0% vessel{} and"
