@@ -2165,7 +2165,7 @@ return {
 						"{f:UTDR_slimelets}We were brought in because of an old {f:UTDR_slimelets,C:attention}Tenna{f:UTDR_slimelets} microgame system",
 						"{f:UTDR_slimelets}we were working on for our {f:UTDR_slimelets,C:red}Balatro{f:UTDR_slimelets} mod. The {f:UTDR_slimelets,C:attention}Joker{f:UTDR_slimelets} is",
 						"{f:UTDR_slimelets}shelved now but it got {f:UTDR_slimelets,C:vio_marks}Vio{f:UTDR_slimelets}'s {f:UTDR_slimelets,C:attention}attention{f:UTDR_slimelets}.",
-						"{f:UTDR_slimelets,s:.8,C:inactive}Recreating all the  {element:2,f:UTDR_slimelets,s:.8,C:inactive} s by {f:UTDR_slimelets,s:.8,C:blue}hand{f:UTDR_slimelets,s:.8,C:inactive} was too daunting"
+						"{f:UTDR_slimelets,s:.8,C:inactive}Recreating all the  {element:2,f:UTDR_slimelets,s:.8,C:inactive}  by {f:UTDR_slimelets,s:.8,C:blue}hand{f:UTDR_slimelets,s:.8,C:inactive} was too daunting"
 					},
 					{
 						"{f:UTDR_slimelets}We made the {f:UTDR_slimelets,C:attention}Tenna{f:UTDR_slimelets} minigame for this mod too,",

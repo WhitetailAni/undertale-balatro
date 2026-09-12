@@ -1,5 +1,6 @@
 UTDR_Modules.elle_plurality = {
 	syslist = {},
+	hidden_count = 0,
 	fallback = { -- Fallback table for if it can't be loaded
 		{name="Please Wait |"},
 		{name="No Connection |"},
@@ -13,8 +14,14 @@ local attempt_count = 0
 local function update_syslist(code, body, headers)
 	--print(#body)
 	if body and #body>0 then
+		local hc = 0
 		attempt_count = 0
 		local list = json.decode(body)
+
+		for i = #list, 1, -1 do
+			if list[i].nolist then table.remove(list,i); hc=hc+1 end
+		end
+
 		for i, member in ipairs(list) do
 			member.colour = member.colour and HEX(member.colour) or nil
 			
@@ -32,6 +39,7 @@ local function update_syslist(code, body, headers)
 				}
 			end
 		end
+		UTDR_Modules.elle_plurality.hidden_count = hc
 
 		UTDR_Modules.elle_plurality.syslist = list
 	else
@@ -63,6 +71,15 @@ function UTDR_Modules.elle_plurality.generate_syslist_ui(list)
 				n = G.UIT.O,
 				config = {
 					object = DynaText({ font = SMODS.Fonts.UTDR_slimelets, string = v.name.." ", text_effect = v.effect and v.effect.key or nil, colours = { v.colour or G.C.WHITE }, silent = true, spacing = 1, scale = 0.297 })
+				}
+			}
+		end
+
+		if UTDR_Modules.elle_plurality.hidden_count>0 then
+			text[#text + 1] = {
+				n = G.UIT.O,
+				config = {
+					object = DynaText({ font = SMODS.Fonts.UTDR_slimelets, string = "["..UTDR_Modules.elle_plurality.hidden_count.." Hidden] ", colours = { G.C.WHITE }, silent = true, spacing = 1, scale = 0.297 })
 				}
 			}
 		end
