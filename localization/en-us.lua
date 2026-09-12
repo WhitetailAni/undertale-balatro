@@ -2148,16 +2148,16 @@ return {
 						"{f:UTDR_slimelets,s:.8,C:inactive}Though it's usually {f:UTDR_slimelets,s:.8,V:1}elle.{f:UTDR_slimelets,s:.8,C:inactive} doing things."
 					},
 					{
-						"{f:UTDR_slimelets}We were brought in because of an old {f:UTDR_slimelets,C:attention}Tenna{f:UTDR_slimelets} microgame system",
-						"{f:UTDR_slimelets}we were working on for our {f:UTDR_slimelets,C:red}Balatro{f:UTDR_slimelets} mod. The {f:UTDR_slimelets,C:attention}Joker{f:UTDR_slimelets} is",
-						"{f:UTDR_slimelets}shelved now but it got {f:UTDR_slimelets,C:vio_marks}Vio{f:UTDR_slimelets}'s {f:UTDR_slimelets,C:attention}attention{f:UTDR_slimelets}.",
+						"{f:UTDR_slimelets}We were brought in because of an old {f:UTDR_slimelets,C:attention}Tenna{f:UTDR_slimelets} microgame",
+						"{f:UTDR_slimelets}system we were working on for our {f:UTDR_slimelets,C:red}Balatro{f:UTDR_slimelets} mod.",
+						"{f:UTDR_slimelets}The {f:UTDR_slimelets,C:attention}Joker{f:UTDR_slimelets} is shelved now but it got {f:UTDR_slimelets,C:vio_marks}Vio{f:UTDR_slimelets}'s {f:UTDR_slimelets,C:attention}attention{f:UTDR_slimelets}.",
 						"{f:UTDR_slimelets,s:.8,C:inactive}Recreating all the  {element:2,f:UTDR_slimelets,s:.8,C:inactive}  by {f:UTDR_slimelets,s:.8,C:blue}hand{f:UTDR_slimelets,s:.8,C:inactive} was too daunting"
 					},
 					{
 						"{f:UTDR_slimelets}We made the {f:UTDR_slimelets,C:attention}Tenna{f:UTDR_slimelets} minigame for this mod too,",
 						"{f:UTDR_slimelets}along with most of the work for the new {f:UTDR_slimelets,C:catty,E:1}shops{f:UTDR_slimelets}.",
 						"{f:UTDR_slimelets}You can find us on {f:UTDR_slimelets,C:blue}BlueSky{f:UTDR_slimelets} at {f:UTDR_slimelets,V:1}@ellestuff.dev{f:UTDR_slimelets}.",
-						"{f:UTDR_slimelets,s:.8,C:inactive}We have a website too! It's the same link, just type it into your browser."
+						"{f:UTDR_slimelets,s:.8,C:inactive}We have a website too! It's the same link, just in your browser."
 					}
 				}
 			},
