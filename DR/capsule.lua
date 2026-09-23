@@ -590,7 +590,20 @@ function G.FUNCS.UTDR_capsule_trade(e)
 			end
 		}))
 	else
-		UTDR_Modules.Capsule.ease_points(-UTDR_Modules.Capsule.bet_amount)
+		local bet_amount = UTDR_Modules.Capsule.bet_amount
+		if bet_amount >= 1000 then
+			play_sound("UTDR_points20", 1.0, 0.67)
+		elseif bet_amount >= 500 then
+			play_sound("UTDR_points20", 1.0, 0.67)
+		elseif bet_amount >= 200 then
+			play_sound("UTDR_points10", 1.0, 0.67)
+		elseif bet_amount >= 100 then
+			play_sound("UTDR_points6", 1.0, 0.67)
+		else
+			play_sound("UTDR_points4", 1.0, 0.67)
+		end
+		
+		UTDR_Modules.Capsule.ease_points(-bet_amount)
 		local center = G.P_CENTERS[reward.key]
 		local set = center.set or "Voucher"
 		--do some fancy animations stuff here
