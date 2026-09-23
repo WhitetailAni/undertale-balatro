@@ -292,6 +292,7 @@ G.FUNCS.reroll_lacquer = function(e)
 			SMODS.calculate_context({buying_card = true, card = c1})
 	
 			play_sound('card1')
+			play_sound("UTDR_points20", 1.0, 0.67)
 			UTDR_Modules.Capsule.ease_points(-1225)
 			G.CONTROLLER:save_cardarea_focus('jokers')
 			G.CONTROLLER:recall_cardarea_focus('jokers')

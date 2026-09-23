@@ -3,6 +3,123 @@ UTDR_Modules.Capsule = {
 	min_amount = 50,
 }
 
+local highlight_ref = Card.highlight
+function Card.highlight(self, is_highlighted)
+  if is_highlighted and self.area == G.UTDR_capsule_holding_pen then
+    UTDR_Modules.Capsule.add_reward_button_ui(self)
+  else
+    UTDR_Modules.Capsule.remove_reward_button_ui(self)
+  end
+
+  return highlight_ref(self, is_highlighted)
+end
+
+function UTDR_Modules.Capsule.add_reward_button_ui(card)
+	G.E_MANAGER:add_event(Event({
+		trigger = 'after',
+		blocking = false,
+		blockable = false,
+		func = (function()
+			local set = G.UTDR_capsule_holding_pen.set
+		
+			local skip = {
+				n=G.UIT.ROOT, config = {ref_table = card, minw = 1.1, maxw = 1.3, padding = 0.1, align = 'bm', colour = G.C.BALLGAME, shadow = true, r = 0.08, minh = 0.94, one_press = true, button = 'UTDR_capsule_skip', hover = true}, nodes={
+					{n=G.UIT.T, config={text = localize('UTDR_shopball_skip'),colour = G.C.WHITE, scale = 0.5}}
+				}
+			}
+				
+			local use = {
+				n=G.UIT.ROOT, config = {ref_table = card, minw = 1.1, maxw = 1.3, padding = 0.1, align = 'cm', colour = G.C.BALLGAME, shadow = true, r = 0.08, minh = 0.94, one_press = true, button = 'UTDR_capsule_use', hover = true}, nodes={
+					{n=G.UIT.T, config={text = localize('UTDR_shopball_use'),colour = G.C.WHITE, scale = 0.5}}
+				}
+			}
+				
+			local take = {
+				n=G.UIT.ROOT, config = {ref_table = card, minw = 1.1, maxw = 1.3, padding = 0.1, align = 'cm', colour = G.C.BALLGAME, shadow = true, r = 0.08, minh = 0.94, one_press = true, button = 'UTDR_capsule_take', hover = true}, nodes={
+					{n=G.UIT.T, config={text = localize('UTDR_shopball_take'),colour = G.C.WHITE, scale = 0.5}}
+				}
+			}
+				
+			card.children.UTDR_skip_button = UIBox{
+				definition = skip,
+				config = {
+					align="cm",
+					offset = {x=0,y=1.5},
+					--major = card,
+					bond = 'Weak',
+					parent = card
+				}
+			}
+			
+			if set == "Consumable" or set == "Voucher" then
+				card.children.UTDR_use_button = UIBox{
+					definition = use,
+					config = {
+						align="cr",
+						offset = {x=0,y=-0.3},
+						--major = card,
+						bond = 'Weak',
+						parent = card
+					}
+				}
+			end
+			
+			if set == "Consumable" or set == "Joker" then
+				card.children.UTDR_take_button = UIBox{
+					definition = take,
+					config = {
+						align="cm",
+						offset = {x=-0.3,y=0},
+						--major = card,
+						bond = 'Weak',
+						parent = card
+					}
+				}
+			end
+		
+			--won_card.children.price.alignment.offset.y = 0.38
+		
+			return true
+		end
+	)}))
+end
+
+function UTDR_Modules.Capsule.remove_reward_button_ui(card)
+	if card.children.UTDR_skip_button then
+		card.children.UTDR_skip_button:remove()
+		card.children.UTDR_skip_button = nil
+	end
+	
+	if card.children.UTDR_use_button then
+		card.children.UTDR_use_button:remove()
+		card.children.UTDR_use_button = nil
+	end
+	
+	if card.children.UTDR_take_button then
+		card.children.UTDR_take_button:remove()
+		card.children.UTDR_take_button = nil
+	end
+end
+
+SMODS.current_mod.custom_card_areas = function(G) -- g is the same as G
+    G.UTDR_capsule_holding_pen = CardArea( -- Should be saved in G for it to be preserved between reloads
+    	love.graphics.getWidth() / (95 * 2), -- x coordinate
+        love.graphics.getHeight() / (95 * 2.67), -- y coordinate
+        G.CARD_W * 0.95, -- width (this is the default for G.jokers)
+        G.CARD_H * 0.95, -- height (this is the default for G.jokers)
+        {
+            -- optional, but recommended configs:
+            card_limit = 1, -- card limit, doesn't actually affect the area unless checked manually
+            type = 'shop',
+            highlight_limit = 1,
+            -- optional:
+            bg_colour = G.C.CLEAR, -- background color
+            no_card_count = true, -- removes the card count ui for the area types that have it by default
+            align_buttons = true, -- aligns the buttons for cards like in the Joker/Consumable areas
+        }
+    )
+end
+
 function UTDR_Modules.Capsule.add_vouchers()
 	for key, value in pairs(G.P_CENTERS) do
 		if value.set == "Voucher" then
@@ -317,7 +434,7 @@ function G.FUNCS.UTDR_capsule_deltapts_func(e)
 	local target = UTDR_Modules.Capsule.bet_amount + e.config.amount
 	local valid_result = G.GAME.UTDR_points >= target
 	
-	local can_press = (valid_result or e.config.amount <= 0) and target >= 0
+	local can_press = (valid_result or e.config.amount <= 0) and target >= 0 and #G.UTDR_capsule_holding_pen.cards == 0
 
 	e.config.colour = can_press and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
 	e.config.button = can_press and 'UTDR_capsule_deltapts' or nil
@@ -328,10 +445,136 @@ function G.FUNCS.UTDR_capsule_deltapts(e)
 end
 
 function G.FUNCS.UTDR_capsule_trade_func(e)
-	local can_trade = UTDR_Modules.Capsule.bet_amount >= UTDR_Modules.Capsule.min_amount and G.GAME.UTDR_points >= UTDR_Modules.Capsule.bet_amount
+	local can_trade = UTDR_Modules.Capsule.bet_amount >= UTDR_Modules.Capsule.min_amount and G.GAME.UTDR_points >= UTDR_Modules.Capsule.bet_amount and #G.UTDR_capsule_holding_pen.cards == 0
 
 	e.config.colour = can_trade and darken(G.C.GREEN, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
 	e.config.button = can_trade and 'UTDR_capsule_trade' or nil
+end
+
+function G.FUNCS.UTDR_capsule_take(e)
+	print("Join the Chaos Insurgency. We love babies.")
+    local c1 = e.config.ref_table
+    if c1 and c1:is(Card) then
+    	UTDR_Modules.Capsule.remove_reward_button_ui(c1)
+      	G.E_MANAGER:add_event(Event({
+        	trigger = 'after',
+        	delay = 0.1,
+        	func = function()
+				c1.from_area = c1.area
+				c1.area:remove_card(c1)
+				c1:add_to_deck()
+				if c1.children.price then c1.children.price:remove() end
+				c1.children.price = nil
+				if c1.children.buy_button then c1.children.buy_button:remove() end
+				c1.children.buy_button = nil
+				if c1.children.buy_and_use_button then c1.children.buy_and_use_button:remove() end
+				c1.children.buy_and_use_button = nil
+				remove_nils(c1.children)
+				G.jokers:emplace(c1)
+				  --Tallies for unlocks
+				  --[[
+				G.GAME.round_scores.cards_purchased.amt = G.GAME.round_scores.cards_purchased.amt + 1
+				G.GAME.current_round.jokers_purchased = G.GAME.current_round.jokers_purchased + 1
+		
+				SMODS.calculate_context({buying_card = true, card = c1})]]
+		
+				play_sound('card1')
+				G.CONTROLLER:save_cardarea_focus('jokers')
+				G.CONTROLLER:recall_cardarea_focus('jokers')
+		
+				return true
+        	end
+      	}))
+    end
+end
+
+function G.FUNCS.UTDR_capsule_use(e)
+	print("Give Your Life")
+    local c1 = e.config.ref_table
+    if c1 and c1:is(Card) then
+    	UTDR_Modules.Capsule.remove_reward_button_ui(c1)
+    	G.E_MANAGER:add_event(Event({
+        	trigger = 'after',
+        	delay = 0.1,
+        	func = function()
+				--c1.from_area = c1.area
+				--c1.area:remove_card(c1)
+				--c1:add_to_deck()
+				if c1.children.price then c1.children.price:remove() end
+				c1.children.price = nil
+				if c1.children.buy_button then c1.children.buy_button:remove() end
+				c1.children.buy_button = nil
+				if c1.children.buy_and_use_button then c1.children.buy_and_use_button:remove() end
+				c1.children.buy_and_use_button = nil
+				remove_nils(c1.children)
+				
+				G.FUNCS.use_card(e, true)
+				  --Tallies for unlocks
+				  --[[
+				G.GAME.round_scores.cards_purchased.amt = G.GAME.round_scores.cards_purchased.amt + 1
+				G.GAME.current_round.jokers_purchased = G.GAME.current_round.jokers_purchased + 1
+		
+				SMODS.calculate_context({buying_card = true, card = c1})]]
+		
+				play_sound('card1')
+	--			G.CONTROLLER:save_cardarea_focus('jokers')
+	--			G.CONTROLLER:recall_cardarea_focus('jokers')
+		
+				return true
+        	end
+      	}))
+    end
+end
+
+function G.FUNCS.UTDR_capsule_skip(e)
+	print("nah, i dont like this one. SKIP")
+    local c1 = e.config.ref_table
+    if c1 and c1:is(Card) then
+    	UTDR_Modules.Capsule.remove_reward_button_ui(c1)
+      	G.E_MANAGER:add_event(Event({
+        	trigger = 'after',
+        	delay = 0.1,
+        	func = function()
+				--c1.from_area = c1.area
+				--c1.area:remove_card(c1)
+				--c1:add_to_deck()
+				if c1.children.price then c1.children.price:remove() end
+				c1.children.price = nil
+				if c1.children.buy_button then c1.children.buy_button:remove() end
+				c1.children.buy_button = nil
+				if c1.children.buy_and_use_button then c1.children.buy_and_use_button:remove() end
+				c1.children.buy_and_use_button = nil
+				remove_nils(c1.children)
+				
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound('tarot1')
+						c1.T.r = -0.2
+						c1:juice_up(0.3, 0.4)
+						c1.states.drag.is = true
+						c1.children.center.pinch.x = true
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
+							func = function()
+								c1:remove()
+								c1 = nil
+								return true;
+							end
+						}))
+						return true
+					end
+				}))
+		
+				play_sound('card1')
+	--			G.CONTROLLER:save_cardarea_focus('jokers')
+	--			G.CONTROLLER:recall_cardarea_focus('jokers')
+		
+				return true
+        	end
+      	}))
+    end
 end
 
 function G.FUNCS.UTDR_capsule_trade(e)
@@ -351,9 +594,7 @@ function G.FUNCS.UTDR_capsule_trade(e)
 		local center = G.P_CENTERS[reward.key]
 		local set = center.set or "Voucher"
 		--do some fancy animations stuff here
-		if set == "Voucher" then
-			print("VOUCHER ALERT DO SPECIAL HANDLING")
-		end
+		
 		--also make sure your joker/consumable slots arent maxed out
 		
 		
@@ -362,8 +603,29 @@ function G.FUNCS.UTDR_capsule_trade(e)
 		-- -hangs there for you to accept/deny (so if your joker/consumable slots are full you can sell other stuff to fit it)
 		-- -if you accept the card (unsure what wording) then it emplaces, or redeems
 		-- if you deny then it Shatters like Glass
-		SMODS.add_card({
-			key = reward.key
+		local won_card = SMODS.add_card({
+			key = reward.key,
+			area = G.UTDR_capsule_holding_pen,
 		})
+		if set == "Voucher" then
+			won_card.cost = 0
+		end
+		
+		G.UTDR_capsule_holding_pen.set = set
+		
+		--[[G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
+                attention_text({
+                    text = localize('k_nope_ex'),
+                    scale = 1.3, 
+                    hold = 1.4,
+                    major = used_tarot,
+                    backdrop_colour = G.C.SECONDARY_SET.Tarot,
+                    align = (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) and 'tm' or 'cm',
+                    offset = {x = 0, y = (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) and -0.2 or 0},
+                    silent = true
+                    })
+                    won_card:juice_up(0.3, 0.5)
+            return true end }))]]
+		
 	end
 end
