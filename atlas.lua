@@ -121,6 +121,16 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+	key = "ellecredits_physical_challenges",
+	path = "ellecredits_physical_challenges.png",
+	px = 391,
+	py = 69,
+	atlas_table = 'ANIMATION_ATLAS',
+	frames = 18,
+	fps = 30
+}
+
+SMODS.Atlas {
 	key = "shopsign_cattybratty",
 	path = "shop/sign_cattybratty.png",
 	px = 114,
