@@ -46,3 +46,11 @@ capsule = {
 },
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "if area and area.cards[1] then "
+position = "at"
+payload = "if area and area.cards and area.cards[1] then"
+match_indent = true
