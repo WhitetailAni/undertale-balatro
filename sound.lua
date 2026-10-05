@@ -46,6 +46,7 @@ local sounds = {
 	"points10",
 	"points15",
 	"points20",
+	"points60",
 	"pipis_laugh",
 	"win",
 	"lose",

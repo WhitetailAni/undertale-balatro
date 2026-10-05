@@ -2,7 +2,8 @@ UTDR_Modules.Lacquer_Shop = {
 	old_volume = 0
 }
 
-function Game:update_utdr_shop_lacquer(dt)
+function Game:update_UTDR_shop_lacquer(dt)
+	if G.UTDR_shop_tabs then G.UTDR_shop_tabs:remove(); G.UTDR_shop_tabs = nil end
 	if not G.STATE_COMPLETE then
 		stop_use()
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_LACQUER)
@@ -60,10 +61,20 @@ function Game:update_utdr_shop_lacquer(dt)
 	G.SETTINGS.SOUND.music_volume = 0
 end
 
+function UTDR_Modules.Lacquer_Shop.exit_lacquer_shop()
+	G.E_MANAGER:add_event(Event({
+		func = function()
+			if G.UTDR_lacquer_shop then G.UTDR_lacquer_shop:remove(); G.UTDR_lacquer_shop = nil end
+			G.SETTINGS.SOUND.music_volume = UTDR_Modules.Lacquer_Shop.old_volume
+			G.STATE = G.STATES.SHOP
+			G.STATE_COMPLETE = false
+			return true
+		end
+	}))
+end
+
 function UTDR_Modules.Lacquer_Shop.create_lacquer_for_shop()
 	local script_step = G.GAME.UTDR_lacquer_script_step
-	
-	print(script_step)
 	  
 	if script_step == 12 then
 		local lacquer_triangle = SMODS.create_card({
@@ -72,14 +83,7 @@ function UTDR_Modules.Lacquer_Shop.create_lacquer_for_shop()
 		UTDR_Modules.Lacquer_Shop.create_lacquer_card_ui(lacquer_triangle)
 		G.lacquer_joker:emplace(lacquer_triangle)
 	elseif script_step > 12 then
-		G.E_MANAGER:add_event(Event({
-			func = function()
-				G.SETTINGS.SOUND.music_volume = UTDR_Modules.Lacquer_Shop.old_volume
-				G.STATE = G.STATES.SHOP
-				G.STATE_COMPLETE = false
-				return true
-			end
-		}))
+		UTDR_Modules.Lacquer_Shop.exit_lacquer_shop()
 	end
 end
 
@@ -292,19 +296,12 @@ G.FUNCS.reroll_lacquer = function(e)
 			SMODS.calculate_context({buying_card = true, card = c1})
 	
 			play_sound('card1')
-			play_sound("UTDR_points20", 1.0, 0.67)
+			play_sound("UTDR_points60", 1.0, 0.67)
 			UTDR_Modules.Capsule.ease_points(-1225)
 			G.CONTROLLER:save_cardarea_focus('jokers')
 			G.CONTROLLER:recall_cardarea_focus('jokers')
 			
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					G.SETTINGS.SOUND.music_volume = UTDR_Modules.Lacquer_Shop.old_volume
-					G.STATE = G.STATES.SHOP
-					G.STATE_COMPLETE = false
-					return true
-				end
-			}))
+			UTDR_Modules.Lacquer_Shop.exit_lacquer_shop()
 	
 			return true
         end

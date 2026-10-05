@@ -1,11 +1,12 @@
-UTDR_Modules.Shop_Tabs = {
-	old_volume = 0,
-	
+UTDR_Modules.Shop_Tabs = {	
 }
 
 Game.update_UTDR_shop_tabs = function()
-	stop_use()
+	if G.UTDR_shop_tabs then
+		G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 11.4
+	end
 	if not G.STATE_COMPLETE then
+		stop_use()
 	
 		if not G.UTDR_shop_tabs then
 			G.E_MANAGER:add_event(Event{
@@ -17,8 +18,13 @@ Game.update_UTDR_shop_tabs = function()
 						definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
 						config = {align="cl", offset = {x=G.ROOM.T.x + 14,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
 					}
-					G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 11.4
-
+					
+					local remove_hook = G.UTDR_shop_tabs.remove
+					function remove(self)
+						G.UTDR_shop_tabs.alignment.offset.y = G.shop.alignment.offset.y + 10
+						remove_hook(self)
+					end
+					
 					-- Move shop tabs to start of uibox list
 					for i, v in ipairs(G.I.UIBOX) do
 						if v == G.UTDR_shop_tabs then

@@ -374,8 +374,8 @@ function G.FUNCS.UTDR_capsule_use(e)
     	G.E_MANAGER:add_event(Event({
         	func = function()
         		G.FUNCS.exit_overlay_menu()
-				--c1.from_area = c1.area
-				--c1.area:remove_card(c1)
+				c1.from_area = c1.area
+				c1.area:remove_card(c1)
 				--c1:add_to_deck()
 				
 				G.FUNCS.use_card(e, true)

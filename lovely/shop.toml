@@ -125,11 +125,39 @@ match_indent = true
 [patches.pattern]
 target = "game.lua"
 pattern = '''
-function Game:update_blind_select(dt)
+if self.shop then self.shop:remove(); self.shop = nil end
 '''
 position = 'after'
 payload = '''
-	if self.UTDR_shop_tabs then self.UTDR_shop_tabs:remove(); self.UTDR_shop_tabs = nil end
+if self.UTDR_shop_tabs then self.UTDR_shop_tabs:remove(); self.UTDR_shop_tabs = nil end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/game_object.lua"]'''
+pattern = '''
+if G.shop then G.shop.alignment.offset.y = G.ROOM.T.y+11 end
+'''
+position = 'after'
+payload = '''
+if G.UTDR_shop_tabs then G.UTDR_shop_tabs.alignment.offset.y = G.shop.alignment.offset.y + 10 end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+G.shop.alignment.offset.y = -5.3
+'''
+position = 'at'
+payload = '''
+if G.SETTINGS.GRAPHICS.texture_scaling == 2 then
+	G.shop.alignment.offset.y = -4.85
+else
+	G.shop.alignment.offset.y = -5.3
+end
 '''
 match_indent = true
 
@@ -154,7 +182,7 @@ if self.STATE == self.STATES.UTDR_SHOP_CAPSULE then
 	self:update_utdr_shop_capsule(dt)
 end
 if self.STATE == self.STATES.UTDR_SHOP_LACQUER then
-    self:update_utdr_shop_lacquer(dt)
+    self:update_UTDR_shop_lacquer(dt)
 end
 
 '''
