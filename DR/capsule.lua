@@ -229,8 +229,6 @@ function Game:update_utdr_shop_capsule(dt)
 		UTDR_Modules.Capsule.bet_amount = math.min(G.GAME.UTDR_points,UTDR_Modules.Capsule.min_amount)
 		
 		if not G.utdr_shop_capsule then
-			--this must only be run ONCE per round
-			UTDR_Modules.Capsule.add_vouchers()
 			G.E_MANAGER:add_event(Event{ func = function()
 				G.E_MANAGER:add_event(Event{
 					trigger = 'immediate',
