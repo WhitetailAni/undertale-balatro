@@ -4,24 +4,6 @@ UTDR_Modules.Capsule = {
 	
 	bet_amount = 0,
 	min_amount = 50,
-	gold_prizes = {
-		"j_UTDR_fallen_human",
-		"j_UTDR_kris",
-		"j_UTDR_asriel",
-		"j_UTDR_susie",
-		"j_UTDR_asgore",
-		"j_UTDR_dark_fountain",
-		"j_UTDR_shadow_crystal",
-		"j_UTDR_save",
-		"j_UTDR_moss",
-		"j_UTDR_toriel",
-		"j_UTDR_temmie_armor",
-		"j_blueprint",
-		"j_brainstorm",
-		"c_ectoplasm",
-		"c_soul",
-		"c_black_hole",
-	},
 	cannot_pull = {
 		"j_UTDR_thorn_ring",
 		"j_UTDR_shelter",
@@ -40,13 +22,13 @@ UTDR_Modules.Capsule = {
 function UTDR_Modules.Capsule.add_vouchers()
 	for key, value in pairs(G.P_CENTERS) do
 		if value.set == "Voucher" then
-			G.GAME.capsule.gold_prizes[#G.GAME.capsule.gold_prizes + 1] = key
+			G.GAME.UTDR_capsule_gold_prizes[#G.GAME.UTDR_capsule_gold_prizes + 1] = key
 		end
 	end
 end
 
 function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
-	local remaining = #UTDR_Modules.Capsule.gold_prizes
+	local remaining = #G.GAME.UTDR_capsule_gold_prizes
 	local remaining_block = 0.1 + (remaining / 50)
 	local oldbet_block = 1 + (UTDR_Modules.Capsule.points_bet_total / 50)
 
@@ -90,7 +72,7 @@ function UTDR_Modules.Capsule.get_reward(bet)
 			december = true			
 		}
 	elseif pseudorandom("capsule_gold") < (UTDR_Modules.Capsule.gold_chance(bet) / 100) then
-		local gold_prize_key = pseudorandom_element(UTDR_Modules.Capsule.gold_prizes, "capsule_prize_gold")
+		local gold_prize_key = pseudorandom_element(G.GAME.UTDR_capsule_gold_prizes, "capsule_prize_gold")
 		UTDR_Modules.Capsule.points_bet_total = 0
 		
 		--ensure no duplicate gold prizes, unless you got showman!
@@ -98,7 +80,7 @@ function UTDR_Modules.Capsule.get_reward(bet)
 			gold_prize_key = pseudorandom_element(gold_prize_pool, "capsule_prize_gold_attempt_2")
 		end
 		
-		UTDR_Modules.Capsule.wow_that_was_so_gold(UTDR_Modules.Capsule.gold_prizes, { gold_prize_key })
+		UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes, { gold_prize_key })
 		
 		return {
 			key = gold_prize_key,
@@ -125,8 +107,8 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	end
 	
 	--remove gold prize keys, cannot_pull keys
-	possible_keys_jokers = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys_jokers, UTDR_Modules.Capsule.gold_prizes)
-	possible_keys_spectral = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys_spectral, UTDR_Modules.Capsule.gold_prizes)
+	possible_keys_jokers = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys_jokers, G.GAME.UTDR_capsule_gold_prizes)
+	possible_keys_spectral = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys_spectral, G.GAME.UTDR_capsule_gold_prizes)
 	
 	possible_keys_jokers = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys_jokers,UTDR_Modules.Capsule.cannot_pull)
 	
@@ -245,9 +227,10 @@ function Game:update_utdr_shop_capsule(dt)
 		G.CONTROLLER.interrupt.focus = true
 
 		UTDR_Modules.Capsule.bet_amount = math.min(G.GAME.UTDR_points,UTDR_Modules.Capsule.min_amount)
-		UTDR_Modules.Capsule.add_vouchers()
 		
 		if not G.utdr_shop_capsule then
+			--this must only be run ONCE per round
+			UTDR_Modules.Capsule.add_vouchers()
 			G.E_MANAGER:add_event(Event{ func = function()
 				G.E_MANAGER:add_event(Event{
 					trigger = 'immediate',
@@ -436,19 +419,14 @@ function G.FUNCS.UTDR_capsule_take(e)
 end
 
 function G.FUNCS.UTDR_capsule_use(e)
-	print("Give Your Life")
 	UTDR_Modules.Capsule.set_goldpercent_text()
     local c1 = UTDR_Modules.Capsule.prize
     if c1 and c1:is(Card) then
     	c1.states.drag.can = true
     	G.E_MANAGER:add_event(Event({
-        	func = function()
-        		G.FUNCS.exit_overlay_menu()
-				
-				G.UTDR_capsule_prize:remove_card(c1)
-				G.play:emplace(c1)
-				
+        	func = function()	
 				G.FUNCS.use_card(e)
+				G.FUNCS.exit_overlay_menu()
 
 				return true
         	end

@@ -19,3 +19,32 @@ pattern = "function CardArea:add_to_highlighted(card, silent)"
 position = "after"
 payload = "if self == G.UTDR_capsule_prize then return end"
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = 'modifiers = {},'
+position = "after"
+payload = '''
+UTDR_capsule_gold_prizes = {
+	"j_UTDR_fallen_human",
+	"j_UTDR_kris",
+	"j_UTDR_asriel",
+	"j_UTDR_susie",
+	"j_UTDR_asgore",
+	"j_UTDR_dark_fountain",
+	"j_UTDR_shadow_crystal",
+	"j_UTDR_save",
+	"j_UTDR_moss",
+	"j_UTDR_toriel",
+	"j_UTDR_temmie_armor",
+	"j_blueprint",
+	"j_brainstorm",
+	"c_ectoplasm",
+	"c_soul",
+	"c_black_hole",
+},
+'''
+match_indent = true
