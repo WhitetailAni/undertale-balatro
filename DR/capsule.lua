@@ -19,14 +19,6 @@ UTDR_Modules.Capsule = {
 	}
 }
 
-function UTDR_Modules.Capsule.add_vouchers()
-	for key, value in pairs(G.P_CENTERS) do
-		if value.set == "Voucher" then
-			G.GAME.UTDR_capsule_gold_prizes[#G.GAME.UTDR_capsule_gold_prizes + 1] = key
-		end
-	end
-end
-
 function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
 	local remaining = #G.GAME.UTDR_capsule_gold_prizes
 	local remaining_block = 0.1 + (remaining / 50)

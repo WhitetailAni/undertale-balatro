@@ -23,10 +23,12 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "game.lua"
-pattern = 'modifiers = {},'
-position = "after"
+pattern = '''
+G.SPLASH_BACK = Sprite(-30, -6, G.ROOM.T.w+60, G.ROOM.T.h+12, G.ASSET_ATLAS["ui_1"], {x = 2, y = 0})
+'''
+position = "before"
 payload = '''
-UTDR_capsule_gold_prizes = {
+local gold_prizes = {
 	"j_UTDR_fallen_human",
 	"j_UTDR_kris",
 	"j_UTDR_asriel",
@@ -43,19 +45,13 @@ UTDR_capsule_gold_prizes = {
 	"c_ectoplasm",
 	"c_soul",
 	"c_black_hole",
-},
-'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "game.lua"
-pattern = '''
-G.SPLASH_BACK = Sprite(-30, -6, G.ROOM.T.w+60, G.ROOM.T.h+12, G.ASSET_ATLAS["ui_1"], {x = 2, y = 0})
-'''
-position = "before"
-payload = '''
-UTDR_Modules.Capsule.add_vouchers()
+}
+for key, value in pairs(G.P_CENTERS) do
+	if value.set == "Voucher" then
+		gold_prizes[#gold_prizes + 1] = key
+	end
+end
+G.GAME.UTDR_capsule_gold_prizes = gold_prizes
 
 '''
 match_indent = true
