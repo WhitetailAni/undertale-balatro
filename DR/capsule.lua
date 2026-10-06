@@ -1,6 +1,40 @@
 UTDR_Modules.Capsule = {
+	points_bet_total = 0,
+	gold_chance_percent = "0%",
+	
 	bet_amount = 0,
 	min_amount = 50,
+	gold_prizes = {
+		"j_UTDR_fallen_human",
+		"j_UTDR_kris",
+		"j_UTDR_asriel",
+		"j_UTDR_susie",
+		"j_UTDR_asgore",
+		"j_UTDR_dark_fountain",
+		"j_UTDR_shadow_crystal",
+		"j_UTDR_save",
+		"j_UTDR_moss",
+		"j_UTDR_toriel",
+		"j_UTDR_temmie_armor",
+		"j_blueprint",
+		"j_brainstorm",
+		"c_ectoplasm",
+		"c_soul",
+		"c_black_hole",
+	},
+	cannot_pull = {
+		"j_UTDR_thorn_ring",
+		"j_UTDR_shelter",
+		"j_UTDR_vessel",
+		"j_UTDR_weird_deard_gaster",
+		"j_UTDR_survey_program",
+		"j_UTDR_fun_value",
+		"j_UTDR_chara",
+		"j_UTDR_eram",
+		"j_UTDR_undyne_the_undying",
+		"j_UTDR_lacquer_triangle",
+		"j_UTDR_real_knife",
+	}
 }
 
 function UTDR_Modules.Capsule.add_vouchers()
@@ -11,20 +45,21 @@ function UTDR_Modules.Capsule.add_vouchers()
 	end
 end
 
-function UTDR_Modules.Capsule.gold_chance(bet)
-	local remaining = #G.GAME.capsule.gold_prizes
+function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
+	local remaining = #UTDR_Modules.Capsule.gold_prizes
 	local remaining_block = 0.1 + (remaining / 50)
-	local oldbet_block = 1 + (G.GAME.capsule.last_bet / 50)
+	local oldbet_block = 1 + (UTDR_Modules.Capsule.points_bet_total / 50)
 
-	local chance = 5 + (bet - 100) * remaining_block * oldbet_block
-	G.GAME.capsule.last_bet = bet
-	chance = chance / 100
+	local chance = (5 + (bet - 100) * remaining_block * oldbet_block) / 3
+	if not no_modify then
+		UTDR_Modules.Capsule.points_bet_total = UTDR_Modules.Capsule.points_bet_total + bet
+	end
 	
-	return chance
-end
-
-function UTDR_Modules.Capsule.did_win_gold(bet)
-	return pseudorandom("capsule_gold") > UTDR_Modules.Capsule.gold_chance(bet)
+	local integer = chance + (2^52 + 2^51) - (2^52 + 2^51)
+	
+	local above_zero = math.max(integer, 0) --make sure we don't have a negative percentage. oops
+	
+	return math.min(above_zero, 100)
 end
 
 --filters tables. provide 2 tables, removes all keys present in table 2 from table 1
@@ -43,19 +78,28 @@ function UTDR_Modules.Capsule.wow_that_was_so_gold(input, filter)
 	return possible_keys
 end
 
+function UTDR_Modules.Capsule.set_goldpercent_text()
+	UTDR_Modules.Capsule.gold_chance_percent = tostring(UTDR_Modules.Capsule.gold_chance(UTDR_Modules.Capsule.bet_amount, true)) .. localize("UTDR_shopball_chance0")
+end
+
 function UTDR_Modules.Capsule.get_reward(bet)
+	UTDR_Modules.Capsule.gold_chance_percent = tostring(UTDR_Modules.Capsule.gold_chance(bet, true)) .. localize("UTDR_shopball_chance0")
+
 	if bet == 1225 then
 		return {
 			december = true			
 		}
-	elseif UTDR_Modules.Capsule.did_win_gold(bet) then
-		local gold_prize_key = pseudorandom_element(G.GAME.capsule.gold_prizes, "capsule_prize_gold")
+	elseif pseudorandom("capsule_gold") < (UTDR_Modules.Capsule.gold_chance(bet) / 100) then
+		local gold_prize_key = pseudorandom_element(UTDR_Modules.Capsule.gold_prizes, "capsule_prize_gold")
+		UTDR_Modules.Capsule.points_bet_total = 0
 		
 		--ensure no duplicate gold prizes, unless you got showman!
 		while #SMODS.find_card("j_showman") == 0 and #SMODS.find_card(gold_prize_key) > 0 and G.P_CENTERS[gold_prize_key].set == "Joker" do
-			gold_prize_key = pseudorandom_element(G.GAME.capsule.gold_prizes, "capsule_prize_gold_attempt_2")
+			gold_prize_key = pseudorandom_element(gold_prize_pool, "capsule_prize_gold_attempt_2")
 		end
-		G.GAME.capsule.gold_prizes[gold_prize_key] = nil
+		
+		UTDR_Modules.Capsule.wow_that_was_so_gold(UTDR_Modules.Capsule.gold_prizes, { gold_prize_key })
+		
 		return {
 			key = gold_prize_key,
 			gold = true
@@ -81,8 +125,10 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	end
 	
 	--remove gold prize keys, cannot_pull keys
-	possible_keys = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys, G.GAME.capsule.gold_prizes)
-	possible_keys = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys, G.GAME.capsule.cannot_pull)
+	possible_keys_jokers = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys_jokers, UTDR_Modules.Capsule.gold_prizes)
+	possible_keys_spectral = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys_spectral, UTDR_Modules.Capsule.gold_prizes)
+	
+	possible_keys_jokers = UTDR_Modules.Capsule.wow_that_was_so_gold(possible_keys_jokers,UTDR_Modules.Capsule.cannot_pull)
 	
 	--if you put in more than 100 points, remove common jokers/planet cards from the pool
 	if bet >= 100 then
@@ -175,6 +221,7 @@ function Game:update_utdr_shop_capsule(dt)
 
 		local targets = {
 			"UTDR_SHOP_SIGN_CATTY",
+			"UTDR_SHOP_SIGN_LACQUER",
 			"buttons",
 			"utdr_shop_cattybratty"
 		}
@@ -265,7 +312,8 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 				{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
 					{n=G.UIT.R, config={align = "cm", colour=G.C.CLEAR, padding = 0.05}, nodes = {
 						{n=G.UIT.R, config={align = "cm"}, nodes = {
-							{n=G.UIT.O,config={object=DynaText({ string = tostring(UTDR_Modules.Capsule.gold_chance(UTDR_Modules.Capsule.bet_amount))..localize("UTDR_shopball_chance0"), float = true, colours = { G.C.GOLD }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}},
+							--{n=G.UIT.T, config={text = UTDR_Modules.Capsule.gold_chance(UTDR_Modules.Capsule.bet_amount, true), scale = 0.5, colour = G.C.GOLD}},
+							{n=G.UIT.O,config={object=DynaText({ string = {{ref_table = UTDR_Modules.Capsule, ref_value = "gold_chance_percent", colour = G.C.GOLD}}, float = true, colours = { G.C.GOLD }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}},
 							{n=G.UIT.O,config={object=DynaText({ string = localize("UTDR_shopball_chance1"), float = true, colours = { G.C.POINTS }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}},
 						}},
 						{n=G.UIT.R, config={align="cm"},nodes={{n=G.UIT.O,config={object=DynaText({ string = localize("UTDR_shopball_chance2"), float = true, colours = { G.C.POINTS }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}}}},
@@ -325,6 +373,7 @@ end
 
 function G.FUNCS.UTDR_capsule_deltapts(e)
 	UTDR_Modules.Capsule.bet_amount = UTDR_Modules.Capsule.bet_amount + e.config.amount
+	UTDR_Modules.Capsule.set_goldpercent_text()
 end
 
 function G.FUNCS.UTDR_capsule_trade_func(e)
@@ -334,22 +383,41 @@ function G.FUNCS.UTDR_capsule_trade_func(e)
 	e.config.button = can_trade and 'UTDR_capsule_trade' or nil
 end
 
+function G.FUNCS.UTDR_capsule_take_func(e)
+	local desired_cardarea = nil
+	if e.config.ref_set == "Joker" then
+		desired_cardarea = G.jokers
+	else
+		desired_cardarea = G.consumeables
+	end
+	
+	local can_press = desired_cardarea.config.card_limits.total_slots > #desired_cardarea.cards
+
+	e.config.colour = can_press and darken(G.C.ORANGE, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = can_press and 'UTDR_capsule_take' or nil
+end
+
 function G.FUNCS.UTDR_capsule_take(e)
-	print("Join the Chaos Insurgency. We love babies.")
-    local c1 = e.config.ref_table
+	UTDR_Modules.Capsule.set_goldpercent_text()
+    local c1 = UTDR_Modules.Capsule.prize
     if c1 and c1:is(Card) then
+    	c1.states.drag.can = true
       	G.E_MANAGER:add_event(Event({
         	trigger = 'after',
         	delay = 0.1,
         	func = function()
-        		G.FUNCS.exit_overlay_menu()
-        		c1.states.drag.can = true
-				e.config.ref_area:remove_card(c1)
+        		
+        		--c1.states.drag.can = true
+				G.UTDR_capsule_prize:remove_card(c1)
+				
+				G.FUNCS.exit_overlay_menu()
+				
 				if e.config.ref_set == "Joker" then
 					G.jokers:emplace(c1)
 				else
 					G.consumeables:emplace(c1)
 				end
+				
 				  --Tallies for unlocks
 				  --[[
 				G.GAME.round_scores.cards_purchased.amt = G.GAME.round_scores.cards_purchased.amt + 1
@@ -358,8 +426,8 @@ function G.FUNCS.UTDR_capsule_take(e)
 				SMODS.calculate_context({buying_card = true, card = c1})]]
 		
 				play_sound('card1')
-				--G.CONTROLLER:save_cardarea_focus('jokers')
-				--G.CONTROLLER:recall_cardarea_focus('jokers')
+				G.CONTROLLER:save_cardarea_focus('jokers')
+				G.CONTROLLER:recall_cardarea_focus('jokers')
 		
 				return true
         	end
@@ -369,27 +437,19 @@ end
 
 function G.FUNCS.UTDR_capsule_use(e)
 	print("Give Your Life")
-    local c1 = e.config.ref_table
+	UTDR_Modules.Capsule.set_goldpercent_text()
+    local c1 = UTDR_Modules.Capsule.prize
     if c1 and c1:is(Card) then
+    	c1.states.drag.can = true
     	G.E_MANAGER:add_event(Event({
         	func = function()
         		G.FUNCS.exit_overlay_menu()
-				c1.from_area = c1.area
-				c1.area:remove_card(c1)
-				--c1:add_to_deck()
 				
-				G.FUNCS.use_card(e, true)
-				  --Tallies for unlocks
-				  --[[
-				G.GAME.round_scores.cards_purchased.amt = G.GAME.round_scores.cards_purchased.amt + 1
-				G.GAME.current_round.jokers_purchased = G.GAME.current_round.jokers_purchased + 1
-		
-				SMODS.calculate_context({buying_card = true, card = c1})]]
-		
-				play_sound('card1')
-	--			G.CONTROLLER:save_cardarea_focus('jokers')
-	--			G.CONTROLLER:recall_cardarea_focus('jokers')
-		
+				G.UTDR_capsule_prize:remove_card(c1)
+				G.play:emplace(c1)
+				
+				G.FUNCS.use_card(e)
+
 				return true
         	end
       	}))
@@ -397,8 +457,8 @@ function G.FUNCS.UTDR_capsule_use(e)
 end
 
 function G.FUNCS.UTDR_capsule_skip(e)
-	print("nah, i dont like this one. SKIP")
-    local c1 = e.config.ref_table
+	UTDR_Modules.Capsule.set_goldpercent_text()
+    local c1 = UTDR_Modules.Capsule.prize
     if c1 and c1:is(Card) then
       	G.E_MANAGER:add_event(Event({
         	trigger = 'after',
@@ -486,44 +546,64 @@ function G.FUNCS.UTDR_capsule_trade(e)
 	end
 end
 
+SMODS.current_mod.custom_card_areas = function(G)
+	G.UTDR_capsule_prize = CardArea(
+		0,
+		0,
+		3.6*G.CARD_W,
+		1.05*G.CARD_H, 
+		{ card_limit = 1, type = 'joker', highlight_limit = 0, bg_colour = G.C.CLEAR, no_card_count = true }
+	)
+end
+
 UTDR_Modules.Capsule.capsule_holding_pen = function(key, set, is_gold)
-		local area = CardArea(
-			0,
-			0,
-			3.6*G.CARD_W,
-			1.05*G.CARD_H, 
-			{ card_limit = 1, type = 'joker', highlight_limit = 1, bg_colour = G.C.CLEAR, no_card_count = true }
-		)
-		
-		local prize = SMODS.add_card({
+		UTDR_Modules.Capsule.prize = SMODS.add_card({
 			key = key,
-			area = area
+			area = G.UTDR_capsule_prize
 		})
 
---		area:emplace(prize)
-
-		prize.states.drag.can = false -- No dragging
+		UTDR_Modules.Capsule.prize.states.drag.can = false -- No dragging
 		
-		local skip = { n=G.UIT.R, config={ref_table = prize, align = "cm", minw = 3.4*G.CARD_W, padding = 0.1, r = 0.1, hover = true, colour = G.C.RED, button = "UTDR_capsule_skip", shadow = true, question = v}, nodes={
+		local skip = { n=G.UIT.R, config={align = "cm", minw = 3.4*G.CARD_W, padding = 0.1, r = 0.1, hover = true, colour = G.C.RED, button = "UTDR_capsule_skip", shadow = true, question = v}, nodes={
 				{ n=G.UIT.R, config={align = "cm", padding = 0.1, no_fill = true}, nodes={
 					{ n=G.UIT.T, config={text = localize("UTDR_shopball_skip"), scale = 0.5, colour = G.C.UI.TEXT_LIGHT}}}}}}
 
-		local use = { n=G.UIT.R, config={ref_table = prize, align = "cm", minw = 3.4*G.CARD_W, padding = 0.1, r = 0.1, hover = true, colour = G.C.ORANGE, button = "UTDR_capsule_use", shadow = true, question = v}, nodes={
+		local use = { n=G.UIT.R, config={ref_table = UTDR_Modules.Capsule.prize, align = "cm", minw = 3.4*G.CARD_W, padding = 0.1, r = 0.1, hover = true, colour = G.C.ORANGE, button = "UTDR_capsule_use", shadow = true, question = v}, nodes={
 				{ n=G.UIT.R, config={align = "cm", padding = 0.1, no_fill = true}, nodes={
 					{ n=G.UIT.T, config={text = localize("UTDR_shopball_use"), scale = 0.5, colour = G.C.UI.TEXT_LIGHT}}}}}}
 					
-		local take = { n=G.UIT.R, config={ref_table = prize, ref_set = set, ref_area = area, align = "cm", minw = 3.4*G.CARD_W, padding = 0.1, r = 0.1, hover = true, colour = G.C.ORANGE, button = "UTDR_capsule_take", shadow = true, question = v}, nodes={
+		local take = { n=G.UIT.R, config={ref_set = set, align = "cm", minw = 3.4*G.CARD_W, padding = 0.1, r = 0.1, hover = true, colour = G.C.ORANGE, func = "UTDR_capsule_take_func", button = "UTDR_capsule_take", shadow = true, question = v}, nodes={
 				{ n=G.UIT.R, config={align = "cm", padding = 0.1, no_fill = true}, nodes={
 					{ n=G.UIT.T, config={text = localize("UTDR_shopball_take"), scale = 0.5, colour = G.C.UI.TEXT_LIGHT}}}}}}
 					
 		local choice_nodes = { skip }
+		local can_use = {
+			"c_fool",
+			"c_high_priestess",
+			"c_emperor",
+			"c_hermit",
+			"c_wheel_of_fortune",
+			"c_temperance",
+			"c_judgement",
+			"c_wraith",
+			"c_ectoplasm",
+			"c_ankh",
+			"c_hex",
+			"c_soul",
+			"c_black_hole"
+		}
 		if set == "Voucher" then
-			prize.cost = 0
+			UTDR_Modules.Capsule.prize.cost = 0
 			choice_nodes = { use, skip }
 		elseif set == "Joker" then
 			choice_nodes = { take, skip }
-		elseif set == "Consumable" then
-			choice_nodes = { use, take, skip }
+		elseif set == "Spectral" or set == "Tarot" or set == "Planet" then
+			choice_nodes = { take, skip }
+			for i = 1, #can_use do
+				if can_use[i] == key then
+					choice_nodes = { use, take, skip }
+				end
+			end
 		end
 		
 		local outline = G.C.RED
@@ -532,7 +612,7 @@ UTDR_Modules.Capsule.capsule_holding_pen = function(key, set, is_gold)
 		end
 
 		local t = create_UIBox_generic_options({ padding = 0, colour = G.C.BLACK, outline_colour = outline, no_back = true, no_esc = true, contents = {
-			not a and {n=G.UIT.R, nodes={{n=G.UIT.O, config={object = area}}}} or nil,
+			not a and {n=G.UIT.R, nodes={{n=G.UIT.O, config={object = G.UTDR_capsule_prize}}}} or nil,
 			{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes=choice_nodes},
 		}})
 		return t

@@ -3,15 +3,16 @@ UTDR_Modules.Lacquer_Shop = {
 }
 
 function Game:update_UTDR_shop_lacquer(dt)
-	if G.UTDR_shop_tabs then G.UTDR_shop_tabs:remove(); G.UTDR_shop_tabs = nil end
+	stop_use()
 	if not G.STATE_COMPLETE then
-		stop_use()
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_LACQUER)
 
 		local targets = {
 			"UTDR_SHOP_SIGN_CATTY",
+			"UTDR_SHOP_SIGN_CAPSULE",
 			"buttons",
-			"utdr_shop_cattybratty"
+			"utdr_shop_cattybratty",
+			"UTDR_shop_tabs",
 		}
 
 		for _, v in ipairs(targets) do
@@ -30,7 +31,6 @@ function Game:update_UTDR_shop_lacquer(dt)
 		end
 
 		G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
-		G.STATE_COMPLETE = true
 		G.CONTROLLER.interrupt.focus = true
 		
 		if not G.UTDR_lacquer_shop then
@@ -46,8 +46,6 @@ function Game:update_UTDR_shop_lacquer(dt)
 							config = {align="bmi", offset = {x=0,y=G.ROOM.T.y + 29}, major = G.hand, bond = 'Weak'}
 						}
 						
-						G.C.DYN_UI.MAIN = G.C.LACQUER_OUTLINE
-						
 						UTDR_Modules.Lacquer_Shop.create_lacquer_for_shop()
 						
 						G.ROOM.jiggle = G.ROOM.jiggle + 3
@@ -55,6 +53,8 @@ function Game:update_UTDR_shop_lacquer(dt)
 						G.UTDR_lacquer_shop.alignment.offset.y = G.ROOM.T.y + 21.4
 				return true end})
 			return true end})
+			
+			G.STATE_COMPLETE = true
 		end
 	end
 	
@@ -66,6 +66,7 @@ function UTDR_Modules.Lacquer_Shop.exit_lacquer_shop()
 		func = function()
 			if G.UTDR_lacquer_shop then G.UTDR_lacquer_shop:remove(); G.UTDR_lacquer_shop = nil end
 			G.SETTINGS.SOUND.music_volume = UTDR_Modules.Lacquer_Shop.old_volume
+			ease_background_colour_blind(G.STATES.SHOP)
 			G.STATE = G.STATES.SHOP
 			G.STATE_COMPLETE = false
 			return true
@@ -165,7 +166,7 @@ function UTDR_Modules.Lacquer_Shop.lacquer_shop()
       {shader = 'dissolve', shadow_height = 0.05},
       {shader = 'dissolve'}
     })]]
-    G.SHOP_SIGN = UIBox{
+    G.UTDR_SHOP_SIGN_LACQUER = UIBox{
       definition = 
         {n=G.UIT.ROOT, config = {colour = G.C.DYN_UI.MAIN, emboss = 0.05, align = 'cm', r = 0.1, padding = 0.1}, nodes={
           {n=G.UIT.R, config={align = "cm", padding = 0.1, minw = 4.72, minh = 3.1, colour = G.C.DYN_UI.DARK, r = 0.1}, nodes={
@@ -187,7 +188,7 @@ function UTDR_Modules.Lacquer_Shop.lacquer_shop()
     G.E_MANAGER:add_event(Event({
       trigger = 'immediate',
       func = (function()
-          G.SHOP_SIGN.alignment.offset.y = 0
+          G.UTDR_SHOP_SIGN_LACQUER.alignment.offset.y = 0
           return true
       end)
     }))
@@ -243,7 +244,6 @@ function UTDR_Modules.Lacquer_Shop.lacquer_shop()
 end
 
 G.FUNCS.reroll_lacquer = function(e) 
-    stop_use()
     G.CONTROLLER.locks.shop_reroll = true
     if G.CONTROLLER:save_cardarea_focus('lacquer_joker') then G.CONTROLLER.interrupt.focus = true end
     G.E_MANAGER:add_event(Event({

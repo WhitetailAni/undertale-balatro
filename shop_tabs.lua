@@ -72,3 +72,20 @@ UTDR_Modules.Shop_Tabs.create_shop_tabs = function(mod_state)
         }}
     return t
 end
+
+G.FUNCS.UTDR_shop_button = function(e)
+	if G.STATE ~= G.STATES[e.config.state] then
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				if G.STATE ~= G.STATES.UTDR_SHOP_CATTYBRATTY then
+					G.UTDR_CATTY_BRATTY_MAIN_SPRITE = nil
+					G.UTDR_CATTY_ARM_SPRITE = nil
+					G.UTDR_BRATTY_ARM_SPRITE = nil
+				end
+				G.STATE = G.STATES[e.config.state]
+				G.STATE_COMPLETE = false
+				return true
+			end
+		}))
+	end
+end

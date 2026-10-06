@@ -197,3 +197,28 @@ payload = '''
 (self.config.type == 'hand' and (state == G.STATES.UTDR_SHOP_CAPSULE or state == G.STATES.UTDR_SHOP_CATTYBRATTY or state == G.STATES.UTDR_SHOP_LACQUER)) or
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "G.shop = G.shop or UIBox{"
+position = "before"
+payload = '''
+local targets = {
+	"UTDR_SHOP_SIGN_CATTY",
+	"UTDR_SHOP_SIGN_CAPSULE",
+	"UTDR_SHOP_SIGN_LACQUER",
+	"utdr_shop_cattybratty",
+	"utdr_shop_capsule",
+	"UTDR_lacquer_shop",
+}
+
+for _, v in ipairs(targets) do
+	if self[v] then
+		self[v]:remove(); self[v] = nil
+	end
+end
+'''
+match_indent = true
+
+

@@ -432,6 +432,7 @@ function Game:update_shop(dt)
 		local targets = {
 			"UTDR_SHOP_SIGN_CATTY",
 			"UTDR_SHOP_SIGN_CAPSULE",
+			"UTDR_SHOP_SIGN_LACQUER",
 			"utdr_shop_cattybratty",
 			"utdr_shop_capsule",
 		}

@@ -648,10 +648,10 @@ SMODS.Joker {
 			["j_UTDR_netskie_disguise_base"].text_parsed
 
 		--put the desired text before the "Kee kee~" since parsing the text hard and ill just have the game do it
-		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = prepend_to_table(
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = G.FUNCS.prepend_to_table(
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text,
 			G.localization.descriptions.Joker[base_card.config.chosen_joker.joker_key].text)
-		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = prepend_to_table(
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed =G.FUNCS. prepend_to_table(
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed,
 			G.localization.descriptions.Joker[base_card.config.chosen_joker.joker_key].text_parsed)
 
@@ -768,7 +768,7 @@ SMODS.Joker {
 	end
 }
 
-function prepend_to_table(tabble, new_items)
+function G.FUNCS.prepend_to_table(tabble, new_items)
 	local tabbble = {}
 	for _, v in ipairs(new_items) do
 		table.insert(tabbble, v)

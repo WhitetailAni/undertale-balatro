@@ -27,18 +27,6 @@ function ease_background_colour_blind(state, blind_override, ...)
 	end
 end
 
-G.FUNCS.UTDR_shop_button = function(e)
-	if G.STATE ~= G.STATES[e.config.state] then
-		G.E_MANAGER:add_event(Event({
-			func = function()
-				G.STATE = G.STATES[e.config.state]
-				G.STATE_COMPLETE = false
-				return true
-			end
-		}))
-	end
-end
-
 G.E_MANAGER:add_event(Event { func = function()
 	local profile_name = G.PROFILES[G.SETTINGS.profile].name
 	if profile_name and profile_name.upper(profile_name) == "GASTER" then
