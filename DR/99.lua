@@ -246,7 +246,7 @@ SMODS.Joker {
 		"on_sell",
 	},
 	pixel_size = { w = 70, h = 71 },
-	rarity = 2,
+	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = false,
 	atlas = "DR_jokers",
@@ -620,7 +620,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "castle_town",
 	config = {
-		mult_per = 5
+		mult_per = 4
 	},
 	attributes = {
 		"mult",

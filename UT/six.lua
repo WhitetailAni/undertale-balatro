@@ -159,7 +159,8 @@ SMODS.Joker {
 	config = {
 		slot_count = 1,
 		slotted = false,
-		in_build = false
+		in_build = false,
+		odds = 2,
 	},
 	attributes = {
 		"boss_blind",
@@ -167,16 +168,17 @@ SMODS.Joker {
 	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = { key = 'tag_voucher', set = 'Tag' }
-		return { vars = { card.ability.slot_count, localize { type = 'name_text', set = 'Tag', key = 'tag_voucher' } } }
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.odds, 'utdr_toby_temmie')
+		return { vars = { card.ability.slot_count, localize { type = 'name_text', set = 'Tag', key = 'tag_voucher' }, numerator, denominator } }
 	end,
 	rarity = 1,
-	blueprint_compat = false,
+	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "UT_jokers",
 	pos = { x = 8, y = 8 },
 	cost = 6,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
+		if context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and SMODS.pseudorandom_probability(card, 'utdr_toby_temmie', 1, card.ability.odds) then
 			card:juice_up(0.3, 0.5)
 			local tag = Tag("tag_voucher")
 			add_tag(tag)

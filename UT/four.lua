@@ -38,7 +38,7 @@ SMODS.Joker {
 	key = "burnt_pan",
 	config = {
 		slots = 2,
-		chips_per = 40,
+		--chips_per = 40,
 	},
 	attributes = {
 		"scaling",
@@ -53,9 +53,9 @@ SMODS.Joker {
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
 		if G.consumeables then
-			return { vars = { card.ability.chips_per, card.ability.slots, card.ability.chips_per * #G.consumeables.cards } }
+			return { vars = { --[[card.ability.chips_per,]] card.ability.slots, --[[card.ability.chips_per * #G.consumeables.cards]] } }
 		else
-			return { vars = { card.ability.chips_per, card.ability.slots, 0 } }
+			return { vars = { --[[card.ability.chips_per,]] card.ability.slots, --[[0]] } }
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
@@ -64,6 +64,7 @@ SMODS.Joker {
 	remove_from_deck = function(self, card, from_debuff)
 		G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.slots
 	end,
+	--[[
 	calculate = function(self, card, context)
 		if context.joker_main and context.cardarea == G.jokers then
 			return {
@@ -71,6 +72,7 @@ SMODS.Joker {
 			}
 		end
 	end
+	]]
 }
 
 SMODS.Joker {
@@ -215,7 +217,7 @@ SMODS.Joker {
 		if card.ability.in_build then
 			return { vars = { G.consumeables.config.card_limit, localize("k_tarot") } }
 		else
-			return { vars = { 2, localize("k_tarot") } }
+			return { vars = { localize("k_tarot") } }
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
@@ -422,7 +424,7 @@ SMODS.Joker {
 		if card.ability.in_build then
 			return { vars = { G.consumeables.config.card_limit, localize("k_planet") } }
 		else
-			return { vars = { 2, localize("k_planet") } }
+			return { vars = { localize("k_planet") } }
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)

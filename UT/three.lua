@@ -886,7 +886,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "mettaton",
 	config = {
-		money = 2
+		money = 3
 	},
 	attributes = {
 		"economy",

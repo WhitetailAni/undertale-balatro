@@ -178,7 +178,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "dogcheck",
 	config = {
-		totem_chance = 6,
+		totem_chance = 5,
 	},
 	attributes = {
 		"chance",
@@ -867,6 +867,7 @@ SMODS.Joker {
 	key = "vessel",
 	config = {
 		xmult_gain = 0.15,
+		xmult_loss = -0.5,
 		xmult = 1
 	},
 	attributes = {
@@ -874,7 +875,7 @@ SMODS.Joker {
 		"xmult",
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
+		return { vars = { card.ability.xmult_gain, card.ability.xmult_loss, card.ability.xmult } }
 	end,
 	--unlocked = false
 	unlock_condition = { type = 'money' },
@@ -900,7 +901,23 @@ SMODS.Joker {
 				scalar_value = "xmult_gain",
 				message_colour = G.C.MULT
 			})
-		elseif context.joker_main then
+		end
+		if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss and not context.blueprint then
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "xmult",
+				scalar_value = "xmult_loss",
+				message_colour = G.C.MULT,
+				scaling_message = {
+					message = localize("k_downgrade_ex"),
+					colour = G.C.MULT,
+				}
+			})
+			if card.ability.xmult < 1.0 then
+				card.ability.xmult = 1.0
+			end
+		end
+		if context.joker_main then
 			return {
 				xmult = card.ability.xmult
 			}

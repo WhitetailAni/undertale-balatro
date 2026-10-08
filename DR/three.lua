@@ -44,7 +44,7 @@ SMODS.Joker {
 		return { vars = { localize("k_tarot"), localize("k_planet") } }
 	end,
 	calculate = function(self, card, context)
-		if context.end_of_round and context.cardarea == G.jokers then
+		if context.end_of_round and context.cardarea == G.jokers and G.GAME.current_round.hands_played <= 1 then
 			G.E_MANAGER:add_event(Event({
 				trigger = 'after',
 				delay = 0.4,
@@ -108,7 +108,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "watercooler",
 	config = {
-		bigbucks = 2,
+		bigbucks = 3,
 		said_buble = false
 	},
 	attributes = {
@@ -441,7 +441,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "ERAM",
 	config = {
-		odds = 15
+		odds = 10
 	},
 	attributes = {
 		"destroy_card",
@@ -570,7 +570,7 @@ SMODS.Joker {
 			cards_to_destroy = merge_table(cards_to_destroy, targ)
 
 			UTDR_Modules.Swoon.play(4)
-			
+
 			for i, v in ipairs(cards_to_destroy) do
 				local heart_as_my_mark = cards_to_destroy[i]
 				local is_joker = heart_as_my_mark.ability.set == "Joker"

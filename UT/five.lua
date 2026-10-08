@@ -99,7 +99,7 @@ SMODS.Joker {
 	key = "boss_monster_soul",
 	config = {
 		chips = 0,
-		chip_gain = 35,
+		chip_gain = 15,
 		increase_count = 0
 	},
 	attributes = {
@@ -271,7 +271,7 @@ SMODS.Joker {
 	key = "justice",
 	config = {
 		mult = 0,
-		mult_gain = 4,
+		mult_gain = 3,
 		mult_gained = false
 	},
 	attributes = {
@@ -334,7 +334,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "asgore",
 	config = {
-		xmult_per = 0.75,
+		xmult_per = 0.5,
 		slots = 4
 	},
 	attributes = {

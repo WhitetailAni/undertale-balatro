@@ -623,7 +623,7 @@ SMODS.Sound {
 SMODS.Joker {
 	key = "flowery",
 	config = {
-		xmult = 1.5,
+		xmult = 1.35,
 		all_flowers = false,
 		orange_active = false,
 		final_hand = false,

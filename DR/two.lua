@@ -303,12 +303,27 @@ SMODS.Joker {
 			return {
 				mult = card.ability.mult
 			}
-		elseif context.open_booster or context.buying_card and not context.blueprint then
+		end
+		if context.open_booster or context.buying_card and not context.blueprint then
 			SMODS.scale_card(card, {
 				ref_table = card.ability,
 				ref_value = "mult",
 				scalar_value = "mult_gain",
 				message_colour = G.C.MULT
+			})
+		end
+		if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss and not context.blueprint then
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "mult",
+				operation = function(ref_table, ref_value, initial, change)
+					ref_table[ref_value] = math.max(0, math.ceil(initial / 2.0))
+				end,
+				message_colour = G.C.MULT,
+				scaling_message = {
+					message = localize("k_downgrade_ex"),
+					colour = G.C.MULT,
+				}
 			})
 		end
 	end

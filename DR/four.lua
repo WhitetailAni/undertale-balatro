@@ -229,6 +229,12 @@ SMODS.Joker {
 		return money_spent >= 150
 	end,
 	loc_vars = function(self, info_queue, card)
+		if (card and card.area and card.area.config.collection) then
+			return {
+				vars = { card.ability.xmult, 150 },
+				key = "j_UTDR_axe_of_justice_collection",
+			}
+		end
 		return { vars = { card.ability.xmult } }
 	end,
 	calculate = function(self, card, context)
@@ -281,6 +287,24 @@ SMODS.Joker {
 	pos = { x = 9, y = 4 },
 	cost = 6,
 	config = {
+		extra = {
+			voucher_count = 1,
+		}
+	},
+	attributes = {
+		"passive"
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.voucher_count } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		SMODS.change_voucher_limit(card.ability.extra.voucher_count)
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		SMODS.change_voucher_limit(-card.ability.extra.voucher_count)
+	end
+	--[[
+	config = {
 		xmult_gain = 0.25,
 		xmult = 1
 	},
@@ -308,6 +332,7 @@ SMODS.Joker {
 			}
 		end
 	end
+	]]
 }
 
 --no, THIS is the second sanctuary. dumbass
@@ -363,7 +388,7 @@ SMODS.Joker {
 	},
 	--unlocked = false
 	rarity = 3,
-	blueprint_compat = false,
+	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
 	pos = { x = 0, y = 9 },
@@ -437,7 +462,7 @@ SMODS.Joker {
 			return {
 				repetitions = 1,
 			}
-		elseif context.selling_self then
+		elseif context.selling_self and not context.blueprint then
 			G.GAME.blind:set_text(true)
 		end
 	end,

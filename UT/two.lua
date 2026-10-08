@@ -37,7 +37,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "manly_bandana",
 	config = {
-		mult = 7
+		mult = 5
 	},
 	attributes = {
 		"mult",
@@ -388,7 +388,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "mad_mew_mew",
 	config = {
-		money = 5,
+		money = 10,
 	},
 	attributes = {
 		"economy",

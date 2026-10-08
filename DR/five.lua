@@ -514,6 +514,8 @@ SMODS.Joker {
 		return {
 			vars = {
 				card.ability.required_chips,
+				localize("k_tarot"),
+				localize("k_planet"),
 				elements = { element }
 			}
 		}
@@ -651,7 +653,7 @@ SMODS.Joker {
 		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text = G.FUNCS.prepend_to_table(
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text,
 			G.localization.descriptions.Joker[base_card.config.chosen_joker.joker_key].text)
-		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed =G.FUNCS. prepend_to_table(
+		G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed = G.FUNCS.prepend_to_table(
 			G.localization.descriptions.Joker["j_UTDR_netskie_disguise"].text_parsed,
 			G.localization.descriptions.Joker[base_card.config.chosen_joker.joker_key].text_parsed)
 
@@ -780,7 +782,7 @@ end
 SMODS.Joker {
 	key = "orange",
 	config = {
-		mult = 40,
+		mult = 30,
 		card_was_sold = false,
 		all_flowers = false
 	},
@@ -951,7 +953,7 @@ SMODS.Joker {
 		extra = {
 			card_type = "Tarot",
 			booster_counter = 0,
-			booster_requirement = 2,
+			booster_requirement = 3,
 		}
 	},
 	attributes = {
@@ -993,7 +995,6 @@ SMODS.Joker {
 			if not context.blueprint then
 				card.ability.extra.booster_counter = card.ability.extra.booster_counter + 1
 				if card.ability.extra.booster_counter >= card.ability.extra.booster_requirement then
-					card.ability.extra.booster_counter = 0
 					do_create = true
 				end
 			end
@@ -1002,6 +1003,10 @@ SMODS.Joker {
 				local do_message = false
 				if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
 					do_message = true
+				end
+				-- reset value
+				if not context.blueprint then
+					card.ability.extra.booster_counter = 0
 				end
 				-- create tarot
 				if do_message then

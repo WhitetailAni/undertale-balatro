@@ -471,10 +471,10 @@ return {
 			j_UTDR_burnt_pan = {
 				name = "Burnt Pan",
 				text = {
-					"{C:chips}+#1#{} chips for each",
-					"held consumable",
-					"{C:tarot}+#2#{} consumable slots",
-					"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)",
+					--"{C:chips}+#1#{} chips for each",
+					--"held consumable",
+					"{C:attention}+#1#{} consumable slots",
+					--"{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)",
 				},
 			},
 			j_UTDR_yaoi = {
@@ -504,9 +504,9 @@ return {
 			j_UTDR_hot_dog = {
 				name = "Hot Dog",
 				text = {
-					"Sell this card to",
-					"create {C:attention}#1#{} random",
-					"{C:tarot}#2#{} cards",
+					"Sell this card to create",
+					"random {C:tarot}#1#{} cards until",
+					"{C:attention}consumable slots{} are full",
 					"{C:inactive}(Must have room){}",
 				},
 			},
@@ -535,9 +535,9 @@ return {
 			j_UTDR_hot_cat = {
 				name = "Hot Cat",
 				text = {
-					"Sell this card to",
-					"create {C:attention}#1#{} random",
-					"{C:planet}#2#{} cards",
+					"Sell this card to create",
+					"random {C:planet}#1#{} cards until",
+					"{C:attention}consumable slots{} are full",
 					"{C:inactive}(Must have room){}",
 				},
 			},
@@ -838,8 +838,9 @@ return {
 			j_UTDR_toby_temmie = {
 				name = "Toby and Temmie",
 				text = {
-					"Creates a {C:purple}#2#",
-					"when {C:attention}Boss Blind is defeated",
+					"{C:green}#3# in #4#{} chance to create",
+					"a {C:attention}#2#{} when",
+					"{C:attention}Boss Blind{} is defeated",
 				},
 			},
 			j_UTDR_annoying_dog = {
@@ -1097,6 +1098,8 @@ return {
 				text = {
 					"This Joker gains {C:mult}+#1#{} Mult when",
 					"{C:attention}anything{} is bought in the shop",
+					"This Joker loses {C:attention}half{} of",
+					"its Mult at end of Ante",
 					"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
 				},
 			},
@@ -1177,7 +1180,8 @@ return {
 				name = "Ramb",
 				text = {
 					"Creates a {C:tarot}#1#{} or {C:planet}#2#",
-					"card at end of round",
+					"card at end of round if",
+					"winning with {C:attention}first hand",
 					"{C:inactive}(Must have room)",
 				},
 			},
@@ -1341,6 +1345,19 @@ return {
 					"{X:mult,C:white}X#1#{} Mult when scored",
 				},
 			},
+			j_UTDR_axe_of_justice_collection = {
+				name = "Justice Axe",
+				text = {
+					{
+						"Played cards give",
+						"{X:mult,C:white}X#1#{} Mult when scored",
+					},
+					{
+						"{C:inactive}(Only appears after spending",
+						"{C:money}$#2#{C:inactive} in the shop)"
+					}
+				},
+			},
 			j_UTDR_sanctuary = {
 				name = "Dark Sanctuary",
 				text = {
@@ -1352,9 +1369,12 @@ return {
 			j_UTDR_motherfucking_gerson_boom = {
 				name = "Hammer of Justice",
 				text = {
+					--[[
 					"This Joker gains {X:mult,C:white}X#1#{} Mult per",
 					"{C:attention}#3#{} redeemed this run",
 					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
+					]]
+					"{C:attention}+#1#{} Vouchers in shop",
 				},
 			},
 			j_UTDR_second_sanctuary = {
@@ -1514,11 +1534,18 @@ return {
 			j_UTDR_blue = {
 				name = "{C:flower_blue,element:1}Blue ",
 				text = {
-					"{C:attention}Prevents Death{} if chips",
-					"scored are at least",
-					"{C:attention}#1#%{} of required chips,",
-					"creates a {C:tarot}Tarot{} card when",
-					"Death is prevented",
+					{
+						"{C:attention}Prevents Death{} if chips",
+						"scored are at least",
+						"{C:attention}#1#%{} of required chips,",
+						"creates a {C:tarot}#2#{} card when",
+						"Death is prevented",
+					},
+					{
+						"Creates a {C:planet}#3#{} card",
+						"at the end of round if",
+						"{C:attention}Death{} wasn't prevented"
+					}
 				},
 			},
 			j_UTDR_netskie = {
@@ -1724,7 +1751,9 @@ return {
 				text = {
 					"Gains {X:mult,C:white}X#1#{} Mult",
 					"for each sold {C:attention}Joker",
-					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
+					"Loses {X:mult,C:white}X#2#{} Mult",
+					"at end of Ante",
+					"{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)",
 				},
 				name = "VESSEL",
 			},
@@ -1916,52 +1945,52 @@ return {
 					}
 				}
 			},
-			
+
 			j_UTDR_dev_white_tail_ani = {
 				name = "WhitetailAni",
 				text = {
 					{
 						"{s:1.3}Hi! I'm {s:1.3,C:homura}WhitetailAni.",
-					},{
-						"Until v3, I was the {C:attention}sole dev{} for this mod.",
-						"{C:vio_marks}Vio{} did the art, designed the jokers,",
-						"but it was my job to implement them. It was pretty fun!",
-						"Lots of {C:ballgame}Late Nights{} spent digging through the Balatro source,",
-						"asking the {C:discord}Balatro Discord{} for tips on where to find stuff..",
-					},{
-						"Anyway. In v3 we had {C:blue}too many ideas{} and realized we'd need more help.",
-						"I also got a {C:money}job{} in the meantime,",
-						"which meant I couldn't spend all day working on it anymore...",
-						"It was difficult to adjust to not being the only dev anymore.",
-						"{s:0.71}I'm not very good at working with other people.",
-						"But I think it turned out pretty well.",
-						"After all, you're playing the new update right now!",
-					}
+					}, {
+					"Until v3, I was the {C:attention}sole dev{} for this mod.",
+					"{C:vio_marks}Vio{} did the art, designed the jokers,",
+					"but it was my job to implement them. It was pretty fun!",
+					"Lots of {C:ballgame}Late Nights{} spent digging through the Balatro source,",
+					"asking the {C:discord}Balatro Discord{} for tips on where to find stuff..",
+				}, {
+					"Anyway. In v3 we had {C:blue}too many ideas{} and realized we'd need more help.",
+					"I also got a {C:money}job{} in the meantime,",
+					"which meant I couldn't spend all day working on it anymore...",
+					"It was difficult to adjust to not being the only dev anymore.",
+					"{s:0.71}I'm not very good at working with other people.",
+					"But I think it turned out pretty well.",
+					"After all, you're playing the new update right now!",
+				}
 				}
 			},
-			
+
 			j_UTDR_dev_white_tail_ani_first_look = {
 				name = "WhitetailAni",
 				text = {
 					{
 						"{s:1.3}Hi! I'm {s:1.3,C:homura}WhitetailAni.",
-					},{
-						"Until v3, I was the {C:attention}sole dev{} for this mod.",
-						"{C:vio_marks}Vio{} did the art, designed the jokers,",
-						"but it was my job to implement them. It was pretty fun!",
-						"Lots of {C:ballgame}Late Nights{} spent digging through the Balatro source,",
-						"asking the {C:discord}Balatro Discord{} for tips on where to find stuff..",
-					},{
-						"Anyway. In v3 we had {C:blue}too many ideas{} and realized we'd need more help.",
-						"I also got a {C:money}job{} in the meantime, which meant I couldn't spend all day working on it anymore...",
-						"It was difficult to adjust to not being the only dev anymore.",
-						"{s:0.71}I'm not very good at working with other people.",
-						"But I think it turned out pretty well.",
-						"After all, you're playing the new update right now!",
-					},{
-						"{s:0.9}If you want to view this message again, hold Alt and hover over me.",
-						"{s:0.9}Or hold Ctrl to view something else!", 
-					}
+					}, {
+					"Until v3, I was the {C:attention}sole dev{} for this mod.",
+					"{C:vio_marks}Vio{} did the art, designed the jokers,",
+					"but it was my job to implement them. It was pretty fun!",
+					"Lots of {C:ballgame}Late Nights{} spent digging through the Balatro source,",
+					"asking the {C:discord}Balatro Discord{} for tips on where to find stuff..",
+				}, {
+					"Anyway. In v3 we had {C:blue}too many ideas{} and realized we'd need more help.",
+					"I also got a {C:money}job{} in the meantime, which meant I couldn't spend all day working on it anymore...",
+					"It was difficult to adjust to not being the only dev anymore.",
+					"{s:0.71}I'm not very good at working with other people.",
+					"But I think it turned out pretty well.",
+					"After all, you're playing the new update right now!",
+				}, {
+					"{s:0.9}If you want to view this message again, hold Alt and hover over me.",
+					"{s:0.9}Or hold Ctrl to view something else!",
+				}
 				}
 			},
 			j_UTDR_dev_ani_no_no_no = {
@@ -2129,7 +2158,7 @@ return {
 					"Be seeing you soon!"
 				}
 			},
-			
+
 			j_UTDR_dev_j8 = {
 				name = "J8-Bit",
 				text = {
@@ -2507,6 +2536,7 @@ return {
 			k_UTDR_robot = "Roboticized!",
 			k_UTDR_yellow_thanks = "Thanks, y'all!",
 			k_upgrade_qm = "Upgrade?",
+			k_downgrade_ex = "Downgrade!",
 
 			k_dog = "Dog",
 			k_him = "Him",
@@ -2541,7 +2571,7 @@ return {
 			b_UTDR_ralseis = "Ralseis",
 			b_UTDR_restart = "Restart Game",
 			b_UTDR_requires_restart = "Requires restart for changes to appear!",
-			
+
 			-- shop tab stuff
 			s_UTDR_shop = "Shop",
 			s_UTDR_cattybratty = "Catty & Bratty",
@@ -2555,8 +2585,8 @@ return {
 			UTDR_shopball_skip = "Skip",
 			UTDR_shopball_take = "Take",
 			UTDR_shopball_use = "Use",
-			
-			
+
+
 			--lacquer script
 			ph_UTDR_improve = "Improve.",
 		},
