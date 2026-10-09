@@ -15,13 +15,13 @@ local ease_background_colour_blind_hook = ease_background_colour_blind
 function ease_background_colour_blind(state, blind_override, ...)
 	if state == G.STATES.UTDR_SHOP_CAPSULE then
 		ease_colour(G.C.DYN_UI.MAIN, HEX("ffd601"))
-		ease_background_colour{new_colour = HEX("42d4a3"), special_colour = HEX("799f97"), contrast = 3}
+		ease_background_colour { new_colour = HEX("42d4a3"), special_colour = HEX("799f97"), contrast = 3 }
 	elseif state == G.STATES.UTDR_SHOP_CATTYBRATTY then
 		ease_colour(G.C.DYN_UI.MAIN, HEX("dc8df0"))
-		ease_background_colour{new_colour = G.C.PURPLE, special_colour = G.C.L_BLACK, contrast = 3}
+		ease_background_colour { new_colour = G.C.PURPLE, special_colour = G.C.L_BLACK, contrast = 3 }
 	elseif state == G.STATES.UTDR_SHOP_LACQUER then
 		ease_colour(G.C.DYN_UI.MAIN, G.C.LACQUER_OUTLINE)
-		ease_background_colour{new_colour = G.C.LACQUER_BG, special_colour = G.C.L_BLACK, contrast = 3}
+		ease_background_colour { new_colour = G.C.LACQUER_BG, special_colour = G.C.L_BLACK, contrast = 3 }
 	else
 		ease_background_colour_blind_hook(state, blind_override, ...)
 	end
@@ -137,7 +137,7 @@ SMODS.Joker {
 			has_viewed = true
 			return { key = "j_UTDR_dev_white_tail_ani_first_look" }
 		end
-		
+
 		for key, value in pairs(G.CONTROLLER.held_keys) do
 			if (key == "lalt" and value == true) or (key == "ralt" and value == true) then
 				return { key = "j_UTDR_dev_white_tail_ani" }
@@ -202,32 +202,42 @@ SMODS.Joker {
 	display_size = { w = 69, h = 69 },
 	no_collection = true,
 	loc_vars = function(self, info_queue, card)
-		local fail = #UTDR_Modules.elle_plurality.syslist==0
+		local fail = #UTDR_Modules.elle_plurality.syslist == 0
 
-		local text = SMODS.create_sprite(0, 0, 2,  69/391*2, "UTDR_ellecredits_physical_challenges", { x = 0, y = 0 })
-		local element = {n = G.UIT.C, config = {padding=-.1}, nodes = {
-			{n = G.UIT.R, config = {minh = .2}},
-			{n = G.UIT.R, nodes = {
-				{n = G.UIT.O, config = {object = text}}
-			}}
-		}}
-
-		return { vars = {
-			fail and "???" or #UTDR_Modules.elle_plurality.syslist+UTDR_Modules.elle_plurality.hidden_count,
-			elements = {
-				UTDR_Modules.elle_plurality.generate_syslist_ui(UTDR_Modules.elle_plurality[fail and "fallback" or "syslist"]),
-				element
-			},
-			colours = {
-				HEX("ff53a9")
+		local text = SMODS.create_sprite(0, 0, 2, 69 / 391 * 2, "UTDR_ellecredits_physical_challenges", { x = 0, y = 0 })
+		local element = {
+			n = G.UIT.C,
+			config = { padding = -.1 },
+			nodes = {
+				{ n = G.UIT.R, config = { minh = .2 } },
+				{
+					n = G.UIT.R,
+					nodes = {
+						{ n = G.UIT.O, config = { object = text } }
+					}
+				}
 			}
-		}}
+		}
+
+		return {
+			vars = {
+				fail and "???" or #UTDR_Modules.elle_plurality.syslist + UTDR_Modules.elle_plurality.hidden_count,
+				elements = {
+					UTDR_Modules.elle_plurality.generate_syslist_ui(UTDR_Modules.elle_plurality
+						[fail and "fallback" or "syslist"]),
+					element
+				},
+				colours = {
+					HEX("ff53a9")
+				}
+			}
+		}
 	end,
 	in_pool = function(self, args)
 		return false
 	end,
 	set_badges = function(self, card, badges)
-		badges[#badges] = create_badge("She/It", HEX("ff53a9"),G.C.WHITE, 1.2)
+		badges[#badges] = create_badge("She/It", HEX("ff53a9"), G.C.WHITE, 1.2)
 	end
 }
 
@@ -240,6 +250,10 @@ UTDR.special_thanks = {
 	"invalidOS (aka alexi)",
 	"GhostSalt",
 	"Balatro Discord Server",
+}
+
+UTDR.beta_testers = {
+	"(beta testers go here)"
 }
 
 UTDR.text_to_text_table = function(text, char_limit)
@@ -336,11 +350,25 @@ SMODS.current_mod.custom_ui = function(mod_nodes)
 				align = "cl",
 			},
 			nodes = {
-				{ n = G.UIT.T, config = { text = "..and ", scale = .275, colour = G.C.TEXT_LIGHT } },
+				{ n = G.UIT.T, config = { text = "...and ", scale = .275, colour = G.C.TEXT_LIGHT } },
 				{ n = G.UIT.T, config = { text = string.upper(localize({ type = 'name_text', set = "Joker", key = "j_UTDR_you" })) or 'YOU', scale = .275, colour = G.C.BALLGAME } },
 				{ n = G.UIT.T, config = { text = "!", scale = .275, colour = G.C.TEXT_LIGHT } }
 			}
 		})
+
+	local tester_nodes = {}
+	for _, text in ipairs(UTDR.beta_testers) do
+		table.insert(tester_nodes,
+			{
+				n = G.UIT.R,
+				config = {
+					align = "cl",
+				},
+				nodes = {
+					{ n = G.UIT.T, config = { text = text, scale = .275, colour = G.C.TEXT_LIGHT } }
+				}
+			})
+	end
 
 	-- putting it all together
 
@@ -406,20 +434,56 @@ SMODS.current_mod.custom_ui = function(mod_nodes)
 			},
 			{
 				n = G.UIT.R,
-				config = { padding = 0.05, align = 'cm', colour = G.C.L_BLACK, r = 0.05 },
+				config = { padding = 0.0, align = 'cm', },
 				nodes = {
 					{
 						n = G.UIT.C,
-						config = { padding = 0.1, align = 'cm' },
+						config = { padding = 0.05, align = 'cm' },
 						nodes = {
-							{ n = G.UIT.T, config = { text = "SPECIAL THANKS", scale = 0.25, colour = G.C.BLACK, vert = true } },
+							{
+								n = G.UIT.R,
+								config = { padding = 0.05, align = 'cm', colour = G.C.L_BLACK, r = 0.05 },
+								nodes = {
+									{
+										n = G.UIT.C,
+										config = { padding = 0.1, align = 'cm' },
+										nodes = {
+											{ n = G.UIT.T, config = { text = "SPECIAL THANKS", scale = 0.25, colour = G.C.BLACK, vert = true } },
+										}
+									},
+									{
+										n = G.UIT.C,
+										config = { padding = 0.05, align = 'cm', colour = G.C.BLACK, r = 0.05, minw = 4.5 },
+										nodes = thanks_nodes
+									}
+								}
+							},
 						}
 					},
 					{
 						n = G.UIT.C,
-						config = { padding = 0.05, align = 'cm', colour = G.C.BLACK, r = 0.05, minw = 9.0 },
-						nodes = thanks_nodes
-					}
+						config = { padding = 0.05, align = 'cm' },
+						nodes = {
+							{
+								n = G.UIT.R,
+								config = { padding = 0.05, align = 'cm', colour = G.C.L_BLACK, r = 0.05 },
+								nodes = {
+									{
+										n = G.UIT.C,
+										config = { padding = 0.1, align = 'cm' },
+										nodes = {
+											{ n = G.UIT.T, config = { text = "BETA TESTERS", scale = 0.25, colour = G.C.BLACK, vert = true } },
+										}
+									},
+									{
+										n = G.UIT.C,
+										config = { padding = 0.05, align = 'cm', colour = G.C.BLACK, r = 0.05, minw = 4.5 },
+										nodes = tester_nodes
+									}
+								}
+							},
+						}
+					},
 				}
 			},
 		}
@@ -599,7 +663,7 @@ if UTDR_config["deltarune"] then
 end
 
 if UTDR_config["deltarune"] and UTDR_config["deltarune"] then
-	
+
 end
 
 function played_secret_hand(played_hands)
