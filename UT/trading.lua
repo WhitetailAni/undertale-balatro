@@ -50,7 +50,7 @@ function Game:update_utdr_shop_cattybratty(dt)
 		local targets = {
 			"UTDR_SHOP_SIGN_CAPSULE",
 			"buttons",
-			"utdr_shop_capsule"
+			"UTDR_shop_capsule"
 		}
 
 		for _, v in ipairs(targets) do
@@ -434,7 +434,7 @@ function Game:update_shop(dt)
 			"UTDR_SHOP_SIGN_CAPSULE",
 			"UTDR_SHOP_SIGN_LACQUER",
 			"utdr_shop_cattybratty",
-			"utdr_shop_capsule",
+			"UTDR_shop_capsule",
 		}
 
 		for _, v in ipairs(targets) do

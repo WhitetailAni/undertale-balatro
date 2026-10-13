@@ -102,7 +102,7 @@ function UTDR_Modules.Lacquer_Shop.create_lacquer_card_ui(card, type, area)
                   }}
               }}
           local t2 = {
-            n=G.UIT.ROOT, config = {ref_table = card, minw = 1.1, maxw = 1.3, padding = 0.1, align = 'bm', colour = G.C.BALLGAME, shadow = true, r = 0.08, minh = 0.94, one_press = true, button = 'buy_lacquer', hover = true}, nodes={
+            n=G.UIT.ROOT, config = {ref_table = card, minw = 1.1, maxw = 1.3, padding = 0.1, align = 'bm', colour = G.C.BALLGAME, shadow = true, r = 0.08, minh = 0.94, one_press = true, button = 'buy_lacquer', hover = true, func = 'can_buy_lacquer'}, nodes={
                 {n=G.UIT.T, config={text = localize('b_buy'),colour = G.C.WHITE, scale = 0.5}}
             }}
             
@@ -136,7 +136,12 @@ function UTDR_Modules.Lacquer_Shop.create_lacquer_card_ui(card, type, area)
       }))
   end
   
-  
+function G.FUNCS.can_buy_lacquer(e)
+	local can_buy = G.jokers.config.card_limits.total_slots > #G.jokers.cards
+
+	e.config.colour = can_buy and darken(G.C.RED, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = can_buy and 'buy_lacquer' or nil
+end
   
 function UTDR_Modules.Lacquer_Shop.lacquer_shop()
     G.lacquer_joker = CardArea(
@@ -227,7 +232,7 @@ function UTDR_Modules.Lacquer_Shop.lacquer_shop()
                     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
                       {n=G.UIT.C, config={align = "cm", padding = 0.15, r=0.2, colour = G.C.L_BLACK, emboss = 0.05}, nodes={
                         {n=G.UIT.C, config={align = "cm", padding = 0.2, r=0.2, colour = G.C.BLACK, maxh = G.lacquer_voucher.T.h+0.4}, nodes={
-                          {n=G.UIT.T, config={text = localize{type = 'variable', key = 'ante_x_voucher', vars = { 0 }}, scale = 0.45, colour = G.C.L_BLACK, vert = true}},
+                          {n=G.UIT.T, config={text = localize{type = 'variable', key = 'ante_x_voucher', vars = { " " }}, scale = 0.45, colour = G.C.L_BLACK, vert = true}},
                           {n=G.UIT.O, config={object = G.lacquer_voucher}},
                         }},
                       }},

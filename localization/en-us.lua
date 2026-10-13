@@ -2585,6 +2585,8 @@ return {
 			UTDR_shopball_skip = "Skip",
 			UTDR_shopball_take = "Take",
 			UTDR_shopball_use = "Use",
+			
+			UTDR_shopball_prize = "Capsule Prize",
 
 
 			--lacquer script

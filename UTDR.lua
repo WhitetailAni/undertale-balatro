@@ -650,6 +650,7 @@ if UTDR_config["deltarune"] then
 	assert(SMODS.load_file('DR/66.lua'))()
 	assert(SMODS.load_file('DR/99.lua'))()
 
+	assert(SMODS.load_file('DR/capsule_booster.lua'))()
 	assert(SMODS.load_file('DR/capsule.lua'))()
 	assert(SMODS.load_file('DR/point.lua'))()
 	assert(SMODS.load_file('DR/lacquer_shop.lua'))()
