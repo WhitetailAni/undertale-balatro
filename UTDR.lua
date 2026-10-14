@@ -249,6 +249,7 @@ UTDR.special_thanks = {
 	"UT/DR Developers",
 	"invalidOS (aka alexi)",
 	"GhostSalt",
+	"Ariana Masako González",
 	"Balatro Discord Server",
 }
 

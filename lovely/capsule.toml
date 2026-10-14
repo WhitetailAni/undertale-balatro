@@ -52,7 +52,7 @@ for key, value in pairs(G.P_CENTERS) do
 	end
 end
 G.GAME.UTDR_capsule_gold_prizes = gold_prizes
-
+UTDR_Modules.Capsule.total_gold_prizes = #gold_prizes
 '''
 match_indent = true
 
@@ -80,6 +80,7 @@ target = "functions/button_callbacks.lua"
 pattern = "G.FUNCS.end_consumeable = function(e, delayfac)"
 position = "after"
 payload = '''
+delayfac = delayfac or 0.0
 if G.UTDR_shop_capsule then
 	G.FUNCS.draw_from_hand_to_deck()
 	G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.2*delayfac,blocking = false,
