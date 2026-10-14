@@ -56,3 +56,40 @@ G.GAME.UTDR_capsule_gold_prizes = gold_prizes
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''
+if G.shop and G.shop.alignment.offset.py then 
+	G.shop.alignment.offset.y = G.shop.alignment.offset.py
+  	G.shop.alignment.offset.py = nil
+end
+'''
+position = "after"
+payload = '''
+if G.UTDR_shop_capsule and G.UTDR_shop_capsule.alignment.offset.py then 
+	G.UTDR_shop_capsule.alignment.offset.y = G.UTDR_shop_capsule.alignment.offset.py
+  	G.UTDR_shop_capsule.alignment.offset.py = nil
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "G.FUNCS.end_consumeable = function(e, delayfac)"
+position = "after"
+payload = '''
+if G.UTDR_shop_capsule then
+	G.FUNCS.draw_from_hand_to_deck()
+	G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.2*delayfac,blocking = false,
+      func = function()
+			G.STATE = G.STATES.UTDR_SHOP_CAPSULE
+			G.STATE_COMPLETE = false
+        return true
+      end}))
+      return true
+end
+'''
+match_indent = true
+

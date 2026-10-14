@@ -74,8 +74,7 @@ G.FUNCS.end_prize = function(e, delayfac)
       G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.2*delayfac,
           func = function()
                 G.STATE_COMPLETE = false
-                G.STATE = G.STATES.SHOP
-                --G.STATE = G.STATES.UTDR_SHOP_CAPSULE
+                G.STATE = G.STATES.UTDR_SHOP_CAPSULE
                 --G.CONTROLLER.interrupt.focus = true
                 
                 --[[G.E_MANAGER:add_event(Event({func = function()        
@@ -118,8 +117,12 @@ local function capsule_UIBox(self)
 				UIBox_dyn_container({
 					{n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 4}, nodes={
 						{n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
-							{n=G.UIT.O, config={object = DynaText({string = localize('UTDR_shopball_prize'), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
-						}}
+							{n=G.UIT.O, config={object = DynaText({string = localize('UTDR_shopball_prize'), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}
+						}},
+						{n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
+							{n=G.UIT.O, config={object = DynaText({string = "Gold", colours = { G.C.GOLD },shadow = true, rotate = true, bump = true, spacing =2, scale = 0.5, maxw = 4, pop_in = 0.5})}},
+						}},
+					}},	
 				}),}},
 			{n=G.UIT.C,config={align = "tm", padding = 0.05, minw = 2.4}, nodes={
 				{n=G.UIT.R,config={minh =0.2}, nodes={}},
@@ -142,6 +145,7 @@ SMODS.Booster {
     	extra = 1,
     	choose = 1
     },
+    select_button_text = "UTDR_shopball_take",
     create_capsule_UIBox = capsule_UIBox,
     --group_key = "k_arcana_pack", -- Delete this if you're using `group_name` in `loc_txt`
     draw_hand = true,
@@ -191,7 +195,7 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
-        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_joker, "capsule_joker") }
+        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_joker, "capsule_joker"), skip_materialize = true }
     end,
 }
 
@@ -214,7 +218,7 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
-        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_planet, "capsule_planet") }
+        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_planet, "capsule_planet"), skip_materialize = true }
     end,
 }
 
@@ -237,7 +241,7 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
-        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_spectral, "capsule_spectral") }
+        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_spectral, "capsule_spectral"), skip_materialize = true }
     end,
 }
 
@@ -253,6 +257,7 @@ SMODS.Booster {
     	extra = 1,
     	choose = 1
     },
+    select_button_text = "UTDR_shopball_take",
     create_capsule_UIBox = capsule_UIBox,
     draw_hand = false,
     in_pool = function(self, args)

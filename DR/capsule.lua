@@ -216,7 +216,7 @@ function Game:update_UTDR_shop_capsule(dt)
 
 		UTDR_Modules.Capsule.bet_amount = math.min(G.GAME.UTDR_points,UTDR_Modules.Capsule.min_amount)
 		
-		if not G.UTDR_shop_capsule then
+		--if not G.UTDR_shop_capsule then
 			G.E_MANAGER:add_event(Event{ func = function()
 				G.E_MANAGER:add_event(Event{
 					trigger = 'immediate',
@@ -232,7 +232,7 @@ function Game:update_UTDR_shop_capsule(dt)
 						G.UTDR_shop_capsule.alignment.offset.y = G.ROOM.T.y + 21.55
 				return true end})
 			return true end})
-		end
+		--end
 	end
 	
 	G.STATE_COMPLETE = true

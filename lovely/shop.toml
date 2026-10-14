@@ -142,7 +142,6 @@ if G.shop then G.shop.alignment.offset.y = G.ROOM.T.y+11 end
 position = 'after'
 payload = '''
 if G.UTDR_shop_capsule then
-	print(G.UTDR_shop_capsule.alignment.offset)
 	if G.UTDR_shop_capsule then G.UTDR_shop_capsule.alignment.offset.y = -20 end
 	if G.UTDR_shop_tabs then G.UTDR_shop_tabs.alignment.offset.y = 30 end
 elseif G.shop then
