@@ -232,7 +232,7 @@ function UTDR_Modules.Trading.create_UIBox_cattybratty(reload)
 						{ n = G.UIT.O, config = { object = shop_sign } }
 					} },
 					{ n = G.UIT.R, config = { align = "cm" }, nodes = {
-						{ n = G.UIT.O, config = { object = DynaText({ string = { localize('ph_utdr_cattybratty') }, colours = { lighten(G.C.GOLD, 0.3) }, shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3 }) } }
+						{ n = G.UIT.O, config = { object = DynaText({ string = { localize('ph_utdr_cattybratty') }, colours = { lighten(G.C.CATTY, 0.3) }, shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, maxw = 4.3 }) } }
 					} },
 				} },
 			} },

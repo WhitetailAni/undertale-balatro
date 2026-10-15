@@ -14,9 +14,15 @@ Game.update_UTDR_shop_tabs = function()
 				delay = 0.2,
 				func = function()
 					play_sound('cancel')
+					
+					local xOffset = 14.6
+					if G.SETTINGS.GRAPHICS.texture_scaling == 2 then
+						xOffset = 15
+					end
+					
 					G.UTDR_shop_tabs = UIBox{
 						definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
-						config = {align="cl", offset = {x=G.ROOM.T.x + 14,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+						config = {align="cl", offset = {x=G.ROOM.T.x + xOffset,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
 					}
 					
 					local remove_hook = G.UTDR_shop_tabs.remove
@@ -45,24 +51,30 @@ UTDR_Modules.Shop_Tabs.create_shop_tabs = function(mod_state)
 	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
     		UIBox_dyn_container({
             	{n=G.UIT.R, config={align = "cm", padding = 0.1, minw = 5.0}, nodes={
-					{n=G.UIT.C,config={align = "cm", minw = 2.8, minh = 0.5, r=0.15,colour = G.C.RED, button = 'UTDR_shop_button', hover = true,shadow = true, state = "SHOP"}, nodes = {
+					{n=G.UIT.C,config={align = "cm", minw = 3.15, minh = 0.5, r=0.15,colour = G.C.RED, button = 'UTDR_shop_button', hover = true,shadow = true, state = "SHOP"}, nodes = {
 					  {n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'y', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
 						{n=G.UIT.R, config={align = "cm", maxw = 1.3}, nodes={
-						  {n=G.UIT.T, config={text = localize('s_UTDR_shop'), scale = 0.4, colour = G.C.WHITE, shadow = true}}
+							{n=G.UIT.O, config={object = SMODS.create_sprite(0, 0, 0.4, 0.4, "UTDR_shop_icons", { x = 0, y = 0 }) }},
+							{n=G.UIT.B, config={h = 0.01, w = 0.03 }},
+						  	{n=G.UIT.T, config={text = localize('s_UTDR_shop'), scale = 0.4, colour = G.C.WHITE, shadow = true}}
 						}},
 					  }},              
 					}},
-					{n=G.UIT.C, config={align = "cm", minw = 2.8, minh = 0.5, r=0.15,colour = HEX('d789c7'), button = 'UTDR_shop_button', hover = true,shadow = true, state = "UTDR_SHOP_CATTYBRATTY"}, nodes = {
+					{n=G.UIT.C, config={align = "cm", minw = 3.15, minh = 0.5, r=0.15,colour = HEX('d789c7'), button = 'UTDR_shop_button', hover = true,shadow = true, state = "UTDR_SHOP_CATTYBRATTY"}, nodes = {
 					  {n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'x', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
 						{n=G.UIT.R, config={align = "cm", minw = 1.3}, nodes={
-						  {n=G.UIT.T, config={text = localize('s_UTDR_cattybratty'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
+							{n=G.UIT.O, config={object = SMODS.create_sprite(0, 0, 0.4, 0.4, "UTDR_shop_icons", { x = 2, y = 0 }) }},
+							{n=G.UIT.B, config={h = 0.01, w = 0.03 }},
+						  	{n=G.UIT.T, config={text = localize('s_UTDR_cattybratty'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
 						}},
 					  }}
 					}},
-					{n=G.UIT.C, config={align = "cm", minw = 2.8, minh = 0.5, r=0.15,colour = HEX('68bc9a'), button = 'UTDR_shop_button', hover = true,shadow = true, state = "UTDR_SHOP_CAPSULE"}, nodes = {
+					{n=G.UIT.C, config={align = "cm", minw = 3.15, minh = 0.5, r=0.15,colour = HEX('68bc9a'), button = 'UTDR_shop_button', hover = true,shadow = true, state = "UTDR_SHOP_CAPSULE"}, nodes = {
 					  {n=G.UIT.R, config={align = "cm", padding = 0.07, focus_args = {button = 'x', orientation = 'cr'}, func = 'set_button_pip'}, nodes={
 						{n=G.UIT.R, config={align = "cm", minw = 1.3}, nodes={
-						  {n=G.UIT.T, config={text = localize('s_UTDR_ball'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
+							{n=G.UIT.O, config={object = SMODS.create_sprite(0, 0, 0.4, 0.4, "UTDR_shop_icons", { x = 1, y = 0 }) }},
+							{n=G.UIT.B, config={h = 0.01, w = 0.07 }},
+						  	{n=G.UIT.T, config={text = localize('s_UTDR_ball'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
 						}},
 					  }}
 					}},

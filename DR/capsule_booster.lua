@@ -17,7 +17,7 @@ function Card:capsule_open()
 	G.GAME.pack_choices = 1
 
 	G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
-		self:explode()
+		self:shatter()
 		
 		local card = nil
 
@@ -75,13 +75,13 @@ end
 
 SMODS.Booster {
     key = "capsule_tarot",
-    --weight = 1,
     loc_txt = {
     	name = "",
     	description = "",
     },
-    atlas = "capsule",
+    atlas = "shop_capsule_ball",
     pos = { x = 0, y = 0 },
+    pixel_size = { w = 64, h = 64 },
     config = {
     	extra = 1,
     	choose = 1
@@ -108,8 +108,9 @@ SMODS.Booster {
     	name = "",
     	description = "",
     },
-    atlas = "capsule",
+    atlas = "shop_capsule_ball",
     pos = { x = 0, y = 0 },
+    pixel_size = { w = 64, h = 64 },
     config = {
     	extra = 1,
     	choose = 1
@@ -134,8 +135,9 @@ SMODS.Booster {
     	name = "",
     	description = "",
     },
-    atlas = "capsule",
+    atlas = "shop_capsule_ball",
     pos = { x = 0, y = 0 },
+    pixel_size = { w = 64, h = 64 },
     config = {
     	extra = 1,
     	choose = 1
@@ -157,8 +159,9 @@ SMODS.Booster {
     	name = "",
     	description = "",
     },
-    atlas = "capsule",
+    atlas = "shop_capsule_ball",
     pos = { x = 0, y = 0 },
+    pixel_size = { w = 64, h = 64 },
     config = {
     	extra = 1,
     	choose = 1
@@ -180,8 +183,9 @@ SMODS.Booster {
     	name = "",
     	description = "",
     },
-    atlas = "capsule",
-    pos = { x = 0, y = 0 },
+    atlas = "shop_capsule_ball",
+    pos = { x = 1, y = 0 },
+    pixel_size = { w = 64, h = 64 },
     config = {
     	extra = 1,
     	choose = 1

@@ -66,7 +66,7 @@ function Game:update_UTDR_shop_capsule(dt)
 						play_sound('cancel')
 						G.UTDR_shop_capsule = UIBox{
 							definition = UTDR_Modules.Capsule.create_UIBox_capsule(),
-							config = {align="bmi", offset = {x=0,y=G.ROOM.T.y + 29}, major = G.hand, bond = 'Weak'}
+							config = {align="bmi", offset = {x=0,y=G.ROOM.T.y + 29.25}, major = G.hand, bond = 'Weak'}
 						}
 						G.ROOM.jiggle = G.ROOM.jiggle + 3
 						G.CONTROLLER.lock_input = false
@@ -96,8 +96,6 @@ function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
 	if chance == -0.05 then
 		chance = 0.05
 	end
-	
-	print(chance)
 	
 	chance = chance * 100
 	
@@ -253,6 +251,16 @@ local function remove_pts_button(amnt)
 	}}
 end
 
+SMODS.current_mod.custom_card_areas = function(G)
+	G.UTDR_capsule_prize = CardArea(
+		0,
+		0,
+		0.01,
+		0.01, 
+		{ card_limit = 1, type = 'joker', highlight_limit = 0, bg_colour = G.C.GASTER, no_card_count = false }
+	)
+end
+
 function UTDR_Modules.Capsule.create_UIBox_capsule()
 	local shop_sign = AnimatedSprite(0,0, 4.4, 4.4/119*45, G.ANIMATION_ATLAS.UTDR_shopsign_capsule)
 	shop_sign:define_draw_steps({
@@ -267,7 +275,7 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 						{n=G.UIT.O, config={object = shop_sign}}
 					}},
 					{n=G.UIT.R, config={align = "cm"}, nodes={
-						{n=G.UIT.O, config={object = DynaText({string = {localize('ph_utdr_capsule')}, colours = {lighten(G.C.GOLD, 0.3)},shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3})}}
+						{n=G.UIT.O, config={object = DynaText({string = {localize('ph_utdr_capsule')}, colours = { lighten(G.C.DYN_UI.MAIN, 0.3) },shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, maxw = 4.3})}}
 					}},
 				}},
 			}},
@@ -286,17 +294,18 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 		end)
 	}))
 
-	local capsule_spr = SMODS.create_sprite(0,0,5,156/111*5,"UTDR_shop_capsule")
 	local t = {n=G.UIT.ROOT, config = {align = 'cl', colour = G.C.CLEAR}, nodes={
 		UIBox_dyn_container({
 			{n=G.UIT.C, config={align = "cm", padding = 0.1, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN}, nodes={
 				{n=G.UIT.C, config={align = "cr", minw = 6.5, padding = .4}, nodes = {
-					{n=G.UIT.O, config={object = capsule_spr}}
+					{n=G.UIT.O, config={object = SMODS.create_sprite(0,0,5,156/111*5,"UTDR_shop_capsule"), colour = G.C.BALLGAME }},
 				}},
+				--[[{n=G.UIT.C, config={align = "cr", minw = 6.5, padding = .4}, nodes = {
+					{n=G.UIT.O, config={object = G.UTDR_capsule_prize, colour = G.C.GASTER}},
+				}},]]
 				{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
 					{n=G.UIT.R, config={align = "cm", colour=G.C.CLEAR, padding = 0.05}, nodes = {
 						{n=G.UIT.R, config={align = "cm"}, nodes = {
-							--{n=G.UIT.T, config={text = UTDR_Modules.Capsule.gold_chance(UTDR_Modules.Capsule.bet_amount, true), scale = 0.5, colour = G.C.GOLD}},
 							{n=G.UIT.O,config={object=DynaText({ string = {{ref_table = UTDR_Modules.Capsule, ref_value = "gold_chance_percent", colour = G.C.GOLD}}, float = true, colours = { G.C.GOLD }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}},
 							{n=G.UIT.O,config={object=DynaText({ string = localize("UTDR_shopball_chance1"), float = true, colours = { G.C.POINTS }, pop_in = 0, pop_in_rate = 3, spacing = 1, scale = .5, maxw=4 })}},
 						}},
@@ -313,8 +322,8 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 								{n=G.UIT.R, config={align = "cm", minw=3, emboss = 0.05, r = 0.1, colour=G.C.L_BLACK, padding = 0.1}, nodes = {
 									{n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes = {
 										{n=G.UIT.R, config={align = "cm"}, nodes = {
-											{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, ref_table = UTDR_Modules.Capsule, ref_value = "bet_amount"}},
-											{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, text = localize("utdr_points_suffix")}},
+											{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, ref_table = UTDR_Modules.Capsule, ref_value = "bet_amount", shadow = true}},
+											{n=G.UIT.T, config={colour=G.C.POINTS, scale=1, shadow = true, text = localize("utdr_points_suffix")}},
 										}},
 									}},
 								}},
@@ -396,10 +405,16 @@ function G.FUNCS.UTDR_capsule_trade(e)
 		UTDR_Modules.Capsule.ease_points(-bet_amount)
 				
 		local pack = SMODS.create_card({
-			key = reward
+			key = reward,
+			area = G.UTDR_capsule_prize,
 		})
 		
-		pack:capsule_open()
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				pack:capsule_open()
+				return true
+			end
+		}))
 	end
 end
 	
