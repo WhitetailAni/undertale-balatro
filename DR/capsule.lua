@@ -202,11 +202,8 @@ function UTDR_Modules.Capsule.get_reward(bet)
 		end
 	end
 	
-	local winning_set = pseudorandom_element({
-		"p_UTDR_capsule_joker",
-		"p_UTDR_capsule_tarot",
-		"p_UTDR_capsule_spectral",
-	}, "capsule_prize_set_broke_ass")
+	local winning_set = ""
+	print(winning_set)
 	if bet < 100 then
 		winning_set = pseudorandom_element({
 			"p_UTDR_capsule_joker",
@@ -214,7 +211,14 @@ function UTDR_Modules.Capsule.get_reward(bet)
 			"p_UTDR_capsule_planet",
 			"p_UTDR_capsule_spectral",
 		}, "capsule_prize_set_super_broke_ass")
+	else
+		pseudorandom_element({
+			"p_UTDR_capsule_joker",
+			"p_UTDR_capsule_tarot",
+			"p_UTDR_capsule_spectral",
+		}, "capsule_prize_set_broke_ass")
 	end
+	print(winning_set)
 	
 	return winning_set
 end
@@ -249,16 +253,6 @@ local function remove_pts_button(amnt)
 	},nodes={
 		{n=G.UIT.T, config={colour=G.C.WHITE, scale=.4, text = SMODS.signed(amnt)..localize("utdr_points_suffix")}}
 	}}
-end
-
-SMODS.current_mod.custom_card_areas = function(G)
-	G.UTDR_capsule_prize = CardArea(
-		0,
-		0,
-		0.01,
-		0.01, 
-		{ card_limit = 1, type = 'joker', highlight_limit = 0, bg_colour = G.C.GASTER, no_card_count = false }
-	)
 end
 
 function UTDR_Modules.Capsule.create_UIBox_capsule()
@@ -300,9 +294,6 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 				{n=G.UIT.C, config={align = "cr", minw = 6.5, padding = .4}, nodes = {
 					{n=G.UIT.O, config={object = SMODS.create_sprite(0,0,5,156/111*5,"UTDR_shop_capsule"), colour = G.C.BALLGAME }},
 				}},
-				--[[{n=G.UIT.C, config={align = "cr", minw = 6.5, padding = .4}, nodes = {
-					{n=G.UIT.O, config={object = G.UTDR_capsule_prize, colour = G.C.GASTER}},
-				}},]]
 				{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
 					{n=G.UIT.R, config={align = "cm", colour=G.C.CLEAR, padding = 0.05}, nodes = {
 						{n=G.UIT.R, config={align = "cm"}, nodes = {
@@ -403,11 +394,24 @@ function G.FUNCS.UTDR_capsule_trade(e)
 		end
 		
 		UTDR_Modules.Capsule.ease_points(-bet_amount)
-				
+		
+		--the actual card's only job is to create the booster UI lmao. get yo sprite out of here!!!!
+		G.pack_cards = CardArea(
+			G.ROOM.T.x + 9 + G.hand.T.x, G.hand.T.y,
+			G.CARD_W*1.1,
+			1.05*G.CARD_H,
+			{card_limit = 1, type = 'consumeable', highlight_limit = 1, negative_info = true}
+		)
+		
 		local pack = SMODS.create_card({
-			key = reward,
-			area = G.UTDR_capsule_prize,
+			key = reward
 		})
+		pack.children.center.states.visible = false
+		
+		local scale_factor = 1.4
+		pack.capsule = {}
+		pack.capsule.bottom = SMODS.create_sprite(pack.T.x, pack.T.y, G.CARD_W * scale_factor, G.CARD_H * scale_factor, "UTDR_shop_capsule_ball", { x = 5, y = 0 })
+		pack.capsule.top = SMODS.create_sprite(pack.T.x, pack.T.y, G.CARD_W * scale_factor , G.CARD_H * scale_factor, "UTDR_shop_capsule_ball", { x = 4, y = 0 })
 		
 		G.E_MANAGER:add_event(Event({
 			func = function()

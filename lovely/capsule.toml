@@ -87,6 +87,14 @@ if G.UTDR_shop_capsule then
       func = function()
 			G.STATE = G.STATES.UTDR_SHOP_CAPSULE
 			G.STATE_COMPLETE = false
+			
+			SMODS.OPENED_BOOSTER.capsule.top:remove()
+			SMODS.OPENED_BOOSTER.capsule.top = nil
+			SMODS.OPENED_BOOSTER.capsule.bottom:remove()
+			SMODS.OPENED_BOOSTER.capsule.bottom = nil
+			
+			SMODS.OPENED_BOOSTER:remove()
+			SMODS.OPENED_BOOSTER = nil
         return true
       end}))
       return true
