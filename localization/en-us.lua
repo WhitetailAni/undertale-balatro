@@ -798,8 +798,9 @@ return {
 					"{E:1,C:attention}1e11{} chips",
 				},
 				text = {
-					"{C:attention}#2# cards{} give",
-					"{C:money}$#1#{} when scored",
+					"{C:attention}#1# cards{} are",
+					"shuffled to the bottom",
+					"of the deck"
 				},
 				name = "The Barrier",
 			},
@@ -822,8 +823,10 @@ return {
 					"your deck",
 				},
 				text = {
-					"Played {C:attention}#2#s{} give",
-					"{C:mult}+#1#{} Mult when scored",
+					"{C:green}#1# in #2#{} chance for",
+					"played {C:attention}#3#s{} to create",
+					"a {V:1}#4#{} card when scored",
+					"{C:inactive}(Must have room)"
 				},
 				name = "The Surface",
 			},
@@ -1420,8 +1423,9 @@ return {
 			j_UTDR_princess_ribbon = {
 				name = "Princess Ribbon",
 				text = {
-					"Played {C:attention}#2#s{} give",
-					"{C:chips}+#1#{} Chips when scored",
+					"{C:green}#1# in #2#{} chance for",
+					"played cards to break",
+					"after scoring"
 				},
 			},
 			j_UTDR_philosopher = {

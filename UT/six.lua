@@ -28,11 +28,9 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "barrier",
-	config = {
-		money = 2,
-	},
 	attributes = {
-		"economy",
+		"passive",
+		"debuff"
 	},
 	--unlocked = false
 	unlock_condition = {
@@ -40,7 +38,7 @@ SMODS.Joker {
 		chips = 100000000000
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.money, localize("k_debuffed") } }
+		return { vars = { localize("k_debuffed") } }
 	end,
 	rarity = 1,
 	blueprint_compat = true,
@@ -48,13 +46,6 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 9, y = 7 },
 	cost = 7,
-	calculate = function(self, card, context)
-		if context.debuffed_individual then
-			return {
-				dollars = card.ability.money
-			}
-		end
-	end
 }
 
 SMODS.Joker {
@@ -90,17 +81,32 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "surface",
 	config = {
-		mult = 5,
+		extra = {
+			odds = 2,
+			card_type = "Planet",
+		}
 	},
 	attributes = {
-		"mult",
+		"chance",
+		"generation",
+		"consumeables",
+		"planet",
 		"enhancements"
 	},
 	--unlocked = false
 	unlock_condition = { type = 'modify_deck', extra = { count = 5, enhancement = 'Stone Card', e_key = 'm_stone' } },
 	loc_vars = function(self, info_queue, card)
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'UTDR_surface')
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
-		return { vars = { card.ability.mult, localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) } }
+		return { vars = { 
+			numerator, 
+			denominator, 
+			localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) ,
+			localize("k_" .. string.lower(card.ability.extra.card_type)),
+			colours = {
+				G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER
+			}
+		} }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
@@ -114,10 +120,35 @@ SMODS.Joker {
 	cost = 7,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
-			if SMODS.has_enhancement(context.other_card, 'm_stone') then
+			if SMODS.has_enhancement(context.other_card, 'm_stone') and SMODS.pseudorandom_probability(card, 'UTDR_surface', 1, card.ability.extra.odds) then
+				-- check if should add consumable
+			local do_message = false
+			if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+				do_message = true
+			end
+			-- create tarot
+			if do_message then
+				G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
 				return {
-					mult = card.ability.mult
+					extra = {
+						message = localize('k_plus_' .. string.lower(card.ability.extra.card_type)) or ("+1 ".. localize("k_" .. string.lower(card.ability.extra.card_type))),
+						colour = G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER,
+						message_card = card,
+						func = function() -- This is for timing purposes, everything here runs after the message
+							G.E_MANAGER:add_event(Event({
+								func = (function()
+									SMODS.add_card {
+										set = card.ability.extra.card_type,
+										key_append = 'UTDR_surface' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
+									}
+									G.GAME.consumeable_buffer = 0
+									return true
+								end)
+							}))
+						end
+					},
 				}
+			end
 			end
 		end
 	end
