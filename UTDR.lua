@@ -36,7 +36,8 @@ G.E_MANAGER:add_event(Event { func = function()
 end })
 
 UTDR = SMODS.current_mod
-local UTDR_config = UTDR.config
+UTDR_Modules.UTDR_config = UTDR.config
+local UTDR_config = UTDR_Modules.UTDR_config
 
 G.FUNCS.restart_game_smods = function(e)
 	SMODS.save_mod_config(UTDR)

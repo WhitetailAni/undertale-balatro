@@ -179,7 +179,8 @@ function UTDR_Modules.Lacquer_Shop.lacquer_shop()
               {n=G.UIT.O, config={object = shop_sign}}
             }},
             {n=G.UIT.R, config={align = "cm"}, nodes={
-              {n=G.UIT.O, config={object = DynaText({string = {localize('ph_UTDR_improve')}, colours = {lighten(G.C.LACQUER_OUTLINE, 0.3)},shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3})}}
+            	{n = G.UIT.T, config = {text = localize("ph_UTDR_improve"), colour = lighten(G.C.LACQUER_OUTLINE, 0.3), scale = 0.5, shadow = true}}
+              --{n=G.UIT.O, config={object = DynaText({string = {localize('ph_UTDR_improve')}, colours = {lighten(G.C.LACQUER_OUTLINE, 0.3)},shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, maxw = 4.3})}}
             }},
           }},
         }},

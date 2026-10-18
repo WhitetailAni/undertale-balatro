@@ -229,27 +229,4 @@ end
 '''
 match_indent = true
 
-[[patches]]
-[patches.pattern]
-target = "game.lua"
-pattern = "G.shop = G.shop or UIBox{"
-position = "before"
-payload = '''
-local targets = {
-	"UTDR_SHOP_SIGN_CATTY",
-	"UTDR_SHOP_SIGN_CAPSULE",
-	"UTDR_SHOP_SIGN_LACQUER",
-	"utdr_shop_cattybratty",
-	"UTDR_shop_capsule",
-	"UTDR_lacquer_shop",
-}
-
-for _, v in ipairs(targets) do
-	if self[v] then
-		self[v]:remove(); self[v] = nil
-	end
-end
-'''
-match_indent = true
-
 

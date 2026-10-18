@@ -20,6 +20,7 @@ function Card:capsule_open()
 			card = SMODS.create_card(_card_to_spawn)
 			card.T.x = self.T.x
 			card.T.y = self.T.y
+			card.states.visible = false
 			card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)
 			self.capsule.pop = true
 			return true
@@ -234,22 +235,30 @@ SMODS.DrawStep {
     key = "UTDR_capsule",
     order = -67,
     func = function(self)
-        if self.capsule and self.capsule.top and self.capsule.bottom and G.pack_cards then
+        if self.capsule and self.capsule.top and self.capsule.bottom and G.pack_cards and G.pack_cards.VT.x < 10 then
         	local area = G.pack_cards
+        	local dt = (G.real_dt * G.SETTINGS.GAMESPEED) / 2 --i forgot about game speed when designing this, so everything was timed off 4x. lmao
+        	self.capsule.howOld = (self.capsule.howOld or 0) + dt
+        	local hsinav = math.min(1, math.max(0, self.capsule.howOld - 0.4) / 0.2)
+        	
         	local target = 0
-        	if self.capsule.pop then
-        		target = 5
+        	
+        	if self.capsule.pop and hsinav >= 1 then
+        		target = 4
         	end
         	if not self.capsule.split then
         		self.capsule.split = 0
         	end
         	
+			--print(G.pack_cards.VT)
+        	
+        	
+        	
         	self.capsule.x0 = self.capsule.x0 or area.T.x
     		self.capsule.y0 = self.capsule.y0 or area.T.y
-    		self.capsule.howOld = (self.capsule.howOld or 0) + (G.real_dt or 0.016)
-
-			self.capsule.t = self.capsule.pop and ((self.capsule.t or 0) + G.real_dt) or 0
-			local hsinav = math.min(1, math.max(0, self.capsule.howOld - 0.2) / 0.4)
+    		
+			self.capsule.t = self.capsule.pop and ((self.capsule.t or 0) + dt) or 0
+			
 			local vanish = math.min(1, self.capsule.t)
 			local dissolve = math.max(1 - hsinav, vanish)
         	
@@ -259,16 +268,22 @@ SMODS.DrawStep {
 			local visualTrackX = area.VT.x + area.VT.w / 2
 			local visualTrackY = area.VT.y + area.VT.h / 2
 			for _, homosexual in ipairs({self.capsule.top, self.capsule.bottom}) do
-				homosexual.T.x = visualTrackX - homosexual.T.w / 2
-				homosexual.T.y = visualTrackY - homosexual.T.h / 2
-				homosexual.VT.x = visualTrackX - homosexual.VT.w / 2
-				homosexual.VT.y = visualTrackY - homosexual.VT.h / 2
+				homosexual.T.x = trackX - homosexual.T.w / 2
+				homosexual.T.y = trackY - homosexual.T.h / 2
+				homosexual.VT.x = trackX - homosexual.VT.w / 2
+				homosexual.VT.y = trackY - homosexual.VT.h / 2
 			end
 			
-			self.capsule.split = self.capsule.split + (target - self.capsule.split) * math.min(1, 10 * G.real_dt)
+			self.capsule.split = self.capsule.split + (target - self.capsule.split) * (1 - math.exp(-10 * dt))
 			if math.abs(target - self.capsule.split) < 0.001 then
 				self.capsule.split = target
 			end
+			
+			if self.capsule.pop and hsinav >= 1 and not self.capsule.card_anim and self.capsule.split == 0.4 then
+        		self.capsule.card_anim = true
+        		area.cards[1].states.visible = true
+        		area.cards[1]:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)
+        	end
 			
 			--rotate and scale
 			local progress = self.capsule.split / 2

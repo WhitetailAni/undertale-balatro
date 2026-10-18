@@ -44,11 +44,6 @@ SMODS.Tag {
 	key = "capsule",
 	atlas = "tag",
 	pos = { x = 2, y = 0 },
-	apply = function(self, tag, context)
-		tag:yep("+", G.C.GOLD)
-		print("we applyin out here")
-		tag.triggered = true
-	end
 }
 
 SMODS.Tag {

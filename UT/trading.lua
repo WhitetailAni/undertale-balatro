@@ -232,7 +232,7 @@ function UTDR_Modules.Trading.create_UIBox_cattybratty(reload)
 						{ n = G.UIT.O, config = { object = shop_sign } }
 					} },
 					{ n = G.UIT.R, config = { align = "cm" }, nodes = {
-						{ n = G.UIT.O, config = { object = DynaText({ string = { localize('ph_utdr_cattybratty') }, colours = { lighten(G.C.CATTY, 0.3) }, shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, maxw = 4.3 }) } }
+						{ n = G.UIT.O, config = { object = DynaText({ string = { localize('ph_utdr_cattybratty') }, colours = { lighten(G.C.CATTY, 0.3) }, shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3 }) } }
 					} },
 				} },
 			} },
@@ -415,35 +415,6 @@ function CardArea.align_cards(self)
 	else
 		achook(self)
 	end
-end
-
-local update_shop_hook = Game.update_shop
-function Game:update_shop(dt)
-	if not G.STATE_COMPLETE then
-		if G.SHOP_SIGN then
-			G.E_MANAGER:add_event(Event({
-				trigger = 'immediate',
-				func = (function()
-					G.SHOP_SIGN.alignment.offset.y = 0
-					return true
-				end)
-			}))
-		end
-		local targets = {
-			"UTDR_SHOP_SIGN_CATTY",
-			"UTDR_SHOP_SIGN_CAPSULE",
-			"UTDR_SHOP_SIGN_LACQUER",
-			"utdr_shop_cattybratty",
-			"UTDR_shop_capsule",
-		}
-
-		for _, v in ipairs(targets) do
-			if self[v] then
-				self[v]:remove(); self[v] = nil
-			end
-		end
-	end
-	update_shop_hook(self, dt)
 end
 
 function UTDR_Modules.Trading.add_catty_trade(args, refresh)

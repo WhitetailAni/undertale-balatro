@@ -1646,7 +1646,8 @@ return {
 				text = {
 					"{C:ballgame}-#1# Hand{}",
 					"{C:gold}Gold{} capsule prizes",
-					"begin at {C:points}300 POINTs"
+					"are {C:attention}guaranteed{}",
+					"at {C:points}300 POINTs"
 				},
 				unlock = {
 					"Try our discount code:",
@@ -2302,9 +2303,9 @@ return {
 			tag_UTDR_capsule = {
 				name = "Capsule Tag",
 				text = {
-					"{C:gold}Gold{} chance",
-					"is {C:attention}100%{} on",
-					"next roll"
+					"Capsule prize {C:gold}Gold{}",
+					"chance is {C:attention}100%{}",
+					"on next roll"
 				},
 			},
 		},
