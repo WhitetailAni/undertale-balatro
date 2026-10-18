@@ -2588,8 +2588,7 @@ return {
 			UTDR_shopball_chance2 = "getting GOLD prize",
 			UTDR_shopball_trade = "Bet!",
 			UTDR_shopball_skip = "Skip",
-			UTDR_shopball_take = "Take",
-			UTDR_shopball_use = "Use",
+			UTDR_shopball_take = "TAKE",
 			
 			UTDR_shopball_prize = "Capsule Prize",
 

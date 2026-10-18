@@ -14,7 +14,7 @@ context.new_parameters = {}
 '''
 position = "after"
 payload = '''
-if args.from and args.from.config.center.key == "j_UTDR_shadowguy" then
+if args.from and args.from.config and args.from.config.center and args.from.config.center.key == "j_UTDR_shadowguy" then
 	G.E_MANAGER:add_event(Event({
 		func = function()
 			play_sound(pseudorandom_element({"UTDR_shadowguy_1", "UTDR_shadowguy_2", "UTDR_shadowguy_3"}, "shadowguy_sfx"), 1.0, 0.7)

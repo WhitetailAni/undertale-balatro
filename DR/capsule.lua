@@ -77,11 +77,10 @@ function Game:update_UTDR_shop_capsule(dt)
 				return true end})
 			return true end})
 		--end
+		
+		SMODS.calculate_context({ UTDR_capsule_start = true })
+		G.STATE_COMPLETE = true
 	end
-	
-	G.STATE_COMPLETE = true
-	
-	SMODS.calculate_context({ UTDR_capsule_start = true })
 end
 
 local function add_pts_button(amnt)
@@ -209,9 +208,7 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 end
 
 function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
-	SMODS.calculate_context({ UTDR_capsule_gold_chance = true })
-
-	local remaining = #G.GAME.UTDR_capsule_gold_prizes
+	local remaining = #G.GAME.UTDR_capsule_gold_prizes_voucher +  #G.GAME.UTDR_capsule_gold_prizes_nonvoucher
 	
 	if remaining == 0 then
 		return 0
@@ -220,7 +217,7 @@ function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
 	local remaining_block = 0.1 + (remaining / 50)
 	local oldbet_block = 1 + (UTDR_Modules.Capsule.points_bet_total / 50)
 
-	local chance = 0.000004 * (UTDR_Modules.Capsule.points_bet_total + 50) * (0.002 * UTDR_Modules.Capsule.total_gold_prizes * #G.GAME.UTDR_capsule_gold_prizes + 5) * (bet - 100) + 0.05
+	local chance = 0.000004 * (UTDR_Modules.Capsule.points_bet_total + 50) * (0.002 * UTDR_Modules.Capsule.total_gold_prizes * (#G.GAME.UTDR_capsule_gold_prizes_voucher +  #G.GAME.UTDR_capsule_gold_prizes_nonvoucher) + 5) * (bet - 100) + 0.05
 	--local chance = (((5 + #G.GAME.UTDR_capsule_gold_prizes) * (50 + UTDR_Modules.Capsule.points_bet_total) + 250) / 5000 + bet) / 10
 	
 	if chance == -0.05 then
@@ -240,19 +237,21 @@ function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
 		end
 	end
 	
-	if #SMODS.find_card("j_UTDR_lacquer_triangle") > 0 and bet >= 300 then
-		return 100
-	end
-	
-	if found_tag then
-		return 100
-	end
-	
 	local integer = chance + (2^52 + 2^51) - (2^52 + 2^51)
 	
 	local above_zero = math.max(integer, 0) --make sure we don't have a negative percentage. oops
 	
-	return math.min(above_zero, 100)
+	local chance = math.min(above_zero, 100)
+	
+	if #SMODS.find_card("j_UTDR_lacquer_triangle") > 0 and bet >= 300 then
+		chance = 100
+	end
+	if found_tag then
+		chance = 100
+	end
+	
+	SMODS.calculate_context({ UTDR_capsule_gold_chance = true, chance = chance })
+	return chance
 end
 
 --filters tables. provide 2 tables, removes all keys present in table 2 from table 1

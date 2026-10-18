@@ -140,27 +140,28 @@ if G.GAME.blind.boss then
 		end
 	end
 	
-	if chips_scored / total_chips >= 10 then
+	if chips_scored / total_chips >= 100 then
 		chips_rank = "T"
-	elseif chips_scored / total_chips >= 3 then
+	elseif chips_scored / total_chips >= 20 then
 		chips_rank = "S"
-	elseif chips_scored / total_chips >= 1.75 then
+	elseif chips_scored / total_chips >= 5 then
 		chips_rank = "A"
-	elseif chips_scored / total_chips >= 1.25 then
+	elseif chips_scored / total_chips >= 2 then
 		chips_rank = "B"
-	elseif chips_scored / total_chips >= 1 then --"uuuuhh but how are you gonna get less than the total ante chip requirements" the elegant and beautiful BLUE???????????????????
+	elseif chips_scored / total_chips >= 1.25 then --"uuuuhh but how are you gonna get less than the total ante chip requirements" the elegant and beautiful BLUE???????????????????
+	--i know the above comment doesnt make any sense. Z rank used to be below 1x required ante chips, we adjusted it
 		chips_rank = "C"
 	end
 	
-	if hands_played <= 3 then
+	if hands_played <= 1 then
 		hand_rank = "T"
-	elseif hands_played <= 5 then
+	elseif hands_played <= 3 then
 		hand_rank = "S"
-	elseif hands_played <= 7 then
+	elseif hands_played <= 5 then
 		hand_rank = "A"
-	elseif hands_played <= 9 then
+	elseif hands_played <= 7 then
 		hand_rank = "B"
-	elseif hands_played <= 11 then
+	elseif hands_played <= 9 then
 		hand_rank = "C"
 	end
 	

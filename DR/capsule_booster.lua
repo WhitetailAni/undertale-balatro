@@ -217,17 +217,33 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
-    	local gold_prize_key = pseudorandom_element(G.GAME.UTDR_capsule_gold_prizes, "capsule_prize_gold")
-		--ensure no duplicate gold prizes, unless you got showman!
-		while #SMODS.find_card("j_showman") == 0 and #SMODS.find_card(gold_prize_key) > 0 and G.P_CENTERS[gold_prize_key].set == "Joker" do
-			gold_prize_key = pseudorandom_element(G.GAME.UTDR_capsule_gold_prizes, "capsule_prize_gold_attempt_2")
-		end
-		
-		UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes, { gold_prize_key })
-		
-		UTDR_Modules.Capsule.points_bet_total = 0
-		
-        return { key = gold_prize_key, skip_materialize = true }
+    	UTDR_Modules.Capsule.points_bet_total = 0
+    	if 0.5 < pseudorandom("is_gold_prize_voucher") then
+    		local voucher_dummy = SMODS.create_card({ set = "Voucher" })
+    		local key = voucher_dummy.config.center.key
+    		voucher_dummy:remove()
+    		
+    		for i = 1, #G.shop_vouchers.cards do
+				while key == G.shop_vouchers.cards[i].config.center.key do
+					voucher_dummy = SMODS.create_card({ set = "Voucher" })
+					key = voucher_dummy.config.center.key
+					voucher_dummy:remove()
+				end
+    		end
+    		
+    		UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes_voucher, { key })
+    		return { key = key, skip_materialize = true }
+    	else
+			local gold_prize_key = pseudorandom_element(G.GAME.UTDR_capsule_gold_prizes_nonvoucher, "capsule_prize_gold_nonvoucher")
+			--ensure no duplicate gold prizes, unless you got showman!
+			while #SMODS.find_card("j_showman") == 0 and #SMODS.find_card(gold_prize_key) > 0 and G.P_CENTERS[gold_prize_key].set == "Joker" do
+				gold_prize_key = pseudorandom_element(G.GAME.UTDR_capsule_gold_prizes_nonvoucher, "capsule_prize_gold_nonvoucher_attempt_2")
+			end
+			
+			UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes_nonvoucher, { gold_prize_key })
+			
+			return { key = gold_prize_key, skip_materialize = true }
+        end
     end,
 }
 

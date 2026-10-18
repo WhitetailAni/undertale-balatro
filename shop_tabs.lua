@@ -15,14 +15,14 @@ Game.update_UTDR_shop_tabs = function()
 				func = function()
 					play_sound('cancel')
 					
-					local xOffset = 14.6
+					--[[local xOffset = 10.6
 					if G.SETTINGS.GRAPHICS.texture_scaling == 2 then
-						xOffset = 15
-					end
+						xOffset = 11
+					end]]
 					
 					G.UTDR_shop_tabs = UIBox{
 						definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
-						config = {align="cl", offset = {x=G.ROOM.T.x + xOffset,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+						config = {align="cl", offset = {x=G.shop.T.x + 11 --[[base the xpos off of G.shop instead of G.ROOM since G.ROOM can be really wide in the case of ultrawide monitors]],y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
 					}
 					
 					local remove_hook = G.UTDR_shop_tabs.remove

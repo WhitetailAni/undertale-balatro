@@ -138,11 +138,9 @@ SMODS.Joker {
 		G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.hands_lost
 		ease_hands_played(-card.ability.hands_lost)
 	end,
-	calculate = function(self, card, context)
-		if context.reroll_shop then
-			print(get_reward(110))
-		end
-	end
+	--[[calculate = function(self, card, context)
+		print(context)
+	end]]
 }
 
 SMODS.Joker {

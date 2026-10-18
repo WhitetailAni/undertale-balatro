@@ -176,8 +176,6 @@ end
 '''
 match_indent = true
 
-
-
 [[patches]]
 [patches.pattern]
 target = "game.lua"
@@ -226,6 +224,19 @@ if self.STATE == self.STATES.UTDR_SHOP_LACQUER then
     self:update_UTDR_shop_lacquer(dt)
 end
 
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "if G.shop and not G.shop.alignment.offset.py then"
+position = "before"
+payload = '''
+if G.UTDR_shop_tabs and not G.UTDR_shop_tabs.alignment.offset.py then
+	G.UTDR_shop_tabs.alignment.offset.py = G.UTDR_shop_tabs.alignment.offset.y
+	G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 31
+end
 '''
 match_indent = true
 
