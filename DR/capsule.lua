@@ -130,7 +130,7 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 							{n=G.UIT.O, config={object = shop_sign}}
 						}},
 						{n=G.UIT.R, config={align = "cm"}, nodes={
-							{n=G.UIT.O, config={object = DynaText({string = {localize('ph_utdr_capsule')}, colours = { lighten(G.C.DYN_UI.MAIN, 0.3) },shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3})}}
+							{n=G.UIT.O, config={object = DynaText({string = {localize('ph_utdr_capsule')}, colours = { HEX('FFE664') },shadow = true, rotate = true, float = true, bump = true, scale = 0.5, spacing = 1, pop_in = 1.5, maxw = 4.3})}}
 						}},
 					}},
 				}},
@@ -154,7 +154,7 @@ function UTDR_Modules.Capsule.create_UIBox_capsule()
 		UIBox_dyn_container({
 			{n=G.UIT.C, config={align = "cm", padding = 0.1, emboss = 0.05, r = 0.1, colour = G.C.DYN_UI.BOSS_MAIN}, nodes={
 				{n=G.UIT.C, config={align = "cr", minw = 6.5, padding = .4}, nodes = {
-					{n=G.UIT.O, config={object = SMODS.create_sprite(0,0,5,156/111*5,"UTDR_shop_capsule"), colour = G.C.BALLGAME }},
+					{n=G.UIT.O, config={object = SMODS.create_sprite(0,0,5,156/111*5,"UTDR_shop_capsule") }},
 				}},
 				{n=G.UIT.C, config={align = "cm", padding = 0.05}, nodes = {
 					{n=G.UIT.R, config={align = "cm", colour=G.C.CLEAR, padding = 0.05}, nodes = {
@@ -220,10 +220,6 @@ function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
 	local chance = 0.000004 * (UTDR_Modules.Capsule.points_bet_total + 50) * (0.002 * UTDR_Modules.Capsule.total_gold_prizes * (#G.GAME.UTDR_capsule_gold_prizes_voucher +  #G.GAME.UTDR_capsule_gold_prizes_nonvoucher) + 5) * (bet - 100) + 0.05
 	--local chance = (((5 + #G.GAME.UTDR_capsule_gold_prizes) * (50 + UTDR_Modules.Capsule.points_bet_total) + 250) / 5000 + bet) / 10
 	
-	if chance == -0.05 then
-		chance = 0.05
-	end
-	
 	chance = chance * 100
 	
 	if not no_modify then
@@ -239,7 +235,8 @@ function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
 	
 	local integer = chance + (2^52 + 2^51) - (2^52 + 2^51)
 	
-	local above_zero = math.max(integer, 0) --make sure we don't have a negative percentage. oops
+	local above_zero = math.max(integer, 5) --make sure we don't have a negative percentage. oops
+	--also ensures gold chance is always at least 5%, since in deltarune it's always at least 5%
 	
 	local chance = math.min(above_zero, 100)
 	

@@ -241,3 +241,17 @@ end
 match_indent = true
 
 
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''
+(G.booster_pack_sparkles and not G.booster_pack_sparkles.REMOVED and 'music2') or
+'''
+position = "before"
+payload = '''
+(G.utdr_shop_cattybratty and 'music4') or
+(G.UTDR_shop_capsule and 'music4') or --provisions for custom music later..?
+'''
+match_indent = true
+
+
