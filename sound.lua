@@ -51,7 +51,7 @@ local sounds = {
 	"win",
 	"lose",
 	"buy",
-	"ralseis"
+	"ralseis",
 }
 
 local volume = {

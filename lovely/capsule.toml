@@ -137,3 +137,18 @@ if card.ability.set ~= 'Joker' or #G.jokers.cards < G.jokers.config.card_limit +
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''
+(G.booster_pack_sparkles and not G.booster_pack_sparkles.REMOVED and 'music2') or
+(G.booster_pack_meteors and not G.booster_pack_meteors.REMOVED and 'music3') or
+(G.booster_pack and not G.booster_pack.REMOVED and 'music2') or
+'''
+position = "at"
+payload = '''
+(G.booster_pack_sparkles and not G.booster_pack_sparkles.REMOVED and not G.UTDR_shop_capsule and 'music2') or
+(G.booster_pack_meteors and not G.booster_pack_meteors.REMOVED and not G.UTDR_shop_capsule and 'music3') or
+(G.booster_pack and not G.booster_pack.REMOVED and not G.UTDR_shop_capsule and 'music2') or
+'''
+match_indent = true

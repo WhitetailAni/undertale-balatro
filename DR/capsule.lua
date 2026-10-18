@@ -256,6 +256,7 @@ end
 
 --filters tables. provide 2 tables, removes all keys present in table 2 from table 1
 function UTDR_Modules.Capsule.wow_that_was_so_gold(input, filter)
+	if not filter then return input end
 	local possible_keys = input
 	local knightmare = {}
 	for _, value in ipairs(filter) do
