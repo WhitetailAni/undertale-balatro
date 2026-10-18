@@ -602,16 +602,18 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "princess_ribbon",
-	config = {
-		chips = 50
-	},
 	attributes = {
-		"enhancements",
-		"chips"
+		"chance",
+		"destroy_card"
+	},
+	config = {
+		extra = {
+			odds = 6
+		}
 	},
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
-		return { vars = { card.ability.chips, localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' } }
+		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds or G.P_CENTERS.m_glass.config.extra or 6, 'UTDR_princess_ribbon')
+		return { vars = { numerator, denominator } }
 	end,
 	rarity = 1,
 	blueprint_compat = true,
@@ -620,12 +622,12 @@ SMODS.Joker {
 	pos = { x = 4, y = 6 },
 	cost = 5,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_glass") then
-			return {
-				chips = card.ability.chips
-			}
-		end
-	end
+        if context.destroy_card and context.cardarea == G.play and
+            SMODS.pseudorandom_probability(card, 'UTDR_princess_ribbon', 1, card.ability.extra.odds or G.P_CENTERS.m_glass.config.extra or 6) then
+            context.destroying_card.glass_trigger = true -- SMODS addition
+            return { remove = true }
+        end
+    end,
 }
 
 SMODS.Joker {
