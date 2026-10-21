@@ -1280,7 +1280,7 @@ return {
 				},
 			},
 			j_UTDR_blackshard = {
-				name = "BlackShard",
+				name = "Black Shard",
 				text = {
 					"During {C:attention}Boss Blind{}, give",
 					"{X:mult,C:white}X#1#{} Mult and played cards",
@@ -1306,7 +1306,7 @@ return {
 				},
 			},
 			j_UTDR_bittertear = {
-				name = "BitterTear",
+				name = "Bitter Tear",
 				text = {
 					"The next {C:attention}#1#{} played",
 					"cards give {C:money}$#2#{}",
@@ -2589,7 +2589,7 @@ return {
 			UTDR_shopball_trade = "Bet!",
 			UTDR_shopball_skip = "Skip",
 			UTDR_shopball_take = "TAKE",
-			
+
 			UTDR_shopball_prize = "Capsule Prize",
 
 
