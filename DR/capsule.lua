@@ -355,7 +355,6 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	end
 	
 	local winning_set = ""
-	print(winning_set)
 	if bet < 100 then
 		winning_set = pseudorandom_element({
 			"p_UTDR_capsule_joker",
@@ -370,7 +369,6 @@ function UTDR_Modules.Capsule.get_reward(bet)
 			"p_UTDR_capsule_spectral",
 		}, "capsule_prize_set_broke_ass")
 	end
-	print(winning_set)
 	
 	return { key = winning_set }
 end

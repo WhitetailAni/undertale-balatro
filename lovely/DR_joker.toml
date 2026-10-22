@@ -256,3 +256,95 @@ payload = '''
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+pattern = '''
+function pseudoshuffle(list, seed)
+    if seed and type(seed) == "string" then seed = pseudoseed(seed) end
+  if seed then math.randomseed(seed) end
+
+  if list[1] and list[1].sort_id then
+    table.sort(list, function (a, b) return (a.sort_id or 1) < (b.sort_id or 2) end)
+  end
+
+  for i = #list, 2, -1 do
+		local j = math.random(i)
+		list[i], list[j] = list[j], list[i]
+	end
+end
+'''
+position = "at"
+payload = '''
+function pseudoshuffle(list, seed)
+	print("pseudoshuffle")
+    if seed and type(seed) == "string" then seed = pseudoseed(seed) end
+	if seed then math.randomseed(seed) end
+
+	if list[1] and list[1].sort_id then
+		table.sort(list, function (a, b) return (a.sort_id or 1) < (b.sort_id or 2) end)
+	end
+	
+	if #SMODS.find_card("j_UTDR_carol") > 0 then
+		print("gm")
+		local rigged_list = {
+			[2] = {},
+			[3] = {},
+			[4] = {},
+			[5] = {},
+			[6] = {},
+			[7] = {},
+			[8] = {},
+			[9] = {},
+			[10] = {},
+			[11] = {},
+			[12] = {},
+			[13] = {},
+			[14] = {},
+		}
+		local holdouts = {
+			stone = {},
+			debuff = {},
+		}
+		for i = 1, #list do
+			local card = list[i]
+			if SMODS.has_no_suit(card) then
+				holdouts["stone"][#holdouts["stone"] + 1] = card
+			elseif is_debuffed and #SMODS.find_card("j_UTDR_barrier") then
+				holdouts["debuff"][#holdouts["debuff"] + 1] = card
+			else
+				local id = card:get_id()
+				rigged_list[id][#rigged_list[id] + 1] = card
+			end
+		end
+		
+		for rank, cards in pairs(rigged_list) do
+			local order = { Diamonds = 1, Clubs = 2, Hearts = 3, Spades = 4 } --add sixsuits compat later? i dunno the mod
+			table.sort(cards, function(a, b) return order[a.base.suit] < order[b.base.suit] end)
+		end
+		
+		local prder = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }
+		local mist = {}
+		for _, rank in ipairs(prder) do
+			local collection = rigged_list[rank]
+			table.move(collection, 1, #collection, #mist + 1, mist)
+		end
+		
+		table.move(holdouts.stone, 1, #holdouts.stone, #mist + 1, mist)
+		table.move(holdouts.debuff, 1, #holdouts.debuff, #mist + 1, mist)
+		
+		for i = 1, #mist do
+			print(mist[i].base)
+		end
+		
+		list = mist
+	else
+		for i = #list, 2, -1 do
+			local j = math.random(i)
+			list[i], list[j] = list[j], list[i]
+		end
+	end
+end
+'''
+match_indent = true
+
