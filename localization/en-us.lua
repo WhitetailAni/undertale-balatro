@@ -25,6 +25,20 @@ return {
 					"grant {C:points}100 POINTs",
 					"{C:attention}extra{} at end of ante",
 				},
+			},
+			v_UTDR_cooking_with_killer_robot = {
+				name = "Cooking with a Killer Robot",
+				text = {
+					"{C:bratty}Bratty{} and {C:catty}Catty's{} {C:attention}third{} trade ",
+					"only costs {C:attention}1{} consumable"
+				},
+			},
+			v_UTDR_attack_of_killer_robot = {
+				name = "Attack of the Killer Robot",
+				text = {
+					"{C:attention}Any{} tag can appear in",
+					"{C:bratty}Bratty{} and {C:catty}Catty{}'s shop",
+				},
 			}
 		},
 		Joker = {
@@ -798,9 +812,8 @@ return {
 					"{E:1,C:attention}1e11{} chips",
 				},
 				text = {
-					"{C:attention}#1# cards{} are",
-					"shuffled to the bottom",
-					"of the deck"
+					"{C:attention}#1#{} cards",
+					"are drawn {C:attention}last",
 				},
 				name = "The Barrier",
 			},

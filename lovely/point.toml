@@ -516,3 +516,17 @@ payload = '''
 {n=G.UIT.R, config={id = 'run_info_button', align = "cm", minh = 2.5, minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.RED, button = "run_info", shadow = true}, nodes={
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+if forced_key and not G.GAME.banned_keys[forced_key] then 
+'''
+position = 'after'
+payload = '''
+print(forced_key)
+'''
+match_indent = true
+
+

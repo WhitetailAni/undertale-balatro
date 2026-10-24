@@ -258,35 +258,20 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
-target = 'functions/misc_functions.lua'
+target = "cardarea.lua"
 pattern = '''
-function pseudoshuffle(list, seed)
-    if seed and type(seed) == "string" then seed = pseudoseed(seed) end
-  if seed then math.randomseed(seed) end
-
-  if list[1] and list[1].sort_id then
-    table.sort(list, function (a, b) return (a.sort_id or 1) < (b.sort_id or 2) end)
-  end
-
-  for i = #list, 2, -1 do
-		local j = math.random(i)
-		list[i], list[j] = list[j], list[i]
-	end
+function CardArea:shuffle(_seed)
+    pseudoshuffle(self.cards, pseudoseed(_seed or 'shuffle'))
+    self:set_ranks()
 end
 '''
 position = "at"
 payload = '''
-function pseudoshuffle(list, seed)
-	print("pseudoshuffle")
-    if seed and type(seed) == "string" then seed = pseudoseed(seed) end
-	if seed then math.randomseed(seed) end
-
-	if list[1] and list[1].sort_id then
-		table.sort(list, function (a, b) return (a.sort_id or 1) < (b.sort_id or 2) end)
-	end
-	
-	if #SMODS.find_card("j_UTDR_carol") > 0 then
-		print("gm")
+function CardArea:shuffle(_seed)
+	local carol = #SMODS.find_card("j_UTDR_carol") > 0
+	local barrier = #SMODS.find_card("j_UTDR_barrier") > 0
+	if self == G.deck and (carol or barrier) then
+		local list = self.cards
 		local rigged_list = {
 			[2] = {},
 			[3] = {},
@@ -310,7 +295,7 @@ function pseudoshuffle(list, seed)
 			local card = list[i]
 			if SMODS.has_no_suit(card) then
 				holdouts["stone"][#holdouts["stone"] + 1] = card
-			elseif is_debuffed and #SMODS.find_card("j_UTDR_barrier") then
+			elseif card.debuff and #SMODS.find_card("j_UTDR_barrier") > 0 then
 				holdouts["debuff"][#holdouts["debuff"] + 1] = card
 			else
 				local id = card:get_id()
@@ -323,27 +308,30 @@ function pseudoshuffle(list, seed)
 			table.sort(cards, function(a, b) return order[a.base.suit] < order[b.base.suit] end)
 		end
 		
-		local prder = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }
-		local mist = {}
+		local mist = {} --master list
+		
+		--this seems backwards i know, but it draws from the very TOP of your deck. or the last cards in there, if the cards were face-up. so we fill it in backwards!
+		--table.move(holdouts.debuff, 1, #holdouts.debuff, #mist + 1, mist)
+		
+		local cist = {} --carol list
+		table.move(holdouts.stone, 1, #holdouts.stone, #mist + 1, mist)
+		local prder = { 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 }
 		for _, rank in ipairs(prder) do
 			local collection = rigged_list[rank]
-			table.move(collection, 1, #collection, #mist + 1, mist)
+			table.move(collection, 1, #collection, #cist + 1, cist)
 		end
 		
-		table.move(holdouts.stone, 1, #holdouts.stone, #mist + 1, mist)
+		if not carol and barrier then
+			pseudoshuffle(cist, pseudoseed(_seed or 'shuffle')) --ensure non-debuffed cards are shuffled normally
+		end
 		table.move(holdouts.debuff, 1, #holdouts.debuff, #mist + 1, mist)
+		table.move(cist, 1, #cist, #mist + 1, mist)
 		
-		for i = 1, #mist do
-			print(mist[i].base)
-		end
-		
-		list = mist
+		self.cards = mist
 	else
-		for i = #list, 2, -1 do
-			local j = math.random(i)
-			list[i], list[j] = list[j], list[i]
-		end
-	end
+    	pseudoshuffle(self.cards, pseudoseed(_seed or 'shuffle'))
+    end
+    self:set_ranks()
 end
 '''
 match_indent = true

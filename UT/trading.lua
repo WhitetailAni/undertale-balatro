@@ -422,7 +422,7 @@ function UTDR_Modules.Trading.add_catty_trade(args, refresh)
 	args.tag = args.tag or SMODS.poll_object({
 		type = "Tag",
 		filter = function(pool)
-			--if args.rare_tag or G.GAME.used_vouchers["v_UTDR_attack"] then return pool end -- Only restrict pool if not 3rd or don't have voucher
+			if args.rare_tag or G.GAME.used_vouchers["v_UTDR_attack_of_killer_robot"] then return pool end -- Only restrict pool if not 3rd or don't have voucher
 			local ret = {}
 			for _, v in ipairs(pool) do
 				if not UTDR_Modules.Trading.excluded_tags[v.key] and (
@@ -455,13 +455,31 @@ function UTDR_Modules.Trading.reroll_catty_shop()
 			SMODS.poll_object { type = "Planet" }
 		}
 	}
-	UTDR_Modules.Trading.add_catty_trade {
-		cards = {
-			SMODS.poll_object { type = "Tarot" },
-			SMODS.poll_object { type = "Planet" }
-		},
-		rare_tag = true
-	}
+	if G.GAME.used_vouchers["v_UTDR_cooking_with_killer_robot"] then
+		if pseudorandom("cooking_with_robot_halfsizes") < 0.5 then
+			UTDR_Modules.Trading.add_catty_trade {
+				cards = {
+					SMODS.poll_object { type = "Tarot" }
+				},
+				rare_tag = true
+			}
+		else
+			UTDR_Modules.Trading.add_catty_trade {
+				cards = {
+					SMODS.poll_object { type = "Planet" }
+				},
+				rare_tag = true
+			}
+		end
+	else
+		UTDR_Modules.Trading.add_catty_trade {
+			cards =  {
+				SMODS.poll_object { type = "Tarot" },
+				SMODS.poll_object { type = "Planet" }
+			},
+			rare_tag = true
+		}
+	end
 end
 
 local reset_blinds_hook = reset_blinds
@@ -581,3 +599,30 @@ G.FUNCS.utdr_setup_uie_reverse_order = function(e)
 		end
 	end
 end
+
+SMODS.Voucher {
+	key = "cooking_with_killer_robot",
+	atlas = "voucher",
+	pos = { x = 0, y = 0 },
+	cost = 10,
+	config = {
+		third_trade_requirement = 1
+	},
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.third_trade_requirement } }
+	end,
+	redeem = function(self, card)
+		UTDR_Modules.Trading.reroll_catty_shop()
+	end
+}
+
+SMODS.Voucher {
+	key = "attack_of_killer_robot",
+	atlas = "voucher",
+	pos = { x = 0, y = 1 },
+	cost = 10,
+	requires = { "v_UTDR_cooking_with_killer_robot" },
+	redeem = function(self, card)
+		UTDR_Modules.Trading.reroll_catty_shop()
+	end
+}
