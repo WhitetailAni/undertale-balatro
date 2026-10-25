@@ -468,6 +468,14 @@ SMODS.Joker {
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
 		return { vars = { localize({ type = 'name_text', set = "Enhanced", key = "m_bonus" }) } }
 	end,
+	in_pool = function(self, args)
+        for _, card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(card, 'm_bonus') then
+                return true
+            end
+        end
+        return false
+    end,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_bonus") then
 			return {

@@ -611,9 +611,6 @@ SMODS.Voucher {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.third_trade_requirement } }
 	end,
-	redeem = function(self, card)
-		UTDR_Modules.Trading.reroll_catty_shop()
-	end
 }
 
 SMODS.Voucher {

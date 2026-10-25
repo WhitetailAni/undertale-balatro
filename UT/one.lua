@@ -33,7 +33,7 @@ SMODS.Joker {
 	config = {
 		mult = 30,
 		cycled = 3,
-		hands_remaining = 3,
+		hands_remaining = 2,
 	},
 	attributes = {
 		"mult",
@@ -131,6 +131,14 @@ SMODS.Joker {
 		local probabilities_glass, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "glass")
 		return { vars = { probabilities_glass, odds, localize({ type = 'name_text', set = "Enhanced", key = "m_glass" }) or 'Glass Card' } }
 	end,
+	in_pool = function(self, args)
+        for _, card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(card, 'm_glass') then
+                return true
+            end
+        end
+        return false
+    end,
 	add_to_deck = function(self, card, from_debuff)
 		if #SMODS.find_card("j_UTDR_noelle") > 0 then
 			card.ability.noelle_is_older = true
@@ -424,7 +432,7 @@ SMODS.Joker {
 					mult = card.ability.nine
 				}
 			end
-		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+		elseif context.after and not context.blueprint then
 			if card.ability.destroy_self then
 				G.E_MANAGER:add_event(Event({
 					func = function()
@@ -509,8 +517,7 @@ SMODS.Joker {
 			end_round()
 		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared and not context.blueprint then
 			return {
-				message = "totem_UTDR_buttspie",
-				saved = true,
+				saved = "totem_UTDR_buttspie",
 				colour = G.C.RED
 			}
 		end
@@ -539,10 +546,10 @@ SMODS.Joker {
 				math.min(1, G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
 
 			local uncommon_or_rare = pseudorandom_element({
-				{ color = G.C.GREEN, rarity = 1 },
-				{ color = G.C.GREEN, rarity = 1 },
-				{ color = G.C.GREEN, rarity = 1 },
-				{ color = G.C.RED,   rarity = 0.75 }
+				{ color = G.C.GREEN, rarity = 0.75 },
+				{ color = G.C.GREEN, rarity = 0.75 },
+				{ color = G.C.GREEN, rarity = 0.75 },
+				{ color = G.C.RED,   rarity = 1 }
 			}, "toriel_rarity")
 
 			SMODS.add_card({
@@ -594,7 +601,11 @@ SMODS.Joker {
 					break
 				end
 				local joker = pseudorandom_element(pool, "snail_pie_joker")
-				joker:set_edition(poll_edition("snail_pie_edition", nil, true, true), true)
+				joker:set_edition(SMODS.poll_edition({
+					key = "snail_pie_edition",
+					no_negative = true,
+					options ={ "e_foil", "e_holo", "e_polychrome" }
+				}), true)
 			end
 		end
 	end

@@ -20,10 +20,22 @@ Game.update_UTDR_shop_tabs = function()
 						xOffset = 11
 					end]]
 					
-					G.UTDR_shop_tabs = UIBox{
-						definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
-						config = {align="cl", offset = {x=G.shop.T.x + 11 --[[base the xpos off of G.shop instead of G.ROOM since G.ROOM can be really wide in the case of ultrawide monitors]],y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
-					}
+					if G.shop then
+						G.UTDR_shop_tabs = UIBox{
+							definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
+							config = {align="cl", offset = {x=G.shop.T.x + 11 --[[base the xpos off of G.shop instead of G.ROOM since G.ROOM can be really wide in the case of ultrawide monitors]],y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+						}
+					elseif G.utdr_shop_cattybratty then
+						G.UTDR_shop_tabs = UIBox{
+							definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
+							config = {align="cl", offset = {x=G.utdr_shop_cattybratty.T.x + 11 --[[base the xpos off of G.shop instead of G.ROOM since G.ROOM can be really wide in the case of ultrawide monitors]],y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+						}
+					elseif G.UTDR_shop_capsule then
+						G.UTDR_shop_tabs = UIBox{
+							definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
+							config = {align="cl", offset = {x=G.UTDR_shop_capsule.T.x + 11 --[[base the xpos off of G.shop instead of G.ROOM since G.ROOM can be really wide in the case of ultrawide monitors]],y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+						}
+					end
 					
 					local remove_hook = G.UTDR_shop_tabs.remove
 					function remove(self)

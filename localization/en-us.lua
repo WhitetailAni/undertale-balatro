@@ -86,7 +86,7 @@ return {
 					"{C:chips}+#1#{} Chips for each",
 					"empty {C:attention}Joker{} slot",
 					"{s:0.8}#3# included{}",
-					"{C:inactive}(Currently {C:chips}+#2#{} Chips)",
+					"{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
 				},
 			},
 			j_UTDR_candy = {

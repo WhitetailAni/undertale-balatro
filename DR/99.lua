@@ -143,6 +143,14 @@ SMODS.Joker {
 		"mod_chance",
 		"xmult",
 	},
+	in_pool = function(self, args)
+        for _, card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(card, 'm_glass') then
+                return true
+            end
+        end
+        return false
+    end,
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_noelle")

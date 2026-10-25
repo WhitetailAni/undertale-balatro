@@ -555,6 +555,14 @@ SMODS.Joker {
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
 		return { vars = { card.ability.mult_gain, card.ability.mult, localize({ type = 'name_text', set = "Enhanced", key = "m_stone" }) or "Stone Card" } }
 	end,
+	in_pool = function(self, args)
+        for _, card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(card, 'm_stone') then
+                return true
+            end
+        end
+        return false
+    end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_stone") and not context.blueprint then
 			SMODS.scale_card(card, {
@@ -591,6 +599,14 @@ SMODS.Joker {
 	pos = { x = 7, y = 5 },
 	soul_pos = { x = 2, y = 8 },
 	cost = 9,
+	in_pool = function(self, args)
+        for _, card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(card, 'm_stone') then
+                return true
+            end
+        end
+        return false
+    end,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_stone") then
 			return {

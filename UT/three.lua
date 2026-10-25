@@ -88,6 +88,14 @@ SMODS.Joker {
 			card.ability.thornring_is_older = true
 		end
 	end,
+	in_pool = function(self, args)
+        for _, card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(card, 'm_stone') then
+                return true
+            end
+        end
+        return false
+    end,
 	calculate = function(self, card, context)
 		if context.mod_probability and not context.blueprint and context.identifier == "glass" and not card.ability.thornring_is_older then
 			return {

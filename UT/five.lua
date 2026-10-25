@@ -580,6 +580,14 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.xmult_gain, card.ability.xmult } }
 	end,
+	in_pool = function(self, args)
+        for _, card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(card, 'm_steel') then
+                return true
+            end
+        end
+        return false
+    end,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {

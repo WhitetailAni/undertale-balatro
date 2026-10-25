@@ -121,6 +121,7 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 5, y = 5 },
 	cost = 5,
+
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
 		local quote = pseudorandom_element({
@@ -145,6 +146,14 @@ SMODS.Joker {
 		end
 		return { vars = { card.ability.bigbucks, quote, localize({ type = 'name_text', set = "Enhanced", key = "m_wild" }) or "Wild Card" } }
 	end,
+	in_pool = function(self, args)
+        for _, card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(card, 'm_wild') then
+                return true
+            end
+        end
+        return false
+    end,
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, "m_wild") then
 			return {

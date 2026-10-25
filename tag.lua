@@ -6,14 +6,26 @@ SMODS.Tag {
 	atlas = "tag",
 	pos = { x = 0, y = 0 },
 	apply = function(self, tag, context)
+		if #G.jokers.cards >= G.jokers.config.card_limits.total_slots then return end
+		--COME BACK TO THIS WHEN YOU ARENT WIPED AFTER AN >10HR WORKDAY KATIE
+		G.E_MANAGER:add_event(Event({
+			func = (function()
+				local key = pseudorandom_element(SMODS.get_attribute_pool("UTDR_dog"), "annoying_tag")
+				for i = 1, #G.jokers.cards do
+					while G.jokers.cards[i].config.center.key == key do
+						key = pseudorandom_element(SMODS.get_attribute_pool("UTDR_dog"), "annoying_tag")
+					end
+				end
+				local card = SMODS.add_card({
+					set = "Joker",
+					key = key,
+					key_append = "tag_annoying",
+				})
+				card:juice_up()
+				return true
+			end)
+		}))
 		tag:yep("+", G.C.DOG)
-		local key = pseudorandom_element(SMODS.get_attribute_pool("UTDR_dog"), "annoying_tag")
-		local card = SMODS.add_card({
-			set = "Joker",
-			key = key,
-			key_append = "tag_annoying",
-		})
-		card:juice_up()
 		play_sound("UTDR_bark", 1.0, 0.7)
 		tag.triggered = true
 	end

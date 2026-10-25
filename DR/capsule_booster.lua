@@ -223,11 +223,13 @@ SMODS.Booster {
     		local key = voucher_dummy.config.center.key
     		voucher_dummy:remove()
     		
-    		for i = 1, #G.shop_vouchers.cards do
-				while key == G.shop_vouchers.cards[i].config.center.key do
-					voucher_dummy = SMODS.create_card({ set = "Voucher" })
-					key = voucher_dummy.config.center.key
-					voucher_dummy:remove()
+    		if G.shop_vouchers then
+				for i = 1, #G.shop_vouchers.cards do
+					while key == G.shop_vouchers.cards[i].config.center.key do
+						voucher_dummy = SMODS.create_card({ set = "Voucher" })
+						key = voucher_dummy.config.center.key
+						voucher_dummy:remove()
+					end
 				end
     		end
     		
@@ -265,10 +267,6 @@ SMODS.DrawStep {
         	if not self.capsule.split then
         		self.capsule.split = 0
         	end
-        	
-			--print(G.pack_cards.VT)
-        	
-        	
         	
         	self.capsule.x0 = self.capsule.x0 or area.T.x
     		self.capsule.y0 = self.capsule.y0 or area.T.y
