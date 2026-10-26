@@ -39,7 +39,10 @@ function Card:capsule_open()
 end
 
 G.FUNCS.end_capsule = function(e)
-	G.pack_cards.cards[1]:start_dissolve(nil, false)
+	if #G.pack_cards.cards > 0 then
+		G.pack_cards.cards[1]:start_dissolve(nil, false)
+	end
+	
 	G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.5, func = function()
 		G.booster_pack.alignment.offset.y = G.ROOM.T.y + 29
 		G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.5, func = function()
@@ -104,7 +107,12 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
-        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_tarot, "capsule_tarot"), skip_materialize = true }
+        return {
+    		set = "Tarot",
+			area = G.pack_cards,
+    		skip_materialize = true,
+    		key_append = "capsule_tarot"
+    	}
     end,
 }
 
@@ -132,7 +140,12 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
-        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_jokers, "capsule_joker"), skip_materialize = true }
+    	return {
+    		set = "Joker",
+			area = G.pack_cards,
+    		skip_materialize = true,
+    		key_append = "capsule_joker"
+    	}
     end,
 }
 
@@ -144,7 +157,6 @@ SMODS.Booster {
     },
     atlas = "shop_capsule_ball",
     pos = { x = 0, y = 0 },
-    pixel_size = { w = 64, h = 64 },
     config = {
     	extra = 1,
     	choose = 1
@@ -160,7 +172,12 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
-        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_planet, "capsule_planet"), skip_materialize = true }
+    	return {
+    		set = "Planet",
+			area = G.pack_cards,
+    		skip_materialize = true,
+    		key_append = "capsule_planet"
+    	}
     end,
 }
 
@@ -188,7 +205,12 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
-        return { key = pseudorandom_element(UTDR_Modules.Capsule.possible_keys_spectral, "capsule_spectral"), skip_materialize = true }
+        return {
+    		set = "Spectral",
+			area = G.pack_cards,
+    		skip_materialize = true,
+    		key_append = "capsule_spectral"
+    	}
     end,
 }
 

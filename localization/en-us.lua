@@ -2,13 +2,6 @@ local dr = UTDR.config["deltarune"]
 
 return {
 	descriptions = {
-		Blind = {
-			bl_wheel = {
-				text = {
-					"#1# in #2# cards get",
-				},
-			},
-		},
 		Voucher = {
 			v_UTDR_rippling_stars = {
 				name = "Rippling Stars",
@@ -2290,15 +2283,12 @@ return {
 			},
 		} or nil,
 		Tag = {
-			tag_ethereal = {
-				text = {
-				},
-			},
 			tag_UTDR_annoying = {
 				name = "Annoying Tag",
 				text = {
-					"Gives a free",
+					"Creates a",
 					"{C:gaster}Dog{} Joker",
+					"{C:inactive}(Must have room)"
 				},
 			},
 			tag_UTDR_glamorous = {

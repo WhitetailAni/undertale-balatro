@@ -225,7 +225,8 @@ SMODS.Joker {
 	},
 	attributes = {
 		"xmult",
-		"passive"
+		"passive",
+		"UTDR_dog"
 	},
 	rarity = 3,
 	blueprint_compat = true,
@@ -307,7 +308,8 @@ SMODS.Joker {
 	attributes = {
 		"mult",
 		"joker",
-		"generation"
+		"generation",
+		"UTDR_dog"
 	},
 	in_pool = function()
 		return false
@@ -355,7 +357,8 @@ SMODS.Joker {
 	attributes = {
 		"mult",
 		"scaling",
-		"joker"
+		"joker",
+		"UTDR_dog"
 	},
 	--unlocked = false
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
@@ -433,7 +436,8 @@ SMODS.Joker {
 		"mult",
 		"chips",
 		"xmult",
-		"economy"
+		"economy",
+		"UTDR_dog"
 	},
 	rarity = 1,
 	blueprint_compat = true,
@@ -507,6 +511,7 @@ SMODS.Joker {
 	key = "dog_shrine",
 	attributes = {
 		"passive",
+		"UTDR_dog"
 	},
 	rarity = 1,
 	blueprint_compat = false,

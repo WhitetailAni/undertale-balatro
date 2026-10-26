@@ -22,7 +22,8 @@ UTDR_Modules.Trading = {
 		tag_UTDR_capsule = true,
 	},
 	excluded_tags = {
-		tag_UTDR_glamorous = true
+		tag_UTDR_glamorous = true,
+		tag_orbital = true,
 	},
 	timer = {
 		silly = 0.0, -- set to a value > 0 and always decreases down to 0
@@ -544,9 +545,7 @@ function G.FUNCS.UTDR_cattybratty_trade(e)
 			local apply = v:apply_to_run { type = "utdr_glamorous_tag" }
 			if apply then break end -- Only do one
 		end
-	end
-
-	if not paid then
+	else
 		local cards = {}
 		for _, v in ipairs(e.config.trade.cards) do
 			for _, v2 in ipairs(SMODS.find_card(v)) do -- In case you want a trade that asks for multiple of the same card

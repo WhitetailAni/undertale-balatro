@@ -181,7 +181,8 @@ SMODS.Joker {
 	attributes = {
 		"chance",
 		"prevents_death",
-		"tag"
+		"tag",
+		"UTDR_dog"
 	},
 	--unlocked = false
 	rarity = 1,

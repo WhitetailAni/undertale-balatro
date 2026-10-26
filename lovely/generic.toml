@@ -195,12 +195,3 @@ UTDR_lacquer_script_step = 0,
 '''
 match_indent = true
 
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = "if forced_key and not G.GAME.banned_keys[forced_key] then "
-position = "at"
-payload = '''
-if forced_key and forced_key ~= "" and not G.GAME.banned_keys[forced_key] then 
-'''
-match_indent = true

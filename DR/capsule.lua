@@ -5,10 +5,6 @@ UTDR_Modules.Capsule = {
 	bet_amount = 0,
 	min_amount = 50,
 	
-	possible_keys_jokers = { },
-	possible_keys_tarot = { },
-	possible_keys_planet = { },
-	possible_keys_spectral = { },
 	was_gold_prize = false,
 	
 	cannot_pull = {
@@ -297,63 +293,6 @@ function UTDR_Modules.Capsule.get_reward(bet)
 		}
 	end
 	
-	local possible_keys = { }
-	
-	UTDR_Modules.Capsule.possible_keys_jokers = { }
-	UTDR_Modules.Capsule.possible_keys_tarot = { }
-	UTDR_Modules.Capsule.possible_keys_planet = { }
-	UTDR_Modules.Capsule.possible_keys_spectral = { }
-	for key, value in pairs(G.P_CENTERS) do
-		if value.set == "Joker" then
-			UTDR_Modules.Capsule.possible_keys_jokers[#UTDR_Modules.Capsule.possible_keys_jokers + 1] = key
-		elseif value.set == "Tarot" then
-			UTDR_Modules.Capsule.possible_keys_tarot[#UTDR_Modules.Capsule.possible_keys_tarot + 1] = key
-		elseif value.set == "Planet" then
-			UTDR_Modules.Capsule.possible_keys_planet[#UTDR_Modules.Capsule.possible_keys_planet + 1] = key
-		elseif value.set == "Spectral" then
-			UTDR_Modules.Capsule.possible_keys_spectral[#UTDR_Modules.Capsule.possible_keys_spectral + 1] = key
-		end
-	end
-	
-	--remove gold prize keys, cannot_pull keys
-	UTDR_Modules.Capsule.possible_keys_jokers = UTDR_Modules.Capsule.wow_that_was_so_gold(UTDR_Modules.Capsule.possible_keys_jokers, G.GAME.UTDR_capsule_gold_prizes)
-	UTDR_Modules.Capsule.possible_keys_spectral = UTDR_Modules.Capsule.wow_that_was_so_gold(UTDR_Modules.Capsule.possible_keys_spectral, G.GAME.UTDR_capsule_gold_prizes)
-	
-	UTDR_Modules.Capsule.possible_keys_jokers = UTDR_Modules.Capsule.wow_that_was_so_gold(UTDR_Modules.Capsule.possible_keys_jokers,UTDR_Modules.Capsule.cannot_pull)
-	
-	--if you put in more than 100 points, remove common jokers/planet cards from the pool
-	if bet >= 100 then
-		UTDR_Modules.Capsule.possible_keys_tarot = {
-			"c_fool",
-			"c_emperor",
-			"c_hermit",
-			"c_hanged_man",
-			"c_death",
-			"c_temperance",
-			"c_judgement"        
-		}
-	end
-	
-	if bet >= 200 then
-		for i = 1, #UTDR_Modules.Capsule.possible_keys_jokers do
-			local key = UTDR_Modules.Capsule.possible_keys_jokers[i]
-			local center = G.P_CENTERS[UTDR_Modules.Capsule.possible_keys_jokers[i]] or { rarity = "fuck" }
-			local rarity = center.rarity or nil
-			if rarity == 1 then
-				table.remove(UTDR_Modules.Capsule.possible_keys_jokers, i)
-			end
-		end
-	end
-	
-	--ensure that you cannot pull 2 prizes in a row
-	if #SMODS.find_card("j_showman") == 0 then
-		for i = 1, #UTDR_Modules.Capsule.possible_keys_jokers do
-			if #SMODS.find_card(UTDR_Modules.Capsule.possible_keys_jokers[i]) > 0 and G.P_CENTERS[UTDR_Modules.Capsule.possible_keys_jokers[i]].set == "Joker" then
-				table.remove(UTDR_Modules.Capsule.possible_keys_jokers, i)
-			end
-		end
-	end
-	
 	local winning_set = ""
 	if bet < 100 then
 		winning_set = pseudorandom_element({
@@ -389,13 +328,16 @@ function G.FUNCS.UTDR_capsule_deltapts(e)
 end
 
 function G.FUNCS.UTDR_capsule_trade_func(e)
-	local can_trade = UTDR_Modules.Capsule.bet_amount >= UTDR_Modules.Capsule.min_amount and G.GAME.UTDR_points >= UTDR_Modules.Capsule.bet_amount
+	local cant_use = (G.GAME.STOP_USE and G.GAME.STOP_USE > 0)
+	local can_trade = UTDR_Modules.Capsule.bet_amount >= UTDR_Modules.Capsule.min_amount and G.GAME.UTDR_points >= UTDR_Modules.Capsule.bet_amount and not cant_use
 
 	e.config.colour = can_trade and darken(G.C.ORANGE, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
 	e.config.button = can_trade and 'UTDR_capsule_trade' or nil
 end
 
 function G.FUNCS.UTDR_capsule_trade(e)
+	stop_use()
+
 	local reward = UTDR_Modules.Capsule.get_reward(UTDR_Modules.Capsule.bet_amount)
 	
 	if reward.december and G.GAME.UTDR_lacquer_script_step == 0 then

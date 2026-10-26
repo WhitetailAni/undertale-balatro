@@ -267,6 +267,12 @@ end
 '''
 position = "at"
 payload = '''
+local function tabledotmovebutlua5dot1edition(destination, source)
+    for i = 1, #source do
+        destination[#destination + 1] = source[i]
+    end
+end
+
 function CardArea:shuffle(_seed)
 	local carol = #SMODS.find_card("j_UTDR_carol") > 0
 	local barrier = #SMODS.find_card("j_UTDR_barrier") > 0
@@ -311,21 +317,25 @@ function CardArea:shuffle(_seed)
 		local mist = {} --master list
 		
 		--this seems backwards i know, but it draws from the very TOP of your deck. or the last cards in there, if the cards were face-up. so we fill it in backwards!
-		--table.move(holdouts.debuff, 1, #holdouts.debuff, #mist + 1, mist)
+		--why is it "tabledotmovebutlua5dot1edition"? because in the 2nd to last week of development, macOS broke love2d 11.5. entirely. i think they broke opengl entirely. but anyway
+		--i was able to port the game to love2d 12.0, which worked, since it can use metal! (the better macOS graphics api). and love2d 12.0 has lua 5.4
+		--but 11.5 only has lua 5.1. and table.move, a very useful function, was added in lua 5.4
+		--i originally used that function for carol/barrier. only to realize during testing that Only I Had That Function. No One Else Did. so i had to poorly recreate it
+		--Fuck my chud life what the hell
 		
 		local cist = {} --carol list
-		table.move(holdouts.stone, 1, #holdouts.stone, #mist + 1, mist)
+		tabledotmovebutlua5dot1edition(mist, holdouts.stone)
 		local prder = { 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 }
 		for _, rank in ipairs(prder) do
 			local collection = rigged_list[rank]
-			table.move(collection, 1, #collection, #cist + 1, cist)
+			tabledotmovebutlua5dot1edition(cist, collection)
 		end
 		
 		if not carol and barrier then
 			pseudoshuffle(cist, pseudoseed(_seed or 'shuffle')) --ensure non-debuffed cards are shuffled normally
 		end
-		table.move(holdouts.debuff, 1, #holdouts.debuff, #mist + 1, mist)
-		table.move(cist, 1, #cist, #mist + 1, mist)
+		tabledotmovebutlua5dot1edition(mist, holdouts.debuff)
+		tabledotmovebutlua5dot1edition(mist, cist)
 		
 		self.cards = mist
 	else

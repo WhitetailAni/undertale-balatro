@@ -202,7 +202,8 @@ SMODS.Joker {
 		"tarot",
 		"generation",
 		"on_sell",
-		"food"
+		"food",
+		"UTDR_dog"
 	},
 	rarity = 1,
 	blueprint_compat = false,

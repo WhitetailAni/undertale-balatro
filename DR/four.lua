@@ -366,12 +366,14 @@ SMODS.Joker {
 					no_message = true
 				})
 			end
-			card_eval_status_text(card, 'extra', nil, nil, nil,
-				{ message = localize('k_upgrade_ex'), colour = G.C.MULT, blocking = false })
+			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_upgrade_ex'), colour = G.C.MULT, blocking = false })
 		elseif context.joker_main then
 			return {
 				xmult = card.ability.xmult
 			}
+		elseif context.end_of_round and context.main_eval then
+			card.ability.xmult = 1
+			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_reset'), colour = G.C.MULT, blocking = false })
 		end
 	end
 }
