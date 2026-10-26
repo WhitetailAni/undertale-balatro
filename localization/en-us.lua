@@ -2169,14 +2169,55 @@ return {
 					"Be seeing you soon!"
 				}
 			},
-
 			j_UTDR_dev_j8 = {
 				name = "J8-Bit",
 				text = {
-					"(insert",
-					"credits",
-					"description",
-					"here)"
+					{
+						"{s:0.75}Howdy! Happy to be here :D It's been a pleasure working on this mod!",
+						"{s:0.75}",
+						"{s:0.75}Vio and I got talkin' after I made a Joker combining {V:2,s:0.75}#1#{s:0.75} and {V:3,s:0.75}#2#{s:0.75} and it turned into kickstarting the new update"
+					},
+					{
+						"{s:0.75}I'm {V:1,s:0.75}J8-Bit{s:0.75}! I did a lot of the programming for the new update, including a lot of new Jokers, a few reworked older ones,",
+						"{s:0.75}and UI shenanigans with {C:catty,s:0.75}Catty{s:0.75} and {C:bratty,s:0.75}Bratty{s:0.75}'s shop. I also made the credits menu you're looking at right now!",
+					},
+					{
+						"{s:0.75}If you're interested in more of my work, I've been very active in recent {C:attention,s:0.75}Potato Patch{s:0.75} events, so",
+						"{s:0.75}I'd highly recommend checking out {C:green,s:0.75}Stocking Stuffer{s:0.75}, {C:planet,s:0.75}Wormhole{s:0.75}, and {C:blue,s:0.75}Fish and Chips{s:0.75}!",
+						"{s:0.75}I'm also a game developer and artist, and you can find more stuff posted over on my {C:blue,s:0.75}Bluesky:{s:0.75} {X:blue,C:white,s:0.75}@j8-bit.bsky.social{s:0.75}"
+					},
+					{
+						"{s:0.75}Finally, I have my own personal Balatro modding projects! My personal mod {V:1,s:0.75}Forager Nonessentials{s:0.75} includes some",
+						"{s:0.75}new, vanilla-friendly content, and has {C:attention,s:0.75}cross-mod compatibility{s:0.75} with the very mod you're playing right now!",
+					},
+					{
+						"{s:0.75}Thanks for playing the mod! Hope you have fun! {s:0.625,C:inactive}(also I think {s:0.625,V:4}#3#{s:0.625,C:inactive} is really cool) {s:0.5,C:inactive}(also {s:0.5,E:UTDR_tropiss}fuck genAI{s:0.5,C:inactive}) {s:0.4,C:inactive}(also I do {s:0.4,C:attention}mod/pixel art commissions{s:0.4,C:inactive})"
+					}
+				}
+			},
+			j_UTDR_dev_j8_fn = {
+				name = "{s:0.9,C:j8mod_fn}J8-Bit",
+				text = {
+					{
+						"{s:0.75}Howdy! Happy to be here :D It's been a pleasure working on this mod!",
+						"{s:0.75}",
+						"{s:0.75}Vio and I got talkin' after I made a Joker combining {V:2,s:0.75}#1#{s:0.75} and {V:3,s:0.75}#2#{s:0.75} and it turned into kickstarting the new update"
+					},
+					{
+						"{s:0.75}I'm {V:1,s:0.75}J8-Bit{s:0.75}! I did a lot of the programming for the new update, including a lot of new Jokers, a few reworked older ones,",
+						"{s:0.75}and UI shenanigans with {C:catty,s:0.75}Catty{s:0.75} and {C:bratty,s:0.75}Bratty{s:0.75}'s shop. I also made the credits menu you're looking at right now!",
+					},
+					{
+						"{s:0.75}If you're interested in more of my work, I've been very active in recent {C:attention,s:0.75}Potato Patch{s:0.75} events!",
+						"{s:0.75}I'm also a game developer and artist, and you can find more stuff posted over on my {C:blue,s:0.75}Bluesky:{s:0.75} {X:blue,C:white,s:0.75}@j8-bit.bsky.social{s:0.75}"
+					},
+					{
+						"{s:0.75}Thanks for playing {V:1,s:0.75}Forager Nonessentials{s:0.75}! You can now find these Jokers in runs:",
+						"{element:1}"
+					},
+					{
+						"{s:0.75}Thanks for playing the mod! Hope you have fun! {s:0.625,C:inactive}(also I think {s:0.625,V:4}#3#{s:0.625,C:inactive} is really cool) {s:0.5,C:inactive}(also {s:0.5,E:UTDR_tropiss}fuck genAI{s:0.5,C:inactive}) {s:0.4,C:inactive}(also I do {s:0.4,C:attention}mod/pixel art commissions{s:0.4,C:inactive})"
+					}
 				}
 			},
 			j_UTDR_dev_elle = {

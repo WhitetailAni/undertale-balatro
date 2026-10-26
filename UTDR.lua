@@ -99,6 +99,13 @@ SMODS.DynaTextEffect {
 	end,
 }
 
+SMODS.Gradient({
+	key = 'fn',
+	colours = { HEX('FDB157'), HEX('FDB157'), HEX('FD5F55'), HEX('8755bf'), HEX('8755bf'), HEX('FD5F55'), },
+	cycle = 4,
+	interpolation = 'linear'
+})
+
 -- developer cards
 SMODS.Joker {
 	key = "dev_viomarks",
@@ -183,7 +190,89 @@ SMODS.Joker {
 	display_size = { w = 69, h = 69 },
 	no_collection = true,
 	loc_vars = function(self, info_queue, card)
-		return {}
+		-- definitions
+		local friend = G.P_CENTERS["j_UTDR_FRIEND"]
+		local vessel = G.P_CENTERS["j_UTDR_vessel"]
+		local normal_about = G.P_CENTERS
+			[pseudorandom_element({ "j_UTDR_asriel", "j_UTDR_muffet", "j_UTDR_tasque_manager", "j_UTDR_missmizzle", "j_UTDR_netskie" }, "U25lYWt5LCBzbmVha3khIFlvdSdsbCBoYXZlIHRvIGFzayBtZSBkaXJlY3RseSB0byBzZWUgTU9SRSBhcnR3b3JrIGZyb20gbWUh")]
+		-- info queue
+		--info_queue[#info_queue + 1] = friend
+		--info_queue[#info_queue + 1] = vessel
+		--info_queue[#info_queue + 1] = normal_about
+		-- fn jokers
+		local other_jokers = {}
+		local saved_cardarea = nil
+		if next(SMODS.find_mod("ForagerNonessentials")) then
+			for key, center in pairs(G.P_CENTERS) do
+				if center.set == "Joker" and center.mod then
+					local has_j8mod = false
+					local has_utdr = false
+					if center.dependencies and #center.dependencies > 0 then
+						if center.original_mod.id == "ForagerNonessentials" then
+							has_j8mod = true
+						elseif center.original_mod.id == "UTDR" then
+							has_utdr = true
+						end
+						for i = 1, #center.dependencies do
+							if center.dependencies[i] == "ForagerNonessentials" then
+								has_j8mod = true
+							elseif center.dependencies[i] == "UTDR" then
+								has_utdr = true
+							end
+						end
+					end
+					if has_j8mod and has_utdr then
+						table.insert(other_jokers, key)
+					end
+				end
+			end
+		end
+		if #other_jokers > 0 then
+			saved_cardarea = CardArea(
+				0,
+				0,
+				2.0 * G.CARD_W,
+				0.325 * G.CARD_H,
+				{ card_limit = math.max(1, #other_jokers), type = 'title_2', highlight_limit = 0 }
+			)
+			for _, joker_key in pairs(other_jokers) do
+				local joker_card = SMODS.create_card({
+					set = "Joker",
+					key = joker_key,
+					no_edition = true,
+					area = saved_cardarea
+				})
+				joker_card.T.w = joker_card.T.w * 0.325
+				joker_card.T.h = joker_card.T.h * 0.325
+				saved_cardarea:emplace(joker_card)
+			end
+		end
+		-- return
+		return {
+			key = next(SMODS.find_mod("ForagerNonessentials")) and "j_UTDR_dev_j8_fn" or "j_UTDR_dev_j8",
+			vars = {
+				localize({ type = 'name_text', set = "Joker", key = friend.key }) or '_FRIEND',
+				localize({ type = 'name_text', set = "Joker", key = vessel.key }) or 'Vessel',
+				localize({ type = 'name_text', set = "Joker", key = normal_about.key }) or 'Muffet',
+				colours = {
+					SMODS.Gradients["j8mod_fn"] or SMODS.Gradients["UTDR_fn"] or HEX('FDB157'),
+					G.C.RARITY[friend.rarity] or G.C.RARITY["Rare"],
+					G.C.RARITY[vessel.rarity] or G.C.RARITY["Uncommon"],
+					G.C.RARITY[normal_about.rarity] or G.C.RARITY["Uncommon"],
+				},
+				elements = {
+					saved_cardarea and {
+						n = G.UIT.C,
+						config = { align = "bm", mh = 0.2 },
+						nodes = {
+							{
+								n = G.UIT.O, config = { object = saved_cardarea }
+							}
+						}
+					} or nil
+				}
+			}
+		}
 	end,
 	in_pool = function(self, args)
 		return false
@@ -320,7 +409,7 @@ SMODS.current_mod.custom_ui = function(mod_nodes)
 		0,
 		4.125 * G.CARD_W,
 		1.05 * G.CARD_W,
-		{ card_limit = 4, type = 'title', highlight_limit = 0 }
+		{ card_limit = 4, type = 'title_2', highlight_limit = 0 }
 	)
 	local dev_cards = { "j_UTDR_dev_viomarks", "j_UTDR_dev_white_tail_ani", "j_UTDR_dev_j8", "j_UTDR_dev_elle" }
 
