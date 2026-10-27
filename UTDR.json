@@ -9,9 +9,12 @@
     "badge_colour": "000000",
     "badge_text_colour": "ffffff",
     "dependencies": [
-    	"Steamodded (>=1.0.0~BETA-0711a)",
+    	"Steamodded (>=26.1002.0)",
         "Lovely (>=0.8)"
     ],
+    "conflicts": [
+	  "Talisman"
+	 ],
     "version": "3.0.0",
 	"icon_path": "icon.png",
   	"icon_width": 28

@@ -383,21 +383,6 @@ SMODS.Joker {
 		badges[#badges + 1] = create_badge(localize("k_dog"), G.C.GASTER, G.C.ANGEL, 1.2)
 	end,
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
-	calc_scaling = function(self, card, other_card, initial_value, scalar_value, args)
-		if other_card.config.center.key ~= "j_UTDR_lesser_dog" then
-			card.ability.mult = card.ability.mult + card.ability.mult_gain
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					self:set_sprites(card)
-					card_eval_status_text(card, 'extra', nil, nil, nil,
-						{ message = localize('k_upgrade_ex'), colour = G.C.MULT })
-					return true
-				end,
-			}))
-		else
-			print("Uh Oh")
-		end
-	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
@@ -411,6 +396,22 @@ SMODS.Joker {
 				x = 3 + math.min(6, math.floor(card.ability.mult / 8)), --you can pet lesser dog 55 times in UT, dividing that by the 7 different sprites available, the neck should extend every ~8 mult gains!
 				y = 12
 			})
+		end
+	end,
+	calculate = function(self, card, context)
+		if context.scaling_card and context.card.config.center.key ~= "j_UTDR_lesser_dog" then
+			SMODS.scale_card(card, {
+				ref_table = card.ability,
+				ref_value = "mult",
+				scalar_value = "mult_gain",
+				no_message = true
+			})
+			return {
+				post = {
+					message = localize("k_upgrade_ex"),
+					colour = G.C.MULT
+				}
+			}
 		end
 	end
 }
