@@ -302,7 +302,7 @@ function UTDR_Modules.Capsule.get_reward(bet)
 			"p_UTDR_capsule_spectral",
 		}, "capsule_prize_set_super_broke_ass")
 	else
-		pseudorandom_element({
+		winning_set = pseudorandom_element({
 			"p_UTDR_capsule_joker",
 			"p_UTDR_capsule_tarot",
 			"p_UTDR_capsule_spectral",
@@ -374,6 +374,8 @@ function G.FUNCS.UTDR_capsule_trade(e)
 			1.05*G.CARD_H,
 			{card_limit = 1, type = 'consumeable', highlight_limit = 1, negative_info = true}
 		)
+		
+		print(reward)
 		
 		local pack = SMODS.create_card({
 			key = reward.key
