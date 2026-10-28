@@ -28,12 +28,13 @@ Game.update_UTDR_shop_tabs = function()
 					elseif G.utdr_shop_cattybratty then
 						G.UTDR_shop_tabs = UIBox{
 							definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
-							config = {align="cl", offset = {x=G.utdr_shop_cattybratty.T.x + 11 --[[base the xpos off of G.shop instead of G.ROOM since G.ROOM can be really wide in the case of ultrawide monitors]],y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+							config = {align="cl", offset = {x=G.utdr_shop_cattybratty.T.x + 11,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
 						}
+						--make sure you can base it off the other shops, if you exit/reload a save!
 					elseif G.UTDR_shop_capsule then
 						G.UTDR_shop_tabs = UIBox{
 							definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
-							config = {align="cl", offset = {x=G.UTDR_shop_capsule.T.x + 10.67 --[[base the xpos off of G.shop instead of G.ROOM since G.ROOM can be really wide in the case of ultrawide monitors]],y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+							config = {align="cl", offset = {x=G.UTDR_shop_capsule.T.x + 10.67 ,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
 						}
 					end
 					

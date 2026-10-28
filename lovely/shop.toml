@@ -271,8 +271,6 @@ end
 '''
 match_indent = true
 
-
-
 [[patches]]
 [patches.pattern]
 target = "functions/misc_functions.lua"
@@ -286,4 +284,18 @@ payload = '''
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''
+G.shop.alignment.offset.y = G.ROOM.T.y + 29
+G.SHOP_SIGN.alignment.offset.y = -15
+'''
+position = "at"
+payload = '''
+G.shop.alignment.offset.y = G.ROOM.T.y + 29
+G.UTDR_shop_tabs.VT.y = 67 --have to use visualtransform on this for some reason, alignment.offset wouldnt take
+G.SHOP_SIGN.alignment.offset.y = -15
+'''
+match_indent = true
 
