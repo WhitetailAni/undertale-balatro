@@ -591,8 +591,6 @@ SMODS.Joker {
 	soul_pos = { x = 1, y = 12 },
 	cost = 4,
 	choose_disguise = function(card)
-		print("kee kee")
-	
 		--pick da joker
 		card.config.chosen_joker.joker_key = SMODS.poll_object({ type = "Joker" })
 

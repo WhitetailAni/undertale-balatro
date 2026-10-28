@@ -375,8 +375,6 @@ function G.FUNCS.UTDR_capsule_trade(e)
 			{card_limit = 1, type = 'consumeable', highlight_limit = 1, negative_info = true}
 		)
 		
-		print(reward)
-		
 		local pack = SMODS.create_card({
 			key = reward.key
 		})
