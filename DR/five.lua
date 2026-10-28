@@ -305,8 +305,7 @@ SMODS.Joker {
 					xmult = card.ability.xmult
 				}
 			end
-		end
-		if context.ante_change and not context.blueprint and #SMODS.find_card("j_UTDR_blue") == 0 then
+		elseif context.ante_change and not context.blueprint and #SMODS.find_card("j_UTDR_blue") == 0 then
 			if card.ability.all_punishments_worse_than_burying then
 				card.ability.all_punishments_worse_than_burying = false
 			else

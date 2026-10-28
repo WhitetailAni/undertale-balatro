@@ -352,7 +352,7 @@ SMODS.Joker {
 	key = "lesser_dog",
 	config = {
 		mult_gain = 1,
-		mult = 0
+		total_mult = 0
 	},
 	attributes = {
 		"mult",
@@ -370,7 +370,7 @@ SMODS.Joker {
 	pos = { x = 3, y = 12 },
 	cost = 5,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.mult_gain, card.ability.mult } }
+		return { vars = { card.ability.mult_gain, card.ability.total_mult } }
 	end,
 	locked_loc_vars = function(self, info_queue, card)
 		if G.PROFILES[G.SETTINGS.profile].hand_usage["Pair"] then
@@ -387,26 +387,31 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
-				mult = card.ability.mult
+				mult = card.ability.total_mult
 			}
-		end
-	end,
-	set_sprites = function(self, card, front)
-		if card.ability and card.ability.mult and card.ability.mult_gain then
-			card.children.center:set_sprite_pos({
-				x = 3 + math.min(6, math.floor(card.ability.mult / 8)), --you can pet lesser dog 55 times in UT, dividing that by the 7 different sprites available, the neck should extend every ~8 mult gains!
-				y = 12
-			})
 		end
 	end,
 	calculate = function(self, card, context)
 		if context.scaling_card and context.card.config.center.key ~= "j_UTDR_lesser_dog" then
 			SMODS.scale_card(card, {
 				ref_table = card.ability,
-				ref_value = "mult",
+				ref_value = "total_mult",
 				scalar_value = "mult_gain",
 				no_message = true
 			})
+			
+			G.E_MANAGER:add_event(Event({
+				trigger = 'after',
+				delay = 0.3,
+				func = function()
+					card.children.center:set_sprite_pos({
+						x = 3 + math.min(6, math.floor(card.ability.total_mult / 8)), --you can pet lesser dog 55 times in UT, dividing that by the 7 different sprites available, the neck should extend every ~8 mult gains!
+						y = 12
+					})
+					return true
+				end
+			}))
+			
 			return {
 				post = {
 					message = localize("k_upgrade_ex"),
@@ -566,28 +571,10 @@ SMODS.Joker {
 			play_sound("UTDR_true_reset", 1.0, 1.5)
 			for i = 1, #G.jokers.cards do
 				local carb = G.jokers.cards[i]
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						carb.T.r = -0.2
-						carb:juice_up(0.3, 0.4)
-						carb.states.drag.is = true
-						carb.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(carb)
-								carb:remove()
-								self = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
-				add_tag(Tag("tag_negative"))
+				if not carb.ability.eternal then
+					carb:start_dissolve()
+					add_tag(Tag("tag_negative"))
+				end
 			end
 		end
 	end

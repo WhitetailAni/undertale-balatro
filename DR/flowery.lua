@@ -703,6 +703,8 @@ SMODS.Joker {
 		if #aquas > 0 and #seths > 0 and #yellows > 0 and #blues > 0 and #oranges > 0 and #greens > 0 and not card.ability.all_flowers then
 			self:play_flowery_sound("lend_me_your_power")
 			card.ability.all_flowers = true
+			
+			card:set_edition({ negative = true }, true)
 
 			for i = 1, #aquas do
 				aquas[i]:set_eternal(true)
@@ -717,7 +719,8 @@ SMODS.Joker {
 				yellows[i]:set_edition({ negative = true }, true)
 			end
 			for i = 1, #blues do
-				blues[i]:set_eternal(true)
+				blues[i].ability.eternal = nil
+				blues[i].ability.eternal = true
 				blues[i]:set_edition({ negative = true }, true)
 			end
 			for i = 1, #oranges do

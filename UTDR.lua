@@ -116,9 +116,6 @@ SMODS.Joker {
 	pixel_size = { w = 69, h = 69 },
 	display_size = { w = 69, h = 69 },
 	no_collection = true,
-	loc_vars = function(self, info_queue, card)
-		return {}
-	end,
 	in_pool = function(self, args)
 		return false
 	end,
@@ -344,7 +341,10 @@ UTDR.special_thanks = {
 }
 
 UTDR.beta_testers = {
-	"(beta testers go here)"
+	"Sophe",
+	"lushabun",
+	"Sokoyo OwO",
+	"Highball"
 }
 
 UTDR.text_to_text_table = function(text, char_limit)
