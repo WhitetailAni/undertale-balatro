@@ -591,25 +591,10 @@ SMODS.Joker {
 	soul_pos = { x = 1, y = 12 },
 	cost = 4,
 	choose_disguise = function(card)
-		local keys = {}
-		--used to use G.localization.descriptions.Joker, but not all entries in here are actual jokers. so if netskie picked a key that wasnt a real card, the game would crash :()
-		for key, value in pairs(G.P_CENTERS) do
-			keys[#keys + 1] = key
-		end
-
-		local j = 1
-		for i = 1, #keys do
-			if keys[i]:sub(1, 2) == "j_" then
-				keys[j] = keys[i]
-				j = j + 1
-			end
-		end
-		for i = j, #keys do
-			keys[i] = nil
-		end
-
-		--set key
-		card.config.chosen_joker.joker_key = pseudorandom_element(keys, "netskie_joker")
+		print("kee kee")
+	
+		--pick da joker
+		card.config.chosen_joker.joker_key = SMODS.poll_object({ type = "Joker" })
 
 		--set atlases
 		local center = G.P_CENTERS[card.config.chosen_joker.joker_key]

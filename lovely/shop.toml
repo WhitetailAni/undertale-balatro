@@ -242,6 +242,39 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "if G.shop and G.shop.alignment.offset.py then"
+position = "before"
+payload = '''
+if G.UTDR_shop_tabs and G.UTDR_shop_tabs.alignment.offset.py then 
+	G.UTDR_shop_tabs.alignment.offset.y = G.UTDR_shop_tabs.alignment.offset.py
+  	G.UTDR_shop_tabs.alignment.offset.py = nil
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''
+if G.shop then 
+	G.shop.alignment.offset.y = G.shop.alignment.offset.py
+	G.shop.alignment.offset.py = nil
+  end
+'''
+position = "after"
+payload = '''
+if G.UTDR_shop_tabs and G.UTDR_shop_tabs.alignment.offset.py then 
+	G.UTDR_shop_tabs.alignment.offset.y = G.UTDR_shop_tabs.alignment.offset.py
+  	G.UTDR_shop_tabs.alignment.offset.py = nil
+end
+'''
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
 target = "functions/misc_functions.lua"
 pattern = '''
 (G.booster_pack_sparkles and not G.booster_pack_sparkles.REMOVED and 'music2') or
@@ -250,24 +283,6 @@ position = "before"
 payload = '''
 (G.utdr_shop_cattybratty and 'music4') or
 (G.UTDR_shop_capsule and 'music4') or --provisions for custom music later..?
-'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "functions/button_callbacks.lua"
-pattern = '''
-if G.shop and G.shop.alignment.offset.py then 
-	G.shop.alignment.offset.y = G.shop.alignment.offset.py
-  	G.shop.alignment.offset.py = nil
-end
-'''
-position = "after"
-payload = '''
-if G.UTDR_shop_tabs and G.UTDR_shop_tabs.alignment.offset.py then 
-	G.UTDR_shop_tabs.alignment.offset.y = G.UTDR_shop_tabs.alignment.offset.py
-  	G.UTDR_shop_tabs.alignment.offset.py = nil
-end
 '''
 match_indent = true
 
