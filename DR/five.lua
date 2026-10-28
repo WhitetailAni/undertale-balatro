@@ -1060,7 +1060,7 @@ SMODS.Joker {
 		if context.first_hand_drawn then
 			local new_card = SMODS.create_card {
 				set = "Enhanced",
-				enhancement = SMODS.poll_enhancement { key = "UTDR_susies_idea", guaranteed = true },
+				edition = SMODS.edition { key = "UTDR_susies_idea", guaranteed = true },
 				area = G.discard,
 				key_append = "UTDR_susies_idea" }
 			G.playing_card = (G.playing_card and G.playing_card + 1) or 1

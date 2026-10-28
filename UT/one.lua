@@ -601,11 +601,7 @@ SMODS.Joker {
 					break
 				end
 				local joker = pseudorandom_element(pool, "snail_pie_joker")
-				joker:set_edition(SMODS.poll_edition({
-					key = "snail_pie_edition",
-					no_negative = true,
-					options ={ "e_foil", "e_holo", "e_polychrome" }
-				}), true)
+				joker:set_edition(SMODS.poll_edition({ key = "snail_pie_edition", no_negative = true, options = { "e_foil", "e_holo", "e_polychrome" }, guaranteed = true }), true)
 			end
 		end
 	end
