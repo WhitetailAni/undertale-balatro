@@ -39,9 +39,15 @@ function Card:capsule_open()
 end
 
 G.FUNCS.end_capsule = function(e)
+	--if G.booster_pack then
+	G.booster_pack.REMOVED = true
+	--end
+
 	if #G.pack_cards.cards > 0 then
 		G.pack_cards.cards[1]:start_dissolve(nil, false)
 	end
+	
+	UTDR_Modules.Capsule.set_goldpercent_text()
 	
 	G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.5, func = function()
 		G.booster_pack.alignment.offset.y = G.ROOM.T.y + 29
