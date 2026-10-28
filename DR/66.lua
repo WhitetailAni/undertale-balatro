@@ -384,7 +384,7 @@ SMODS.Joker {
 		end
 		return { vars = { card.ability.cards_destroyed, card.ability.deer_kidnapped, localize("k_spectral") } }
 	end,
-	rarity = "UTDR_FRIEND",
+	rarity = 3,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -874,7 +874,7 @@ SMODS.Joker {
 		"xmult",
 	},
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.xmult_gain, card.ability.xmult_loss, card.ability.xmult } }
+		return { vars = { card.ability.xmult_gain, -1 * card.ability.xmult_loss, card.ability.xmult } }
 	end,
 	--unlocked = false
 	unlock_condition = { type = 'money' },
@@ -892,6 +892,20 @@ SMODS.Joker {
 	atlas = "UT_jokers",
 	pos = { x = 1, y = 9 },
 	cost = 6,
+	get_weight = function(self, weight)
+		local protein_count = #SMODS.find_card("j_egg")
+		local multiplier = 1
+		if protein_count == 1 then
+			multiplier = 4
+		elseif protein_count == 2 then
+			multiplier = 7
+		elseif protein_count == 3 then
+			multiplier = 9
+		elseif protein_count >= 4 then
+			multiplier = 10
+		end
+		return weight * multiplier
+	end,
 	calculate = function(self, card, context)
 		if context.selling_card and context.card ~= card and context.card.ability.set == "Joker" and not context.blueprint then
 			SMODS.scale_card(card, {

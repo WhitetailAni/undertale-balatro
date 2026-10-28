@@ -36,6 +36,11 @@ G.E_MANAGER:add_event(Event { func = function()
 end })
 
 UTDR = SMODS.current_mod
+
+UTDR.optional_features = {
+	object_weights = true
+}
+
 UTDR_Modules.UTDR_config = UTDR.config
 local UTDR_config = UTDR_Modules.UTDR_config
 
@@ -850,29 +855,6 @@ SMODS.Attribute {
 		"j_UTDR_doghole",
 		"j_UTDR_dogcheck"
 	}
-}
-
---rigging the rarity poll to make FRIEND show up quicker if youve got protein is hard, so we cheat. cause im LAZY
-SMODS.Rarity {
-	key = "UTDR_FRIEND",
-	badge_colour = HEX('fe5f55'),
-	pools = {
-		Joker = true
-	},
-	get_weight = function(self, weight, object_type)
-		local multiplier = 1
-		local protein_count = #SMODS.find_card("j_egg")
-		if protein_count == 1 then
-			multiplier = 4
-		elseif protein_count == 2 then
-			multiplier = 7
-		elseif protein_count == 3 then
-			multiplier = 9
-		elseif protein_count >= 4 then
-			multiplier = 10
-		end
-		return 0.0025 * multiplier
-	end,
 }
 
 SMODS.Shader {

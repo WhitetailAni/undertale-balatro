@@ -134,9 +134,8 @@ return {
 			["j_UTDR_butterscotch-cinnamon_pie"] = {
 				name = "Butterscotch-Cinnamon Pie",
 				text = {
-					"Sell this card to",
-					"{C:attention}end{} the current Blind",
-					"without {C:money}cashing out{}",
+					"Sell this card to {C:attention}end{} the ",
+					"current Blind {C:money}without cashing out{}",
 					"{C:inactive}(Excludes {C:attention}Boss Blinds{C:inactive})",
 				},
 			},
@@ -383,9 +382,8 @@ return {
 			j_UTDR_undyne_the_undying = {
 				name = "Undyne the Undying",
 				text = {
-					"This Joker gains {C:mult}+#1#{} Mult",
-					"for every card",
-					"{C:attention}discarded{} this round",
+					"This Joker gains {C:mult}+#1#{} Mult for",
+					"every card {C:attention}discarded{} this round",
 					"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
 				},
 			},
@@ -710,8 +708,8 @@ return {
 					"Prevents Death if chips",
 					"scored are at least",
 					"{C:attention}#1#%{} of required chips,",
-					"gains {X:mult,C:white}X#2#{} Mult when",
-					"{C:attention}Death is prevented{}",
+					"gains {X:mult,C:white}X#2#{} Mult {C:attention}when",
+					"{C:attention}Death is prevented",
 					"{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)",
 				},
 				name = "Omega Flowey",
@@ -992,9 +990,8 @@ return {
 			j_UTDR_clover = {
 				name = "Clover",
 				text = {
-					"Played cards with",
-					"{C:clubs}#3#{} suit give",
-					"{C:chips}+#1#{} Chips and",
+					"Played cards with {C:clubs}#3#",
+					"suit give {C:chips}+#1#{} Chips and",
 					"{C:mult}+#2#{} Mult{} when scored",
 				},
 			},
@@ -1098,7 +1095,7 @@ return {
 				name = "Silver Watch",
 				text = {
 					"Played cards give {C:mult}+#1#{}",
-					"Mult when scored,",
+					"Mult when scored",
 					"{C:red}only one hand per round",
 				},
 			},
@@ -1391,6 +1388,7 @@ return {
 				text = {
 					"Gains {X:mult,C:white}X#1#{} Mult for each",
 					"card {C:attention}drawn{} from your deck",
+					"{s:0.8}resets at end of round",
 					"{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
 				},
 			},
@@ -1654,10 +1652,10 @@ return {
 			j_UTDR_lacquer_triangle = {
 				name = "Lacquer Triangle",
 				text = {
-					"{C:ballgame}-#1# Hand{}",
 					"{C:gold}Gold{} capsule prizes",
 					"are {C:attention}guaranteed{}",
-					"at {C:points}300 POINTs"
+					"at {C:points}300 POINTs",
+					"{C:ballgame}-#1# Hand{}",
 				},
 				unlock = {
 					"Try our discount code:",
@@ -2566,9 +2564,6 @@ return {
 			["UTDR_him"] = {
 				"",
 			},
-		},
-		labels = {
-			UTDR_friend = "Rare"
 		},
 		dictionary = {
 			totem_UTDR_punch_card = "Redeemed the Punch Card",

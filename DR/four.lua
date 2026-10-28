@@ -254,6 +254,7 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 7, y = 4 },
 	soul_pos = { x = 9, y = 7 },
+	pixel_size = { w = 35 },
 	cost = 5,
 	config = {
 		mult_per = 0.5
@@ -344,6 +345,7 @@ SMODS.Joker {
 	atlas = "DR_jokers",
 	pos = { x = 8, y = 4 },
 	soul_pos = { x = 0, y = 8 },
+	pixel_size = { w = 35 },
 	cost = 6,
 	config = {
 		xmult_gain = 0.05,

@@ -239,6 +239,7 @@ SMODS.Joker {
 	eternal_compat = true,
 	atlas = "DR_jokers",
 	pos = { x = 0, y = 7 },
+	pixel_size = { w = 46 },
 	cost = 8,
 	loc_vars = function(self, info_queue, card)
 		return { vars = { localize("k_uncommon"), localize("k_rare") } }

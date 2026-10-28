@@ -1056,27 +1056,15 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.first_hand_drawn then
-			local new_card = SMODS.create_card {
+			local new_card = SMODS.add_card {
 				set = "Enhanced",
-				edition = SMODS.edition { key = "UTDR_susies_idea", guaranteed = true },
-				area = G.discard,
-				key_append = "UTDR_susies_idea" }
-			G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-			new_card.playing_card = G.playing_card
-			table.insert(G.playing_cards, new_card)
-
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					G.hand:emplace(new_card)
-					new_card:start_materialize()
-					G.GAME.blind:debuff_card(new_card)
-					G.hand:sort()
-					card:juice_up()
-					SMODS.calculate_context({ playing_card_added = true, cards = { new_card } })
-					save_run()
-					return true
-				end
-			}))
+				edition = SMODS.poll_edition { key = "UTDR_susies_idea", guaranteed = true },
+				area = G.hand,
+				key_append = "UTDR_susies_idea"
+			}
+			
+			G.hand:sort()
+			card:juice_up()
 
 			return nil, true -- This is for Joker retrigger purposes
 		end
