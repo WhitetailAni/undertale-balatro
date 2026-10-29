@@ -82,9 +82,9 @@ if math.fmod(os.time(), 4096) == 0 and config["undertale"] then
 		SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_UTDR_chara'], {bypass_discovery_center = true})
 	end
 else
-	--local tv_world = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, config["deltarune"] and G.P_CENTERS['j_UTDR_tv_world'] or G.P_CENTERS['j_joker'], {bypass_discovery_center = true})
-	SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, config["undertale"] and G.P_CENTERS['j_UTDR_sans'] or G.P_CENTERS['j_joker'], {bypass_discovery_center = true})
-	--[[if config["deltarune"] and not config["undertale"] then
+	local tv_world = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, config["deltarune"] and G.P_CENTERS['j_UTDR_tv_world'] or G.P_CENTERS['j_joker'], {bypass_discovery_center = true})
+	local sans = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, config["undertale"] and G.P_CENTERS['j_UTDR_sans'] or G.P_CENTERS['j_joker'], {bypass_discovery_center = true})
+	if config["deltarune"] and not config["undertale"] then
 		SC = tv_world
 	elseif config["undertale"] and not config["deltarune"] then
 		SC = sans
@@ -94,7 +94,7 @@ else
 		else
 			SC = sans
 		end
-	end]]
+	end
 end
 '''
 match_indent = true
