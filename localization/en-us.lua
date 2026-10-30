@@ -1812,7 +1812,8 @@ return {
 					"{C:attention}Small Blind{} is defeated",
 					"Creates a {C:tarot}Tarot{} card when",
 					"{C:attention}Big Blind{} is defeated",
-					"Earn {C:money}$#1#{} when {C:attention}Boss Blind{} is defeated",
+					"Earn {C:money}$#1#{} when",
+					"{C:attention}Boss Blind{} is defeated",
 				},
 			},
 			j_UTDR_noelle = {
