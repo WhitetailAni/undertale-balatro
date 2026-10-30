@@ -124,7 +124,7 @@ SMODS.Joker {
 		return false
 	end,
 	set_badges = function(self, card, badges)
-		badges = EMPTY(badges)
+		badges[#badges] = create_badge("She/He", G.C.VIO_MARKS, G.C.WHITE, 1.2)
 	end
 }
 
@@ -300,7 +300,7 @@ SMODS.Joker {
 		return false
 	end,
 	set_badges = function(self, card, badges)
-		badges = EMPTY(badges)
+		badges[#badges] = create_badge("He/Him", HEX("FDB157"), G.C.WHITE, 1.2)
 	end
 }
 
