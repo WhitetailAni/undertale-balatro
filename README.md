@@ -1,9 +1,9 @@
 # undertale-balatro
 An Undertale/Deltarune mod for Balatro
 
-## Found a bug? Please submit it under the Issues tab! There are 2 templates provided for you, please use them!!
+# Found a bug? Please submit it under the [Issues](https://github.com/WhitetailAni/undertale-balatro/issues) tab! There are 2 templates provided for you depending on the type of bug, please use them!! Please fill them out!!! It makes it easier for us to fix the bugs!!!!
 
-Please be aware that the Undertale/Deltarune mod's compatibility with other mods is not guaranteed. If you experience a crash with other mods active, Please Please Please ~~only microwave his insides
+Please be aware that the Undertale/Deltarune mod's compatibility with other mods is not guaranteed. If you experience a crash with other mods active, Please Please Please ~~only microwave his insides~~ note this in your issue!!
 
 
 ## Mod developer info
