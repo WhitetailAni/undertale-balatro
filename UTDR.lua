@@ -7,7 +7,6 @@ assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
 --assert(SMODS.load_file('challenge.lua'))() 3.1 feature!
 assert(SMODS.load_file('shop_tabs.lua'))()
-assert(SMODS.load_file('elleplural.lua'))() -- used by dev credits
 
 
 
@@ -118,8 +117,8 @@ SMODS.Joker {
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 0, y = 0 },
-	pixel_size = { w = 69, h = 69 },
-	display_size = { w = 69, h = 69 },
+	pixel_size = { w = 71, h = 71 },
+	display_size = { w = 71, h = 71 },
 	no_collection = true,
 	in_pool = function(self, args)
 		return false
@@ -138,10 +137,9 @@ SMODS.Joker {
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 0 },
-	pixel_size = { w = 69, h = 69 },
-	display_size = { w = 69, h = 69 },
+	pixel_size = { w = 71, h = 71 },
+	display_size = { w = 71, h = 71 },
 	no_collection = true,
-	no_mod_badge = true,
 	loc_vars = function(self, info_queue, card)
 		if not has_viewed then
 			has_viewed = true
@@ -195,8 +193,8 @@ SMODS.Joker {
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 0, y = 1 },
-	pixel_size = { w = 69, h = 69 },
-	display_size = { w = 69, h = 69 },
+	pixel_size = { w = 71, h = 71 },
+	display_size = { w = 71, h = 71 },
 	no_collection = true,
 	loc_vars = function(self, info_queue, card)
 		-- definitions
@@ -312,38 +310,20 @@ SMODS.Joker {
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 1 },
-	pixel_size = { w = 69, h = 69 },
-	display_size = { w = 69, h = 69 },
+	pixel_size = { w = 71, h = 71 },
+	display_size = { w = 71, h = 71 },
 	no_collection = true,
 	loc_vars = function(self, info_queue, card)
-		local fail = #UTDR_Modules.elle_plurality.syslist == 0
-
 		local text = SMODS.create_sprite(0, 0, 2, 69 / 391 * 2, "UTDR_ellecredits_physical_challenges", { x = 0, y = 0 })
-		local element = {
-			n = G.UIT.C,
-			config = { padding = -.1 },
-			nodes = {
-				{ n = G.UIT.R, config = { minh = .2 } },
-				{
-					n = G.UIT.R,
-					nodes = {
-						{ n = G.UIT.O, config = { object = text } }
-					}
-				}
-			}
-		}
+		local element = { n = G.UIT.C, config = { padding = -.1 }, nodes = {
+			{ n = G.UIT.R, config = { minh = .2 }},
+			{ n = G.UIT.R, nodes = {{ n = G.UIT.O, config = { object = text }}}}
+		}}
 
 		return {
 			vars = {
-				fail and "???" or #UTDR_Modules.elle_plurality.syslist + UTDR_Modules.elle_plurality.hidden_count,
-				elements = {
-					UTDR_Modules.elle_plurality.generate_syslist_ui(UTDR_Modules.elle_plurality
-						[fail and "fallback" or "syslist"]),
-					element
-				},
-				colours = {
-					HEX("ff53a9")
-				}
+				elements = {element},
+				colours = {HEX("ff53a9")}
 			}
 		}
 	end,
