@@ -124,7 +124,7 @@ SMODS.Joker {
 		return false
 	end,
 	set_card_type_badge = function(self, card, badges)
-		badges[#badges+1] = create_badge("She/He", G.C.VIO_MARKS, G.C.WHITE, 1.2)
+		badges[#badges + 1] = create_badge("She/He", G.C.VIO_MARKS, G.C.WHITE, 1.2)
 	end
 }
 
@@ -176,7 +176,7 @@ SMODS.Joker {
 		return false
 	end,
 	set_card_type_badge = function(self, card, badges)
-		badges[#badges+1] = create_badge("   /   ", G.C.HOMURA, G.C.ANGEL, 1.2)
+		badges[#badges + 1] = create_badge("   /   ", G.C.HOMURA, G.C.ANGEL, 1.2)
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -300,7 +300,7 @@ SMODS.Joker {
 		return false
 	end,
 	set_card_type_badge = function(self, card, badges)
-		badges[#badges+1] = create_badge("He/Him", HEX("FDB157"), G.C.WHITE, 1.2)
+		badges[#badges + 1] = create_badge("He/Him/Any?", HEX("FDB157"), G.C.WHITE, 0.8)
 	end
 }
 
@@ -315,15 +315,19 @@ SMODS.Joker {
 	no_collection = true,
 	loc_vars = function(self, info_queue, card)
 		local text = SMODS.create_sprite(0, 0, 2, 69 / 391 * 2, "UTDR_ellecredits_physical_challenges", { x = 0, y = 0 })
-		local element = { n = G.UIT.C, config = { padding = -.1 }, nodes = {
-			{ n = G.UIT.R, config = { minh = .2 }},
-			{ n = G.UIT.R, nodes = {{ n = G.UIT.O, config = { object = text }}}}
-		}}
+		local element = {
+			n = G.UIT.C,
+			config = { padding = -.1 },
+			nodes = {
+				{ n = G.UIT.R, config = { minh = .2 } },
+				{ n = G.UIT.R, nodes = { { n = G.UIT.O, config = { object = text } } } }
+			}
+		}
 
 		return {
 			vars = {
-				elements = {element},
-				colours = {HEX("ff53a9")}
+				elements = { element },
+				colours = { HEX("ff53a9") }
 			}
 		}
 	end,
@@ -331,7 +335,7 @@ SMODS.Joker {
 		return false
 	end,
 	set_card_type_badge = function(self, card, badges)
-		badges[#badges+1] = create_badge("She/It", HEX("ff53a9"), G.C.WHITE, 1.2)
+		badges[#badges + 1] = create_badge("She/It", HEX("ff53a9"), G.C.WHITE, 1.2)
 	end
 }
 
