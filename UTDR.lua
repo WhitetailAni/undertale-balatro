@@ -202,27 +202,27 @@ SMODS.Joker {
 		-- definitions
 		local friend = G.P_CENTERS["j_UTDR_FRIEND"]
 		local vessel = G.P_CENTERS["j_UTDR_vessel"]
-		local normal_about
+		local pretty_cool
 		if UTDR_config['undertale'] or UTDR_config['deltarune'] then
-			normal_about = pseudorandom_element(
+			pretty_cool = pseudorandom_element(
 				{ "j_UTDR_asriel", "j_UTDR_muffet", "j_UTDR_tasque_manager", "j_UTDR_missmizzle", "j_UTDR_netskie",
 					"j_UTDR_swatch", "j_UTDR_lanino_elnina", "j_UTDR_knight", "j_UTDR_mike",
-					"j_UTDR_ralseis_dummy", "j_UTDR_you" },
+					"j_UTDR_ralsei", "j_UTDR_you" },
 				"U25lYWt5LCBzbmVha3khIFlvdSdsbCBoYXZlIHRvIGFzayBtZSBkaXJlY3RseSB0byBzZWUgTU9SRSBhcnR3b3JrIGZyb20gbWUh")
-			while not G.P_CENTERS[normal_about] do
-				normal_about = pseudorandom_element(
+			while not G.P_CENTERS[pretty_cool] do
+				pretty_cool = pseudorandom_element(
 					{ "j_UTDR_asriel", "j_UTDR_muffet", "j_UTDR_tasque_manager", "j_UTDR_missmizzle", "j_UTDR_netskie",
 						"j_UTDR_swatch", "j_UTDR_lanino_elnina", "j_UTDR_knight", "j_UTDR_mike",
-						"j_UTDR_ralseis_dummy", "j_UTDR_you" },
+						"j_UTDR_ralsei", "j_UTDR_you" },
 					"U25lYWt5LCBzbmVha3khIFlvdSdsbCBoYXZlIHRvIGFzayBtZSBkaXJlY3RseSB0byBzZWUgTU9SRSBhcnR3b3JrIGZyb20gbWUh")
 			end
 		else
-			normal_about = "j_lucky_cat"
+			pretty_cool = "j_lucky_cat"
 		end
 		-- info queue
 		--info_queue[#info_queue + 1] = friend
 		--info_queue[#info_queue + 1] = vessel
-		--info_queue[#info_queue + 1] = normal_about
+		--info_queue[#info_queue + 1] = pretty_cool
 		-- fn jokers
 		local other_jokers = {}
 		local saved_cardarea = nil
@@ -277,12 +277,12 @@ SMODS.Joker {
 			vars = {
 				friend and localize({ type = 'name_text', set = "Joker", key = friend.key }) or '_FRIEND',
 				vessel and localize({ type = 'name_text', set = "Joker", key = vessel.key }) or 'Vessel',
-				localize({ type = 'name_text', set = "Joker", key = normal_about }) or 'Muffet',
+				localize({ type = 'name_text', set = "Joker", key = pretty_cool }) or 'Muffet',
 				colours = {
 					SMODS.Gradients["j8mod_fn"] or SMODS.Gradients["UTDR_fn"] or HEX('FDB157'),
 					friend and G.C.RARITY[friend.rarity] or G.C.RARITY["Rare"],
 					vessel and G.C.RARITY[vessel.rarity] or G.C.RARITY["Uncommon"],
-					G.C.RARITY[G.P_CENTERS[normal_about].rarity] or G.C.RARITY["Uncommon"],
+					G.C.RARITY[G.P_CENTERS[pretty_cool].rarity] or G.C.RARITY["Uncommon"],
 				},
 				elements = {
 					saved_cardarea and {
