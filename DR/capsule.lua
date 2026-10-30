@@ -2,7 +2,7 @@ UTDR_Modules.Capsule = {
 	points_bet_total = 0,
 	gold_chance_percent = "5%",
 	
-	bet_amount = 0,
+	bet_amount = 100,
 	min_amount = 50,
 	
 	was_gold_prize = false,
@@ -23,6 +23,10 @@ UTDR_Modules.Capsule = {
 }
 
 function Game:update_UTDR_shop_capsule(dt)
+	if G.booster_pack then
+		G.booster_pack.REMOVED = true
+	end
+
 	if not G.STATE_COMPLETE then
 		UTDR_Modules.Capsule.set_goldpercent_text()
 	
@@ -236,7 +240,15 @@ function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
 	
 	local chance = math.min(above_zero, 100)
 	
-	if #SMODS.find_card("j_UTDR_lacquer_triangle") > 0 and bet >= 300 then
+	local you_can_never_wash_it_all_away = false
+	local lacquers = SMODS.find_card("j_UTDR_lacquer_triangle")
+	for i = 1, #lacquers do
+		if lacquers[i].ability.attempted_to_forget then
+			you_can_never_wash_it_all_away = true
+		end
+	end
+	
+	if #SMODS.find_card("j_UTDR_lacquer_triangle") > 0 and bet >= 300 and not you_can_never_wash_it_all_away then
 		chance = 100
 	end
 	if found_tag then
@@ -272,7 +284,7 @@ function UTDR_Modules.Capsule.get_reward(bet)
 	UTDR_Modules.Capsule.was_gold_prize = false
 	UTDR_Modules.Capsule.gold_chance_percent = tostring(UTDR_Modules.Capsule.gold_chance(bet, true)) .. localize("UTDR_shopball_chance0")
 
-	if bet == 1225 then
+	if bet == 1225 and G.GAME.UTDR_lacquer_script_step == 0 then
 		return {
 			december = true
 		}
@@ -298,6 +310,8 @@ function UTDR_Modules.Capsule.get_reward(bet)
 		winning_set = pseudorandom_element({
 			"p_UTDR_capsule_joker",
 			"p_UTDR_capsule_tarot",
+			"p_UTDR_capsule_planet",
+			"p_UTDR_capsule_planet",
 			"p_UTDR_capsule_planet",
 			"p_UTDR_capsule_spectral",
 		}, "capsule_prize_set_super_broke_ass")
@@ -340,7 +354,7 @@ function G.FUNCS.UTDR_capsule_trade(e)
 
 	local reward = UTDR_Modules.Capsule.get_reward(UTDR_Modules.Capsule.bet_amount)
 	
-	if reward.december and G.GAME.UTDR_lacquer_script_step == 0 then
+	if reward.december then
 		ease_background_colour { new_colour = G.C.LACQUER, contrast = 1 }
 		G.E_MANAGER:add_event(Event({
 			func = function()

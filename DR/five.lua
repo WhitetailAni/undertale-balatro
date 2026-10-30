@@ -715,7 +715,7 @@ SMODS.Joker {
 	set_card_type_badge = function(self, card, badges)
 		badges[#badges] = create_badge("Kee kee~", G.C.GASTER, G.C.NETSKIE, 1.2)
 	end,
-	set_ability = function(self, card, initial, delay_sprites)
+	set_sprites = function(self, card, front)
 		--have to put this in an event, otherwise it doesnt work in collection tab
 		G.E_MANAGER:add_event(Event({
 			func = function()

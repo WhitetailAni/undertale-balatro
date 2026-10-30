@@ -179,6 +179,13 @@ SMODS.Joker {
 	end,
 	set_badges = function(self, card, badges)
 		badges[#badges] = create_badge("   /   ", G.C.HOMURA, G.C.ANGEL, 1.2)
+	end,
+	calculate = function(self, card, context)
+		if context.joker_main then
+			return {
+				xmult = 67
+			}
+		end
 	end
 }
 

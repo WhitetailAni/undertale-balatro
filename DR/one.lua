@@ -57,29 +57,11 @@ SMODS.Joker {
 				chips = card.ability.chips
 			}
 		elseif context.end_of_round and G.GAME.blind.boss and not context.blueprint then
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					card_eval_status_text(card, 'extra', nil, nil, nil,
-						{ message = localize("k_UTDR_splat_ex"), colour = G.C.BLUE })
-					play_sound('tarot1')
-					card.T.r = -0.2
-					card:juice_up(0.3, 0.4)
-					card.states.drag.is = true
-					card.children.center.pinch.x = true
-					G.E_MANAGER:add_event(Event({
-						trigger = 'after',
-						delay = 0.3,
-						blockable = false,
-						func = function()
-							G.jokers:remove_card(card)
-							card:remove()
-							card = nil
-							return true;
-						end
-					}))
-					return true
-				end
-			}))
+			card:start_dissolve()
+			return = {
+				message = localize("k_UTDR_splat_ex"),
+				colour = G.C.BLUE
+			}
 		end
 	end
 }
@@ -129,35 +111,15 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			if card.ability.hands >= card.ability.hand_limit then
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
+				card:start_dissolve()
 				if #SMODS.find_card("j_UTDR_susie") > 0 then
 					susie:juice_up(0.3, 0.3);
 					return {
-						message = "Consumed by the Dragon"
+						message = localize("k_UTDR_consumed_by_dragon")
 					}
 				else
 					return {
-						message = "Mama miba!"
+						message = localize("k_UTDR_mama_miba_ex")
 					}
 				end
 			end

@@ -115,13 +115,13 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "lacquer_triangle",
 	config = {
-		hands_lost = 1,
+		attempted_to_forget = false
 	},
 	attributes = {
 		"passive",
 		"hands"
 	},
-	unlocked = false,
+	--unlocked = false,
 	rarity = 3,
 	blueprint_compat = false,
 	eternal_compat = true,
@@ -132,15 +132,17 @@ SMODS.Joker {
 		return false
 	end,
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.hands_lost } }
+		if card.ability.attempted_to_forget then
+			return {
+				key = "j_UTDR_lacquer_washing_of_hands",
+			}
+		end
 	end,
-	add_to_deck = function(self, card, from_debuff)
-		G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.hands_lost
-		ease_hands_played(-card.ability.hands_lost)
-	end,
-	--[[calculate = function(self, card, context)
-		print(context)
-	end]]
+	calculate = function(self, card, context)
+		if context.setting_blind then
+			ease_hands_played(-(G.GAME.round_resets.hands - 1))
+		end
+	end
 }
 
 SMODS.Joker {
@@ -269,7 +271,6 @@ SMODS.Joker {
 	key = "sjelter",
 	config = {
 		in_build = false,
-		old_volume = 0
 	},
 	attributes = {
 		"passive",
@@ -289,9 +290,7 @@ SMODS.Joker {
 	end,
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.in_build = true
-		if not from_debuff then
-			card.ability.old_volume = G.SETTINGS.SOUND.music_volume
-		end
+		G.listen_and_learn_big_G_is_talking = true
 	end,
 	update = function(self, card, dt)
 		if card.ability.in_build then
@@ -300,9 +299,7 @@ SMODS.Joker {
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
-		if not from_debuff then
-			G.SETTINGS.SOUND.music_volume = card.ability.old_volume
-		end
+		G.listen_and_learn_big_G_is_talking = false
 	end
 }
 

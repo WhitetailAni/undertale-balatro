@@ -345,3 +345,20 @@ function CardArea:shuffle(_seed)
 end
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "G.CONTROLLER.locks.selling_card = true"
+position = 'before'
+payload = '''
+if self.config.center.key == "j_UTDR_lacquer_triangle" then
+	self.ability.attempted_to_forget = true
+	self:set_eternal(true)
+	self:set_edition({ negative = true })
+	self.highlighted = false
+	return
+end
+'''
+match_indent = true
+

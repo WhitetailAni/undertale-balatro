@@ -1655,7 +1655,18 @@ return {
 					"{C:gold}Gold{} capsule prizes",
 					"are {C:attention}guaranteed{}",
 					"at {C:points}300 POINTs",
-					"{C:ballgame}-#1# Hand{}",
+					"{C:red}Only one hand per round",
+				},
+				unlock = {
+					"Try our discount code:",
+					"{C:ballgame}B  A  L  L",
+				},
+			},
+			j_UTDR_lacquer_washing_of_hands = {
+				name = "Lacquer Triangle",
+				text = {
+					"{C:ballgame}You can never wash it all away.{}",
+					"Only one hand per round",
 				},
 				unlock = {
 					"Try our discount code:",

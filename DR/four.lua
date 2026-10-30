@@ -69,29 +69,7 @@ SMODS.Joker {
 			SMODS.calculate_effect({ dollars = card.ability.bigbucks }, context.other_card)
 			if card.ability.card_count == 0 then
 				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Drank!" })
-				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					delay = 0.4,
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
+				card:start_dissolve()
 			end
 		end
 	end
@@ -501,27 +479,7 @@ SMODS.Joker {
 			if card.ability.first_round then
 				card.ability.first_round = false
 			elseif not ((card.ability.money - card.ability.hole_in_my_pocket) > 0) then
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
+				card:start_dissolve()
 				return {
 					message = "Drank!"
 				}

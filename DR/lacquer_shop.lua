@@ -6,6 +6,7 @@ function Game:update_UTDR_shop_lacquer(dt)
 	stop_use()
 	if not G.STATE_COMPLETE then
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_LACQUER)
+		G.listen_and_learn_big_G_is_talking = true
 
 		local targets = {
 			"UTDR_SHOP_SIGN_CATTY",
@@ -30,7 +31,6 @@ function Game:update_UTDR_shop_lacquer(dt)
 			}))
 		end
 
-		G.E_MANAGER:add_event(Event{ func = function() save_run(); return true end})
 		G.CONTROLLER.interrupt.focus = true
 		
 		if not G.UTDR_lacquer_shop then
@@ -39,7 +39,6 @@ function Game:update_UTDR_shop_lacquer(dt)
 					trigger = 'immediate',
 					func = function()
 						UTDR_Modules.Lacquer_Shop.old_volume = G.SETTINGS.SOUND.music_volume
-						G.SETTINGS.SOUND.music_volume = 0
 						play_sound('cancel')
 						G.UTDR_lacquer_shop = UIBox{
 							definition = UTDR_Modules.Lacquer_Shop.lacquer_shop(),
@@ -67,6 +66,7 @@ function UTDR_Modules.Lacquer_Shop.exit_lacquer_shop()
 			if G.UTDR_lacquer_shop then G.UTDR_lacquer_shop:remove(); G.UTDR_lacquer_shop = nil end
 			G.SETTINGS.SOUND.music_volume = UTDR_Modules.Lacquer_Shop.old_volume
 			ease_background_colour_blind(G.STATES.SHOP)
+			G.listen_and_learn_big_G_is_talking = false
 			G.STATE = G.STATES.SHOP
 			G.STATE_COMPLETE = false
 			return true
@@ -79,7 +79,10 @@ function UTDR_Modules.Lacquer_Shop.create_lacquer_for_shop()
 	  
 	if script_step == 12 then
 		local lacquer_triangle = SMODS.create_card({
-			key = "j_UTDR_lacquer_triangle"
+			key = "j_UTDR_lacquer_triangle",
+			area = G.lacquer_joker,
+			no_edition = true,
+			bypass_discovery_center = true
 		})
 		UTDR_Modules.Lacquer_Shop.create_lacquer_card_ui(lacquer_triangle)
 		G.lacquer_joker:emplace(lacquer_triangle)
@@ -251,7 +254,6 @@ end
 
 G.FUNCS.reroll_lacquer = function(e) 
     G.CONTROLLER.locks.shop_reroll = true
-    if G.CONTROLLER:save_cardarea_focus('lacquer_joker') then G.CONTROLLER.interrupt.focus = true end
     G.E_MANAGER:add_event(Event({
         trigger = 'immediate',
         func = function()
@@ -276,7 +278,6 @@ G.FUNCS.reroll_lacquer = function(e)
         return true
       end
     }))
-    G.E_MANAGER:add_event(Event({ func = function() save_run(); return true end}))
   end
   
   G.FUNCS.buy_lacquer = function(e)

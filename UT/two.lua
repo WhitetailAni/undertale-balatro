@@ -97,27 +97,7 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			if card.ability.rounds >= card.ability.round_limit then
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
+				card:start_dissolve()
 				return {
 					message = "Melted!"
 				}
@@ -226,27 +206,7 @@ SMODS.Joker {
 			end
 			if not context.blueprint then
 				if SMODS.pseudorandom_probability(card, "nice_cream_destroy", 1, card.ability.destroy_odds, "UT_nice_cream_destroy") then
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							play_sound('tarot1')
-							card.T.r = -0.2
-							card:juice_up(0.3, 0.4)
-							card.states.drag.is = true
-							card.children.center.pinch.x = true
-							G.E_MANAGER:add_event(Event({
-								trigger = 'after',
-								delay = 0.3,
-								blockable = false,
-								func = function()
-									G.jokers:remove_card(card)
-									card:remove()
-									card = nil
-									return true;
-								end
-							}))
-							return true
-						end
-					}))
+					card:start_dissolve()
 					return {
 						message = "Melted!"
 					}
@@ -378,7 +338,12 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.repetition and context.cardarea == G.play and next(context.poker_hands['Straight']) then
-			play_sound("UTDR_papyrus", 1.0, 0.7)
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					play_sound("UTDR_papyrus", 1.0, 0.7)
+					return true
+				end
+			}))
 			return {
 				repetitions = 1,
 			}

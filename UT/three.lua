@@ -26,29 +26,9 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			if card.ability.chips - card.ability.chips_loss <= 0 then
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
+				card:start_dissolve()
 				return {
-					message = "Evaporated!",
+					message = localize("k_UTDR_evaporated_ex")
 					colour = G.C.BLUE
 				}
 			else
@@ -220,29 +200,9 @@ SMODS.Joker {
 					end
 				end
 
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
+				card:start_dissolve()
 				return {
-					message = "Abandoned!"
+					message = localize("k_UTDR_abandoned_ex")
 				}
 			end
 		end
@@ -589,29 +549,9 @@ SMODS.Joker {
 				xmult = card.ability.xmult
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					play_sound('tarot1')
-					card.T.r = -0.2
-					card:juice_up(0.3, 0.4)
-					card.states.drag.is = true
-					card.children.center.pinch.x = true
-					G.E_MANAGER:add_event(Event({
-						trigger = 'after',
-						delay = 0.3,
-						blockable = false,
-						func = function()
-							G.jokers:remove_card(card)
-							card:remove()
-							card = nil
-							return true;
-						end
-					}))
-					return true
-				end
-			}))
+			card:start_dissolve()
 			return {
-				message = "Cooked!"
+				message = localize("k_UTDR_cooked_ex")
 			}
 		end
 	end

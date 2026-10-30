@@ -92,27 +92,7 @@ SMODS.Joker {
 			return result
 		elseif context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			if card.ability.tea_timer == card.ability.steep_time then
-				G.E_MANAGER:add_event(Event({
-					func = function()
-						play_sound('tarot1')
-						card.T.r = -0.2
-						card:juice_up(0.3, 0.4)
-						card.states.drag.is = true
-						card.children.center.pinch.x = true
-						G.E_MANAGER:add_event(Event({
-							trigger = 'after',
-							delay = 0.3,
-							blockable = false,
-							func = function()
-								G.jokers:remove_card(card)
-								card:remove()
-								card = nil
-								return true;
-							end
-						}))
-						return true
-					end
-				}))
+				card:start_dissolve()
 				return {
 					message = "Rotten!",
 					colour = G.C.RED
@@ -461,27 +441,7 @@ SMODS.Joker {
 			play_sound("UTDR_revivemint", 1.0, 0.7)
 			if not context.blueprint then
 				if SMODS.pseudorandom_probability(card, "revivemint", 1, card.ability.odds, "DR_revivemint") then
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							play_sound('tarot1')
-							card.T.r = -0.2
-							card:juice_up(0.3, 0.4)
-							card.states.drag.is = true
-							card.children.center.pinch.x = true
-							G.E_MANAGER:add_event(Event({
-								trigger = 'after',
-								delay = 0.3,
-								blockable = false,
-								func = function()
-									G.jokers:remove_card(card)
-									card:remove()
-									card = nil
-									return true;
-								end
-							}))
-							return true
-						end
-					}))
+					card:start_dissolve()
 					return {
 						message = "DOWN"
 					}
@@ -646,28 +606,7 @@ SMODS.Joker {
 				}
 			end
 		elseif context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					play_sound('tarot1')
-					play_sound('UTDR_pipis_boom', 1.0, 0.7)
-					card.T.r = -0.2
-					card:juice_up(0.3, 0.4)
-					card.states.drag.is = true
-					card.children.center.pinch.x = true
-					G.E_MANAGER:add_event(Event({
-						trigger = 'after',
-						delay = 0.3,
-						blockable = false,
-						func = function()
-							G.jokers:remove_card(card)
-							card:remove()
-							card = nil
-							return true;
-						end
-					}))
-					return true
-				end
-			}))
+			card:start_dissolve()
 			return {
 				message = "[" .. pseudorandom('pipis_liked_that', 1173, 8824) .. " liked that]",
 				colour = G.C.BLUE

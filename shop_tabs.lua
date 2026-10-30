@@ -198,6 +198,9 @@ G.FUNCS.UTDR_shop_button = function(e)
 	if G.STATE ~= G.STATES[e.config.state] then
 		G.E_MANAGER:add_event(Event({
 			func = function()
+				if G.booster_pack then
+					G.booster_pack.REMOVED = true
+				end
 				if G.STATE ~= G.STATES.UTDR_SHOP_CATTYBRATTY then
 					G.UTDR_CATTY_BRATTY_MAIN_SPRITE = nil
 					G.UTDR_CATTY_ARM_SPRITE = nil

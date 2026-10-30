@@ -195,3 +195,13 @@ UTDR_lacquer_script_step = 0,
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "(G.STATE == G.STATES.SPLASH and '') or"
+position = "at"
+payload = "((G.STATE == G.STATES.SPLASH or G.listen_and_learn_big_G_is_talking)and '') or"
+match_indent = true
+
+
+
