@@ -28,7 +28,7 @@ SMODS.Joker {
 			if card.ability.chips - card.ability.chips_loss <= 0 then
 				card:start_dissolve()
 				return {
-					message = localize("k_UTDR_evaporated_ex")
+					message = localize("k_UTDR_evaporated_ex"),
 					colour = G.C.BLUE
 				}
 			else

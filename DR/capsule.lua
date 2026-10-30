@@ -364,7 +364,7 @@ function G.FUNCS.UTDR_capsule_trade(e)
 			end
 		}))
 	else
-		SMODS.calculate_context({ UTDR_capsule_reward = true, is_gold = reward.gold })
+		--SMODS.calculate_context({ UTDR_capsule_reward = true, is_gold = reward.gold })
 	
 		local bet_amount = UTDR_Modules.Capsule.bet_amount
 		if bet_amount >= 1000 then

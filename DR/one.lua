@@ -58,7 +58,7 @@ SMODS.Joker {
 			}
 		elseif context.end_of_round and G.GAME.blind.boss and not context.blueprint then
 			card:start_dissolve()
-			return = {
+			return {
 				message = localize("k_UTDR_splat_ex"),
 				colour = G.C.BLUE
 			}

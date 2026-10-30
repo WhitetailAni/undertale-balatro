@@ -2586,10 +2586,19 @@ return {
 
 			k_UTDR_more = "more",
 			k_UTDR_less = "less",
+			
 			k_UTDR_splat_ex = "Splat!",
 			k_UTDR_burned_ex = "Burned!",
 			k_UTDR_robot = "Roboticized!",
 			k_UTDR_yellow_thanks = "Thanks, y'all!",
+			k_UTDR_dropped_ex = "Dropped!",
+			k_UTDR_oh_no_ex = "Oh no!",
+			k_UTDR_consumed_by_dragon = "Consumed by the Dragon",
+			k_UTDR_mama_miba_ex = "Mama miba!",
+			k_UTDR_cooked_ex = "Cooked!",
+			k_UTDR_abandoned_ex = "Abandoned!",
+			k_UTDR_evaporated_ex = "Evaporated!",
+			
 			k_upgrade_qm = "Upgrade?",
 			k_downgrade_ex = "Downgrade!",
 
