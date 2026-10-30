@@ -256,7 +256,7 @@ SMODS.Joker {
 			play_sound("UTDR_bark", 1.0, 0.7)
 			for i = 1, count do
 				SMODS.add_card({ key = "j_UTDR_dog_residue" })
-				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Bark!", colour = G.C.ATTENTION })
+				card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_UTDR_bark_ex"), colour = G.C.ATTENTION })
 			end
 		end
 	end
