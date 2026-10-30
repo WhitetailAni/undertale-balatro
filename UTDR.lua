@@ -206,13 +206,13 @@ SMODS.Joker {
 		if UTDR_config['undertale'] or UTDR_config['deltarune'] then
 			normal_about = pseudorandom_element(
 				{ "j_UTDR_asriel", "j_UTDR_muffet", "j_UTDR_tasque_manager", "j_UTDR_missmizzle", "j_UTDR_netskie",
-					"j_UTDR_swatch", "j_UTDR_lanino_elnina", "j_UTDR_knight", "j_UTDR_mike", "j_UTDR_ralsei",
+					"j_UTDR_swatch", "j_UTDR_lanino_elnina", "j_UTDR_knight", "j_UTDR_mike",
 					"j_UTDR_ralseis_dummy", "j_UTDR_you" },
 				"U25lYWt5LCBzbmVha3khIFlvdSdsbCBoYXZlIHRvIGFzayBtZSBkaXJlY3RseSB0byBzZWUgTU9SRSBhcnR3b3JrIGZyb20gbWUh")
 			while not G.P_CENTERS[normal_about] do
 				normal_about = pseudorandom_element(
 					{ "j_UTDR_asriel", "j_UTDR_muffet", "j_UTDR_tasque_manager", "j_UTDR_missmizzle", "j_UTDR_netskie",
-						"j_UTDR_swatch", "j_UTDR_lanino_elnina", "j_UTDR_knight", "j_UTDR_mike", "j_UTDR_ralsei",
+						"j_UTDR_swatch", "j_UTDR_lanino_elnina", "j_UTDR_knight", "j_UTDR_mike",
 						"j_UTDR_ralseis_dummy", "j_UTDR_you" },
 					"U25lYWt5LCBzbmVha3khIFlvdSdsbCBoYXZlIHRvIGFzayBtZSBkaXJlY3RseSB0byBzZWUgTU9SRSBhcnR3b3JrIGZyb20gbWUh")
 			end
