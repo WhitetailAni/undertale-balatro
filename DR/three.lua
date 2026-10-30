@@ -56,7 +56,7 @@ SMODS.Joker {
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
 						card:juice_up(0.3, 0.5)
-						card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Nice, luv." })
+						card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_UTDR_ramb") })
 					end
 					return true
 				end
@@ -215,7 +215,7 @@ SMODS.Joker {
 				card.ability.mult = 0
 				return {
 					card = card,
-					message = "KILLED",
+					message = localize("k_UTDR_KILLED"),
 					colour = G.C.MULT
 				}
 			end
@@ -471,7 +471,7 @@ SMODS.Joker {
 	end,
 	calculate = function(self, card, context)
 		if context.discard and SMODS.pseudorandom_probability(card, "eram", 1, card.ability.odds, "DR_eram") then
-			card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Burned!" })
+			card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_UTDR_burned_ex") })
 			play_sound("UTDR_ERAM", 1.0, 0.7)
 			return {
 				remove = true,
@@ -509,7 +509,7 @@ SMODS.Joker {
 							new_card:add_to_deck()
 							G.consumeables:emplace(new_card)
 							card:juice_up(0.3, 0.5)
-							card_eval_status_text(card, 'extra', nil, nil, nil, { message = "GOT STRONGER" })
+							card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_UTDR_GOT_STRONGER") })
 						end
 						return true
 					end

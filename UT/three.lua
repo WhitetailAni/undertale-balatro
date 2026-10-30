@@ -258,14 +258,14 @@ SMODS.Joker {
 			end_round()
 		elseif context.game_over and not G.GAME.blind.boss and card.ability.spared and not context.blueprint then
 			return {
-				message = "Punched!",
+				message = localize("k_UTDR_punched_ex"),
 				saved = "totem_UTDR_punch_card",
 				colour = G.C.RED
 			}
 		elseif context.end_of_round and context.cardarea == G.jokers and card.ability.extra.hands_remaining == 0 then
 			if SMODS.pseudorandom_probability(card, "punch_card_super_secret", 1, card.ability.extra.super_secret_chance, "UT_punch_card_secret") then
 				SMODS.add_card({ key = "j_UTDR_nice_cream" })
-				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Punched!", colour = G.C.ATTENTION })
+				card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_UTDR_punched_ex"), colour = G.C.ATTENTION })
 			end
 		end
 	end
@@ -370,7 +370,7 @@ SMODS.Joker {
 				func = function()
 					play_sound("UTDR_dummy", 1, 0.7)
 					card_eval_status_text(card, 'extra', nil, nil, nil,
-						{ message = "Futile!", colour = G.C.RED })
+						{ message = localize("k_UTDR_futile_ex"), colour = G.C.RED })
 					card:juice_up(0.3, 0.5)
 					return true
 				end
@@ -502,9 +502,8 @@ SMODS.Joker {
 				func = function()
 					if not context.scoring_hand[1].seal then
 						card_eval_status_text(card, 'extra', nil, nil, nil, {
-							message = "Sealed!",
-							colour = G.C
-								.ATTENTION
+							message = localize("k_UTDR_sealed_ex"),
+							colour = G.C.ATTENTION
 						})
 						context.scoring_hand[1]:set_seal(
 							SMODS.poll_seal({ guaranteed = true, type_key = "hotland" }),
@@ -696,7 +695,7 @@ SMODS.Joker {
 	pick_bonus = function(self, card)
 		local rand = pseudorandom("alphys_effect")
 		play_sound("UTDR_alphys", 1.0, 0.7)
-		card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Called in!" })
+		card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_UTDR_called_in_ex") })
 
 		if G.GAME.blind.name == "Big Blind" then
 			local zeroth = 0

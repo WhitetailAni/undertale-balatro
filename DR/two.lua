@@ -94,7 +94,7 @@ SMODS.Joker {
 			if card.ability.tea_timer == card.ability.steep_time then
 				card:start_dissolve()
 				return {
-					message = "Rotten!",
+					message = localize("k_UTDR_rotten_ex"),
 					colour = G.C.RED
 				}
 			else
@@ -443,7 +443,7 @@ SMODS.Joker {
 				if SMODS.pseudorandom_probability(card, "revivemint", 1, card.ability.odds, "DR_revivemint") then
 					card:start_dissolve()
 					return {
-						message = "DOWN"
+						message = localize("k_UTDR_DOWN")
 					}
 				end
 			end
@@ -608,7 +608,7 @@ SMODS.Joker {
 		elseif context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
 			card:start_dissolve()
 			return {
-				message = "[" .. pseudorandom('pipis_liked_that', 1173, 8824) .. " liked that]",
+				message = "[" .. pseudorandom('pipis_liked_that', 1173, 8824) .. " " .. localize("k_UTDR_pipis_liked_that") .. "]", --this is so stupid lmfao
 				colour = G.C.BLUE
 			}
 		end

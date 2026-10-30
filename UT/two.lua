@@ -99,7 +99,7 @@ SMODS.Joker {
 			if card.ability.rounds >= card.ability.round_limit then
 				card:start_dissolve()
 				return {
-					message = "Melted!"
+					message = localize("k_UTDR_melted_ex")
 				}
 			elseif context.end_of_round and context.cardarea == G.jokers then
 				SMODS.scale_card(card, {
@@ -208,7 +208,7 @@ SMODS.Joker {
 				if SMODS.pseudorandom_probability(card, "nice_cream_destroy", 1, card.ability.destroy_odds, "UT_nice_cream_destroy") then
 					card:start_dissolve()
 					return {
-						message = "Melted!"
+						message = localize("k_UTDR_melted_ex")
 					}
 				end
 			end

@@ -68,7 +68,7 @@ SMODS.Joker {
 			card.ability.card_count = card.ability.card_count - 1
 			SMODS.calculate_effect({ dollars = card.ability.bigbucks }, context.other_card)
 			if card.ability.card_count == 0 then
-				card_eval_status_text(card, 'extra', nil, nil, nil, { message = "Drank!" })
+				card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_UTDR_drank_ex") })
 				card:start_dissolve()
 			end
 		end
@@ -165,12 +165,12 @@ SMODS.Joker {
 			if G.GAME.current_round.hands_played == 1 then
 				return {
 					sound = "UTDR_your_taking_too_long",
-					message = "YOUR TAKING TOO LONG"
+					message = localize("k_UTDR_YOUR_TAKING_TOO_LONG")
 				}
 			elseif context.scoring_name == "Pair" and context.scoring_hand[1].base.value == "2" and context.scoring_hand[2].base.value == "2" then
 				return {
 					sound = "UTDR_your_too_too",
-					message = "YOUR     TOO TOO"
+					message = localize("k_UTDR_YOUR_TOO_TOO")
 				}
 			end
 		elseif context.joker_main then
@@ -481,7 +481,7 @@ SMODS.Joker {
 			elseif not ((card.ability.money - card.ability.hole_in_my_pocket) > 0) then
 				card:start_dissolve()
 				return {
-					message = "Drank!"
+					message = localize("k_UTDR_drank_ex")
 				}
 			else
 				card.ability.money = card.ability.money - card.ability.hole_in_my_pocket

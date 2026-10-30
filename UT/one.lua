@@ -597,7 +597,7 @@ SMODS.Joker {
 			mult = mod_mult(math.ceil(mult / card.ability.mult_round) * card.ability.mult_round)
 			update_hand_text({ delay = 0 }, { mult = mult, chips = hand_chips })
 			return {
-				message = "Saved!",
+				message = localize("k_UTDR_saved_ex"),
 				colour = G.C.PURPLE
 			}
 		end

@@ -78,7 +78,7 @@ function Game:update_UTDR_shop_capsule(dt)
 			return true end})
 		--end
 		
-		SMODS.calculate_context({ UTDR_capsule_start = true })
+		--SMODS.calculate_context({ UTDR_capsule_start = true })
 		G.STATE_COMPLETE = true
 	end
 end
@@ -255,7 +255,7 @@ function UTDR_Modules.Capsule.gold_chance(bet, no_modify)
 		chance = 100
 	end
 	
-	SMODS.calculate_context({ UTDR_capsule_gold_chance = true, chance = chance })
+	--SMODS.calculate_context({ UTDR_capsule_gold_chance = true, chance = chance })
 	return chance
 end
 
