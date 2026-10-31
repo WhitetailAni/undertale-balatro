@@ -7,6 +7,7 @@ SMODS.Tag {
 	pos = { x = 0, y = 0 },
 	apply = function(self, tag, context)
 		if context.type == 'immediate' then
+			if #G.jokers.cards >= G.jokers.config.card_limit then return end
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
             tag:yep('+', G.C.DOG, function()
