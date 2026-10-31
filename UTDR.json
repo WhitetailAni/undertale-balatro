@@ -10,11 +10,12 @@
     "badge_text_colour": "ffffff",
     "dependencies": [
     	"Steamodded (>=26.1002.0)",
-        "Lovely (>=0.8)"
+        "Lovely (>=0.10)"
     ],
     "conflicts": [
-	  "Talisman (<=2.7)"
-	 ],
+	    "Talisman (<=2.7)",
+        "Handy",
+	],
     "version": "3.0.0",
 	"icon_path": "icon.png",
   	"icon_width": 28
