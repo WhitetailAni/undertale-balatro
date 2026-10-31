@@ -13,7 +13,7 @@
         "Lovely (>=0.8)"
     ],
     "conflicts": [
-	  "Talisman"
+	  "Talisman (<=2.7)"
 	 ],
     "version": "3.0.0",
 	"icon_path": "icon.png",
