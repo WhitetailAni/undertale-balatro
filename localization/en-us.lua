@@ -2264,7 +2264,7 @@ return {
 			b_UTDR_forgotten = {
 				name = "Forgotten Deck",
 				text = {
-					"All rerolls cost {C:money}$#1#",
+					"All rerolls always cost {C:money}$#1#",
 				},
 			},
 			b_UTDR_dog = {

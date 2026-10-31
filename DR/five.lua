@@ -654,7 +654,7 @@ SMODS.Joker {
 			card.ability = dummy.config.center.config
 			if center.original_mod then
 				local raw = center:loc_vars({}, card)
-				if raw["vars"] then
+				if raw and raw["vars"] then
 					vars = raw["vars"]
 				end
 			else
