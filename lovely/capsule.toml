@@ -28,6 +28,8 @@ G.SPLASH_BACK = Sprite(-30, -6, G.ROOM.T.w+60, G.ROOM.T.h+12, G.ASSET_ATLAS["ui_
 '''
 position = "before"
 payload = '''
+local config = SMODS.find_mod('UTDR')[1].config
+if config["deltarune"] then
 local gold_prizes_nonvoucher = {
 	"j_UTDR_fallen_human",
 	"j_UTDR_kris",
@@ -55,6 +57,7 @@ end
 G.GAME.UTDR_capsule_gold_prizes_nonvoucher = gold_prizes_nonvoucher
 G.GAME.UTDR_capsule_gold_prizes_voucher = gold_prizes_voucher
 UTDR_Modules.Capsule.total_gold_prizes = #gold_prizes_nonvoucher + #gold_prizes_voucher
+end
 '''
 match_indent = true
 

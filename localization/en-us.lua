@@ -2231,24 +2231,26 @@ return {
 				}
 			},
 			j_UTDR_dev_elle = {
-				name = "{f:UTDR_slimelets}slimestuff.",
+				name = "slimestuff.",
 				text = {
 					{
-						"{f:UTDR_slimelets}Hi! We're a system of {f:UTDR_slimelets,E:UTDR_ellerainbow}#1#{f:UTDR_slimelets} creatures.",
-						" {element:1} ",
-						"{f:UTDR_slimelets,s:.8,C:inactive}Though it's usually {f:UTDR_slimelets,s:.8,V:1}elle.{f:UTDR_slimelets,s:.8,C:inactive} doing things."
+						"Hi! We're a {C:attention}Plural{} system of {C:attention}many creatures{}.",
+						"{s:.9}We were gonna have cool web-based UI stuff here,",
+						"{s:.9}but then we lost count of how many of us there are",
+						"{s:.9}and scrapped it last minute. There's at least {E:UTDR_tropiss,s:.9}15{s:.9}, I think.",
+						"{s:.8,C:inactive}Though it's usually {s:.8,V:1}elle.{s:.8,C:inactive} doing things."
 					},
 					{
-						"{f:UTDR_slimelets}We were brought in because of an old {f:UTDR_slimelets,C:attention}Tenna{f:UTDR_slimelets} microgame",
-						"{f:UTDR_slimelets}system we were working on for our {f:UTDR_slimelets,C:red}Balatro{f:UTDR_slimelets} mod.",
-						"{f:UTDR_slimelets}The {f:UTDR_slimelets,C:attention}Joker{f:UTDR_slimelets} is shelved now but it got {f:UTDR_slimelets,C:vio_marks}Vio{f:UTDR_slimelets}'s {f:UTDR_slimelets,C:attention}attention{f:UTDR_slimelets}.",
-						"{f:UTDR_slimelets,s:.8,C:inactive}Recreating all the  {element:2,f:UTDR_slimelets,s:.8,C:inactive}  by {f:UTDR_slimelets,s:.8,C:blue}hand{f:UTDR_slimelets,s:.8,C:inactive} was too daunting"
+						"We were brought in because of an old {C:attention}Tenna{} microgame",
+						"system we were working on for our {C:red}Balatro{} mod.",
+						"The {C:attention}Joker{} is shelved now but it got {C:vio_marks}Vio{}'s {C:attention}attention{}.",
+						"{s:.8,C:inactive}Recreating all the {element:1,s:.8,C:inactive} by {s:.8,C:blue}hand{s:.8,C:inactive} was too daunting"
 					},
 					{
-						"{f:UTDR_slimelets}We made the {f:UTDR_slimelets,C:attention}Tenna{f:UTDR_slimelets} minigame for this mod too,",
-						"{f:UTDR_slimelets}along with most of the work for the new {f:UTDR_slimelets,C:catty,E:1}shops{f:UTDR_slimelets}.",
-						"{f:UTDR_slimelets}You can find us on {f:UTDR_slimelets,C:blue}BlueSky{f:UTDR_slimelets} at {f:UTDR_slimelets,V:1}@ellestuff.dev{f:UTDR_slimelets}.",
-						"{f:UTDR_slimelets,s:.8,C:inactive}We have a website too! It's the same link, just in your browser."
+						"We made the {C:attention}Tenna{} minigame for this mod too,",
+						"along with most of the work for the new {C:catty,E:1}shops{}.",
+						"You can find us on {C:blue}BlueSky{} at {V:1}@ellestuff.dev{}.",
+						"{s:.8,C:inactive}We have a website too! It's the same link, just in your browser."
 					}
 				}
 			},

@@ -7,7 +7,6 @@ assert(SMODS.load_file('sound.lua'))()
 assert(SMODS.load_file('tag.lua'))()
 --assert(SMODS.load_file('challenge.lua'))() 3.1 feature!
 assert(SMODS.load_file('shop_tabs.lua'))()
-assert(SMODS.load_file('elleplural.lua'))() -- used by dev credits
 
 
 
@@ -118,14 +117,14 @@ SMODS.Joker {
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 0, y = 0 },
-	pixel_size = { w = 69, h = 69 },
-	display_size = { w = 69, h = 69 },
+	pixel_size = { w = 71, h = 71 },
+	display_size = { w = 71, h = 71 },
 	no_collection = true,
 	in_pool = function(self, args)
 		return false
 	end,
-	set_badges = function(self, card, badges)
-		badges = EMPTY(badges)
+	set_card_type_badge = function(self, card, badges)
+		badges[#badges + 1] = create_badge("She/He", G.C.VIO_MARKS, G.C.WHITE, 1.2)
 	end
 }
 
@@ -138,10 +137,9 @@ SMODS.Joker {
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 0 },
-	pixel_size = { w = 69, h = 69 },
-	display_size = { w = 69, h = 69 },
+	pixel_size = { w = 71, h = 71 },
+	display_size = { w = 71, h = 71 },
 	no_collection = true,
-	no_mod_badge = true,
 	loc_vars = function(self, info_queue, card)
 		if not has_viewed then
 			has_viewed = true
@@ -177,8 +175,8 @@ SMODS.Joker {
 	in_pool = function(self, args)
 		return false
 	end,
-	set_badges = function(self, card, badges)
-		badges[#badges] = create_badge("   /   ", G.C.HOMURA, G.C.ANGEL, 1.2)
+	set_card_type_badge = function(self, card, badges)
+		badges[#badges + 1] = create_badge("   /   ", G.C.HOMURA, G.C.ANGEL, 1.2)
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main then
@@ -195,34 +193,34 @@ SMODS.Joker {
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 0, y = 1 },
-	pixel_size = { w = 69, h = 69 },
-	display_size = { w = 69, h = 69 },
+	pixel_size = { w = 71, h = 71 },
+	display_size = { w = 71, h = 71 },
 	no_collection = true,
 	loc_vars = function(self, info_queue, card)
 		-- definitions
 		local friend = G.P_CENTERS["j_UTDR_FRIEND"]
 		local vessel = G.P_CENTERS["j_UTDR_vessel"]
-		local normal_about
+		local pretty_cool
 		if UTDR_config['undertale'] or UTDR_config['deltarune'] then
-			normal_about = pseudorandom_element(
+			pretty_cool = pseudorandom_element(
 				{ "j_UTDR_asriel", "j_UTDR_muffet", "j_UTDR_tasque_manager", "j_UTDR_missmizzle", "j_UTDR_netskie",
 					"j_UTDR_swatch", "j_UTDR_lanino_elnina", "j_UTDR_knight", "j_UTDR_mike",
-					"j_UTDR_ralseis_dummy", "j_UTDR_you" },
+					"j_UTDR_ralsei", "j_UTDR_you" },
 				"U25lYWt5LCBzbmVha3khIFlvdSdsbCBoYXZlIHRvIGFzayBtZSBkaXJlY3RseSB0byBzZWUgTU9SRSBhcnR3b3JrIGZyb20gbWUh")
-			while not G.P_CENTERS[normal_about] do
-				normal_about = pseudorandom_element(
+			while not G.P_CENTERS[pretty_cool] do
+				pretty_cool = pseudorandom_element(
 					{ "j_UTDR_asriel", "j_UTDR_muffet", "j_UTDR_tasque_manager", "j_UTDR_missmizzle", "j_UTDR_netskie",
 						"j_UTDR_swatch", "j_UTDR_lanino_elnina", "j_UTDR_knight", "j_UTDR_mike",
-						"j_UTDR_ralseis_dummy", "j_UTDR_you" },
+						"j_UTDR_ralsei", "j_UTDR_you" },
 					"U25lYWt5LCBzbmVha3khIFlvdSdsbCBoYXZlIHRvIGFzayBtZSBkaXJlY3RseSB0byBzZWUgTU9SRSBhcnR3b3JrIGZyb20gbWUh")
 			end
 		else
-			normal_about = "j_lucky_cat"
+			pretty_cool = "j_lucky_cat"
 		end
 		-- info queue
 		--info_queue[#info_queue + 1] = friend
 		--info_queue[#info_queue + 1] = vessel
-		--info_queue[#info_queue + 1] = normal_about
+		--info_queue[#info_queue + 1] = pretty_cool
 		-- fn jokers
 		local other_jokers = {}
 		local saved_cardarea = nil
@@ -277,12 +275,12 @@ SMODS.Joker {
 			vars = {
 				friend and localize({ type = 'name_text', set = "Joker", key = friend.key }) or '_FRIEND',
 				vessel and localize({ type = 'name_text', set = "Joker", key = vessel.key }) or 'Vessel',
-				localize({ type = 'name_text', set = "Joker", key = normal_about }) or 'Muffet',
+				localize({ type = 'name_text', set = "Joker", key = pretty_cool }) or 'Muffet',
 				colours = {
 					SMODS.Gradients["j8mod_fn"] or SMODS.Gradients["UTDR_fn"] or HEX('FDB157'),
 					friend and G.C.RARITY[friend.rarity] or G.C.RARITY["Rare"],
 					vessel and G.C.RARITY[vessel.rarity] or G.C.RARITY["Uncommon"],
-					G.C.RARITY[G.P_CENTERS[normal_about].rarity] or G.C.RARITY["Uncommon"],
+					G.C.RARITY[G.P_CENTERS[pretty_cool].rarity] or G.C.RARITY["Uncommon"],
 				},
 				elements = {
 					saved_cardarea and {
@@ -301,8 +299,8 @@ SMODS.Joker {
 	in_pool = function(self, args)
 		return false
 	end,
-	set_badges = function(self, card, badges)
-		badges = EMPTY(badges)
+	set_card_type_badge = function(self, card, badges)
+		badges[#badges + 1] = create_badge("He/Him/Any?", HEX("FDB157"), G.C.WHITE, 0.8)
 	end
 }
 
@@ -312,46 +310,32 @@ SMODS.Joker {
 	discovered = true,
 	atlas = "UTDR_devs",
 	pos = { x = 1, y = 1 },
-	pixel_size = { w = 69, h = 69 },
-	display_size = { w = 69, h = 69 },
+	pixel_size = { w = 71, h = 71 },
+	display_size = { w = 71, h = 71 },
 	no_collection = true,
 	loc_vars = function(self, info_queue, card)
-		local fail = #UTDR_Modules.elle_plurality.syslist == 0
-
 		local text = SMODS.create_sprite(0, 0, 2, 69 / 391 * 2, "UTDR_ellecredits_physical_challenges", { x = 0, y = 0 })
 		local element = {
 			n = G.UIT.C,
 			config = { padding = -.1 },
 			nodes = {
 				{ n = G.UIT.R, config = { minh = .2 } },
-				{
-					n = G.UIT.R,
-					nodes = {
-						{ n = G.UIT.O, config = { object = text } }
-					}
-				}
+				{ n = G.UIT.R, nodes = { { n = G.UIT.O, config = { object = text } } } }
 			}
 		}
 
 		return {
 			vars = {
-				fail and "???" or #UTDR_Modules.elle_plurality.syslist + UTDR_Modules.elle_plurality.hidden_count,
-				elements = {
-					UTDR_Modules.elle_plurality.generate_syslist_ui(UTDR_Modules.elle_plurality
-						[fail and "fallback" or "syslist"]),
-					element
-				},
-				colours = {
-					HEX("ff53a9")
-				}
+				elements = { element },
+				colours = { HEX("ff53a9") }
 			}
 		}
 	end,
 	in_pool = function(self, args)
 		return false
 	end,
-	set_badges = function(self, card, badges)
-		badges[#badges] = create_badge("She/It", HEX("ff53a9"), G.C.WHITE, 1.2)
+	set_card_type_badge = function(self, card, badges)
+		badges[#badges + 1] = create_badge("She/It", HEX("ff53a9"), G.C.WHITE, 1.2)
 	end
 }
 
