@@ -478,7 +478,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
 			local rank = context.other_card.base.value
-			if rank == "Ace" or rank == "9" or rank == "7" and SMODS.pseudorandom_probability(card, "spamton", 1, card.ability.odds, "DR_spamton") then
+			if (rank == "Ace" or rank == "9" or rank == "7") and SMODS.pseudorandom_probability(card, "spamton", 1, card.ability.odds, "DR_spamton") then
 				--oh my spamtenna
 				local other_card = context.other_card --cant pass context.other_card into an event or it gets sad....
 				if #SMODS.find_card("j_UTDR_tenna") > 0 and pseudorandom("spamtenna") <= 0.25 and not context.blueprint then
