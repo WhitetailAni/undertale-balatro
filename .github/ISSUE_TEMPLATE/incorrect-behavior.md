@@ -1,7 +1,8 @@
 ---
 name: Incorrect behavior
 about: Something in the game isn't working how it should?
-title: "[BEHAVIOR] PleaseReplaceThisTextWithWhat'sWrong"
+title: "[BEHAVIOR] I Can't Read, I'm An Undertale Fan! (Replace this text with the
+  issue)"
 labels: ''
 assignees: ''
 
