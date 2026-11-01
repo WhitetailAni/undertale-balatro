@@ -253,7 +253,7 @@ SMODS.Joker {
 			return {
 				mult = card.ability.mult
 			}
-		elseif context.setting_blind and context.cardarea == G.jokers and G.GAME.blind.name ~= "The Needle" and not context.blueprint then
+		elseif context.setting_blind and context.cardarea == G.jokers and G.GAME.blind.name ~= "The Needle" and not context.blueprint and #SMODS.find_card("j_UTDR_lacquer_triangle") == 0 then
 			ease_hands_played(-G.GAME.current_round.hands_left + 1)
 		end
 	end
