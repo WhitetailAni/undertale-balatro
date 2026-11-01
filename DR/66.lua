@@ -394,7 +394,12 @@ SMODS.Joker {
 
 				if card.ability.deer_kidnapped == 2 or #SMODS.find_card("j_UTDR_vessel") then
 					card.ability.deer_kidnapped = 0
-					play_sound("UTDR__", 1.0, 1.0)
+					G.E_MANAGER:add_event(Event({
+						func = (function()
+							play_sound("UTDR__", 1.0, 1.0)
+							return true
+						end)
+					}))
 					if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
 						G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
 						G.E_MANAGER:add_event(Event({
