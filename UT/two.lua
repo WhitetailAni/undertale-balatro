@@ -310,7 +310,7 @@ SMODS.Joker {
 						local new_card = create_card('Planet', G.consumeables, nil, nil, nil, nil, nil, 'snowdin')
 						new_card:add_to_deck()
 						G.consumeables:emplace(new_card)
-						card:juice_up(0.3, 0.5)
+						new_card:juice_up(0.3, 0.5)
 						card_eval_status_text(self, 'extra', nil, nil, nil,
 							{ message = localize('k_plus_planet'), colour = G.C.SECONDARY_SET.Planet })
 					end
