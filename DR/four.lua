@@ -390,48 +390,54 @@ SMODS.Joker {
 			--i tried to do it programatic by looping over G.blind_select_opts, but wasn't able to get it working reliably.
 			local small_baby = G.blind_select_opts.small.parent
 			G.blind_select_opts.small = nil
-			G.blind_select_opts.small = UIBox {
-				T = { small_baby.T.x, 0, 0, 0, },
-				definition =
-				{ n = G.UIT.ROOT, config = { align = "cm", colour = G.C.CLEAR }, nodes = {
-					UIBox_dyn_container({ create_UIBox_blind_choice('Small') }, false, get_blind_main_colour('Small'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
-				} },
-				config = { align = "bmi",
-					offset = { x = 0, y = G.ROOM.T.y + 9 },
-					major = small_baby,
-					xy_bond = 'Weak'
+			if small_baby then
+				G.blind_select_opts.small = UIBox {
+					T = { small_baby.T.x, 0, 0, 0, },
+					definition =
+					{ n = G.UIT.ROOT, config = { align = "cm", colour = G.C.CLEAR }, nodes = {
+						UIBox_dyn_container({ create_UIBox_blind_choice('Small') }, false, get_blind_main_colour('Small'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
+					} },
+					config = { align = "bmi",
+						offset = { x = 0, y = G.ROOM.T.y + 9 },
+						major = small_baby,
+						xy_bond = 'Weak'
+					}
 				}
-			}
+			end
 
 			local big_baby = G.blind_select_opts.big.parent
 			G.blind_select_opts.big = nil
-			G.blind_select_opts.big = UIBox {
-				T = { big_baby.T.x, 0, 0, 0, },
-				definition =
-				{ n = G.UIT.ROOT, config = { align = "cm", colour = G.C.CLEAR }, nodes = {
-					UIBox_dyn_container({ create_UIBox_blind_choice('Big') }, false, get_blind_main_colour('Big'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
-				} },
-				config = { align = "bmi",
-					offset = { x = 0, y = G.ROOM.T.y + 9 },
-					major = big_baby,
-					xy_bond = 'Weak'
+			if big_baby then
+				G.blind_select_opts.big = UIBox {
+					T = { big_baby.T.x, 0, 0, 0, },
+					definition =
+					{ n = G.UIT.ROOT, config = { align = "cm", colour = G.C.CLEAR }, nodes = {
+						UIBox_dyn_container({ create_UIBox_blind_choice('Big') }, false, get_blind_main_colour('Big'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
+					} },
+					config = { align = "bmi",
+						offset = { x = 0, y = G.ROOM.T.y + 9 },
+						major = big_baby,
+						xy_bond = 'Weak'
+					}
 				}
-			}
+			end
 
 			local boss_baby = G.blind_select_opts.boss.parent
 			G.blind_select_opts.boss = nil
-			G.blind_select_opts.boss = UIBox {
-				T = { boss_baby.T.x, 0, 0, 0, },
-				definition =
-				{ n = G.UIT.ROOT, config = { align = "cm", colour = G.C.CLEAR }, nodes = {
-					UIBox_dyn_container({ create_UIBox_blind_choice('Boss') }, false, get_blind_main_colour('Boss'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
-				} },
-				config = { align = "bmi",
-					offset = { x = 0, y = G.ROOM.T.y + 9 },
-					major = boss_baby,
-					xy_bond = 'Weak'
+			if boss_baby then
+				G.blind_select_opts.boss = UIBox {
+					T = { boss_baby.T.x, 0, 0, 0, },
+					definition =
+					{ n = G.UIT.ROOT, config = { align = "cm", colour = G.C.CLEAR }, nodes = {
+						UIBox_dyn_container({ create_UIBox_blind_choice('Boss') }, false, get_blind_main_colour('Boss'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
+					} },
+					config = { align = "bmi",
+						offset = { x = 0, y = G.ROOM.T.y + 9 },
+						major = boss_baby,
+						xy_bond = 'Weak'
+					}
 				}
-			}
+			end
 		end
 	end,
 	loc_vars = function(self, info_queue, card)

@@ -140,5 +140,6 @@ SMODS.Back {
 	pos = { x = 0, y = 0 },
 	apply = function(self)
 		G.GAME.starting_params.reroll_cost = 4
+		G.GAME.shop_d6ed = true
 	end,
 }

@@ -203,5 +203,15 @@ position = "at"
 payload = "((G.STATE == G.STATES.SPLASH or G.listen_and_learn_big_G_is_talking)and '') or"
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "tag.lua"
+pattern = "G.GAME.round_resets.temp_reroll_cost = 0"
+position = "at"
+payload = '''
+if not G.GAME.selected_back.name == "b_UTDR_forgotten" then G.GAME.round_resets.temp_reroll_cost = 0 end
+'''
+match_indent = true
+
 
 

@@ -299,3 +299,19 @@ G.SHOP_SIGN.alignment.offset.y = -15
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+if saveTable then 
+	check_for_unlock({type = 'continue_game'})
+end
+'''
+position = 'at'
+payload = '''
+if saveTable then 
+	G.RELOADED_SAVE = true
+	check_for_unlock({type = 'continue_game'})
+end
+'''
+match_indent = true

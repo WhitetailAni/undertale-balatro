@@ -290,7 +290,7 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.poker_hand_changed and context.card.config.center.key ~= "j_UTDR_shadowguy" then --shadowguys cannot feed off each other under ANY CIRCUMSTANCES (it crashes the game instantly)
+		if context.poker_hand_changed and context.card and context.card.config and context.card.config.center and context.card.config.center.key ~= "j_UTDR_shadowguy" then --shadowguys cannot feed off each other under ANY CIRCUMSTANCES (it crashes the game instantly)
 			SMODS.upgrade_poker_hands({
 				hands = context.scoring_name,
 				func = function(base, hand, parameter, level_up)
