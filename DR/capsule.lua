@@ -28,6 +28,7 @@ function Game:update_UTDR_shop_capsule(dt)
 	end
 
 	if not G.STATE_COMPLETE then
+		G.STATE_SHOP_CHANGED = false
 		UTDR_Modules.Capsule.set_goldpercent_text()
 	
 		stop_use()

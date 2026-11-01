@@ -45,6 +45,7 @@ end
 
 function Game:update_utdr_shop_cattybratty(dt)
 	if not G.STATE_COMPLETE then
+		G.STATE_SHOP_CHANGED = false
 		stop_use()
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_CATTYBRATTY)
 

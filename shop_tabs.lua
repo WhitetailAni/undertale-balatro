@@ -207,6 +207,7 @@ G.FUNCS.UTDR_shop_button = function(e)
 					G.UTDR_CATTY_ARM_SPRITE = nil
 					G.UTDR_BRATTY_ARM_SPRITE = nil
 				end
+				G.STATE_SHOP_CHANGED = true
 				G.STATE = G.STATES[e.config.state]
 				G.STATE_COMPLETE = false
 				return true

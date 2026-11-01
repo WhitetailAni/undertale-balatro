@@ -315,3 +315,45 @@ if saveTable then
 end
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+for i = 1, #G.GAME.tags do
+	G.GAME.tags[i]:apply_to_run({type = 'shop_start'})
+end
+'''
+position = 'at'
+payload = '''
+if G.STATE_SHOP_CHANGED then
+	G.STATE_SHOP_CHANGED = false
+if not G.STATE_SHOP_CHANGED then
+	for i = 1, #G.GAME.tags do
+		G.GAME.tags[i]:apply_to_run({type = 'shop_start'})
+	end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+for i = 1, #G.GAME.tags do
+	G.GAME.tags[i]:apply_to_run({type = 'shop_final_pass'})
+end
+'''
+position = 'at'
+payload = '''
+if G.STATE_SHOP_CHANGED then
+	G.STATE_SHOP_CHANGED = false
+if not G.STATE_SHOP_CHANGED then
+	for i = 1, #G.GAME.tags do
+		G.GAME.tags[i]:apply_to_run({type = 'shop_final_pass'})
+	end
+end
+'''
+match_indent = true
+
+
