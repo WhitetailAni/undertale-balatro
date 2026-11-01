@@ -88,7 +88,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.money } }
 	end,
-	rarity = 3,
+	rarity = 2,
 	blueprint_compat = true,
 	eternal_compat = true,
 	atlas = "DR_jokers",
@@ -303,7 +303,7 @@ SMODS.Joker {
 		end
 		return { vars = { card.ability.tag_count, localize { type = 'name_text', set = 'Tag', key = 'tag_charm' } } }
 	end,
-	rarity = 1,
+	rarity = 2,
 	blueprint_compat = false,
 	eternal_compat = false,
 	atlas = "DR_jokers",
