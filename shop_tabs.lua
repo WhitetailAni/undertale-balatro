@@ -1,9 +1,49 @@
-UTDR_Modules.Shop_Tabs = {	
+UTDR_Modules.Shop_Tabs = {
+	
 }
+
+function UTDR_Modules.Shop_Tabs.reload_tabs()
+	if G.shop then
+		G.UTDR_shop_tabs = UIBox{
+			definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
+			config = {align="cl", offset = {x=G.shop.T.x + 11 --[[base the xpos off of G.shop instead of G.ROOM since G.ROOM can be really wide in the case of ultrawide monitors]],y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+		}
+	elseif G.utdr_shop_cattybratty then
+		G.UTDR_shop_tabs = UIBox{
+			definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
+			config = {align="cl", offset = {x=G.utdr_shop_cattybratty.T.x + 11,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+		}
+		--make sure you can base it off the other shops, if you exit/reload a save!
+	elseif G.UTDR_shop_capsule then
+		G.UTDR_shop_tabs = UIBox{
+			definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
+			config = {align="cl", offset = {x=G.UTDR_shop_capsule.T.x + 10.67 ,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
+		}
+	end
+	
+	if G.UTDR_shop_tabs then
+		local remove_hook = G.UTDR_shop_tabs.remove
+		function remove(self)
+			G.UTDR_shop_tabs.alignment.offset.y = G.shop.alignment.offset.y + 10
+			remove_hook(self)
+		end
+	end
+	
+	-- Move shop tabs to start of uibox list
+	for i, v in ipairs(G.I.UIBOX) do
+		if v == G.UTDR_shop_tabs then
+			table.remove(G.I.UIBOX,i)
+			table.insert(G.I.UIBOX,1,G.UTDR_shop_tabs)
+			break
+		end
+	end
+end
 
 Game.update_UTDR_shop_tabs = function()
 	if G.UTDR_shop_tabs then
 		G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 11.4
+	else
+		UTDR_Modules.Shop_Tabs.reload_tabs()
 	end
 	if not G.STATE_COMPLETE then
 		stop_use()
@@ -15,45 +55,9 @@ Game.update_UTDR_shop_tabs = function()
 				func = function()
 					play_sound('cancel')
 					
-					--[[local xOffset = 10.6
-					if G.SETTINGS.GRAPHICS.texture_scaling == 2 then
-						xOffset = 11
-					end]]
+					UTDR_Modules.Shop_Tabs.reload_tabs()
 					
-					if G.shop then
-						G.UTDR_shop_tabs = UIBox{
-							definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
-							config = {align="cl", offset = {x=G.shop.T.x + 11 --[[base the xpos off of G.shop instead of G.ROOM since G.ROOM can be really wide in the case of ultrawide monitors]],y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
-						}
-					elseif G.utdr_shop_cattybratty then
-						G.UTDR_shop_tabs = UIBox{
-							definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
-							config = {align="cl", offset = {x=G.utdr_shop_cattybratty.T.x + 11,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
-						}
-						--make sure you can base it off the other shops, if you exit/reload a save!
-					elseif G.UTDR_shop_capsule then
-						G.UTDR_shop_tabs = UIBox{
-							definition = UTDR_Modules.Shop_Tabs.create_shop_tabs("DR"),
-							config = {align="cl", offset = {x=G.UTDR_shop_capsule.T.x + 10.67 ,y=G.ROOM.T.y + 30}, major = G.ROOM_ATTACH, bond = 'Weak'}
-						}
-					end
 					
-					if G.UTDR_shop_tabs then
-						local remove_hook = G.UTDR_shop_tabs.remove
-						function remove(self)
-							G.UTDR_shop_tabs.alignment.offset.y = G.shop.alignment.offset.y + 10
-							remove_hook(self)
-						end
-					end
-					
-					-- Move shop tabs to start of uibox list
-					for i, v in ipairs(G.I.UIBOX) do
-						if v == G.UTDR_shop_tabs then
-							table.remove(G.I.UIBOX,i)
-							table.insert(G.I.UIBOX,1,G.UTDR_shop_tabs)
-							break
-						end
-					end
 			return true end})
 		end
 	end
