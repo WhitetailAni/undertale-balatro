@@ -12,6 +12,7 @@ local sounds = {
 	"shadowguy_1",
 	"shadowguy_2",
 	"shadowguy_3",
+	"shadowguy_sad",
 	"shadowguy_gone",
 	"_",
 	"egg",

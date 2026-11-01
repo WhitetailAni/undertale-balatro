@@ -326,8 +326,6 @@ end
 '''
 position = 'at'
 payload = '''
-if G.STATE_SHOP_CHANGED then
-	G.STATE_SHOP_CHANGED = false
 if not G.STATE_SHOP_CHANGED then
 	for i = 1, #G.GAME.tags do
 		G.GAME.tags[i]:apply_to_run({type = 'shop_start'})
@@ -348,7 +346,7 @@ position = 'at'
 payload = '''
 if G.STATE_SHOP_CHANGED then
 	G.STATE_SHOP_CHANGED = false
-if not G.STATE_SHOP_CHANGED then
+else
 	for i = 1, #G.GAME.tags do
 		G.GAME.tags[i]:apply_to_run({type = 'shop_final_pass'})
 	end

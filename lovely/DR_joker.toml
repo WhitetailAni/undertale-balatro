@@ -4,27 +4,6 @@ priority = -2
 
 [vars]
 
-#shadowguy chips-mult level up tampering
-[[patches]]
-[patches.pattern]
-target = '''=[SMODS _ "src/utils.lua"]'''
-pattern = '''
-context.old_parameters = {}
-context.new_parameters = {}
-'''
-position = "after"
-payload = '''
-if args.from and args.from.config and args.from.config.center and args.from.config.center.key == "j_UTDR_shadowguy" then
-	G.E_MANAGER:add_event(Event({
-		func = function()
-			play_sound(pseudorandom_element({"UTDR_shadowguy_1", "UTDR_shadowguy_2", "UTDR_shadowguy_3"}, "shadowguy_sfx"), 1.0, 0.7)
-			return true
-		end
-	}))
-end
-'''
-match_indent = true
-
 #mizzle stuffs
 [[patches]]
 [patches.pattern]

@@ -270,7 +270,8 @@ SMODS.Joker {
 	key = "shadowguy",
 	config = {
 		chips = 5,
-		mult = 2
+		mult = 2,
+		has_armed = false
 	},
 	attributes = {
 		"passive",
@@ -290,15 +291,43 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.poker_hand_changed and context.card and context.card.config and context.card.config.center and context.card.config.center.key ~= "j_UTDR_shadowguy" then --shadowguys cannot feed off each other under ANY CIRCUMSTANCES (it crashes the game instantly)
-			SMODS.upgrade_poker_hands({
-				hands = context.scoring_name,
-				func = function(base, hand, parameter, level_up)
-					return base + card.ability[parameter]
-				end,
-				level_up = 0,
-				from = card,
-			})
+		if context.setting_blind then
+			card.ability.has_armed = false
+		elseif context.poker_hand_changed then
+			if G.GAME.blind.name == "The Arm" and not card.ability.has_armed and context.old_level > context.new_level then
+				print(context.old_level)
+				print(context.new_level)
+				card.ability.has_armed = true
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound("UTDR_shadowguy_sad", 1.0, 0.7)
+						return true
+					end
+				}))
+				SMODS.upgrade_poker_hands({
+					hands = context.scoring_name,
+					func = function(base, hand, parameter, level_up)
+						return base - card.ability[parameter]
+					end,
+					level_up = 0,
+					from = card,
+				})
+			elseif context.card and context.card.config.center.key ~= "j_UTDR_shadowguy" then --shadowguys cannot feed off each other under ANY CIRCUMSTANCES (it crashes the game instantly)
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound(pseudorandom_element({"UTDR_shadowguy_1", "UTDR_shadowguy_2", "UTDR_shadowguy_3"}, "shadowguy_sfx"), 1.0, 0.7)
+						return true
+					end
+				}))
+				SMODS.upgrade_poker_hands({
+					hands = context.scoring_name,
+					func = function(base, hand, parameter, level_up)
+						return base + card.ability[parameter]
+					end,
+					level_up = 0,
+					from = card,
+				})
+			end
 		end
 	end
 }
