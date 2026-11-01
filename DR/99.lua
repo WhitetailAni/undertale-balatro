@@ -144,13 +144,13 @@ SMODS.Joker {
 		"xmult",
 	},
 	in_pool = function(self, args)
-        for _, card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(card, 'm_glass') then
-                return true
-            end
-        end
-        return false
-    end,
+		for _, card in ipairs(G.playing_cards or {}) do
+			if SMODS.has_enhancement(card, 'm_glass') then
+				return true
+			end
+		end
+		return false
+	end,
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
 		local probabilities_normal, odds = SMODS.get_probability_vars(card, 1, card.ability.odds, "DR_noelle")
@@ -765,7 +765,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "moss",
 	config = {
-		joker_slots = 1
+		extra_slots_used = -1
 	},
 	attributes = {
 		"passive",
@@ -781,9 +781,9 @@ SMODS.Joker {
 	cost = 10,
 	add_to_deck = function(self, card, from_debuff)
 		play_sound("UTDR_moss", 1.0, 1.5)
-		G.jokers.config.card_limit = G.jokers.config.card_limit + card.ability.joker_slots
+		--G.jokers.config.card_limit = G.jokers.config.card_limit + card.ability.joker_slots
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.jokers.config.card_limit = G.jokers.config.card_limit - card.ability.joker_slots
+		--G.jokers.config.card_limit = G.jokers.config.card_limit - card.ability.joker_slots
 	end,
 }
