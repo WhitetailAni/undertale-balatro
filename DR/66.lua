@@ -139,7 +139,7 @@ SMODS.Joker {
 		end
 	end,
 	calculate = function(self, card, context)
-		if context.setting_blind then
+		if context.setting_blind and context.cardarea == G.jokers and G.GAME.blind.name ~= "The Needle" and not context.blueprint then
 			ease_hands_played(-(G.GAME.round_resets.hands - 1))
 		end
 	end
