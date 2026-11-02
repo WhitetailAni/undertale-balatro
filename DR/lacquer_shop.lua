@@ -3,8 +3,9 @@ UTDR_Modules.Lacquer_Shop = {
 }
 
 function Game:update_UTDR_shop_lacquer(dt)
-	stop_use()
 	if not G.STATE_COMPLETE then
+		stop_use()
+	
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_LACQUER)
 		G.listen_and_learn_big_G_is_talking = true
 
