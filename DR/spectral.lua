@@ -172,14 +172,9 @@ SMODS.Consumable:take_ownership('aura',
 		atlas = "UTDR_consumables",
 		pos = { x = 4, y = 4 },
 		loc_vars = function(self, info_queue, card)
-			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0 then
-				if math.fmod(os.time(), 16) == 0 then
-					return { key = "c_UTDR_jorkington_crystal" }
-				else
-					return { key = "c_UTDR_wraith_crystal" }
-				end
-			elseif math.fmod(os.time(), 16) == 0 then
-				return { key = "c_UTDR_jorkington" }
+			loc_vars = function(self, info_queue, card)
+			if #SMODS.find_card("j_UTDR_shadow_crystal") > 0  then
+				return { key = "c_UTDR_aura_crystal" }
 			end
 		end,
 	},
