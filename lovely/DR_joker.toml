@@ -357,3 +357,13 @@ end
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = "function get_pack(_key, _type)"
+position = "after"
+payload = '''
+if #SMODS.find_card("j_UTDR_seam") > 0 and #SMODS.find_card("j_UTDR_sjelter") > 0 then return G.P_CENTERS["p_spectral_mega_1"] end
+'''
+match_indent = true
+

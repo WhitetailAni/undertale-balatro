@@ -1,5 +1,4 @@
 UTDR_Modules.Lacquer_Shop = {
-	old_volume = 0
 }
 
 function Game:update_UTDR_shop_lacquer(dt)
@@ -7,7 +6,7 @@ function Game:update_UTDR_shop_lacquer(dt)
 		stop_use()
 	
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_LACQUER)
-		G.listen_and_learn_big_G_is_talking = true
+		G.listen_and_learn_big_G_is_talking = G.listen_and_learn_big_G_is_talking + 1
 
 		local targets = {
 			"UTDR_SHOP_SIGN_CATTY",
@@ -39,7 +38,6 @@ function Game:update_UTDR_shop_lacquer(dt)
 				G.E_MANAGER:add_event(Event{
 					trigger = 'immediate',
 					func = function()
-						UTDR_Modules.Lacquer_Shop.old_volume = G.SETTINGS.SOUND.music_volume
 						play_sound('cancel')
 						G.UTDR_lacquer_shop = UIBox{
 							definition = UTDR_Modules.Lacquer_Shop.lacquer_shop(),
@@ -57,17 +55,14 @@ function Game:update_UTDR_shop_lacquer(dt)
 			G.STATE_COMPLETE = true
 		end
 	end
-	
-	G.SETTINGS.SOUND.music_volume = 0
 end
 
 function UTDR_Modules.Lacquer_Shop.exit_lacquer_shop()
 	G.E_MANAGER:add_event(Event({
 		func = function()
 			if G.UTDR_lacquer_shop then G.UTDR_lacquer_shop:remove(); G.UTDR_lacquer_shop = nil end
-			G.SETTINGS.SOUND.music_volume = UTDR_Modules.Lacquer_Shop.old_volume
 			ease_background_colour_blind(G.STATES.SHOP)
-			G.listen_and_learn_big_G_is_talking = false
+			G.listen_and_learn_big_G_is_talking = G.listen_and_learn_big_G_is_talking - 1
 			G.STATE = G.STATES.SHOP
 			G.STATE_COMPLETE = false
 			return true

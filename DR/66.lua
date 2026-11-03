@@ -7,8 +7,6 @@ SMODS.Joker {
 	pos = { x = 1, y = 1 },
 	cost = 6,
 	config = {
-		xmult_first = 2,
-		xmult_too_long = 0.5,
 		glasses_are_older = false,
 		in_build = false
 	},
@@ -269,9 +267,6 @@ SMODS.Joker {
 
 SMODS.Joker {
 	key = "sjelter",
-	config = {
-		in_build = false,
-	},
 	attributes = {
 		"passive",
 	},
@@ -289,18 +284,11 @@ SMODS.Joker {
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
-		card.ability.in_build = true
-		G.listen_and_learn_big_G_is_talking = true
-	end,
-	update = function(self, card, dt)
-		if card.ability.in_build then
-			G.SETTINGS.SOUND.music_volume = 0
-		end
+		G.listen_and_learn_big_G_is_talking = G.listen_and_learn_big_G_is_talking + 1
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		card.ability.in_build = false
-		G.listen_and_learn_big_G_is_talking = false
-	end
+		G.listen_and_learn_big_G_is_talking = G.listen_and_learn_big_G_is_talking - 1
+	end,
 }
 
 SMODS.Joker {

@@ -29,6 +29,7 @@ function Card:capsule_open()
 		G.E_MANAGER:add_event(Event({trigger = 'after', delay = 1.3*math.sqrt(G.SETTINGS.GAMESPEED), blocking = false, func = function()
 			if G.pack_cards then 
 				if G.pack_cards and G.pack_cards.VT.y < G.ROOM.T.h then 
+				UTDR_Modules.Capsule.you_can_skip_now = true
 				G.pack_cards:emplace(card)
 				return true
 				end
@@ -42,6 +43,7 @@ G.FUNCS.end_capsule = function(e)
 	--if G.booster_pack then
 	G.booster_pack.REMOVED = true
 	--end
+	stop_use()
 
 	if #G.pack_cards.cards > 0 then
 		G.pack_cards.cards[1]:start_dissolve(nil, false)
@@ -59,6 +61,13 @@ G.FUNCS.end_capsule = function(e)
 		return true
 	end}))
 	G.FUNCS.end_consumeable(e)
+end
+
+function G.FUNCS.can_end_capsule(e)
+	local can_use = (G.GAME.STOP_USE and G.GAME.STOP_USE == 0) and UTDR_Modules.Capsule.you_can_skip_now
+
+	e.config.colour = can_use and darken(G.C.GREY, e.states.hover.is and .15 or 0) or G.C.UI.BACKGROUND_INACTIVE
+	e.config.button = can_use and 'end_capsule' or nil
 end
 
 local function capsule_UIBox(self)
@@ -83,17 +92,13 @@ local function capsule_UIBox(self)
 				}),}},
 			{n=G.UIT.C,config={align = "tm", padding = 0.05, minw = 2.4}, nodes={
 				{n=G.UIT.R,config={minh =0.2}, nodes={}},
-				{n=G.UIT.R,config={align = "tm",padding = 0.2, minh = 1.2, minw = 1.8, r=0.15,colour = G.C.GREY, one_press = true, button = 'end_capsule', delayfac = 0.0, hover = true,shadow = true}, nodes = {
+				{n=G.UIT.R,config={align = "tm",padding = 0.2, minh = 1.2, minw = 1.8, r=0.15,colour = G.C.GREY, one_press = true, func = "can_end_capsule", button = 'end_capsule', delayfac = 0.0, hover = true,shadow = true}, nodes = {
 					{n=G.UIT.T, config={text = localize('b_skip'), scale = 0.5, colour = G.C.WHITE, shadow = true, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}}}}}}}}}}}
 	return t
 end
 
 SMODS.Booster {
     key = "capsule_tarot",
-    loc_txt = {
-    	name = "",
-    	description = "",
-    },
     atlas = "shop_capsule_ball",
     pos = { x = 0, y = 0 },
     pixel_size = { w = 64, h = 64 },
@@ -124,10 +129,6 @@ SMODS.Booster {
 
 SMODS.Booster {
     key = "capsule_joker",
-    loc_txt = {
-    	name = "",
-    	description = "",
-    },
     atlas = "shop_capsule_ball",
     pos = { x = 0, y = 0 },
     pixel_size = { w = 64, h = 64 },
@@ -157,10 +158,6 @@ SMODS.Booster {
 
 SMODS.Booster {
     key = "capsule_planet",
-    loc_txt = {
-    	name = "",
-    	description = "",
-    },
     atlas = "shop_capsule_ball",
     pos = { x = 0, y = 0 },
     config = {
@@ -189,10 +186,6 @@ SMODS.Booster {
 
 SMODS.Booster {
     key = "capsule_spectral",
-    loc_txt = {
-    	name = "",
-    	description = "",
-    },
     atlas = "shop_capsule_ball",
     pos = { x = 0, y = 0 },
     pixel_size = { w = 64, h = 64 },
@@ -222,10 +215,6 @@ SMODS.Booster {
 
 SMODS.Booster {
     key = "capsule_gold",
-    loc_txt = {
-    	name = "",
-    	description = "",
-    },
     atlas = "shop_capsule_ball",
     pos = { x = 1, y = 0 },
     pixel_size = { w = 64, h = 64 },

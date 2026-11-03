@@ -6,6 +6,7 @@ UTDR_Modules.Capsule = {
 	min_amount = 50,
 	
 	was_gold_prize = false,
+	you_can_skip_now = true,
 	
 	cannot_pull = {
 		"j_UTDR_thorn_ring",
@@ -399,9 +400,11 @@ function G.FUNCS.UTDR_capsule_trade(e)
 		pack.capsule = {}
 		pack.capsule.bottom = SMODS.create_sprite(pack.T.x, pack.T.y, G.CARD_W * scale_factor, G.CARD_H * scale_factor, "UTDR_shop_capsule_ball", { x = 5, y = 0 })
 		pack.capsule.top = SMODS.create_sprite(pack.T.x, pack.T.y, G.CARD_W * scale_factor , G.CARD_H * scale_factor, "UTDR_shop_capsule_ball", { x = 4, y = 0 })
+		UTDR_Modules.Capsule.you_can_skip_now = false
 		
 		G.E_MANAGER:add_event(Event({
 			func = function()
+				stop_use()
 				pack:capsule_open()
 				return true
 			end

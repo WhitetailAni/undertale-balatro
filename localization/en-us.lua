@@ -1699,7 +1699,8 @@ return {
 			j_UTDR_sjelter = {
 				name = "Shelter",
 				text = {
-					"{C:gaster}. . .{}",
+					"Only {C:spectral}Prophecy Packs",
+					"show up in shop",
 				},
 			},
 			j_UTDR_sjelter_sjelter = {

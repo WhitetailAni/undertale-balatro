@@ -679,15 +679,6 @@ end
 
 -- load UT
 if UTDR_config['undertale'] then
-	assert(SMODS.load_file('UT/one.lua'))()
-	assert(SMODS.load_file('UT/two.lua'))()
-	assert(SMODS.load_file('UT/three.lua'))()
-	assert(SMODS.load_file('UT/four.lua'))()
-	assert(SMODS.load_file('UT/five.lua'))()
-	assert(SMODS.load_file('UT/six.lua'))()
-	assert(SMODS.load_file('UT/trading.lua'))()
-	assert(SMODS.load_file('UT/tarot.lua'))()
-
 	SMODS.Font {
 		key = "ComicSansUT",
 		path = "sans.ttf"
@@ -698,40 +689,15 @@ if UTDR_config['undertale'] then
 		path = "papyrus.ttf"
 	}
 
-	SMODS.Back {
-		key = "dog",
-		--[[
-		loc_txt = {
-			name = "Dogdeck",
-			text = {
-				"Start run with",
-				"{C:attention}Bandage{} and {C:attention}Stick{}",
-				"Winning ante is {C:attention}9"
-			},
-		},
-		]]
-		unlocked = true,
-		atlas = "UT_deck",
-		pos = { x = 0, y = 0 },
-		config = { win_ante = 9, extra_jokers = { "j_UTDR_bandage", "j_UTDR_stick" } },
-		loc_vars = function(self, info_queue, back)
-			--print(localize({ type = 'name_text', set = "Joker", key = self.config.extra_jokers[1] }))
-			--print(localize({ type = 'name_text', set = "Joker", key = self.config.extra_jokers[2] }))
-			return { vars = { localize({ type = 'name_text', set = "Joker", key = self.config.extra_jokers[1] }) or 'Bandage', localize({ type = 'name_text', set = "Joker", key = self.config.extra_jokers[2] }) or 'Stick', self.config.win_ante } }
-		end,
-		apply = function(self, back)
-			G.GAME.win_ante = 9
-			for i = 1, #self.config.extra_jokers do
-				G.E_MANAGER:add_event(Event({
-					trigger = 'after',
-					func = function()
-						SMODS.add_card({ key = self.config.extra_jokers[i], no_edition = true })
-						return true
-					end
-				}))
-			end
-		end
-	}
+	assert(SMODS.load_file('UT/one.lua'))()
+	assert(SMODS.load_file('UT/two.lua'))()
+	assert(SMODS.load_file('UT/three.lua'))()
+	assert(SMODS.load_file('UT/four.lua'))()
+	assert(SMODS.load_file('UT/five.lua'))()
+	assert(SMODS.load_file('UT/six.lua'))()
+	assert(SMODS.load_file('UT/trading.lua'))()
+	assert(SMODS.load_file('UT/tarot.lua'))()
+	assert(SMODS.load_file('UT/deck.lua'))()
 end
 
 -- load DR
