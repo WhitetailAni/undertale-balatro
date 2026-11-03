@@ -2,6 +2,26 @@ local dr = UTDR.config["deltarune"]
 
 return {
 	descriptions = {
+		Stake = {
+            stake_UTDR_blue = {
+                name = "Blue Stake",
+                text = {
+                	"{C:bratty}Bratty{} and {C:catty}Catty's{} 2nd trade costs {C:attention}double",
+                    "Ball Machine {C:gold}Gold{} prizes are {C:attention}1.5x{} as rare",
+                    "{s:0.8}Applies all previous Stakes",
+                },
+            },
+            stake_UTDR_orange = {
+                name = "Orange Stake",
+               	text = {
+                    "Shop can have {C:attention}Perishable{} Jokers",
+                    "{C:inactive,s:0.8}(Debuffed after 5 Rounds)",
+                    "{C:attention}All {C:bratty}Bratty{} and {C:catty}Catty{} trades cost double",
+                    "Ball Machine {C:gold}Gold{} prizes are {C:attention}2x{} as rare",
+                    "{s:0.8}Applies all previous Stakes",
+                },
+            },
+        },
 		Voucher = {
 			v_UTDR_rippling_stars = {
 				name = "Rippling Stars",

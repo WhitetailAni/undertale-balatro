@@ -8,7 +8,17 @@ assert(SMODS.load_file('tag.lua'))()
 --assert(SMODS.load_file('challenge.lua'))() 3.1 feature!
 assert(SMODS.load_file('shop_tabs.lua'))()
 
+--[[SMODS.Stake:take_ownership("blue", {
+	loc_vars = function(self, info_queue, card)
+		return { key = "stake_UTDR_blue" }
+	end,
+})
 
+SMODS.Stake:take_ownership("orange", {
+	loc_vars = function(self, info_queue, card)
+		return { key = "stake_UTDR_orange" }
+	end,
+})]]
 
 local ease_background_colour_blind_hook = ease_background_colour_blind
 function ease_background_colour_blind(state, blind_override, ...)
