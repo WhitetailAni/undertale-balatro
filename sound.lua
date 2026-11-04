@@ -53,6 +53,11 @@ local sounds = {
 	"lose",
 	"buy",
 	"ralseis",
+	"bet",
+	"drumroll",
+	"applause",
+	"applause2",
+	"aww",
 }
 
 local volume = {

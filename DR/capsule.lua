@@ -353,6 +353,7 @@ end
 
 function G.FUNCS.UTDR_capsule_trade(e)
 	stop_use()
+	play_sound("UTDR_bet", 1.0, 0.7)
 
 	local reward = UTDR_Modules.Capsule.get_reward(UTDR_Modules.Capsule.bet_amount)
 	
@@ -405,6 +406,7 @@ function G.FUNCS.UTDR_capsule_trade(e)
 		G.E_MANAGER:add_event(Event({
 			func = function()
 				stop_use()
+				play_sound("UTDR_drumroll", 1.0, 0.7)
 				pack:capsule_open()
 				return true
 			end

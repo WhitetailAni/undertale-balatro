@@ -118,6 +118,7 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
+    	play_sound("UTDR_applause", 1.0, 0.7)
         return {
     		set = "Tarot",
 			area = G.pack_cards,
@@ -147,6 +148,7 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
+    	play_sound("UTDR_applause", 1.0, 0.7)
     	return {
     		set = "Joker",
 			area = G.pack_cards,
@@ -175,6 +177,7 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
+    	play_sound("UTDR_aww", 1.0, 0.7)
     	return {
     		set = "Planet",
 			area = G.pack_cards,
@@ -204,6 +207,7 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
+    	play_sound("UTDR_applause", 1.0, 0.7)
         return {
     		set = "Spectral",
 			area = G.pack_cards,
@@ -234,6 +238,7 @@ SMODS.Booster {
     end,
     no_collection = true,
     create_card = function(self, card, i)
+    	play_sound("UTDR_applause2", 1.0, 0.7)
     	UTDR_Modules.Capsule.points_bet_total = 0
     	if 0.5 < pseudorandom("is_gold_prize_voucher") then
     		local voucher_dummy = SMODS.create_card({ set = "Voucher" })
