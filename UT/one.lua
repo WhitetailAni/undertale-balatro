@@ -283,7 +283,6 @@ SMODS.Joker {
 	key = "fallen_human",
 	config = {
 		hand_size_gain = 1,
-		joker_count = 0,
 		in_build = false
 	},
 	attributes = {
@@ -327,24 +326,31 @@ SMODS.Joker {
 			}
 		end
 	end,
+	recalc_hand_size = function(self, card)
+		G.E_MANAGER:add_event(Event({
+			func = function()
+				G.hand:change_size(-G.hand.config.card_limits.mod)
+				for i = 1, #SMODS.find_card("j_UTDR_fallen_human") do
+					G.hand:change_size(#G.jokers.cards * card.ability.hand_size_gain)
+				end
+				return true
+			end
+		}))
+	end,
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.in_build = true
-		G.hand:change_size((#G.jokers.cards * card.ability.hand_size_gain))
-		card.ability.joker_count = #G.jokers.cards
+		self:recalc_hand_size(card)
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.hand:change_size(-G.hand.config.card_limits.mod)
-		for i = 1, #SMODS.find_card("j_UTDR_fallen_human") do
-			G.hand:change_size(#G.jokers.cards * card.ability.hand_size_gain)
-		end
+		self:recalc_hand_size(card)
 		card.ability.in_build = false
 	end,
 	calculate = function(self, card, context)
 		--these 2 contexts can only ever trigger on 1 joker at a time, so we can assume to change hand size by 1 joker's worth. or just hand_size_gain
 		if context.card_added and context.card.ability.set == "Joker" then
-			G.hand:change_size(card.ability.hand_size_gain)
+			self:recalc_hand_size(card)
 		elseif context.joker_type_destroyed or (context.selling_card and context.card.ability.set == "Joker") and not context.card.config.center.key == "j_UTDR_fallen_human" then
-			G.hand:change_size(-card.ability.hand_size_gain)
+			self:recalc_hand_size(card)
 		end
 	end
 }
