@@ -200,7 +200,7 @@ match_indent = true
 target = "functions/misc_functions.lua"
 pattern = "(G.STATE == G.STATES.SPLASH and '') or"
 position = "at"
-payload = "((G.STATE == G.STATES.SPLASH or G.listen_and_learn_big_G_is_talking > 0)and '') or"
+payload = "((G.STATE == G.STATES.SPLASH or (G.listen_and_learn_big_G_is_talking and G.listen_and_learn_big_G_is_talking > 0))and '') or"
 match_indent = true
 
 [[patches]]
