@@ -51,12 +51,15 @@ SMODS.Joker {
 				func = function()
 					if G.consumeables.config.card_limit > #G.consumeables.cards then
 						play_sound('timpani')
-						local new_card = create_card(pseudorandom_element({ 'Tarot', 'Planet' }, "ramb"), G.consumeables,
-							nil, nil, nil, nil, nil, 'ramb')
-						new_card:add_to_deck()
-						G.consumeables:emplace(new_card)
+						SMODS.add_card({
+							set = pseudorandom_element({ 'Tarot', 'Planet' }, "ramb"),
+							area = G.consumeables,
+							key_append = "ramb",
+						})
 						card:juice_up(0.3, 0.5)
-						card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_UTDR_ramb") })
+						if not context.blueprint then
+							card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize("k_UTDR_ramb") })
+						end
 					end
 					return true
 				end

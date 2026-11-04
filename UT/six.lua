@@ -387,7 +387,7 @@ SMODS.Joker {
 	end,
 	unlock_condition = { type = 'hand', count = 20, hand = 'Pair' },
 	calculate = function(self, card, context)
-		if context.scaling_card and context.card.config.center.key ~= "j_UTDR_lesser_dog" then
+		if context.scaling_card and context.card.config.center.key ~= "j_UTDR_lesser_dog" and not context.blueprint then
 			SMODS.scale_card(card, {
 				ref_table = card.ability,
 				ref_value = "total_mult",
@@ -413,8 +413,7 @@ SMODS.Joker {
 					colour = G.C.MULT
 				}
 			}
-		end
-		if context.joker_main then
+		elseif context.joker_main then
 			return {
 				mult = card.ability.total_mult
 			}

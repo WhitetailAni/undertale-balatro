@@ -673,14 +673,37 @@ SMODS.Joker {
 			}
 		}
 	end,
+	update_existing_editions = function(self, card)
+		for i = 1, #G.jokers.cards do
+			self:update_existing_edition(card, G.jokers.cards[i])
+		end
+		for i = 1, #G.deck.cards do
+			self:update_existing_edition(card, G.deck.cards[i])
+		end
+		for i = 1, #G.hand.cards do
+			self:update_existing_edition(card, G.hand.cards[i])
+		end
+	end,
+	update_existing_edition = function(self, card, carb)
+		if carb.edition then
+			if carb.edition.key == "e_foil" then
+				carb.edition.chips = G.P_CENTERS.e_foil.config.chips
+			elseif carb.edition.key == "e_holo" then
+				carb.edition.mult = G.P_CENTERS.e_holo.config.mult
+			elseif carb.edition.key == "e_polychrome" then
+				carb.edition.x_mult = G.P_CENTERS.e_polychrome.config.x_mult
+			end
+		end
+	end,
 	add_to_deck = function(self, card, from_debuff)
 		card.ability.old_foil = G.P_CENTERS.e_foil.config.chips
 		card.ability.old_holo = G.P_CENTERS.e_holo.config.mult
 		card.ability.old_poly = G.P_CENTERS.e_polychrome.config.x_mult
 
 		card.ability.in_build = true
-
+		
 		edition_values(card.ability.foil, card.ability.holo, card.ability.poly, true)
+		self:update_existing_editions(card)
 	end,
 	update = function(self, card, dt)
 		if card.ability.in_build then
@@ -689,12 +712,16 @@ SMODS.Joker {
 	end,
 	remove_from_deck = function(self, card, from_debuff)
 		card.ability.in_build = false
+		
 		edition_values(card.ability.old_foil, card.ability.old_holo, card.ability.old_poly, true)
+		self:update_existing_editions(card)
 	end,
 	calculate = function(self, card, context)
 		if context.game_over and not context.blueprint then
 			card.ability.in_build = false
+			
 			edition_values(card.ability.old_foil, card.ability.old_holo, card.ability.old_poly)
+			self:update_existing_editions(card)
 		end
 	end
 }
