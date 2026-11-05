@@ -21,10 +21,38 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "card.lua"
-pattern = "G.GAME.discount_percent = center_table.extra"
+pattern = '''
+ if center_table.name == 'Clearance Sale' or center_table.name == 'Liquidation' then
+	G.E_MANAGER:add_event(Event({func = function()
+		G.GAME.discount_percent = G.GAME.discount_percent + center_table.extra
+		for k, v in pairs(G.I.CARD) do
+			if v.set_cost then v:set_cost() end
+		end
+		return true end }))
+end
+'''
 position = "at"
-payload = "G.GAME.discount_percent = G.GAME.discount_percent + center_table.extra"
-match_indent = false
+payload = '''
+ if center_table.name == 'Clearance Sale' or center_table.name == 'Liquidation' then
+	G.E_MANAGER:add_event(Event({func = function()
+		if center_table.name == 'Clearance Sale' then
+			G.GAME.discount_percent_storage = center_table.extra
+			G.GAME.discount_percent = G.GAME.discount_percent + center_table.extra
+		else
+			if G.GAME.discount_percent_storage then
+				G.GAME.discount_percent = G.GAME.discount_percent - G.GAME.discount_percent_storage
+				G.GAME.discount_percent_storage = nil
+			end
+			G.GAME.discount_percent = G.GAME.discount_percent + center_table.extra
+		end
+		for k, v in pairs(G.I.CARD) do
+			if v.set_cost then v:set_cost() end
+		end
+		return true end }))
+end
+G.GAME.discount_percent = G.GAME.discount_percent + center_table.extra
+'''
+match_indent = true
 
 # barrier
 [[patches]]
