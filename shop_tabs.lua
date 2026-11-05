@@ -40,6 +40,7 @@ UTDR_Modules.Shop_Tabs.move_tabs_to_back = function()
 end
 
 Game.update_UTDR_shop_tabs = function()
+	if not UTDR_Modules.UTDR_config.undertale and not UTDR_Modules.UTDR_config.deltarune then return end
 	if G.UTDR_shop_tabs then
 		G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 11.4
 	end
