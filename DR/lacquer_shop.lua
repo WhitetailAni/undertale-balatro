@@ -6,6 +6,9 @@ function Game:update_UTDR_shop_lacquer(dt)
 		stop_use()
 	
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_LACQUER)
+		if not G.listen_and_learn_big_G_is_talking then
+			G.listen_and_learn_big_G_is_talking = 0
+		end
 		G.listen_and_learn_big_G_is_talking = G.listen_and_learn_big_G_is_talking + 1
 
 		local targets = {
@@ -75,7 +78,8 @@ function UTDR_Modules.Lacquer_Shop.create_lacquer_for_shop()
 	  
 	if script_step == 12 then
 		local lacquer_triangle = SMODS.create_card({
-			key = "j_UTDR_lacquer_triangle",
+			key = "j_UTDR_weird_deard_gaster",
+			--key = "j_UTDR_lacquer_triangle",
 			area = G.lacquer_joker,
 			no_edition = true,
 			bypass_discovery_center = true

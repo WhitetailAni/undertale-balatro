@@ -353,7 +353,6 @@ end
 
 function G.FUNCS.UTDR_capsule_trade(e)
 	stop_use()
-	play_sound("UTDR_bet", 1.0, 0.7)
 
 	local reward = UTDR_Modules.Capsule.get_reward(UTDR_Modules.Capsule.bet_amount)
 	
@@ -367,6 +366,7 @@ function G.FUNCS.UTDR_capsule_trade(e)
 			end
 		}))
 	else
+		play_sound("UTDR_bet", 1.0, 0.7)
 		--SMODS.calculate_context({ UTDR_capsule_reward = true, is_gold = reward.gold })
 	
 		local bet_amount = UTDR_Modules.Capsule.bet_amount

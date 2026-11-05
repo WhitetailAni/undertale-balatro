@@ -509,7 +509,7 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "weird_deard_gaster",
 	config = {
-		state = 0
+		in_build = false
 	},
 	attributes = {
 		"passive",
@@ -534,296 +534,560 @@ SMODS.Joker {
 		local scale = 0.44
 		local silent = true
 		local min_cycle_time = 0
-		local main_start = {
-			{
-				n = G.UIT.C,
-				config = { minw = 5, minh = 0, padding = 0.01, align = "cm" },
-				nodes = {
-					{
-						n = G.UIT.R,
-						config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
-						nodes = {
-							{
-								n = G.UIT.O,
-								config = {
-									object = DynaText({
-										string = {
-											{ string = ' ', colour = G.C.ANGEL },
-										},
-										colours = { G.C.ANGEL },
-										pop_in = pop_in,
-										pop_in_rate = pop_in_rate,
-										silent = silent,
-										pop_delay = pop_delay,
-										scale = scale,
-										min_cycle_time = min_cycle_time
-									})
-								}
-							},
-						}
-					},
-					{
-						n = G.UIT.R,
-						config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
-						nodes = {
-							{
-								n = G.UIT.O,
-								config = {
-									object = DynaText({
-										string = {
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-
-											{ string = 'HAVE YOU', colour = G.C.ANGEL },
-											{ string = 'HAVE YOU', colour = G.C.ANGEL },
-											{ string = 'HAVE YOU', colour = G.C.ANGEL },
-											{ string = 'HAVE YOU', colour = G.C.ANGEL },
-											{ string = 'HAVE YOU', colour = G.C.ANGEL },
-											{ string = 'HAVE YOU', colour = G.C.ANGEL },
-											{ string = 'HAVE YOU', colour = G.C.ANGEL },
-
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-
-											{ string = 'HOW',      colour = G.C.ANGEL },
-											{ string = 'HOW',      colour = G.C.ANGEL },
-											{ string = 'HOW',      colour = G.C.ANGEL },
-											{ string = 'HOW',      colour = G.C.ANGEL },
-											{ string = 'HOW',      colour = G.C.ANGEL },
-											{ string = 'HOW',      colour = G.C.ANGEL },
-											{ string = 'HOW',      colour = G.C.ANGEL },
-
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-
-											{ string = 'I',        colour = G.C.ANGEL },
-											{ string = 'I',        colour = G.C.ANGEL },
-											{ string = 'I',        colour = G.C.ANGEL },
-											{ string = 'I',        colour = G.C.ANGEL },
-											{ string = 'I',        colour = G.C.ANGEL },
-											{ string = 'I',        colour = G.C.ANGEL },
-											{ string = 'I',        colour = G.C.ANGEL },
-
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-
-											{ string = 'FOR YOU',  colour = G.C.ANGEL },
-											{ string = 'FOR YOU',  colour = G.C.ANGEL },
-											{ string = 'FOR YOU',  colour = G.C.ANGEL },
-											{ string = 'FOR YOU',  colour = G.C.ANGEL },
-											{ string = 'FOR YOU',  colour = G.C.ANGEL },
-											{ string = 'FOR YOU',  colour = G.C.ANGEL },
-											{ string = 'FOR YOU',  colour = G.C.ANGEL },
-
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-											{ string = ' ',        colour = G.C.ANGEL },
-										},
-										colours = { G.C.ANGEL },
-										pop_in_rate = pop_in_rate,
-										silent = silent,
-										pop_delay = pop_delay,
-										scale = scale,
-										min_cycle_time = min_cycle_time
-									})
-								}
-							},
-						}
-					},
-					{
-						n = G.UIT.R,
-						config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
-						nodes = {
-							{
-								n = G.UIT.O,
-								config = {
-									object = DynaText({
-										string = {
-											{ string = 'WELCOME.',  colour = G.C.ANGEL },
-											{ string = 'WELCOME.',  colour = G.C.ANGEL },
-											{ string = 'WELCOME.',  colour = G.C.ANGEL },
-
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = 'BEEN',      colour = G.C.ANGEL },
-											{ string = 'BEEN',      colour = G.C.ANGEL },
-											{ string = 'BEEN',      colour = G.C.ANGEL },
-											{ string = 'BEEN',      colour = G.C.ANGEL },
-											{ string = 'BEEN',      colour = G.C.ANGEL },
-
-											{ string = 'FOR ME?',   colour = G.C.ANGEL },
-											{ string = 'FOR ME?',   colour = G.C.ANGEL },
-											{ string = 'FOR ME?',   colour = G.C.ANGEL },
-											{ string = 'FOR ME?',   colour = G.C.ANGEL },
-
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = 'HAVE BEEN', colour = G.C.ANGEL },
-											{ string = 'HAVE BEEN', colour = G.C.ANGEL },
-											{ string = 'HAVE BEEN', colour = G.C.ANGEL },
-											{ string = 'HAVE BEEN', colour = G.C.ANGEL },
-											{ string = 'HAVE BEEN', colour = G.C.ANGEL },
-
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = 'AS',        colour = G.C.ANGEL },
-											{ string = 'AS',        colour = G.C.ANGEL },
-											{ string = 'AS',        colour = G.C.ANGEL },
-											{ string = 'AS',        colour = G.C.ANGEL },
-											{ string = 'AS',        colour = G.C.ANGEL },
-
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-											{ string = ' ',         colour = G.C.ANGEL },
-										},
-										colours = { G.C.ANGEL },
-										pop_in = pop_in,
-										pop_in_rate = pop_in_rate,
-										silent = silent,
-										pop_delay = pop_delay,
-										scale = scale,
-										min_cycle_time = min_cycle_time
-									})
-								}
-							},
-						}
-					},
-					{
-						n = G.UIT.R,
-						config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
-						nodes = {
-							{
-								n = G.UIT.O,
-								config = {
-									object = DynaText({
-										string = {
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = 'LOOKING',    colour = G.C.ANGEL },
-											{ string = 'LOOKING',    colour = G.C.ANGEL },
-											{ string = 'LOOKING',    colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = 'WONDERFUL.', colour = G.C.ANGEL },
-											{ string = 'WONDERFUL.', colour = G.C.ANGEL },
-											{ string = 'WONDERFUL.', colour = G.C.ANGEL },
-											{ string = 'WONDERFUL.', colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = 'LOOKING',    colour = G.C.ANGEL },
-											{ string = 'LOOKING',    colour = G.C.ANGEL },
-											{ string = 'LOOKING',    colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = 'WELL.',      colour = G.C.ANGEL },
-											{ string = 'WELL.',      colour = G.C.ANGEL },
-											{ string = 'WELL.',      colour = G.C.ANGEL },
-
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-											{ string = ' ',          colour = G.C.ANGEL },
-										},
-										colours = { G.C.ANGEL },
-										pop_in = pop_in,
-										pop_in_rate = pop_in_rate,
-										silent = silent,
-										pop_delay = pop_delay,
-										scale = scale,
-										min_cycle_time = min_cycle_time
-									})
-								}
-							},
-						}
-					},
-					{
-						n = G.UIT.R,
-						config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
-						nodes = {
-							{
-								n = G.UIT.O,
-								config = {
-									object = DynaText({
-										string = {
-											{ string = ' ', colour = G.C.ANGEL },
-										},
-										colours = { G.C.ANGEL },
-										pop_in = pop_in,
-										pop_in_rate = pop_in_rate,
-										silent = silent,
-										pop_delay = pop_delay,
-										scale = scale,
-										min_cycle_time = min_cycle_time
-									})
-								}
-							},
+		local main_start = {}
+		if card.ability.in_build then
+			main_start = {
+				{
+					n = G.UIT.C,
+					config = { minw = 5, minh = 0, padding = 0.01, align = "cm" },
+					nodes = {
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = ' ', colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in = pop_in,
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
+						},
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = 'I SHALL', colour = G.C.ANGEL },
+												{ string = 'I SHALL', colour = G.C.ANGEL },
+												{ string = 'I SHALL', colour = G.C.ANGEL },
+												{ string = 'I SHALL', colour = G.C.ANGEL },
+												{ string = 'I SHALL', colour = G.C.ANGEL },
+												{ string = 'I SHALL', colour = G.C.ANGEL },
+												{ string = 'I SHALL', colour = G.C.ANGEL },
+	
+												{ string = 'IN',      colour = G.C.ANGEL },
+												{ string = 'IN',      colour = G.C.ANGEL },
+												{ string = 'IN',      colour = G.C.ANGEL },
+												{ string = 'IN',      colour = G.C.ANGEL },
+												{ string = 'IN',      colour = G.C.ANGEL },
+												{ string = 'IN',      colour = G.C.ANGEL },
+												{ string = 'IN',      colour = G.C.ANGEL },
+	
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+												
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+	
+												{ string = 'ALL JOKERS',        colour = G.C.ANGEL },
+												{ string = 'ALL JOKERS',        colour = G.C.ANGEL },
+												{ string = 'ALL JOKERS',        colour = G.C.ANGEL },
+												{ string = 'ALL JOKERS',        colour = G.C.ANGEL },
+												{ string = 'ALL JOKERS',        colour = G.C.ANGEL },
+												{ string = 'ALL JOKERS',        colour = G.C.ANGEL },
+												{ string = 'ALL JOKERS',        colour = G.C.ANGEL },
+												
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+	
+												{ string = 'IN MATTERS',  colour = G.C.ANGEL },
+												{ string = 'IN MATTERS',  colour = G.C.ANGEL },
+												{ string = 'IN MATTERS',  colour = G.C.ANGEL },
+												{ string = 'IN MATTERS',  colour = G.C.ANGEL },
+												{ string = 'IN MATTERS',  colour = G.C.ANGEL },
+												{ string = 'IN MATTERS',  colour = G.C.ANGEL },
+												{ string = 'IN MATTERS',  colour = G.C.ANGEL },
+	
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
+						},
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = 'NOW',      colour = G.C.ANGEL },
+												{ string = 'NOW',      colour = G.C.ANGEL },
+												{ string = 'NOW',      colour = G.C.ANGEL },
+												{ string = 'NOW',      colour = G.C.ANGEL },
+												{ string = 'NOW',      colour = G.C.ANGEL },
+												
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = 'YOUR',         colour = G.C.ANGEL },
+												{ string = 'YOUR',         colour = G.C.ANGEL },
+												{ string = 'YOUR',         colour = G.C.ANGEL },
+												{ string = 'YOUR',         colour = G.C.ANGEL },
+												{ string = 'YOUR',         colour = G.C.ANGEL },
+												
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												
+												{ string = 'FROM HERE ON,',   colour = G.C.ANGEL },
+												{ string = 'FROM HERE ON,',   colour = G.C.ANGEL },
+												{ string = 'FROM HERE ON,',   colour = G.C.ANGEL },
+												{ string = 'FROM HERE ON,',   colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = 'ARE TREATED',         colour = G.C.ANGEL },
+												{ string = 'ARE TREATED',         colour = G.C.ANGEL },
+												{ string = 'ARE TREATED',         colour = G.C.ANGEL },
+												{ string = 'ARE TREATED',         colour = G.C.ANGEL },
+												{ string = 'ARE TREATED',         colour = G.C.ANGEL },
+												
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = 'OF',        colour = G.C.ANGEL },
+												{ string = 'OF',        colour = G.C.ANGEL },
+												{ string = 'OF',        colour = G.C.ANGEL },
+												{ string = 'OF',        colour = G.C.ANGEL },
+												{ string = 'OF',        colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in = pop_in,
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
+						},
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = 'ASSIST',    colour = G.C.ANGEL },
+												{ string = 'ASSIST',    colour = G.C.ANGEL },
+												{ string = 'ASSIST',    colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ', colour = G.C.ANGEL },
+												{ string = 'ENDEAVORS.', colour = G.C.ANGEL },
+												{ string = 'ENDEAVORS.', colour = G.C.ANGEL },
+												{ string = 'ENDEAVORS.', colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = 'AS EQUALS',    colour = G.C.ANGEL },
+												{ string = 'AS EQUALS',    colour = G.C.ANGEL },
+												{ string = 'AS EQUALS',    colour = G.C.ANGEL },
+												
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = 'RARITY.',      colour = G.C.ANGEL },
+												{ string = 'RARITY.',      colour = G.C.ANGEL },
+												{ string = 'RARITY.',      colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in = pop_in,
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
+						},
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = ' ', colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in = pop_in,
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
 						}
 					}
 				}
 			}
-		}
+		else
+			main_start = {
+				{
+					n = G.UIT.C,
+					config = { minw = 5, minh = 0, padding = 0.01, align = "cm" },
+					nodes = {
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = ' ', colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in = pop_in,
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
+						},
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+	
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+	
+												{ string = 'HAVE YOU', colour = G.C.ANGEL },
+												{ string = 'HAVE YOU', colour = G.C.ANGEL },
+												{ string = 'HAVE YOU', colour = G.C.ANGEL },
+												{ string = 'HAVE YOU', colour = G.C.ANGEL },
+												{ string = 'HAVE YOU', colour = G.C.ANGEL },
+												{ string = 'HAVE YOU', colour = G.C.ANGEL },
+												{ string = 'HAVE YOU', colour = G.C.ANGEL },
+	
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+	
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+	
+												{ string = 'HOW',      colour = G.C.ANGEL },
+												{ string = 'HOW',      colour = G.C.ANGEL },
+												{ string = 'HOW',      colour = G.C.ANGEL },
+												{ string = 'HOW',      colour = G.C.ANGEL },
+												{ string = 'HOW',      colour = G.C.ANGEL },
+												{ string = 'HOW',      colour = G.C.ANGEL },
+												{ string = 'HOW',      colour = G.C.ANGEL },
+	
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+	
+												{ string = 'I',        colour = G.C.ANGEL },
+												{ string = 'I',        colour = G.C.ANGEL },
+												{ string = 'I',        colour = G.C.ANGEL },
+												{ string = 'I',        colour = G.C.ANGEL },
+												{ string = 'I',        colour = G.C.ANGEL },
+												{ string = 'I',        colour = G.C.ANGEL },
+												{ string = 'I',        colour = G.C.ANGEL },
+	
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+	
+												{ string = 'FOR YOU',  colour = G.C.ANGEL },
+												{ string = 'FOR YOU',  colour = G.C.ANGEL },
+												{ string = 'FOR YOU',  colour = G.C.ANGEL },
+												{ string = 'FOR YOU',  colour = G.C.ANGEL },
+												{ string = 'FOR YOU',  colour = G.C.ANGEL },
+												{ string = 'FOR YOU',  colour = G.C.ANGEL },
+												{ string = 'FOR YOU',  colour = G.C.ANGEL },
+	
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+												{ string = ' ',        colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
+						},
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = 'WELCOME.',  colour = G.C.ANGEL },
+												{ string = 'WELCOME.',  colour = G.C.ANGEL },
+												{ string = 'WELCOME.',  colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = 'BEEN',      colour = G.C.ANGEL },
+												{ string = 'BEEN',      colour = G.C.ANGEL },
+												{ string = 'BEEN',      colour = G.C.ANGEL },
+												{ string = 'BEEN',      colour = G.C.ANGEL },
+												{ string = 'BEEN',      colour = G.C.ANGEL },
+	
+												{ string = 'FOR ME?',   colour = G.C.ANGEL },
+												{ string = 'FOR ME?',   colour = G.C.ANGEL },
+												{ string = 'FOR ME?',   colour = G.C.ANGEL },
+												{ string = 'FOR ME?',   colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = 'HAVE BEEN', colour = G.C.ANGEL },
+												{ string = 'HAVE BEEN', colour = G.C.ANGEL },
+												{ string = 'HAVE BEEN', colour = G.C.ANGEL },
+												{ string = 'HAVE BEEN', colour = G.C.ANGEL },
+												{ string = 'HAVE BEEN', colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = 'AS',        colour = G.C.ANGEL },
+												{ string = 'AS',        colour = G.C.ANGEL },
+												{ string = 'AS',        colour = G.C.ANGEL },
+												{ string = 'AS',        colour = G.C.ANGEL },
+												{ string = 'AS',        colour = G.C.ANGEL },
+	
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in = pop_in,
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
+						},
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = 'LOOKING',    colour = G.C.ANGEL },
+												{ string = 'LOOKING',    colour = G.C.ANGEL },
+												{ string = 'LOOKING',    colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = 'WONDERFUL.', colour = G.C.ANGEL },
+												{ string = 'WONDERFUL.', colour = G.C.ANGEL },
+												{ string = 'WONDERFUL.', colour = G.C.ANGEL },
+												{ string = 'WONDERFUL.', colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = 'LOOKING',    colour = G.C.ANGEL },
+												{ string = 'LOOKING',    colour = G.C.ANGEL },
+												{ string = 'LOOKING',    colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = 'WELL.',      colour = G.C.ANGEL },
+												{ string = 'WELL.',      colour = G.C.ANGEL },
+												{ string = 'WELL.',      colour = G.C.ANGEL },
+	
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in = pop_in,
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
+						},
+						{
+							n = G.UIT.R,
+							config = { minw = 0, minh = 0, padding = 0.01, align = "cm" },
+							nodes = {
+								{
+									n = G.UIT.O,
+									config = {
+										object = DynaText({
+											string = {
+												{ string = ' ', colour = G.C.ANGEL },
+											},
+											colours = { G.C.ANGEL },
+											pop_in = pop_in,
+											pop_in_rate = pop_in_rate,
+											silent = silent,
+											pop_delay = pop_delay,
+											scale = scale,
+											min_cycle_time = min_cycle_time
+										})
+									}
+								},
+							}
+						}
+					}
+				}
+			}
+		end
 		return { main_start = main_start, background_colour = G.C.CLEAR }
 	end,
 	add_to_deck = function(self, card, from_debuff)
