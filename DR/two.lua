@@ -77,16 +77,16 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.individual and context.cardarea == G.play then
 			local result = {}
-			if context.other_card:is_suit("Spades") or SMODS.has_any_suit(context.other_card) then
+			if (context.other_card:is_suit("Spades") or SMODS.has_any_suit(context.other_card)) and not SMODS.has_no_suit(context.other_card) then
 				result["chips"] = card.ability.chips
 			end
-			if context.other_card:is_suit("Hearts") or SMODS.has_any_suit(context.other_card) then
+			if (context.other_card:is_suit("Hearts") or SMODS.has_any_suit(context.other_card)) and not SMODS.has_no_suit(context.other_card) then
 				result["xmult"] = card.ability.xmult
 			end
-			if context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card) then
+			if (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) and not SMODS.has_no_suit(context.other_card) then
 				result["mult"] = card.ability.mult
 			end
-			if context.other_card.base.suit == "Diamonds" or SMODS.has_any_suit(context.other_card) then
+			if (context.other_card.base.suit == "Diamonds" or SMODS.has_any_suit(context.other_card)) and not SMODS.has_no_suit(context.other_card) then
 				result["dollars"] = card.ability.bigbucks
 			end
 			return result
@@ -217,7 +217,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.joker_main and G.GAME.starting_deck_size == #G.playing_cards then
 			for i = 1, #context.scoring_hand do
-				if context.scoring_hand[i].base.suit ~= "Diamonds" and not SMODS.has_any_suit(context.scoring_hand[i]) then
+				if (context.scoring_hand[i].base.suit ~= "Diamonds" or SMODS.has_any_suit(context.scoring_hand[i])) and not SMODS.has_no_suit(context.scoring_hand[i]) then
 					return
 				end
 			end

@@ -341,7 +341,7 @@ SMODS.Joker {
 	pos = { x = 2, y = 10 },
 	cost = 3,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and (context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) then
+		if context.individual and context.cardarea == G.play and ((context.other_card.base.suit == "Clubs" or SMODS.has_any_suit(context.other_card)) and not SMODS.has_no_suit(context.other_card)) then
 			SMODS.scale_card(card, {
 				ref_table = card.ability,
 				ref_value = "chips",
