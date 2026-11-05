@@ -693,15 +693,6 @@ if UTDR_config['undertale'] then
 		key = "ComicSansUT",
 		path = "sans.ttf"
 	}
-	
-	SMODS.Voucher:take_ownership('liquidation',
- 	{
- 		config = {
- 			extra = 25
- 		}
-	},
-	true
-)
 
 	SMODS.Font {
 		key = "PapyrusUT",
