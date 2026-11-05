@@ -49,8 +49,6 @@ G.FUNCS.end_capsule = function(e)
 		G.pack_cards.cards[1]:start_dissolve(nil, false)
 	end
 	
-	UTDR_Modules.Capsule.set_goldpercent_text()
-	
 	G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.5, func = function()
 		G.booster_pack.alignment.offset.y = G.ROOM.T.y + 29
 		G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.5, func = function()

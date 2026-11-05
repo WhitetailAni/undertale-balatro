@@ -27,10 +27,11 @@ function Game:update_UTDR_shop_capsule(dt)
 	if G.booster_pack then
 		G.booster_pack.REMOVED = true
 	end
+	
+	UTDR_Modules.Capsule.set_goldpercent_text()
 
 	if not G.STATE_COMPLETE then
 		G.STATE_SHOP_CHANGED = false
-		UTDR_Modules.Capsule.set_goldpercent_text()
 	
 		stop_use()
 		ease_background_colour_blind(G.STATES.UTDR_SHOP_CAPSULE)
@@ -340,7 +341,6 @@ end
 
 function G.FUNCS.UTDR_capsule_deltapts(e)
 	UTDR_Modules.Capsule.bet_amount = UTDR_Modules.Capsule.bet_amount + e.config.amount
-	UTDR_Modules.Capsule.set_goldpercent_text()
 end
 
 function G.FUNCS.UTDR_capsule_trade_func(e)
