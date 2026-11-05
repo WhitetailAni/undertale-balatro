@@ -120,7 +120,7 @@ end
 '''
 position = 'after'
 payload = '''
-if G.GAME.blind.boss then
+if G.GAME.blind.boss and SMODS.find_mod('UTDR')[1].config["deltarune"] then
 	--set up local equivalents to G.GAME.ante.* so i dont have to type them as much
 	local total_chips = G.GAME.ante.total_chips_required
 	local chips_scored = G.GAME.ante.chips_scored
@@ -207,6 +207,8 @@ if G.GAME.blind.boss then
 	total_points = total_points + hand_points
 	total_points = total_points + interest_points
 	
+	
+	
 	add_round_points_row({points = chips_points, bonus = true, name='chips_points'..i, pitch = pitch, text_colour = color_for_rank(chips_rank), rank = chips_rank, string = " Chips scored", text_scale = 0.6})
 	pitch = pitch + 0.06
 	add_round_points_row({points = hand_points, bonus = true, name='hand_points'..i, pitch = pitch, text_colour = color_for_rank(hand_rank), rank = hand_rank, string = " Hands played", text_scale = 0.6})
@@ -277,7 +279,7 @@ end
 position = 'at'
 payload = '''
 else
-	if G.GAME.blind.boss then
+	if G.GAME.blind.boss and SMODS.find_mod('UTDR')[1].config["deltarune"] then
 		delay(0.4)
 		G.E_MANAGER:add_event(Event({
 			trigger = 'before',delay = 0.5,
@@ -477,8 +479,8 @@ pattern = '''
 '''
 position = 'after'
 payload = '''
-{n=G.UIT.R, config={minh = spacing},nodes={}},
-{n=G.UIT.R, config={align = "cm"}, nodes={
+SMODS.find_mod('UTDR')[1].config["deltarune"] and {n=G.UIT.R, config={minh = spacing},nodes={}} or nil,
+SMODS.find_mod('UTDR')[1].config["deltarune"] and {n=G.UIT.R, config={align = "cm"}, nodes={
 	{n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 1.45*2 + spacing, minh = 1.15, colour = temp_col, emboss = 0.05, r = 0.1}, nodes={
 	  {n=G.UIT.R, config={align = "cm"}, nodes={
 		{n=G.UIT.C, config={align = "cm", r = 0.1, minw = 1.28*2+spacing, minh = 1, colour = temp_col2}, nodes={
@@ -489,7 +491,7 @@ payload = '''
 	  }},
 	  }},
 	}},
-}},
+}} or nil,
 '''
 match_indent = true
 
@@ -501,7 +503,7 @@ pattern = '''
 '''
 position = 'at'
 payload = '''
-{n=G.UIT.R, config={align = "cm", minh = 2.5, minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.ORANGE, button = "options", shadow = true}, nodes={
+{n=G.UIT.R, config={align = "cm", minh = ((SMODS.find_mod('UTDR')[1].config["deltarune"] and 2.5 or 1.75)), minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.ORANGE, button = "options", shadow = true}, nodes={
 '''
 match_indent = true
 
@@ -513,7 +515,7 @@ pattern = '''
 '''
 position = 'at'
 payload = '''
-{n=G.UIT.R, config={id = 'run_info_button', align = "cm", minh = 2.5, minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.RED, button = "run_info", shadow = true}, nodes={
+{n=G.UIT.R, config={id = 'run_info_button', align = "cm", minh = ((SMODS.find_mod('UTDR')[1].config["deltarune"] and 2.5) or 1.75), minw = 1.5,padding = 0.05, r = 0.1, hover = true, colour = G.C.RED, button = "run_info", shadow = true}, nodes={
 '''
 match_indent = true
 
