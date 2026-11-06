@@ -379,7 +379,6 @@ SMODS.Joker {
 	},
 	atlas = "DR_jokers",
 	pos = { x = 6, y = 10 },
-	config = { extra = { old = {} } },
 	cost = 1,
 	rarity = 1,
 	blueprint_compat = false,
@@ -398,7 +397,7 @@ SMODS.Joker {
 					colour = G.C.SECONDARY_SET.Enhanced,
 					func = function()
 						for i, playing_card in ipairs(cards_to_enhance) do
-							local new_enhancement = SMODS.poll_enhancement { key = "UTDR_flowery_scarf", guaranteed = true }
+							local new_enhancement = SMODS.poll_enhancement { key = "UTDR_flowery_scarf", type_key = "UTDR_flowery_scarf", guaranteed = true }
 							local percent = 0.85 + (i - 0.999) / (#G.play.cards - 0.998) * 0.3
 							local idx = 0
 							for k, v in pairs(context.full_hand) do

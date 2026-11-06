@@ -367,3 +367,17 @@ if #SMODS.find_card("j_UTDR_seam") > 0 and #SMODS.find_card("j_UTDR_sjelter") > 
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = "if SMODS.optional_features.object_weights then args.type = 'Enhanced'; args.pool = args.options or nil; return SMODS.poll_object(args) end"
+position = "at"
+payload = '''
+if SMODS.optional_features.object_weights and args and args.key ~= "UTDR_flowery_scarf" then
+	args.type = 'Enhanced'
+	args.pool = args.options or nil
+	return SMODS.poll_object(args)
+end
+'''
+match_indent = true
+

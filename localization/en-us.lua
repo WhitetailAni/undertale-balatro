@@ -1886,7 +1886,7 @@ return {
 				name = "Kris",
 				text = {
 					"Copies ability of {C:attention}Joker{}",
-					"to the left for",
+					"to the left during",
 					"{C:attention}first hand of round",
 				},
 			},
