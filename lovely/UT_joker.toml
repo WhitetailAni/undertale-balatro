@@ -14,6 +14,9 @@ payload = '''
 G.P_CENTERS.e_foil.config.chips = 50
 G.P_CENTERS.e_holo.config.mult = 10
 G.P_CENTERS.e_polychrome.config.x_mult = 1.5
+SMODS.ObjectTypes["Joker"].rarities[1].weight = 0.7
+SMODS.ObjectTypes["Joker"].rarities[2].weight = 0.25
+SMODS.ObjectTypes["Joker"].rarities[3].weight = 0.05
 '''
 match_indent = true
 
