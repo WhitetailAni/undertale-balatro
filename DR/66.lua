@@ -380,7 +380,7 @@ SMODS.Joker {
 			for i = 1, #context.removed do
 				card.ability.deer_kidnapped = card.ability.deer_kidnapped + 1
 
-				if card.ability.deer_kidnapped == 2 or #SMODS.find_card("j_UTDR_vessel") then
+				if card.ability.deer_kidnapped == 2 or #SMODS.find_card("j_UTDR_vessel") > 0 then
 					card.ability.deer_kidnapped = 0
 					G.E_MANAGER:add_event(Event({
 						func = (function()
