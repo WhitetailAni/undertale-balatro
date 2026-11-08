@@ -952,57 +952,23 @@ SMODS.Joker {
 		}
 	end,
 	calculate = function(self, card, context)
-		if context.ending_booster then
-			local do_create = false
+		if context.open_booster then
 			if not context.blueprint then
 				card.ability.extra.booster_counter = card.ability.extra.booster_counter + 1
-				if card.ability.extra.booster_counter >= card.ability.extra.booster_requirement then
-					do_create = true
-				end
 			end
-			if do_create then
-				-- check if should add consumable
-				local do_message = false
-				if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-					do_message = true
-				end
+			if card.ability.extra.booster_counter >= card.ability.extra.booster_requirement or context.blueprint then
 				-- reset value
 				if not context.blueprint then
 					card.ability.extra.booster_counter = 0
+					card_eval_status_text(card, 'extra', nil, nil, nil, { message = localize('k_plus_' .. card.ability.extra.card_type), })
 				end
 				-- create tarot
-				if do_message then
-					G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-					return {
-						extra = {
-							message = localize('k_plus_' .. string.lower(card.ability.extra.card_type)),
-							colour = G.C.SECONDARY_SET[card.ability.extra.card_type] or G.C.FILTER,
-							message_card = card,
-							func = function() -- This is for timing purposes, everything here runs after the message
-								G.E_MANAGER:add_event(Event({
-									func = (function()
-										ease_background_colour { new_colour = G.C.FLOWER_GREEN, contrast = 1 }
-										SMODS.add_card {
-											set = card.ability.extra.card_type,
-											edition = "e_negative",
-											key_append = 'UTDR_green' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
-										}
-										G.GAME.consumeable_buffer = 0
-										G.E_MANAGER:add_event(Event({
-											trigger = 'after',
-											delay = 0.7,
-											func = function()
-												ease_background_colour_blind(G.STATES.SHOP)
-												return true
-											end
-										}))
-										return true
-									end)
-								}))
-							end
-						},
-					}
-				end
+				
+				SMODS.add_card {
+					set = card.ability.extra.card_type,
+					edition = "e_negative",
+					key_append = 'UTDR_green' -- Optional, useful for manipulating the random seed and checking the source of the creation in `in_pool`.
+				}
 			end
 		end
 	end

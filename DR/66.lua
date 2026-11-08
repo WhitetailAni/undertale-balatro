@@ -284,10 +284,10 @@ SMODS.Joker {
 		end
 	end,
 	add_to_deck = function(self, card, from_debuff)
-		G.listen_and_learn_big_G_is_talking = G.listen_and_learn_big_G_is_talking + 1
+		G.GAME.listen_and_learn_big_G_is_talking = G.GAME.listen_and_learn_big_G_is_talking + 1
 	end,
 	remove_from_deck = function(self, card, from_debuff)
-		G.listen_and_learn_big_G_is_talking = G.listen_and_learn_big_G_is_talking - 1
+		G.GAME.listen_and_learn_big_G_is_talking = G.GAME.listen_and_learn_big_G_is_talking - 1
 	end,
 }
 

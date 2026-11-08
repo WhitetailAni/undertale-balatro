@@ -238,7 +238,14 @@ SMODS.Booster {
     create_card = function(self, card, i)
     	play_sound("UTDR_applause2", 1.0, 0.7)
     	UTDR_Modules.Capsule.points_bet_total = 0
-    	if 0.5 < pseudorandom("is_gold_prize_voucher") then
+    	
+    	local voucher_count = 0
+    	for key, center in pairs(G.P_CENTERS) do
+    		voucher_count = voucher_count + 1
+    	end
+    	
+    	--make sure gold prizes will never be vouchers if you have them all
+    	if 0.5 < pseudorandom("is_gold_prize_voucher") and #G.GAME.used_vouchers < voucher_count then
     		local voucher_dummy = SMODS.create_card({ set = "Voucher" })
     		local key = voucher_dummy.config.center.key
     		voucher_dummy:remove()

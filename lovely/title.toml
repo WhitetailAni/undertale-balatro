@@ -74,7 +74,6 @@ target = "game.lua"
 pattern = "SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_joker'])"
 position = "at"
 payload = '''
-G.listen_and_learn_big_G_is_talking = 0
 local config = SMODS.find_mod('UTDR')[1].config
 if math.fmod(os.time(), 4096) == 0 and config["undertale"] then
 	if math.fmod(os.time(), 8192) == 0 then
