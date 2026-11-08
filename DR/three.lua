@@ -610,8 +610,10 @@ SMODS.Joker {
 			end
 
 			cards_to_destroy = merge_table(cards_to_destroy, targ)
-
-			UTDR_Modules.Swoon.play(4)
+			
+			if not UTDR_Modules.UTDR_config.should_SWOON then
+				UTDR_Modules.Swoon.play(4)
+			end
 
 			for i, v in ipairs(cards_to_destroy) do
 				local heart_as_my_mark = cards_to_destroy[i]

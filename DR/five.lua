@@ -377,6 +377,7 @@ SMODS.Joker {
 		"modify_card",
 		"enhancements",
 	},
+	config = { extra = { old = {} } },
 	atlas = "DR_jokers",
 	pos = { x = 6, y = 10 },
 	cost = 1,

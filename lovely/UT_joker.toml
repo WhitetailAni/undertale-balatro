@@ -66,5 +66,16 @@ position = "after"
 payload = "SMODS.calculate_context({debuffed_individual = true, other_card = new_card})"
 match_indent = true
 
-
-
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''
+ease_dollars(self.sell_cost)
+self:start_dissolve({G.C.GOLD})
+delay(0.3)
+'''
+position = 'after'
+payload = '''
+SMODS.calculate_context({sold_card = true, card = self})
+'''
+match_indent = true

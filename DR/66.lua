@@ -721,7 +721,7 @@ SMODS.Joker {
 												{ string = ' ',          colour = G.C.ANGEL },
 												{ string = ' ',          colour = G.C.ANGEL },
 												{ string = ' ',          colour = G.C.ANGEL },
-												{ string = ' ', colour = G.C.ANGEL },
+												{ string = ' ', 		  colour = G.C.ANGEL },
 												{ string = 'ENDEAVORS.', colour = G.C.ANGEL },
 												{ string = 'ENDEAVORS.', colour = G.C.ANGEL },
 												{ string = 'ENDEAVORS.', colour = G.C.ANGEL },

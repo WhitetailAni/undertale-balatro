@@ -327,7 +327,10 @@ SMODS.Joker {
 		end
 	end,
 	recalc_hand_size = function(self, card)
+		override = override or 0
 		G.E_MANAGER:add_event(Event({
+			trigger = "after",
+			delay = 0.3,
 			func = function()
 				G.hand:change_size(-G.hand.config.card_limits.mod)
 				for i = 1, #SMODS.find_card("j_UTDR_fallen_human") do
@@ -349,7 +352,7 @@ SMODS.Joker {
 		--these 2 contexts can only ever trigger on 1 joker at a time, so we can assume to change hand size by 1 joker's worth. or just hand_size_gain
 		if context.card_added and context.card.ability.set == "Joker" then
 			self:recalc_hand_size(card)
-		elseif context.joker_type_destroyed or (context.selling_card and context.card.ability.set == "Joker") and not context.card.config.center.key == "j_UTDR_fallen_human" then
+		elseif (context.joker_type_destroyed or context.sold_card) and context.card.ability.set == "Joker" and context.card.config.center.key ~= "j_UTDR_fallen_human" then
 			self:recalc_hand_size(card)
 		end
 	end

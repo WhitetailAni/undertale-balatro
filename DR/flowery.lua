@@ -636,7 +636,7 @@ SMODS.Joker {
 		"xmult"
 	},
 	loc_vars = function(self, info_queue, card)
-		if not card.debuff then
+		if not card.debuff and self.play_flowery_sound_random then
 			self:play_flowery_sound_random({
 				"flowery",
 				"flowery2",
