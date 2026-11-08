@@ -266,7 +266,7 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
 			card.ability.turns = card.ability.turns + 1
-			if card.ability.turns >= card.ability.turn_cap then
+			if card.ability.turns == card.ability.turn_cap then
 				local eval = function(card)
 					return card.ability.turns >= card.ability.turn_cap
 				end
