@@ -4,19 +4,26 @@ priority = -2
 
 [vars]
 
-# kindness last resort reset
+# on-new-run resets
 [[patches]]
 [patches.pattern]
 target = "game.lua"
-pattern = "if change_context ~= 'splash' then "
-position = "before"
+pattern = '''
+self.jokers.config.align_buttons = true
+self.consumeables.config.align_buttons = true
+'''
+position = "after"
 payload = '''
+--reset kindness
 G.P_CENTERS.e_foil.config.chips = 50
 G.P_CENTERS.e_holo.config.mult = 10
 G.P_CENTERS.e_polychrome.config.x_mult = 1.5
+--reset dess
 SMODS.ObjectTypes["Joker"].rarities[1].weight = 0.7
 SMODS.ObjectTypes["Joker"].rarities[2].weight = 0.25
 SMODS.ObjectTypes["Joker"].rarities[3].weight = 0.05
+
+G.P_CENTERS.m_glass.config.Xmult = 2 --ensure xmult is always reset with thornring
 '''
 match_indent = true
 
