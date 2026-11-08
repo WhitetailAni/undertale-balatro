@@ -365,7 +365,8 @@ UTDR.beta_testers = {
 	"Sophe",
 	"lushabun",
 	"Sokoyo OwO",
-	"Highball"
+	"Highball",
+	"sdrx902"
 }
 
 UTDR.text_to_text_table = function(text, char_limit)
