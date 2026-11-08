@@ -381,3 +381,21 @@ end
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils/weights.lua"]'''
+pattern = '''
+local card_args = {
+	type = SMODS.poll_object_type({seed = 'cdt'..G.GAME.round_resets.ante}),
+	area = area
+}
+'''
+position = "after"
+payload = '''
+if #SMODS.find_card("j_UTDR_ROOTS") > 0 then
+	card_args.type = "Joker"
+end
+'''
+match_indent = true
+
+
