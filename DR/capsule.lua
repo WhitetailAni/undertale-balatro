@@ -8,6 +8,8 @@ UTDR_Modules.Capsule = {
 	was_gold_prize = false,
 	you_can_skip_now = true,
 	
+	total_gold_prizes = 52, --failsafe, assumes no other mods
+	
 	cannot_pull = {
 		"j_UTDR_thorn_ring",
 		"j_UTDR_shelter",
@@ -291,7 +293,7 @@ function UTDR_Modules.Capsule.get_reward(bet)
 		return {
 			december = true
 		}
-	elseif pseudorandom("capsule_gold") < (UTDR_Modules.Capsule.gold_chance(bet) / 100) then
+	elseif pseudorandom("capsule_gold") < (UTDR_Modules.Capsule.gold_chance(bet) / 100) and #G.GAME.UTDR_capsule_gold_prizes_nonvoucher > 0 and #G.GAME.UTDR_capsule_gold_prizes_voucher > 0 then
 		UTDR_Modules.Capsule.points_bet_total = 0
 		
 		for i = 1, #G.GAME.tags do

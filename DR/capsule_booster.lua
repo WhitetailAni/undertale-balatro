@@ -245,31 +245,54 @@ SMODS.Booster {
     	end
     	
     	--make sure gold prizes will never be vouchers if you have them all
-    	if 0.5 < pseudorandom("is_gold_prize_voucher") and #G.GAME.used_vouchers < voucher_count then
-    		local voucher_dummy = SMODS.create_card({ set = "Voucher" })
-    		local key = voucher_dummy.config.center.key
-    		voucher_dummy:remove()
+    	if (0.5 < pseudorandom("is_gold_prize_voucher") or #G.GAME.UTDR_capsule_gold_prizes_nonvoucher == 0) and #G.GAME.used_vouchers < voucher_count then
+    	--also make sure the game doesn't try to give you a nonvoucher prize if you've won them all
+    		local key = SMODS.poll_object({ type = "Voucher" })
     		
     		if G.shop_vouchers then
 				for i = 1, #G.shop_vouchers.cards do
 					while key == G.shop_vouchers.cards[i].config.center.key do
-						voucher_dummy = SMODS.create_card({ set = "Voucher" })
-						key = voucher_dummy.config.center.key
-						voucher_dummy:remove()
+						key = SMODS.poll_object({ type = "Voucher" })
 					end
 				end
     		end
     		
-    		UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes_voucher, { key })
     		return { key = key, skip_materialize = true }
     	else
 			local gold_prize_key = pseudorandom_element(G.GAME.UTDR_capsule_gold_prizes_nonvoucher, "capsule_prize_gold_nonvoucher")
 			--ensure no duplicate gold prizes, unless you got showman!
-			while #SMODS.find_card("j_showman") == 0 and #SMODS.find_card(gold_prize_key) > 0 and G.P_CENTERS[gold_prize_key].set == "Joker" do
-				gold_prize_key = pseudorandom_element(G.GAME.UTDR_capsule_gold_prizes_nonvoucher, "capsule_prize_gold_nonvoucher_attempt_2")
-			end
 			
-			UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes_nonvoucher, { gold_prize_key })
+			--my dumb ass forgot it was ring_master internally still
+			if #SMODS.find_card("j_ring_master") == 0 and #SMODS.find_card(gold_prize_key) > 0 and G.P_CENTERS[gold_prize_key].set == "Joker" then
+				--first check if we have other nonvoucher prizes and try to get a new one
+				if #G.GAME.UTDR_capsule_gold_prizes_nonvoucher > 1 then
+					--give it 5 tries before bailing to black hole
+					local how_many_tries = 0
+					while #SMODS.find_card(gold_prize_key) > 0 and how_many_tries < 5 do
+						how_many_tries = how_many_tries + 1
+						gold_prize_key = pseudorandom_element(G.GAME.UTDR_capsule_gold_prizes_nonvoucher, "capsule_prize_gold_nonvoucher_attempt_2")
+					end
+					if how_many_tries >= 5 then
+						gold_prize_key = "c_black_hole"
+					end
+				else
+					--if we don't, other fallbacks
+					if #G.GAME.UTDR_capsule_gold_prizes_voucher == 0 then
+						--if we are truly out of available prizes, give black hole as a failsafe
+						gold_prize_key = "c_black_hole"
+					else
+						--otherwise, give a voucher
+						gold_prize_key = SMODS.poll_object({ type = "Voucher" })
+						if G.shop_vouchers then
+							for i = 1, #G.shop_vouchers.cards do
+								while key == G.shop_vouchers.cards[i].config.center.key do
+									gold_prize_key = SMODS.poll_object({ type = "Voucher" })
+								end
+							end
+						end
+					end
+				end
+			end
 			
 			return { key = gold_prize_key, skip_materialize = true }
         end

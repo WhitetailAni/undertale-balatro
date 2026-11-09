@@ -28,35 +28,38 @@ G.SPLASH_BACK = Sprite(-30, -6, G.ROOM.T.w+60, G.ROOM.T.h+12, G.ASSET_ATLAS["ui_
 '''
 position = "before"
 payload = '''
-local config = SMODS.find_mod('UTDR')[1].config
-if config["deltarune"] then
-local gold_prizes_nonvoucher = {
-	"j_UTDR_fallen_human",
-	"j_UTDR_kris",
-	"j_UTDR_asriel",
-	"j_UTDR_susie",
-	"j_UTDR_asgore",
-	"j_UTDR_dark_fountain",
-	"j_UTDR_shadow_crystal",
-	"j_UTDR_save",
-	"j_UTDR_moss",
-	"j_UTDR_toriel",
-	"j_UTDR_temmie_armor",
-	"j_blueprint",
-	"j_brainstorm",
-	"c_ectoplasm",
-	"c_soul",
-	"c_black_hole",
-}
-local gold_prizes_voucher = {}
-for key, value in pairs(G.P_CENTERS) do
-	if value.set == "Voucher" then
-		gold_prizes_voucher[#gold_prizes_voucher + 1] = key
+if not saveTable then
+	local config = SMODS.find_mod('UTDR')[1].config
+	if config["deltarune"] then
+	local gold_prizes_nonvoucher = {
+		"j_UTDR_fallen_human",
+		"j_UTDR_kris",
+		"j_UTDR_asriel",
+		"j_UTDR_susie",
+		"j_UTDR_asgore",
+		"j_UTDR_dark_fountain",
+		"j_UTDR_shadow_crystal",
+		"j_UTDR_save",
+		"j_UTDR_moss",
+		"j_UTDR_toriel",
+		"j_UTDR_temmie_armor",
+		"j_blueprint",
+		"j_brainstorm",
+		"c_ectoplasm",
+		"c_soul",
+		"c_black_hole",
+	}
+	local gold_prizes_voucher = {}
+	for key, value in pairs(G.P_CENTERS) do
+		if value.set == "Voucher" then
+			gold_prizes_voucher[#gold_prizes_voucher + 1] = key
+		end
 	end
+	G.GAME.UTDR_capsule_gold_prizes_nonvoucher = gold_prizes_nonvoucher
+	G.GAME.UTDR_capsule_gold_prizes_voucher = gold_prizes_voucher
 end
-G.GAME.UTDR_capsule_gold_prizes_nonvoucher = gold_prizes_nonvoucher
-G.GAME.UTDR_capsule_gold_prizes_voucher = gold_prizes_voucher
-UTDR_Modules.Capsule.total_gold_prizes = #gold_prizes_nonvoucher + #gold_prizes_voucher
+UTDR_Modules.Capsule.total_gold_prizes = #G.GAME.UTDR_capsule_gold_prizes_nonvoucher + #G.GAME.UTDR_capsule_gold_prizes_voucher
+print(UTDR_Modules.Capsule.total_gold_prizes)
 end
 '''
 match_indent = true
@@ -118,7 +121,7 @@ payload = '''
 if G.UTDR_shop_capsule then
 	return {
       n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
-        {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, maxw = 0.9*card.T.w - 0.15, minh = 0.3*card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_select_card'}, nodes={
+        {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, maxw = 0.9*card.T.w - 0.15, minh = 0.3*card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, UTDR_capsule = true, button = 'use_card', func = 'can_select_card'}, nodes={
           {n=G.UIT.T, config={text = localize('UTDR_shopball_take'),colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true}}
         }},
     }}
@@ -139,3 +142,46 @@ if card.ability.set ~= 'Joker' or #G.jokers.cards < G.jokers.config.card_limit +
 	e.config.colour = G.UTDR_shop_capsule and G.C.ORANGE or G.C.GREEN
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "G.FUNCS.use_card = function(e, mute, nosave)"
+position = "after"
+payload = '''
+print(e.config.ref_table.config.center.key)
+if e.config.UTDR_capsule then
+	print("remov")
+	UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes_nonvoucher, { e.config.ref_table.config.center.key })
+	UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes_voucher, { e.config.ref_table.config.center.key })
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''
+return {
+        n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
+          {n=G.UIT.R, config={mid = true}, nodes={
+          }},
+          {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, minh = 0.8*card.T.h, maxw = 0.7*card.T.w - 0.15, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_use_consumeable'}, nodes={
+            {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true}}
+          }},
+      }}
+'''
+position = "at"
+payload = '''
+return {
+        n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
+          {n=G.UIT.R, config={mid = true}, nodes={
+          }},
+          {n=G.UIT.R, config={ref_table = card, UTDR_capsule = not not G.UTDR_shop_capsule, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, minh = 0.8*card.T.h, maxw = 0.7*card.T.w - 0.15, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_use_consumeable'}, nodes={
+            {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true}}
+          }},
+      }}
+'''
+match_indent = true
+
+
