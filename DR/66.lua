@@ -537,7 +537,6 @@ SMODS.Joker {
 												{ string = 'I SHALL', colour = G.C.ANGEL },
 												{ string = 'I SHALL', colour = G.C.ANGEL },
 												{ string = 'I SHALL', colour = G.C.ANGEL },
-												{ string = 'I SHALL', colour = G.C.ANGEL },
 	
 												{ string = 'IN',      colour = G.C.ANGEL },
 												{ string = 'IN',      colour = G.C.ANGEL },
@@ -550,10 +549,12 @@ SMODS.Joker {
 												{ string = ' ',        colour = G.C.ANGEL },
 												{ string = ' ',        colour = G.C.ANGEL },
 												
-												{ string = ' ',         colour = G.C.ANGEL },
-												{ string = ' ',         colour = G.C.ANGEL },
-												{ string = ' ',         colour = G.C.ANGEL },
-												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = 'WHEN',        colour = G.C.ANGEL },
+												{ string = 'WHEN',        colour = G.C.ANGEL },
+												{ string = 'WHEN',        colour = G.C.ANGEL },
+												{ string = 'WHEN',        colour = G.C.ANGEL },
+												{ string = 'WHEN',        colour = G.C.ANGEL },
+												{ string = 'WHEN',        colour = G.C.ANGEL },
 	
 												{ string = 'ALL JOKERS',        colour = G.C.ANGEL },
 												{ string = 'ALL JOKERS',        colour = G.C.ANGEL },
@@ -600,8 +601,7 @@ SMODS.Joker {
 										object = DynaText({
 											string = {
 												{ string = ' ',         colour = G.C.ANGEL },
-												{ string = ' ',         colour = G.C.ANGEL },
-												{ string = 'NOW',      colour = G.C.ANGEL },
+												{ string = 'NOW',         colour = G.C.ANGEL },
 												{ string = 'NOW',      colour = G.C.ANGEL },
 												{ string = 'NOW',      colour = G.C.ANGEL },
 												{ string = 'NOW',      colour = G.C.ANGEL },
@@ -618,10 +618,12 @@ SMODS.Joker {
 												{ string = ' ',         colour = G.C.ANGEL },
 												{ string = ' ',         colour = G.C.ANGEL },
 												
-												{ string = 'FROM HERE ON,',   colour = G.C.ANGEL },
-												{ string = 'FROM HERE ON,',   colour = G.C.ANGEL },
-												{ string = 'FROM HERE ON,',   colour = G.C.ANGEL },
-												{ string = 'FROM HERE ON,',   colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',         colour = G.C.ANGEL },
 	
 												{ string = ' ',         colour = G.C.ANGEL },
 												{ string = ' ',         colour = G.C.ANGEL },
@@ -671,7 +673,6 @@ SMODS.Joker {
 												{ string = ' ',          colour = G.C.ANGEL },
 												{ string = ' ',          colour = G.C.ANGEL },
 												{ string = ' ',          colour = G.C.ANGEL },
-												{ string = ' ',          colour = G.C.ANGEL },
 												{ string = 'ASSIST',    colour = G.C.ANGEL },
 												{ string = 'ASSIST',    colour = G.C.ANGEL },
 												{ string = 'ASSIST',    colour = G.C.ANGEL },
@@ -687,10 +688,12 @@ SMODS.Joker {
 												{ string = ' ',          colour = G.C.ANGEL },
 												{ string = ' ',          colour = G.C.ANGEL },
 												
-												{ string = ' ',         colour = G.C.ANGEL },
-												{ string = ' ',         colour = G.C.ANGEL },
-												{ string = ' ',         colour = G.C.ANGEL },
-												{ string = ' ',         colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = ' ',          colour = G.C.ANGEL },
+												{ string = 'SEARCHING,',     colour = G.C.ANGEL },
+												{ string = 'SEARCHING,',     colour = G.C.ANGEL },
+												{ string = 'SEARCHING,',    colour = G.C.ANGEL },
+												{ string = 'SEARCHING,',    colour = G.C.ANGEL },
 	
 												{ string = ' ',          colour = G.C.ANGEL },
 												{ string = ' ',          colour = G.C.ANGEL },
