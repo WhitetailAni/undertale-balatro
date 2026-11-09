@@ -8,6 +8,10 @@ assignees: ''
 
 ---
 
+BEFORE FILLING THIS OUT!!! ARE YOU USING THE LATEST VERSION OF THE MOD!!!! GO HERE:
+https://github.com/WhitetailAni/undertale-balatro/releases/latest
+AND DOUBLE CHECK!!!! THE VERSION LISTED THERE SHOULD MATCH THE VERSION IN YOUR MODS TAB!!!!!!! BUGS REPORTED FROM VERSIONS THAT AREN'T THE LATEST WILL BE IGNORED!!!!!!!!!!
+
 **What's not working how it should?**
 
 **Please give us step by step instructions for how to cause this.**

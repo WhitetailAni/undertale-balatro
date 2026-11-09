@@ -1,11 +1,16 @@
 ---
 name: Crash report
 about: Did the game crash? Tell us why and how!
-title: "[CRASH] PleaseReplaceThisTextWithWhat'sWrong"
+title: "[CRASH] I Can't Read, I'm An Undertale Fan! (Please replace this text with
+  what the issue is)."
 labels: ''
 assignees: ''
 
 ---
+
+BEFORE FILLING THIS OUT!!! ARE YOU USING THE LATEST VERSION OF THE MOD!!!! GO HERE:
+https://github.com/WhitetailAni/undertale-balatro/releases/latest
+AND DOUBLE CHECK!!!! THE VERSION LISTED THERE SHOULD MATCH THE VERSION IN YOUR MODS TAB!!!!!!! BUGS REPORTED FROM VERSIONS THAT AREN'T THE LATEST WILL BE IGNORED!!!!!!!!!!
 
 **What specifically caused the game to crash?**
 
