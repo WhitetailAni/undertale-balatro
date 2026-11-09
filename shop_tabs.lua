@@ -213,6 +213,9 @@ G.FUNCS.UTDR_shop_button = function(e)
 	if G.STATE ~= G.STATES[e.config.state] then
 		G.E_MANAGER:add_event(Event({
 			func = function()
+				for i = 1, #G.GAME.tags do
+					G.GAME.tags[i]:apply_to_run({ type = "immediate" })
+				end
 				if G.booster_pack then
 					G.booster_pack.REMOVED = true
 				end

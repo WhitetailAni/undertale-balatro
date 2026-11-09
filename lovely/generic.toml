@@ -210,7 +210,11 @@ target = "tag.lua"
 pattern = "G.GAME.round_resets.temp_reroll_cost = 0"
 position = "at"
 payload = '''
-if not G.GAME.selected_back.name == "b_UTDR_forgotten" then G.GAME.round_resets.temp_reroll_cost = 0 end
+print("hello!")
+if G.GAME.selected_back.name ~= "b_UTDR_forgotten" then
+	print("gm")
+	G.GAME.round_resets.temp_reroll_cost = 0
+end
 '''
 match_indent = true
 
