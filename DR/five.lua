@@ -588,7 +588,23 @@ SMODS.Joker {
 			card.config.chosen_joker.floating_pos = center.soul_pos
 		end
 	end,
-	disguise = function(base_card)
+	disguise_sprite = function(self, card)
+		card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
+		card.children.center:set_sprite_pos(card.config.center.config.chosen_joker.center_pos)
+
+		if card.config.center.config.chosen_joker.should_floating then
+			card.children.floating_sprite.atlas = G.ASSET_ATLAS
+				[card.config.center.config.chosen_joker.atlas_key]
+			card.children.floating_sprite:set_sprite_pos(card.config.center.config.chosen_joker.floating_pos)
+		end
+	end,
+	undisguise_sprite = function(self, card)
+		card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
+		card.children.center:set_sprite_pos({ x = 7, y = 10 })
+		card.children.floating_sprite.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
+		card.children.floating_sprite:set_sprite_pos({ x = 1, y = 12 })
+	end,
+	disguise_text = function(base_card)
 		--if netskie chooses itself to disguise as, it gets Very Very Confused. it thinks it isnt disguised, so it will disguise itself again. and then it will think it isnt disguised again, so it will disguise itself again. and Again. and AGAIN. until balatro crashes.
 		--so we fix that by making it disguise itself as... Close To Itself! manually. its textbox is very slightly different :D
 		if base_card.config.chosen_joker.joker_key == "j_UTDR_netskie" then
@@ -669,7 +685,7 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		if not (card.ability.in_build or (card and card.area and card.area.config.collection)) then
 			return {
-				vars = self:disguise(card),
+				vars = self:disguise_text(),
 				key = "j_UTDR_netskie_disguise",
 			}
 		end
@@ -681,10 +697,7 @@ SMODS.Joker {
 			func = function()
 				play_sound("UTDR_netskie", 1.0, 0.7)
 				card:juice_up(1, 1)
-				card.children.center.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
-				card.children.center:set_sprite_pos({ x = 7, y = 10 })
-				card.children.floating_sprite.atlas = G.ASSET_ATLAS["UTDR_DR_jokers"]
-				card.children.floating_sprite:set_sprite_pos({ x = 1, y = 12 })
+				self:undisguise_sprite(card)
 				card:set_cost()
 				return true
 			end
@@ -694,26 +707,19 @@ SMODS.Joker {
 		card.ability.in_build = false
 	end,
 	set_card_type_badge = function(self, card, badges)
-		badges[#badges] = create_badge("Kee kee~", G.C.GASTER, G.C.NETSKIE, 1.2)
+		badges[#badges + 1] = create_badge("Kee kee~", G.C.GASTER, G.C.NETSKIE, 1.2)
 	end,
 	set_sprites = function(self, card, front)
 		if card and card.ability and card.ability.in_build then return end
 		--have to put this in an event, otherwise it doesnt work in collection tab
+		self:choose_disguise(card)
+		self:disguise_sprite(card)
 		G.E_MANAGER:add_event(Event({
 			func = function()
-				if not (card and card.area and card.area.config.collection) then
-					self:choose_disguise(card)
-
+				if card and card.area and card.area.config.collection then
+					self:undisguise_sprite(card)
+				else
 					card:set_cost_value(card.config.center.config.chosen_joker.joker_key)
-
-					card.children.center.atlas = G.ASSET_ATLAS[card.config.center.config.chosen_joker.atlas_key]
-					card.children.center:set_sprite_pos(card.config.center.config.chosen_joker.center_pos)
-
-					if card.config.center.config.chosen_joker.should_floating then
-						card.children.floating_sprite.atlas = G.ASSET_ATLAS
-							[card.config.center.config.chosen_joker.atlas_key]
-						card.children.floating_sprite:set_sprite_pos(card.config.center.config.chosen_joker.floating_pos)
-					end
 				end
 				return true
 			end

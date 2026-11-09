@@ -249,6 +249,14 @@ if G.UTDR_shop_tabs and not G.UTDR_shop_tabs.alignment.offset.py then
 	G.UTDR_shop_tabs.alignment.offset.py = G.UTDR_shop_tabs.alignment.offset.y
 	G.UTDR_shop_tabs.alignment.offset.y = G.ROOM.T.y + 31
 end
+if G.UTDR_shop_capsule and not G.UTDR_shop_capsule.alignment.offset.py then
+	G.UTDR_shop_capsule.alignment.offset.py = G.UTDR_shop_capsule.alignment.offset.y
+	G.UTDR_shop_capsule.alignment.offset.y = G.ROOM.T.y + 31
+end
+if G.utdr_shop_cattybratty and not G.utdr_shop_cattybratty.alignment.offset.py then
+	G.utdr_shop_cattybratty.alignment.offset.py = G.utdr_shop_cattybratty.alignment.offset.y
+	G.utdr_shop_cattybratty.alignment.offset.y = G.ROOM.T.y + 31
+end
 '''
 match_indent = true
 
@@ -258,9 +266,17 @@ target = "functions/button_callbacks.lua"
 pattern = "if G.shop and G.shop.alignment.offset.py then"
 position = "before"
 payload = '''
+if G.utdr_shop_cattybratty and G.utdr_shop_cattybratty.alignment.offset.py then 
+	G.utdr_shop_cattybratty.alignment.offset.y = G.utdr_shop_cattybratty.alignment.offset.py
+  	G.utdr_shop_cattybratty.alignment.offset.py = nil
+end
 if G.UTDR_shop_tabs and G.UTDR_shop_tabs.alignment.offset.py then 
 	G.UTDR_shop_tabs.alignment.offset.y = G.UTDR_shop_tabs.alignment.offset.py
   	G.UTDR_shop_tabs.alignment.offset.py = nil
+end
+if G.UTDR_shop_capsule and G.UTDR_shop_capsule.alignment.offset.py then 
+	G.UTDR_shop_capsule.alignment.offset.y = G.UTDR_shop_tabs.alignment.offset.py
+  	G.UTDR_shop_capsule.alignment.offset.py = nilUTDR_shop_capsule
 end
 '''
 match_indent = true
@@ -276,6 +292,14 @@ if G.shop then
 '''
 position = "after"
 payload = '''
+if G.utdr_shop_cattybratty and G.utdr_shop_cattybratty.alignment.offset.py then 
+	G.utdr_shop_cattybratty.alignment.offset.y = G.utdr_shop_cattybratty.alignment.offset.py
+  	G.utdr_shop_cattybratty.alignment.offset.py = nil
+end
+if G.UTDR_shop_capsule and G.UTDR_shop_capsule.alignment.offset.py then 
+	G.UTDR_shop_capsule.alignment.offset.y = G.UTDR_shop_capsule.alignment.offset.py
+  	G.UTDR_shop_capsule.alignment.offset.py = nil
+end
 if G.UTDR_shop_tabs and G.UTDR_shop_tabs.alignment.offset.py then 
 	G.UTDR_shop_tabs.alignment.offset.y = G.UTDR_shop_tabs.alignment.offset.py
   	G.UTDR_shop_tabs.alignment.offset.py = nil
