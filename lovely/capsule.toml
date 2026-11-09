@@ -59,7 +59,6 @@ if not saveTable then
 	G.GAME.UTDR_capsule_gold_prizes_voucher = gold_prizes_voucher
 end
 UTDR_Modules.Capsule.total_gold_prizes = #G.GAME.UTDR_capsule_gold_prizes_nonvoucher + #G.GAME.UTDR_capsule_gold_prizes_voucher
-print(UTDR_Modules.Capsule.total_gold_prizes)
 end
 '''
 match_indent = true
@@ -149,9 +148,7 @@ target = "functions/button_callbacks.lua"
 pattern = "G.FUNCS.use_card = function(e, mute, nosave)"
 position = "after"
 payload = '''
-print(e.config.ref_table.config.center.key)
 if e.config.UTDR_capsule then
-	print("remov")
 	UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes_nonvoucher, { e.config.ref_table.config.center.key })
 	UTDR_Modules.Capsule.wow_that_was_so_gold(G.GAME.UTDR_capsule_gold_prizes_voucher, { e.config.ref_table.config.center.key })
 end
