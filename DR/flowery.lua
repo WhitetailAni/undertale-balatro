@@ -620,6 +620,13 @@ SMODS.Sound {
 	volume = 0.7
 }
 
+SMODS.Sound {
+	key = "flowery_theme",
+	path = "flowery/theme.ogg",
+	pitch = 1.0,
+	volume = 0.7
+}
+
 SMODS.Joker {
 	key = "flowery",
 	config = {
@@ -668,9 +675,10 @@ SMODS.Joker {
 	pos = { x = 9, y = 9 },
 	soul_pos = { x = 0, y = 12 },
 	cost = 3,
-	play_flowery_sound = function(self, sfx)
+	play_flowery_sound = function(self, sfx, volume_adjustment)
+		volume_adjustment = volume_adjustment or 0
 		if UTDR.config['voiceclips'] then
-			play_sound("UTDR_flowery_" .. sfx, 1.0, 0.7)
+			play_sound("UTDR_flowery_" .. sfx, 1.0, (0.7 - volume_adjustment))
 		end
 	end,
 	play_flowery_sound_random = function(self, table)
@@ -768,6 +776,9 @@ SMODS.Joker {
 			elseif context.after then
 				card.ability.orange_active = false
 			elseif context.before then
+				if context.scoring_name == "Full House" then
+					self:play_flowery_sound("theme", 0.55)
+				end
 				self:last_jarona(card)
 			elseif context.joker_main then
 				card:juice_up()
