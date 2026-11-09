@@ -95,6 +95,14 @@ SMODS.Joker {
 	},
 	--unlocked = false
 	unlock_condition = { type = 'modify_deck', extra = { count = 5, enhancement = 'Stone Card', e_key = 'm_stone' } },
+	in_pool = function(self, args)
+        for _, card in ipairs(G.playing_cards or {}) do
+            if SMODS.has_enhancement(card, 'm_stone') then
+                return true
+            end
+        end
+        return false
+    end,
 	loc_vars = function(self, info_queue, card)
 		local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'UTDR_surface')
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_stone

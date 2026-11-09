@@ -572,7 +572,8 @@ SMODS.Joker {
 	key = "pipis",
 	config = {
 		mult = 5,
-		xmult = 1.25
+		xmult = 1.25,
+		are_we_gonna_win = false,
 	},
 	attributes = {
 		"mult",
@@ -607,7 +608,17 @@ SMODS.Joker {
 					mult = -card.ability.mult
 				}
 			end
-		elseif context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
+		elseif context.ante_change and context.ante_end and G.GAME.blind.boss then
+			if G.GAME.win_ante == G.GAME.round_resets.ante then
+				card.ability.are_we_gonna_win = true
+			else
+				card:start_dissolve()
+				return {
+					message = "[" .. pseudorandom('pipis_liked_that', 1173, 8824) .. " " .. localize("k_UTDR_pipis_liked_that") .. "]",
+					colour = G.C.BLUE
+				}
+			end
+		elseif context.round_eval and card.ability.are_we_gonna_win then
 			card:start_dissolve()
 			return {
 				message = "[" .. pseudorandom('pipis_liked_that', 1173, 8824) .. " " .. localize("k_UTDR_pipis_liked_that") .. "]", --this is so stupid lmfao

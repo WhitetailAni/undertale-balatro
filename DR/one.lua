@@ -35,7 +35,8 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "lancer_cookie",
 	config = {
-		chips = 60
+		chips = 60,
+		are_we_gonna_win = true,
 	},
 	attributes = {
 		"food",
@@ -56,11 +57,19 @@ SMODS.Joker {
 			return {
 				chips = card.ability.chips
 			}
-		elseif context.end_of_round and G.GAME.blind.boss and not context.blueprint then
+		elseif context.ante_change and context.ante_end and G.GAME.blind.boss then
+			if G.GAME.win_ante == G.GAME.round_resets.ante then
+				card.ability.are_we_gonna_win = true
+			else
+				card:start_dissolve()
+				return {
+					message = localize("k_UTDR_splat_ex")
+				}
+			end
+		elseif context.round_eval and card.ability.are_we_gonna_win then
 			card:start_dissolve()
 			return {
-				message = localize("k_UTDR_splat_ex"),
-				colour = G.C.BLUE
+				message = localize("k_UTDR_splat_ex")
 			}
 		end
 	end

@@ -526,7 +526,8 @@ SMODS.Joker {
 SMODS.Joker {
 	key = "instant_noodles",
 	config = {
-		xmult = 3
+		xmult = 3,
+		are_we_gonna_win = false
 	},
 	attributes = {
 		"xmult",
@@ -547,7 +548,16 @@ SMODS.Joker {
 			return {
 				xmult = card.ability.xmult
 			}
-		elseif context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint then
+		elseif context.ante_change and context.ante_end and G.GAME.blind.boss then
+			if G.GAME.win_ante == G.GAME.round_resets.ante then
+				card.ability.are_we_gonna_win = true
+			else
+				card:start_dissolve()
+				return {
+					message = localize("k_UTDR_cooked_ex")
+				}
+			end
+		elseif context.round_eval and card.ability.are_we_gonna_win then
 			card:start_dissolve()
 			return {
 				message = localize("k_UTDR_cooked_ex")
