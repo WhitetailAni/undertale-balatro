@@ -55,7 +55,7 @@ SMODS.Joker {
 	},
 	rarity = 2,
 	blueprint_compat = true,
-	eternal_compat = true,
+	eternal_compat = false,
 	atlas = "DR_jokers",
 	pos = { x = 6, y = 5 },
 	cost = 7,
