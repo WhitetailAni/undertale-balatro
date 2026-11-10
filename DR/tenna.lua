@@ -58,7 +58,7 @@ UTDR_Modules.Tenna = {
 		local cards = type(quiz.cards) == "function" and quiz:cards() or quiz.cards or {}
 
 		for _, v in ipairs(cards) do
-			local c = SMODS.create_card(type(v) == "table" and v or {key=v, area = area, no_edition = true, soulable = false})
+			local c = SMODS.create_card(type(v) == "table" and v or {key=v, area = area, no_edition = true, soulable = false, bypass_discovery_center = trrue})
 			area:emplace(c)
 		end
 
