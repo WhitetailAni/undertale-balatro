@@ -61,56 +61,6 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
-target = '''=[SMODS _ "src/overrides.lua"]'''
-pattern = '''
-local all_unavailable = true
-for _, v in ipairs(pool) do
-	if not G.P_CENTERS[v.key] or G.P_CENTERS[v.key].kind ~= _type then
-		v.key = "UNAVAILABLE"
-	else
-		all_unavailable = false
-	end
-end
-if all_unavailable then
-	pool[#pool+1] = {key = 'p_buffoon_normal_1', type = "Booster"}
-end
-'''
-position = "after"
-payload = '''
-print("hello this is my test message in get pack")
-local has_seam = #SMODS.find_card('j_UTDR_seam') > 0
-local has_shelter = #SMODS.find_card('j_UTDR_sjelter') > 0
-if not all_unavailable and (has_seam or has_shelter) then
-	if has_seam then
-		print("seam is here")
-	end
-	if has_shelter then
-		print("shelter is here")
-	end
-	local pool_index = 1
-	while pool_index <= #pool do
-		local removed = false
-		if has_seam and not string.match(pool[pool_index].key, "mega") then
-			removed = true
-			print("Seam says " .. pool[pool_indexi].key .. " isn't Mega! Remove it!")
-		end
-		if has_shelter and not string.match(pool[pool_index].key, "spectral") then
-			removed = true
-			print("Shelter says " .. pool[pool_index].key .. " isn't Spectral! Remove it!")
-		end
-		if removed then
-			print("Removing " .. pool[pool_index].key .. " at position " .. tostring(pool_index))
-			table.remove(pool, pool_index)
-		else
-			pool_index = pool_index + 1
-		end
-	end
-end
-'''
-match_indent = true
-
-[[patches]]
-[patches.pattern]
 target = "globals.lua"
 pattern = "self.STATES = {    "
 position = 'after'

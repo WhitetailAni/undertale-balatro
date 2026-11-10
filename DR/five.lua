@@ -573,7 +573,11 @@ SMODS.Joker {
 	cost = 4,
 	choose_disguise = function(card)
 		--pick da joker
+		if G.playing_cards then
 		card.config.chosen_joker.joker_key = SMODS.poll_object({ type = "Joker" })
+		else
+			card.config.chosen_joker.joker_key = "j_UTDR_dev_white_tail_ani" --what a fucking narcissist
+		end
 
 		--set atlases
 		local center = G.P_CENTERS[card.config.chosen_joker.joker_key]
@@ -710,14 +714,19 @@ SMODS.Joker {
 		badges[#badges + 1] = create_badge("Kee kee~", G.C.GASTER, G.C.NETSKIE, 1.2)
 	end,
 	set_sprites = function(self, card, front)
-		if card and card.ability and card.ability.in_build then return end
+		if card and ((card.ability and card.ability.in_build) or not card.config.center.discovered) then return end
 		--have to put this in an event, otherwise it doesnt work in collection tab
 		self:choose_disguise(card)
 		self:disguise_sprite(card)
 		G.E_MANAGER:add_event(Event({
+			trigger = 'immediate',
 			func = function()
 				if card and card.area and card.area.config.collection then
-					self:undisguise_sprite(card)
+					if card.config.center.discovered then
+						self:undisguise_sprite(card)
+					else
+						card.children.center = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS["Joker"], G.j_locked.pos)
+					end
 				else
 					card:set_cost_value(card.config.center.config.chosen_joker.joker_key)
 				end

@@ -299,8 +299,6 @@ SMODS.Joker {
 			card.ability.has_armed = false
 		elseif context.poker_hand_changed then
 			if G.GAME.blind.name == "The Arm" and not card.ability.has_armed and context.old_level > context.new_level then
-				print(context.old_level)
-				print(context.new_level)
 				card.ability.has_armed = true
 				G.E_MANAGER:add_event(Event({
 					func = function()
