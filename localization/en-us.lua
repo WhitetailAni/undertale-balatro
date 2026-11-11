@@ -522,7 +522,7 @@ return {
 				name = "Amalgamates",
 				text = {
 					"At end of round, randomize",
-					"{C:attention}rank{} and {C:attention}suit{} of {C:attention}all",
+					"{C:attention}rank and suit{} of {C:attention}all",
 					"cards held in hand"
 				},
 			},
